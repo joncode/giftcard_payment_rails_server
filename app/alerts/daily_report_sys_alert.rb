@@ -5,7 +5,7 @@ class DailyReportSysAlert < Alert
 
 	def text_msg
 		get_data
-		"Daily Report\nActivity #{@day}\n\
+		"DAILY REPORT\n#{@day}\n\
 Gift purchases: #{@purchases}\n\
 MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
@@ -15,7 +15,7 @@ Redemptions: #{@redemptions}"
 
 	def email_msg
 		get_data
-		"<div><h2>Daily Report</h2><h3>Activity #{@day}</h3>\
+		"<div><h2>DAILY REPORT</h2><h3>#{@day}</h3>\
 <p><ul><li>Gift purchases: #{@purchases}</li>\
 <li>MerchantTools gifts: #{@merchant_gifts}</li>\
 <li>New Merchants: #{@merchants}</li>\

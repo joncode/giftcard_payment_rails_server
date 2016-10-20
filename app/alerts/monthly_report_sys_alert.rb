@@ -5,7 +5,7 @@ class MonthlyReportSysAlert < Alert
 
 	def text_msg
 		get_data
-		"Monthly Report\nActivity #{@month_name} #{@year}\n\
+		"MONTHLY REPORT\n#{@month_name} #{@year}\n\
 Gift purchases: #{@purchases}\n\
 MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
@@ -15,7 +15,7 @@ Redemptions: #{@redemptions}"
 
 	def email_msg
 		get_data
-		"<div><h2>Monthly Report</h2><h3>Activity #{@month_name} #{@year}</h3>\
+		"<div><h2>MONTHLY REPORT</h2><h3>#{@month_name} #{@year}</h3>\
 <p><ul><li>Gift purchases: #{@purchases}</li>\
 <li>MerchantTools gifts: #{@merchant_gifts}</li>\
 <li>New Merchants: #{@merchants}</li>\

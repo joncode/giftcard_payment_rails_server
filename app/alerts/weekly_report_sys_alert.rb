@@ -5,7 +5,7 @@ class WeeklyReportSysAlert < Alert
 
 	def text_msg
 		get_data
-		"Weekly Report\nActivity week of #{@week_day}\n\
+		"WEEKLY REPORT\nWeek of #{@week_day}\n\
 Gift purchases: #{@purchases}\n\
 MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
@@ -15,7 +15,7 @@ Redemptions: #{@redemptions}"
 
 	def email_msg
 		get_data
-		"<div><h2>Weekly Report</h2><h3>Activity week of #{@week_day}</h3>\
+		"<div><h2>WEEKLY REPORT</h2><h3>Week of #{@week_day}</h3>\
 <p><ul><li>Gift purchases: #{@purchases}</li>\
 <li>MerchantTools gifts: #{@merchant_gifts}</li>\
 <li>New Merchants: #{@merchants}</li>\
