@@ -9,7 +9,7 @@ module UrbanAirshipWrap
         pnts.each do |pn_token_obj|
             begin
                 if pn_token_obj.platform == 'ios'
-                    r = OpsPushApple.send_push(pn_token_obj, alert)
+                    r = OpsPushApple.send_push(pn_token_obj, alert, gift_id)
                     resp << r
                 elsif pn_token_obj.platform == 'android'
                     # is the token for the new APP ?
@@ -29,7 +29,7 @@ module UrbanAirshipWrap
 
         if googe_push_tokens.count > 0
 
-            r = OpsPushGoogle.send_push(googe_push_tokens, alert)
+            r = OpsPushGoogle.send_push(googe_push_tokens, alert, gift_id)
             puts "PUSH SUCCEEDED |#{googe_push_tokens.map(&:id)}| - #{r.inspect}"
             resp << r
         end

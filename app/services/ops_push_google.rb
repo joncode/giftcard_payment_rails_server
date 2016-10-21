@@ -4,10 +4,10 @@ class OpsPushGoogle
 
 	class << self
 
-		def send_push pn_token_or_array, alert
+		def send_push pn_token_or_array, alert, gift_id
 			pn_tokens = parse_input(pn_token_or_array)
 			registration_ids = format_push_ids(pn_tokens)
-			payload = format_payload(alert)
+			payload = format_payload(alert, gift_id)
 
 			r = perform(registration_ids, payload)
 			update_canonical_id(r, pn_tokens)
@@ -50,7 +50,7 @@ class OpsPushGoogle
 			registration_ids.uniq
 		end
 
-		def format_payload alert
+		def format_payload alert, gift_id
 			if alert.kind_of?(Hash)
 				payload = alert
 			elsif alert.to_s.match(/has been delivered/)
