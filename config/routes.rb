@@ -255,8 +255,9 @@ Drinkboard::Application.routes.draw do
 				end
 			end
 
-			resources :users,     only: [:update] do         # biz logic
+			resources :users, only: [ :update ] do         # biz logic
 				member do
+					post :send_push
 					post :deactivate
 					post :suspend
 					put :deactivate_social

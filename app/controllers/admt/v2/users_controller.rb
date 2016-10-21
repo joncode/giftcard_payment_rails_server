@@ -3,6 +3,24 @@ class Admt::V2::UsersController < JsonController
     before_action :authenticate_admin_tools
     rescue_from JSON::ParserError, :with => :bad_request
 
+    def send_push
+        puts "Admt::V2::UsersController - SEND PUSH #{params.inspect}"
+        user = User.find(params[:id])
+        alert = send_push_params[:alert]
+        if alert.present?
+            ditto = PushUserJob.perform(user, alert)
+            if ditto.status == 200
+                success ditto.response
+            else
+                fail ditto.response
+            end
+        else
+            fail "Not message to send"
+        end
+
+        respond
+    end
+
     def update
         return nil  if data_not_hash?
         # user_params = strong_param(params["data"])
@@ -84,6 +102,10 @@ private
 
     def user_params
         params.require(:data).permit(:first_name, :last_name,  :phone, :email, :zip, :primary)
+    end
+
+    def send_push_params
+        params.require(:data).permit(:alert)
     end
 
     # def strong_param(data_hsh)

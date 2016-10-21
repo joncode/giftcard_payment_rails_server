@@ -4,7 +4,7 @@ class OpsPushGoogle
 
 	class << self
 
-		def send_push pn_token_or_array, alert, gift_id
+		def send_push pn_token_or_array, alert, gift_id=nil
 			pn_tokens = parse_input(pn_token_or_array)
 			registration_ids = format_push_ids(pn_tokens)
 			payload = format_payload(alert, gift_id)
@@ -32,6 +32,8 @@ class OpsPushGoogle
 		end
 
 		def perform(registration_ids, payload)
+			puts "Sending GOOGLE Push #{registration_ids} #{payload}"
+			return if Rails.env.development? || Rails.env.test?
 			gcm = GCM.new(GCM_API_KEY)
 			r = gcm.send(registration_ids, payload)
 			puts "SENDING PUSH GCM #{r.inspect}"
@@ -50,31 +52,39 @@ class OpsPushGoogle
 			registration_ids.uniq
 		end
 
-		def format_payload alert, gift_id=nil
+		def format_payload alert, data=nil
 			if alert.kind_of?(Hash)
 				payload = alert
-			elsif alert.to_s.match(/has been delivered/)
-                payload = { message: alert,
-                        title: 'ItsOnMe Gift Delivered!',
-                        args: { gift_id: gift_id }
-                    }
-            elsif alert.to_s.match(/opened your gift/)
-                payload = { message: alert,
-                        title: 'ItsOnMe Gift Opened!',
-                        args: { gift_id: gift_id }
-                    }
-            elsif alert.to_s.match(/got the app/)
-                payload = { message: alert,
-                        title: 'Thank You!',
-                        args: { gift_id: gift_id }
-                    }
-            else
-                payload = { message: alert,
-                        title: 'New ItsOnMe Gift!',
-                        action: 'VIEW_GIFT',
-                        args: { gift_id: gift_id }
-                    }
-            end
+			else
+				if data
+					if alert.to_s.match(/has been delivered/)
+		                payload = { message: alert,
+		                        title: 'ItsOnMe Gift Delivered!',
+		                        args: { gift_id: data }
+		                    }
+		            elsif alert.to_s.match(/opened your gift/)
+		                payload = { message: alert,
+		                        title: 'ItsOnMe Gift Opened!',
+		                        args: { gift_id: data }
+		                    }
+		            elsif alert.to_s.match(/got the app/)
+		                payload = { message: alert,
+		                        title: 'Thank You!',
+		                        args: { gift_id: data }
+		                    }
+		            else
+		                payload = { message: alert,
+		                        title: 'New ItsOnMe Gift!',
+		                        action: 'VIEW_GIFT',
+		                        args: { gift_id: data }
+		                    }
+		            end
+		        else
+	                payload = { message: alert,
+	                        title: 'ItsOnMe :)'
+	              		}
+		        end
+		    end
 			return { data: payload }
 		end
 
