@@ -50,7 +50,7 @@ class OpsPushGoogle
 			registration_ids.uniq
 		end
 
-		def format_payload alert, gift_id
+		def format_payload alert, gift_id=nil
 			if alert.kind_of?(Hash)
 				payload = alert
 			elsif alert.to_s.match(/has been delivered/)
