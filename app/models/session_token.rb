@@ -33,12 +33,10 @@ class SessionToken < ActiveRecord::Base
 	end
 
 	def self.get_platform client
-		if client.id == IOS_CLIENT_ID
+		if [IOS_CLIENT_ID, IOS_15].include?(client.id)
 			'ios'
-		elsif client.id == ANDROID_CLIENT_ID
+		elsif [ANDROID_15, ANDROID_CLIENT_ID].include?(client.id)
 			'android'
-		elsif client.id == WBG_CLIENT_ID
-			'www'
 		else
 			'www'
 		end

@@ -11,7 +11,9 @@ if Rails.env.production?
     PUBLIC_URL_MT    = "http://merchant.itson.me"
     PUBLIC_URL_PT    = "http://partner.itson.me"
     IOS_CLIENT_ID = 5
+    IOS_15 = 160
     ANDROID_CLIENT_ID = 4
+    ANDROID_15 = 161
     WBG_CLIENT_ID = 1
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     API_URL          = "https://api.itson.me/web/v3"
@@ -31,6 +33,7 @@ elsif Rails.env.staging?
     PUBLIC_URL_PT    = "http://qapartner.itson.me"
     IOS_CLIENT_ID = 8
     ANDROID_CLIENT_ID = 6
+    ANDROID_15 = 29
     WBG_CLIENT_ID = 1
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
@@ -48,8 +51,10 @@ else
     PUBLIC_URL_AT    = "http://0.0.0.0:3002"
     PUBLIC_URL_MT    = "http://merchant.happyer.dev/"
     PUBLIC_URL_PT    = "http://partner.happyer.dev/"
-    IOS_CLIENT_ID = 5
+    IOS_CLIENT_ID = 8
+    IOS_15 = 30
     ANDROID_CLIENT_ID = 4
+    ANDROID_15 = 161
     WBG_CLIENT_ID = 1
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
