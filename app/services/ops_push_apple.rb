@@ -13,7 +13,7 @@ class OpsPushApple
 		end
 
 		def format_payload alert, gift_id
-			return { alert: alert }
+			return { alert: alert, badge: 100 }
 	        if alert.to_s.match(/has been delivered/)
 	            payload = { body: alert,
 	                    title: 'ItsOnMe Gift Delivered!',
