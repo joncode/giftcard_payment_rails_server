@@ -9,7 +9,7 @@ module UrbanAirshipWrap
         pnts.each do |pn_token_obj|
             begin
                 if pn_token_obj.platform == 'ios'
-                    r = send_push_with_apns(pn_token_obj, alert)
+                    r = OpsPushApple.send_push(pn_token_obj, alert)
                     resp << r
                 elsif pn_token_obj.platform == 'android'
                     # is the token for the new APP ?
@@ -29,7 +29,7 @@ module UrbanAirshipWrap
 
         if googe_push_tokens.count > 0
 
-            r = OpsGooglePush.send_push(googe_push_tokens, alert)
+            r = OpsPushGoogle.send_push(googe_push_tokens, alert)
             puts "PUSH SUCCEEDED |#{googe_push_tokens.map(&:id)}| - #{r.inspect}"
             resp << r
         end
@@ -38,32 +38,26 @@ module UrbanAirshipWrap
         Ditto.send_push_create(resp[0], gift_id, 'Gift')
     end
 
-    def send_push_with_apns(pnt, alert)
-        puts "SEND APNS push |#{pnt.id}| - #{alert}"
-        if alert.to_s.match(/has been delivered/)
-            hsh = { body: alert,
-                    title: 'ItsOnMe Gift Delivered!',
-                    args: { gift_id: gift_id }
-                }
-        elsif alert.to_s.match(/opened your gift/)
-            hsh = { body: alert,
-                    title: 'ItsOnMe Gift Opened!',
-                    args: { gift_id: gift_id }
-                }
-        elsif alert.to_s.match(/got the app/)
-            hsh = { body: alert,
-                    title: 'Thank You!',
-                    args: { gift_id: gift_id }
-                }
-        else
-            hsh = { body: alert,
-                    title: 'New ItsOnMe Gift!',
-                    'action-loc-key': 'View Gift',
-                    args: { gift_id: gift_id }
-                }
-        end
-        n = APNS::Notification.new(pnt.pn_token, hsh)
-        APNS.send_notifications([n])
+
+#------------------------------    RETIRED
+
+
+    def format_payload(alert, user, alert_type, badge=nil)
+        badge = badge.present? ? badge : Gift.get_notifications(user)
+        {
+            :audience => {
+                :alias => user.ua_alias,
+            },
+            :aps => {
+                :alert => alert,
+                :badge => badge,
+                :sound => 'pn.wav'
+            },
+            :alert_type => alert_type,
+            :android => {
+                :alert => alert
+            }
+        }
     end
 
     def send_push_with_urban_airship(pn_token_obj, alert)
@@ -95,23 +89,5 @@ module UrbanAirshipWrap
         tokens = UA_CLIENT.device_tokens_with_limiting
         #puts "UA response --- >  #{tokens}"
         return tokens
-    end
-
-    def format_payload(alert, user, alert_type, badge=nil)
-        badge = badge.present? ? badge : Gift.get_notifications(user)
-        {
-            :audience => {
-                :alias => user.ua_alias,
-            },
-            :aps => {
-                :alert => alert,
-                :badge => badge,
-                :sound => 'pn.wav'
-            },
-            :alert_type => alert_type,
-            :android => {
-                :alert => alert
-            }
-        }
     end
 end

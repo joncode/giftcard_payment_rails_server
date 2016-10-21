@@ -1,37 +1,15 @@
 require 'gcm'
 
-class OpsGooglePush
+class OpsPushGoogle
 
 	class << self
 
 		def send_push pn_token_or_array, alert
-			if alert.to_s.match(/has been delivered/)
-                hsh = { message: alert,
-                        title: 'ItsOnMe Gift Delivered!',
-                        args: { gift_id: gift_id }
-                    }
-            elsif alert.to_s.match(/opened your gift/)
-                hsh = { message: alert,
-                        title: 'ItsOnMe Gift Opened!',
-                        args: { gift_id: gift_id }
-                    }
-            elsif alert.to_s.match(/got the app/)
-                hsh = { message: alert,
-                        title: 'Thank You!',
-                        args: { gift_id: gift_id }
-                    }
-            else
-                hsh = { message: alert,
-                        title: 'New ItsOnMe Gift!',
-                        action: 'VIEW_GIFT',
-                        args: { gift_id: gift_id }
-                    }
-            end
 			pn_tokens = parse_input(pn_token_or_array)
 			registration_ids = format_push_ids(pn_tokens)
-			msg = format_payload(hsh)
+			payload = format_payload(alert)
 
-			r = perform(registration_ids, msg)
+			r = perform(registration_ids, payload)
 			update_canonical_id(r, pn_tokens)
 			r
 		end
@@ -39,8 +17,8 @@ class OpsGooglePush
 		def get_canonical_id pn_token
 			pn_tokens = parse_input(pn_token)
 			registration_ids = format_push_ids(pn_tokens)
-			msg = format_payload({ action: 'VERIFY_ID' })
-			r = perform(registration_ids, msg)
+			payload = format_payload({ action: 'VERIFY_ID' })
+			r = perform(registration_ids, payload)
 			if r && r[:canonical_ids][0].present? && r[:canonical_ids][0][:new].present?
 				r[:canonical_ids][0][:new]
 			else
@@ -53,9 +31,9 @@ class OpsGooglePush
 			end
 		end
 
-		def perform(registration_ids, msg)
+		def perform(registration_ids, payload)
 			gcm = GCM.new(GCM_API_KEY)
-			r = gcm.send(registration_ids, msg)
+			r = gcm.send(registration_ids, payload)
 			puts "SENDING PUSH GCM #{r.inspect}"
 			r
 		end
@@ -73,11 +51,31 @@ class OpsGooglePush
 		end
 
 		def format_payload alert
-			if alert.kind_of?(String)
-				{ data: { message: alert, title: 'ItsOnMe App' } }
-			else
-				{ data: alert }
-			end
+			if alert.kind_of?(Hash)
+				payload = alert
+			elsif alert.to_s.match(/has been delivered/)
+                payload = { message: alert,
+                        title: 'ItsOnMe Gift Delivered!',
+                        args: { gift_id: gift_id }
+                    }
+            elsif alert.to_s.match(/opened your gift/)
+                payload = { message: alert,
+                        title: 'ItsOnMe Gift Opened!',
+                        args: { gift_id: gift_id }
+                    }
+            elsif alert.to_s.match(/got the app/)
+                payload = { message: alert,
+                        title: 'Thank You!',
+                        args: { gift_id: gift_id }
+                    }
+            else
+                payload = { message: alert,
+                        title: 'New ItsOnMe Gift!',
+                        action: 'VIEW_GIFT',
+                        args: { gift_id: gift_id }
+                    }
+            end
+			return { data: payload }
 		end
 
 		def parse_input pn_token_or_array

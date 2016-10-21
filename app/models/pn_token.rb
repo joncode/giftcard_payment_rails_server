@@ -24,7 +24,7 @@ class PnToken < ActiveRecord::Base
         canonical_id = nil
         if platform == 'android'
             pnt = PnToken.new(user_id: user_id, pn_token: value, platform: platform.to_s, device_id: device_id)
-            canonical_id = OpsGooglePush.get_canonical_id(pnt)
+            canonical_id = OpsPushGoogle.get_canonical_id(pnt)
         end
 
         puts "PnToken -self.find_or_create_token(#{user_id}, #{value}, #{platform})- "
