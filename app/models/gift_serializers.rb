@@ -213,9 +213,7 @@ private
         gift_hsh["items"] = ary_of_shopping_cart_as_hash
         gift_hsh["ccy"] = self.ccy
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
-        if Rails.env.staging?
-            gift_hsh['item_photo'] = self.item_photo
-        end
+        gift_hsh['item_photo'] = self.item_photo
     end
 
     def multi_redemption_web_keys gift_hsh
