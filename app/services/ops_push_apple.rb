@@ -6,8 +6,8 @@ class OpsPushApple
 
 	        puts "SEND APNS push |#{pnt.id}| - #{alert}"
 
-	        payload = format_payload(alert, gift_id)
-	        n = APNS::Notification.new(pnt.pn_token, payload)
+	        # payload = format_payload(alert, gift_id)
+	        n = APNS::Notification.new(pnt.pn_token, alert)
 	        APNS.send_notifications([n])
 
 		end
