@@ -1,4 +1,4 @@
-class p
+class OpsPushApple
 
 	class << self
 
