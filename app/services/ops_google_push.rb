@@ -5,9 +5,31 @@ class OpsGooglePush
 	class << self
 
 		def send_push pn_token_or_array, alert
+			if alert.to_s.match(/has been delivered/)
+                hsh = { message: alert,
+                        title: 'ItsOnMe Gift Delivered!',
+                        args: { gift_id: gift_id }
+                    }
+            elsif alert.to_s.match(/opened your gift/)
+                hsh = { message: alert,
+                        title: 'ItsOnMe Gift Opened!',
+                        args: { gift_id: gift_id }
+                    }
+            elsif alert.to_s.match(/got the app/)
+                hsh = { message: alert,
+                        title: 'Thank You!',
+                        args: { gift_id: gift_id }
+                    }
+            else
+                hsh = { message: alert,
+                        title: 'New ItsOnMe Gift!',
+                        action: 'VIEW_GIFT',
+                        args: { gift_id: gift_id }
+                    }
+            end
 			pn_tokens = parse_input(pn_token_or_array)
 			registration_ids = format_push_ids(pn_tokens)
-			msg = format_payload(alert)
+			msg = format_payload(hsh)
 
 			r = perform(registration_ids, msg)
 			update_canonical_id(r, pn_tokens)

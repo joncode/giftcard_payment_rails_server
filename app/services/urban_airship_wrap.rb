@@ -29,30 +29,7 @@ module UrbanAirshipWrap
 
         if googe_push_tokens.count > 0
 
-            if alert.to_s.match(/has been delivered/)
-                hsh = { message: alert,
-                        title: 'ItsOnMe Gift Delivered!',
-                        args: { gift_id: gift_id }
-                    }
-            elsif alert.to_s.match(/opened your gift/)
-                hsh = { message: alert,
-                        title: 'ItsOnMe Gift Opened!',
-                        args: { gift_id: gift_id }
-                    }
-            elsif alert.to_s.match(/got the app/)
-                hsh = { message: alert,
-                        title: 'Thank You!',
-                        args: { gift_id: gift_id }
-                    }
-            else
-                hsh = { message: alert,
-                        title: 'New ItsOnMe Gift!',
-                        action: 'VIEW_GIFT',
-                        args: { gift_id: gift_id }
-                    }
-            end
-
-            r = OpsGooglePush.send_push(googe_push_tokens, hsh)
+            r = OpsGooglePush.send_push(googe_push_tokens, alert)
             puts "PUSH SUCCEEDED |#{googe_push_tokens.map(&:id)}| - #{r.inspect}"
             resp << r
         end
@@ -63,7 +40,29 @@ module UrbanAirshipWrap
 
     def send_push_with_apns(pnt, alert)
         puts "SEND APNS push |#{pnt.id}| - #{alert}"
-        n = APNS::Notification.new(pnt.pn_token, alert)
+        if alert.to_s.match(/has been delivered/)
+            hsh = { body: alert,
+                    title: 'ItsOnMe Gift Delivered!',
+                    args: { gift_id: gift_id }
+                }
+        elsif alert.to_s.match(/opened your gift/)
+            hsh = { body: alert,
+                    title: 'ItsOnMe Gift Opened!',
+                    args: { gift_id: gift_id }
+                }
+        elsif alert.to_s.match(/got the app/)
+            hsh = { body: alert,
+                    title: 'Thank You!',
+                    args: { gift_id: gift_id }
+                }
+        else
+            hsh = { body: alert,
+                    title: 'New ItsOnMe Gift!',
+                    'action-loc-key': 'View Gift',
+                    args: { gift_id: gift_id }
+                }
+        end
+        n = APNS::Notification.new(pnt.pn_token, hsh)
         APNS.send_notifications([n])
     end
 
