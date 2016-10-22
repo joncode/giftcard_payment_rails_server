@@ -32,6 +32,7 @@ elsif Rails.env.staging?
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
     PUBLIC_URL_PT    = "http://qapartner.itson.me"
     IOS_CLIENT_ID = 8
+    IOS_15 = 30
     ANDROID_CLIENT_ID = 6
     ANDROID_15 = 29
     WBG_CLIENT_ID = 1
