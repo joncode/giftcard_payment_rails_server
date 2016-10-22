@@ -293,6 +293,7 @@ class Omnivore
 			@json
 		rescue => e
 			puts "\n\n 246 POSITRONICS ERROR #{e.inspect}"
+			@json = e.to_json
 			e
 			unless e.nil?
 				resp = e.response.code

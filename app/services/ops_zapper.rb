@@ -196,6 +196,7 @@ class OpsZapper
             apply_ticket_value(resp)
 		rescue => e
 			puts "\n Here is ZAPPER error #{e.inspect}\n\n"
+			@json = e.to_json
 			handle_error(e)
 		end
 	end
@@ -218,6 +219,7 @@ class OpsZapper
 			# end
             apply_ticket_success(resp)
         rescue => e
+        	@json = e.to_json
             handle_error(e)
         end
     end
