@@ -53,7 +53,7 @@ Click here to claim your gift.\n #{self.invite_link}"
     def messenger_proto_join
         Relay.send_push_notification(self)
         puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name}"
-        notify_via_text
+        # notify_via_text
         notify_receiver_proto_join
     end
 
