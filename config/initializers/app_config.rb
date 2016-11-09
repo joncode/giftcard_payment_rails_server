@@ -12,11 +12,7 @@ APP_CONFIG = ENV["RAILS_ENV"] == "development" ? HashWithIndifferentAccess.new(y
 
 def thread_on?
 
-    if Rails.env.development?
-        false
-    else
-        true
-    end
+    !Rails.env.development?
 
 end
 
