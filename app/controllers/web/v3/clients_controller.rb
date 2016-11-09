@@ -23,6 +23,9 @@ class Web::V3::ClientsController < MetalCorsController
         if hsh[:slug2].blank? && !hsh[:slug1].blank?
             	# get the client with slug 1 as url_name
         	client = ClientUrlMatcher.get_client(hsh[:slug1].to_s)
+        	if client.nil?
+        		client = Client.find_by(active: true, url_name: hsh[:slug1].to_s)
+        	end
         end
 
         if client.nil?
