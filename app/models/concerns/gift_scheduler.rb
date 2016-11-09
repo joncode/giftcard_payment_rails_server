@@ -15,6 +15,7 @@ module GiftScheduler
 		    messenger(:invoice_giver)
 		    true
 		else
+			puts "500 Internal - Gift deliver now failed #{self.id} #{self.errors.messages}"
 			false
 		end
 	rescue => e
