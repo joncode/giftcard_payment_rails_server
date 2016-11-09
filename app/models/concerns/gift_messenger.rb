@@ -11,6 +11,8 @@ module GiftMessenger
             end
             # notify_admin if self.giver_type == "User"
             send_receiver_notification if self.status != 'schedule'
+        else
+            puts "500 Internal Gift messenger FAIL conditional #{self.id} #{self.success?} #{thread_on?}"
         end
     end
 
