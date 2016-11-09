@@ -124,7 +124,7 @@ AND #{content_symbol}.id = contents.content_id"
 				sql += " OR url_name ilike '#{slug}%' OR download_url ilike '#{slug}%' "
 			end
 		end
-		menu_widget.where(sql)
+		menu_widget.where(active: true).where(sql)
 	end
 
 private
