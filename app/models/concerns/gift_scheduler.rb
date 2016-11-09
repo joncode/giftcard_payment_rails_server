@@ -12,6 +12,7 @@ module GiftScheduler
 	    	self.status = 'incomplete'
 	    end
 	    if save
+	    	puts "Gift has been scheduled for delivery #{self.status} #{self.id}"
 		    messenger(:invoice_giver)
 		    true
 		else
