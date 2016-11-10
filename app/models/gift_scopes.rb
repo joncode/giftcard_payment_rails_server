@@ -54,6 +54,9 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
         where("active AND status = 'incomplete' AND giver_type = 'User' AND (created_at < ?) AND giver_id != 62", boom_time)
     end
 
+    def scheds
+        where(active: true, status: 'schedule').order(scheduled_at: :asc)
+    end
 
 #### USER SCOPES
 
