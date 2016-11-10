@@ -9,8 +9,8 @@ class Redeem
 	end
 
 	def self.set_balance(gift)
-		total_redeemed_or_held_amt = gift.redemptions.reload.map(&:amount).sum
-		gift.balance = gift.original_value - total_redeemed_or_held_amt
+		total_redeemed_amt = gift.complete_redemptions.reload.map(&:amount).sum
+		gift.balance = gift.original_value - total_redeemed_amt
 	end
 
 	def self.set_gift_current_status(gift)

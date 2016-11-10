@@ -72,6 +72,11 @@ class Gift < ActiveRecord::Base
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :proto_join
     has_many    :redemptions, -> { get_live_scope }, autosave: true
+
+    def complete_redemptions
+        redemptions.where(status: 'done')
+    end
+
     has_many    :registers
     has_one     :sms_contact,   autosave: true
 
