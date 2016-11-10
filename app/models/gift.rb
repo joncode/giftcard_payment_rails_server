@@ -72,6 +72,11 @@ class Gift < ActiveRecord::Base
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :proto_join
     has_many    :redemptions, -> { get_live_scope }, autosave: true
+
+    def complete_redemptions
+        redemptions.where(status: 'done')
+    end
+
     has_many    :registers
     has_one     :sms_contact,   autosave: true
 
@@ -537,7 +542,7 @@ class Gift < ActiveRecord::Base
                 new_hsh = mitem.serialize_to_app(quantity)
             elsif item_hsh['price'].to_f < mitem.price.to_f
                     # new price is greater than customer price
-                OpsTwilio.text_devs msg: "Menu Item Price is wrong on gift - menu item #{mitem.id} #{mitem.price} at Q #{quantity} - item price = #{item_hsh['price']}"
+                OpsTwilio.text_devs msg: "#{self.id} Menu Item Price is wrong on gift - menu item #{mitem.id} #{mitem.price} at Q #{quantity} - item price = #{item_hsh['price']}"
                 hsh = mitem.serialize_to_app(quantity)
                 hsh['price'] = item_hsh['price']
                 new_hsh = hsh
