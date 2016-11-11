@@ -13,7 +13,7 @@ module GiftScheduler
 	    end
 	    if save
 	    	puts "Gift has been scheduled for delivery #{self.status} #{self.id}"
-		    messenger(:invoice_giver)
+		    messenger(:invoice_giver, false)
 		    true
 		else
 			puts "500 Internal - Gift deliver now failed #{self.id} #{self.errors.messages}"

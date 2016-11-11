@@ -2,7 +2,7 @@ module GiftMessenger
     extend ActiveSupport::Concern
     include Email
 
-    def messenger(invoice=false)
+    def messenger(invoice=false, thread_it=true)
         if self.success? && thread_on?
             puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name}"
 
@@ -10,15 +10,15 @@ module GiftMessenger
                 invoice_giver
             end
             # notify_admin if self.giver_type == "User"
-            send_receiver_notification if self.status != 'schedule'
+            send_receiver_notification(thread_it) if self.status != 'schedule'
         else
             puts "500 Internal Gift messenger FAIL conditional #{self.id} #{self.success?} #{thread_on?}"
         end
     end
 
-    def send_receiver_notification
+    def send_receiver_notification(thread_it=true)
         Relay.send_push_notification(self)
-        notify_receiver
+        notify_receiver(thread_it)
     end
 
     def send_gift_delivered_notifications

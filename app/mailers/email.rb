@@ -130,6 +130,7 @@ private
     def route_email_system data, thread_it=true
         puts "Email.rb 131 - route_email_system"
         unless  Rails.env.development?
+
             if thread_it  # set this to false if you are already on a background thread
                 Resque.enqueue(MailerJob, data)
             else
