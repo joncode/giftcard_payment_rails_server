@@ -5,7 +5,7 @@ class Redemption < ActiveRecord::Base
 	# STATUS ENUM : 'pending', 'done', 'expired'
 	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
-    default_scope -> { where(active: true) } # indexed
+    default_scope -> { where(active: true) } # indexed - # do NOT remove !@
     scope :live_scope, -> (gift) { where(gift_id: gift.id, status: ['done', 'pending']).order(created_at: :desc) }
     scope :pending_scope, -> (gift) { where(gift_id: gift.id, status: 'pending').order(created_at: :desc) }
     scope :get_live_scope, -> { where(status: ['done', 'pending']).order(created_at: :desc) }
@@ -40,6 +40,11 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+	def self.expire_stale_tokens
+		where(status: 'pending').find_each do |redemption|
+			redemption.stale?
+		end
+	end
 
 	def redeemable?
 		return false if self.status != 'pending'
@@ -79,7 +84,7 @@ class Redemption < ActiveRecord::Base
 		end
 		if boolean && self.status == 'pending'
 				# status is out of sync with token , redemption must be expired
-			remove_pending('expired', { 'response_code' => 'SYSTEM_EXPIRE', 'response_text' => "API Redemption :stale? - Token #{self.token} stale #{DateTime.now.utc} - #{self.new_token_at}" })
+			remove_pending('expired', { 'response_code' => 'SYSTEM_EXPIRE', 'response_text' => "API Redemption :stale? - Token #{self.token} stale #{Time.now.utc} - #{self.new_token_at}" })
 		end
 		return boolean
     end
