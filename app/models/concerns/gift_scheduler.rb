@@ -12,7 +12,7 @@ module GiftScheduler
 	    	self.status = 'incomplete'
 	    end
 	    if save
-		    messenger(:invoice_giver)
+		    messenger(:invoice_giver, false)
 		    true
 		else
 			puts "500 Internal - Gift deliver now failed #{self.id} #{self.errors.messages}"
