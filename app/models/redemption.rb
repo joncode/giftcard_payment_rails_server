@@ -5,7 +5,7 @@ class Redemption < ActiveRecord::Base
 	# STATUS ENUM : 'pending', 'done', 'expired'
 	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
-    default_scope -> { where(active: true) } # indexed
+    default_scope -> { where(active: true) } # indexed - # do NOT remove !@
     scope :live_scope, -> (gift) { where(gift_id: gift.id, status: ['done', 'pending']).order(created_at: :desc) }
     scope :pending_scope, -> (gift) { where(gift_id: gift.id, status: 'pending').order(created_at: :desc) }
     scope :get_live_scope, -> { where(status: ['done', 'pending']).order(created_at: :desc) }
@@ -37,42 +37,67 @@ class Redemption < ActiveRecord::Base
 		Gift.unscoped.find self.gift_id
 	end
 
+
 #   -------------
 
-    def stale?
-    	return true if self.new_token_at.nil?
-    	if self.status != 'pending'
-	    	return true
-	    else
-	    	stale_true = (self.new_token_at < reset_time)
-	    	if stale_true && self.r_sys != 4
-	    			# stale tokens should not be on pending redemptions
-	    		remove_pending 'expired', { 'response_code' => 'SYSTEM_EXPIRE',
-							'response_text' => "Token #{self.token} stale #{DateTime.now.utc} - #{self.new_token_at}" }
-	    		return true
-	    	end
-	    	return stale_true
-	    end
-    end
+	def self.expire_stale_tokens
+		where(status: 'pending').find_each do |redemption|
+			redemption.stale?
+		end
+	end
+
+	def redeemable?
+		return false if self.status != 'pending'
+		fresh?
+	end
 
     def fresh?
     	!stale?
     end
     alias_method :token_fresh?, :fresh?
 
-	def redeemable?
-		if self.r_sys == 2 || self.type_of == Redemption.convert_r_sys_to_type_of(2).to_s
-			status == 'pending' && fresh?
-		else
-			status == 'pending'
+    def stale?
+		if self.new_token_at.nil?
+			OpsTwilio.text_devs msg: "Redemption #{self.id} has no :new_token_at  - BAD DATA"
+			boolean = true
 		end
-	end
+		case self.r_sys
+		when 1		# synchronous, so should be immediate
+					# 10 minutes
+			boolean = self.new_token_at < 5.minutes.ago
+		when 2 		# v2 MerchantTools tablet
+					# after reset_time
+			boolean = self.new_token_at < reset_time
+		when 3 		# omnivore
+					# 27 seconds
+			boolean = self.new_token_at < 5.minutes.ago
+		when 4  	# zapper
+					# 3 minutes
+			boolean = self.new_token_at < 10.minutes.ago
+		when 5 		# paper certificate
+					# does not expire
+			boolean = false
+		else
+					# ERROR !
+			OpsTwilio.text_devs msg: "Redemption #{self.id} has unknown R-sys = |#{self.r_sys}|"
+			boolean = true
+		end
+		if boolean && self.status == 'pending'
+				# status is out of sync with token , redemption must be expired
+			remove_pending('expired', { 'response_code' => 'SYSTEM_EXPIRE', 'response_text' => "API Redemption :stale? - Token #{self.token} stale #{Time.now.utc} - #{self.new_token_at}" })
+		end
+		return boolean
+    end
 
 	def remove_pending cancel_type, response
 		return nil if self.status != 'pending'
 		return nil unless ['expired', 'cancel', 'failed'].include?(cancel_type)
 		self.status = cancel_type
-		self.response = response
+		if self.response.nil?
+			self.response = response
+		else
+			self.response['remove_pending'] = response
+		end
 		self.gift_next_value = self.gift_prev_value
 		if save
 			gift = self.gift

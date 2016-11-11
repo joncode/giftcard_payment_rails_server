@@ -25,45 +25,6 @@ class Operation < ActiveRecord::Base
         super(GIFT_STATUS_HSH[status_str])
     end
 
-    def self.collection_for_select gift
-        collection = []
-        if gift.status == "redeemed"
-            collection << ["Unredeem", "unredeem"]
-        elsif ["open", "incomplete", "notified"].include?(gift.status)
-            if gift.giver_type == 'User'
-                collection << ["Return to Sender", "return_to_sender"]
-            end
-            collection << ["Change Receiver", "change_receiver"]
-        end
-        if ['open'].include?(gift.status)
-            collection << ['Notify', 'notify']
-        end
-        if ['notified'].include?(gift.status) && !gift.token_fresh?
-            collection << ['Refresh Token', 'notify']
-        end
-        if ["open", "notified"].include?(gift.status)
-            collection << ["Redeem", "redeem_gift"]
-        end
-
-        if ["schedule"].include?(gift.status)
-            # collection << ["Reschedule", "reschedule"]
-            if gift.giver_type == 'User'
-                collection << ["Return to Sender & Deliver", "return_to_sender"]
-            end
-            collection << ["Change Receiver & Deliver", "change_receiver"]
-        end
-        if gift.payable_type == "Sale"
-            collection << ["Refund/Cancel", "refund_cancel"]
-            collection << ["Refund/Live", "refund_live"]
-        end
-        if gift.active
-            collection << ["Deactivate", "deactivate"]
-        else
-            collection << ["Activate", "activate"]
-        end
-        collection
-    end
-
     # def type_of
     #     ADMIN_ACTION_HASH.key(super)
     # end

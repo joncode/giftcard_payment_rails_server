@@ -370,7 +370,7 @@ class Redeem
 				if sync
 					if already_have_one.merchant_id == gift.merchant_id
 						already_have_one.remove_pending( 'cancel',
-							{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "Removed for next redemption via #{api}" })
+							{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "API - Redeem.rb - Removed for next redemption via #{api}" })
 					end
 				else
 					return response(already_have_one, gift)
