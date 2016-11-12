@@ -2,6 +2,24 @@ class Web::V3::MerchantsController < MetalCorsController
 
     before_action :authentication_no_token
 
+
+    def card
+        create_with = anon_stripe_card_params
+        card = CardStripe.create_card_from_hash create_with
+
+        card.client = @current_client
+        card.partner = @current_partner
+        card.origin = "#{@current_partner.id}|#{@current_partner.name}|#{@current_client.id}|#{@current_client.name}"
+        card.save
+        if card.active && card.persisted?
+            success 'Card Created'
+        else
+            fail_web fail_web_payload("not_created_card", card.error_message)
+            # status = :bad_request
+        end
+        respond(status)
+    end
+
     def signup
         submit_obj = MerchantSignup.new(merchant_signup_params)
 
@@ -80,6 +98,10 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
 private
+
+    def anon_stripe_card_params
+        params.require(:data).permit(:stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
+    end
 
     def mail_notice_submit_merchant_setup merchant_submit_obj
         data = { 'method' => 'mail_notice_submit_merchant_setup', 'args' => merchant_submit_obj }

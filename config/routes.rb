@@ -186,6 +186,7 @@ Drinkboard::Application.routes.draw do
 				end
 				collection do
 					post :signup
+					post :card
 				end
 			end
 
