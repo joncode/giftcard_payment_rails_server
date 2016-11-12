@@ -15,6 +15,7 @@ class CardStripe < ActiveRecord::Base
 		cc_hash.stringify_keys!
 		card 			= new
 		card.stripe_id 	= cc_hash["stripe_id"]
+		card.stripe_user_id = cc_hash["stripe_user_id"]
 		card.name 		= cc_hash["name"]
 		card.zip 		= cc_hash['zip']
 		card.brand 		= cc_hash["brand"]

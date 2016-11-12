@@ -100,7 +100,7 @@ class Web::V3::MerchantsController < MetalCorsController
 private
 
     def anon_stripe_card_params
-        params.require(:data).permit(:stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
+        params.require(:data).permit(:stripe_user_id, :stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
     end
 
     def mail_notice_submit_merchant_setup merchant_submit_obj
