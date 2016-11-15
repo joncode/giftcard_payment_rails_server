@@ -60,27 +60,28 @@ class Redemption < ActiveRecord::Base
 		if self.new_token_at.nil?
 			OpsTwilio.text_devs msg: "Redemption #{self.id} has no :new_token_at  - BAD DATA"
 			boolean = true
-		end
-		case self.r_sys
-		when 1		# synchronous, so should be immediate
-					# 10 minutes
-			boolean = self.new_token_at < 5.minutes.ago
-		when 2 		# v2 MerchantTools tablet
-					# after reset_time
-			boolean = self.new_token_at < reset_time
-		when 3 		# omnivore
-					# 27 seconds
-			boolean = self.new_token_at < 5.minutes.ago
-		when 4  	# zapper
-					# 3 minutes
-			boolean = self.new_token_at < 10.minutes.ago
-		when 5 		# paper certificate
-					# does not expire
-			boolean = false
 		else
-					# ERROR !
-			OpsTwilio.text_devs msg: "Redemption #{self.id} has unknown R-sys = |#{self.r_sys}|"
-			boolean = true
+			case self.r_sys
+			when 1		# synchronous, so should be immediate
+						# 10 minutes
+				boolean = self.new_token_at < 5.minutes.ago
+			when 2 		# v2 MerchantTools tablet
+						# after reset_time
+				boolean = self.new_token_at < reset_time
+			when 3 		# omnivore
+						# 27 seconds
+				boolean = self.new_token_at < 5.minutes.ago
+			when 4  	# paper certificate
+						# does not expire
+				boolean = false
+			when 5 		# zapper
+						# 3 minutes
+				boolean = self.new_token_at < 10.minutes.ago
+			else
+						# ERROR !
+				OpsTwilio.text_devs msg: "Redemption #{self.id} has unknown R-sys = |#{self.r_sys}|"
+				boolean = true
+			end
 		end
 		if boolean && self.status == 'pending'
 				# status is out of sync with token , redemption must be expired
