@@ -5,11 +5,13 @@ class Web::V3::MerchantsController < MetalCorsController
 
     def card
         create_with = anon_stripe_card_params
+        merchant_name = create_with.delete(:merchant_name)
+        email = create_with.delete(:email)
         card = CardStripe.create_card_from_hash create_with
 
         card.client = @current_client
         card.partner = @current_partner
-        card.origin = "#{@current_partner.id}|#{@current_partner.name}|#{@current_client.id}|#{@current_client.name}"
+        card.origin = "#{merchant_name}|#{email}"
         card.save
         if card.active && card.persisted?
             success 'Card Created'
@@ -100,7 +102,7 @@ class Web::V3::MerchantsController < MetalCorsController
 private
 
     def anon_stripe_card_params
-        params.require(:data).permit(:stripe_user_id, :stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
+        params.require(:data).permit(:merchant_name, :email, :stripe_user_id, :stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
     end
 
     def mail_notice_submit_merchant_setup merchant_submit_obj
