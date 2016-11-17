@@ -11,6 +11,12 @@ class CardStripe < ActiveRecord::Base
 #	-------------
 
 
+	belongs_to :client
+	belongs_to :partner, polymorphic: true
+
+#	-------------
+
+
 	def self.create_card_from_hash cc_hash
 		cc_hash.stringify_keys!
 		card 			= new
