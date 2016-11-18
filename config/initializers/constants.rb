@@ -65,6 +65,8 @@ else
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 end
 
+GOLFNOW_ID = Rails.env.staging? ? 28 : 31
+
 GOLFNOW_COM = 331
 GOLFADVISOR_COM = 13326
 GOLFCOURSE_WEBSITE = 74

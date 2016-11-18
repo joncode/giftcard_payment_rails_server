@@ -246,6 +246,10 @@ class Gift < ActiveRecord::Base
         string_to_float self.value
     end
 
+    def cost_cents
+        currency_to_cents(self.cost)
+    end
+
     def fee
         case self.giver_type
         when "User"
@@ -259,13 +263,13 @@ class Gift < ActiveRecord::Base
         if [300,301,307].include? self.cat
             return merchant.location_fee(self.value_cents)
         elsif [100,101,107,150,151,157].include? self.cat
-            return (self.cost.to_f * 100).to_i
+            return cost_cents
         else
             return 0
         end
     end
 
-    def override_fee override_obj
+    def override_fee override_obj=nil
         if [300,301,307].include? self.cat
             return merchant.override_fee(self.value_cents)
         elsif [100,101,107,150,151,157].include? self.cat

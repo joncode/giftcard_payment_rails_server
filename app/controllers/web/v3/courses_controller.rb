@@ -2,8 +2,6 @@ class Web::V3::CoursesController < MetalCorsController
 
     before_action :authentication_no_token, only: [:index, :revenue]
 
-    GOLFNOW_ID = Rails.env.staging? ? 28 : 31
-
     def index
         if @current_client.partner_id != GOLFNOW_ID || @current_client.partner_type != 'Affiliate'
                     # closing this API off for non-Golfnow
