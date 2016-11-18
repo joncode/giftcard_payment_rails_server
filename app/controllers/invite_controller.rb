@@ -12,6 +12,10 @@ class InviteController < ApplicationController
 		end
 	end
 
+	def new_paper
+
+	end
+
     def paper_gifts
     	puts "PAPER GIFT REQUEST #{params.inspect}"
         @gift = Gift.includes(:merchant).find_by(hex_id: params[:id])

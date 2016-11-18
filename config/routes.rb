@@ -5,6 +5,7 @@ Drinkboard::Application.routes.draw do
 
     # if !Rails.env.production?
     get '/papergifts/:id',  to: 'invite#paper_gifts'
+    # get '/newpaper',  to: 'invite#new_paper'
     # end
 
 #################        Mdot V2 API                              /////////////////////////////
