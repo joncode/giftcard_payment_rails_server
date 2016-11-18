@@ -66,8 +66,8 @@ class Redemption < ActiveRecord::Base
 						# 10 minutes
 				boolean = self.new_token_at < 5.minutes.ago
 			when 2 		# v2 MerchantTools tablet
-						# after reset_time
-				boolean = self.new_token_at < reset_time
+						# token lasts for 24 hours
+				boolean = self.new_token_at < (DateTime.now.utc - 24.hours)
 			when 3 		# omnivore
 						# 27 seconds
 				boolean = self.new_token_at < 5.minutes.ago
