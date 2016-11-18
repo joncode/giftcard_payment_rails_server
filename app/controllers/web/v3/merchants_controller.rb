@@ -11,7 +11,8 @@ class Web::V3::MerchantsController < MetalCorsController
 
         card.client = @current_client
         card.partner = @current_partner
-        card.origin = "#{merchant_name}|#{email}"
+        card.nickname = email
+        card.origin = merchant_name
         card.save
         if card.active && card.persisted?
             success 'Card Created'
