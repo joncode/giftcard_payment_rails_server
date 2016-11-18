@@ -24,10 +24,16 @@ class Sale < ActiveRecord::Base
         #    "card_id"=>980193262, "giver_id"=>45, "merchant_id"=>"590",
         #    "cim_profile"=>"123944998", "cim_token"=>"283107841", 'ccy'=>'USD'}
 
+         # {"amount"=>"0.0", "ccy"=>"USD", "unique_id"=>"r-David|m-10|u-7689", "card_id"=>980191948,
+         #    "giver_id"=>7689, "merchant_id"=>10, "stripe_id"=>"card_18yDTbHMscfhJNrcYaJvkx6a",
+         #  "stripe_user_id"=>"cus_9GkzzcqBi0Z9Q7"}
+
 
         cc_hsh.stringify_keys!
 
-        if cc_hsh['stripe_id'].present?
+        if cc_hsh['amount'].to_f == 0
+            self.charge_zero_amount cc_hsh
+        elsif cc_hsh['stripe_id'].present?
             self.charge_stripe cc_hsh, giver
         elsif cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
             cc_hsh.delete('ccy')
@@ -38,6 +44,23 @@ class Sale < ActiveRecord::Base
             self.charge_number_then_tokenize cc_hsh
         end
 
+    end
+
+    def self.charge_zero_amount cc_hsh
+        s = Sale.new
+        s.request = cc_hsh
+        s.response =  {"response_code"=>"1", "response_subcode"=>"1", "response_reason_code"=>"1", "response_reason_text"=>"This transaction has been approved.", "transaction_id"=> cc_hsh['unique_id'], "amount"=>"0.0" }
+        s.revenue_cents = 0
+        s.revenue = 0
+        s.gateway = 'free'
+        s.resp_code = 1
+        s.reason_text = "This transaction has been approved."
+        s.reason_code = 1
+        s.merchant_id = cc_hsh["merchant_id"]
+        s.giver_id = cc_hsh["giver_id"]
+        s.card_id = cc_hsh["card_id"]
+        s.transaction_id = cc_hsh['unique_id']
+        s
     end
 
     def self.charge_stripe cc_hsh, giver=nil
@@ -73,10 +96,18 @@ class Sale < ActiveRecord::Base
         nil
     end
 
+    def response= hsh
+        self.resp_json = hsh.to_json
+    end
+
     def request
         JSON.parse self.req_json
     rescue
         nil
+    end
+
+    def request= hsh
+        self.req_json = hsh.to_json
     end
 
 #   -------------

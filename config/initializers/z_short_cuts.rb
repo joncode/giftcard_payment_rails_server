@@ -21,6 +21,7 @@ PLG = PlaceGraph
 RD = Redemption
 RG = Register
 S = OpsStripe
+SA = Sale
 SC = OpsStripeCard
 U = User
 US = UserSocial
