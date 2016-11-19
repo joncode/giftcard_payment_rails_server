@@ -6,9 +6,10 @@
     <title>ItsOnMe Gift Certificate</title>
 	<style type="text/css">
 		h2 { padding-top: 10px; }
-		table { border-collapse:collapse; border: none; padding: 0; margin: 0; width:96%;}
+		table { border-collapse:collapse; border: none; padding: 0; margin: 0; width:95%;}
 		td {
 			padding-top: 10px;
+			padding-right: 10px;
 	   		border:none;
 		}
 		ul {
@@ -18,6 +19,7 @@
 			border:5px solid #333;
 			border-radius: 10px !important;
 			height: 200px;
+			width: 90%;
 		}
 		.user_image {
 			border:2px solid #333;
@@ -37,13 +39,13 @@
 <body>
 
 
-<div style="border: 10px solid #000; border-radius: 20px !important; width: 650px; padding: 10px 0 10px 20px !important;">
+<div style="border: 10px solid #000; border-radius: 20px !important; width: 650px; padding: 10px 10px 10px 20px !important;">
 <table border="0" cellpadding="0" cellspacing="0">
 	<tbody>
 		<tr>
 			<td>
 				<p style='text-align: center;'>
-					<span style='float:left;padding-right:10px;'><%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "" %></span>
+					<span style='float:left;padding-right:10px;'><%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png' %></span>
 					<h1 style="color: #28A9E0;">
 						<span style="font-size: 35px;font-weight: bold;font-family: 'Arial Rounded MT Bold';margin-top:4px;">ItsOn.Me</span>
 					</h1>
@@ -58,7 +60,9 @@
 						<%= image_tag(@gift.merchant.get_photo,  class: "merchant_image") %>
 					</li>
 					<li>
-						<h2 style="text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.merchant.name %></b></h2>
+						<h2 style="text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';">
+							<b><%= @gift.merchant.name %></b>
+						</h2>
 					</li>
 					<li>
 						<div style="text-align:center;"><%= @gift.merchant.html_complete_address %></div>
@@ -72,7 +76,9 @@
 <!-- 					<li style="text-align: center;"><i style="text-align: center; font-size: 130%;">To: <%= @gift.receiver_name %></i>
 					</li> -->
 					<li>
-					<h2 style="text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.message %></b></h2>
+						<h2 style="padding-right: 15px;text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';">
+							<b><%= @gift.message %></b>
+						</h2>
 					</li>
 					<li>
 						<h2 style="text-align: center; font-weight: bold; font-family: 'Arial Rounded MT Bold';">
@@ -122,4 +128,3 @@
 
 </body>
 </html>
-
