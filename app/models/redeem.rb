@@ -389,9 +389,9 @@ class Redeem
 		if !amount.kind_of?(Integer)
 			return { 'success' => false, "response_code" => 'INVALID_INPUT',
 				"response_text" => "Amount #{amount} is not denominated in #{CCY[gift.ccy]['subunit'].pluralize(2)}" }
-		elsif amount == 0
-			return { 'success' => false, "response_code" => 'INVALID_INPUT',
-				"response_text" => "Gift Amount (#{display_money(cents: amount, ccy: gift.ccy)}) is not a redeemable value" }
+		# elsif amount == 0
+		# 	return { 'success' => false, "response_code" => 'INVALID_INPUT',
+		# 		"response_text" => "Gift Amount (#{display_money(cents: amount, ccy: gift.ccy)}) is not a redeemable value" }
 		elsif amount == gift.balance
 			amount = gift.balance
 			gift_prev_value = gift.balance
