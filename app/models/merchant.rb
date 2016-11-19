@@ -165,7 +165,7 @@ class Merchant < ActiveRecord::Base
         if self.rate == 90
             o_rate = 7
         else
-            o_rate = 3
+            o_rate = 4
         end
         if convert_these_cents
             (convert_these_cents * o_rate / 100)
