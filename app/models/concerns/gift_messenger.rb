@@ -6,11 +6,11 @@ module GiftMessenger
         if self.success? && thread_on?
             puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name} #{self.receiver_email}"
 
+            # notify_admin if self.giver_type == "User"
+            send_receiver_notification(thread_it) if self.status != 'schedule'
             if invoice
                 invoice_giver(thread_it)
             end
-            # notify_admin if self.giver_type == "User"
-            send_receiver_notification(thread_it) if self.status != 'schedule'
         else
             puts "500 Internal Gift messenger FAIL conditional #{self.id} #{self.success?} #{thread_on?}"
         end
