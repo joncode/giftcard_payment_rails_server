@@ -8,7 +8,7 @@ module Email
         email     = gift.receiver_email || obj_email
 
         unless email.blank?
-            puts "emailing the gift receiver for #{gift.id}"
+            puts "emailing the gift receiver for #{gift.id} #{thread_it}"
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
 
             data = {"text"        => 'notify_receiver',
@@ -128,11 +128,13 @@ module Email
 private
 
     def route_email_system data, thread_it=true
-        puts "Email.rb 131 - route_email_system"
-        unless  Rails.env.development?
+        puts "Email.rb 131 - route_email_system #{data} #{thread_it}"
+        unless Rails.env.development?
             if thread_it  # set this to false if you are already on a background thread
+                puts "Email.rb 134 - Resque.enqueue(MailerJob, #{data})"
                 Resque.enqueue(MailerJob, data)
             else
+                puts "Email.rb 137 - MailerJob.perform(#{data})"
                 MailerJob.perform(data)
             end
         end
