@@ -11,7 +11,9 @@ module GiftScheduler
 	    else
 	    	self.status = 'incomplete'
 	    end
+	    puts "IN DELIVER NOW #{self.id} - #{self.status}"
 	    if save
+		    puts "SAVED DELIVER NOW #{self.id} - #{self.status}"
 		    messenger(:invoice_giver, false)
 		    true
 		else
@@ -19,7 +21,7 @@ module GiftScheduler
 			false
 		end
 	rescue => e
-		"500 Internal - Scheduled gift failed #{self.id} #{e.inspect}"
+		puts "500 Internal - Scheduled gift failed #{self.id} #{e.inspect}"
     end
 
 end
