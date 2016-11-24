@@ -7,7 +7,7 @@ module GiftMessenger
             puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name} #{self.receiver_email}"
 
             if invoice
-                invoice_giver
+                invoice_giver(thread_it)
             end
             # notify_admin if self.giver_type == "User"
             send_receiver_notification(thread_it) if self.status != 'schedule'

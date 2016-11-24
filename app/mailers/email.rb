@@ -50,13 +50,13 @@ module Email
         end
     end
 
-    def invoice_giver
+    def invoice_giver thread_it=true
         gift = self
         puts "emailing the gift giver for #{gift.id}"
         data = {"text"        => 'invoice_giver',
                 "gift_id"     => gift.id
                 }
-        route_email_system(data)
+        route_email_system(data, thread_it)
     end
 
     def notify_admin
