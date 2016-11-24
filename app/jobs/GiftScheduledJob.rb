@@ -7,13 +7,13 @@ class GiftScheduledJob
 
             begin
                 if gift.deliver_now
-    	            "-------------  Scheduled gift ID = #{gift.id}  -------------"
+    	            puts "-------------  Scheduled gift ID = #{gift.id}  -------------"
     	            sent_gifts += 1
     	        else
-    	        	"500 Internal - Scheduled gift failed #{gift.id} #{gift.errors.messages}"
+    	        	puts "500 Internal - Scheduled gift failed #{gift.id} #{gift.errors.messages}"
     	        end
             rescue => e
-                "500 Internal - Scheduled gift failed #{gift.id} #{e.inspect}"
+                puts "500 Internal - Scheduled gift failed #{gift.id} #{e.inspect}"
             end
 
         end
