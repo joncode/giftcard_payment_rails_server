@@ -14,7 +14,7 @@ class ClientUrlMatcher
 
 			if [SINGLEPLATFORM_ID, GOLFNOW_COM, GOLFADVISOR_COM, GOLFCOURSE_WEBSITE, GOLFFACEBOOK_TAB].include?(ary[0].to_i)
 					# matched client to channel ID
-				Client.where("url_name like '#{ary[0]}-#{ary[1]}%'").first
+				Client.where("url_name like '#{ary[0]}-#{ary[1]}-%'").first
 			end
 		end
 
