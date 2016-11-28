@@ -18,7 +18,7 @@ class OpsStripeToken
 		@email = args['nickname']
 	end
 
-	def upload
+	def tokenize
 		return nil if @token.nil? || @customer_name.nil? || @card_id.nil?
 		@response = Stripe::Customer.create(
 			:source => @token,

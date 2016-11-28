@@ -7,6 +7,9 @@ class CardStripe < ActiveRecord::Base
 
     validates_presence_of :stripe_id, :name, :zip, :brand, :csv, :month, :year, :last_four
 
+#	-------------
+
+	before_save :send_to_stripe
 
 #	-------------
 
@@ -15,6 +18,21 @@ class CardStripe < ActiveRecord::Base
 	belongs_to :partner, polymorphic: true
 
 #	-------------
+
+	def send_to_stripe
+		o = OpsStripeToken.new(self.as_json)
+		o.tokenize
+		if o.success
+			self.stripe_id = o.card_id
+			self.stripe_user_id = o.customer_id
+			self.country = o.country if o.country
+			self.ccy = o.ccy if o.ccy
+			self.brand = o.brand if o.brand
+			self.resp_json = o.to_db
+		else
+			self.resp_json = o.error.as_json
+		end
+	end
 
 
 	def self.create_card_from_hash cc_hash
@@ -31,14 +49,6 @@ class CardStripe < ActiveRecord::Base
 		card.last_four 	= cc_hash["last_four"]
 		card
 	end
-
-
-
-
-
-
-
-
 
 
 
