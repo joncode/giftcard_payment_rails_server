@@ -5,7 +5,7 @@ class OpsStripeToken
 	include OpsStripeHelper
 
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
-		:http_status, :customer_name, :token, :card_id, :ccy
+		:http_status, :customer_name, :token, :card_id, :ccy, :email, :card
 
 	def initialize args
 		Stripe.api_key = STRIPE_SECRET
@@ -15,14 +15,18 @@ class OpsStripeToken
 		@card_id = args['id']
 		@amount = args['amount'].to_i || 0
 		@ccy = args['ccy']
+		@email = args['nickname']
 	end
 
 	def upload
 		return nil if @token.nil? || @customer_name.nil? || @card_id.nil?
 		@response = Stripe::Customer.create(
 			:source => @token,
-			:description => "#{@customer_name} - #{@card_id}"
+			:description => "#{@customer_name} - #{@card_id}",
+			:email => @email
 		)
+		@customer_id = @response.id
+		process_card_validation @response.sources.first
 	rescue => e
 		process_error e
 	end
