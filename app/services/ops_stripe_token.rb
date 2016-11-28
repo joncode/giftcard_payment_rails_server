@@ -17,12 +17,14 @@ class OpsStripeToken
 		@ccy = args['ccy']
 	end
 
-	def create_subscription
+	def upload
 		return nil if @token.nil? || @customer_name.nil? || @card_id.nil?
 		@response = Stripe::Customer.create(
 			:source => @token,
 			:description => "#{@customer_name} - #{@card_id}"
 		)
+	rescue => e
+		process_error e
 	end
 
 	def charge_token
@@ -32,6 +34,8 @@ class OpsStripeToken
 			:currency => @ccy,
 			:customer => @customer_id
 		)
+	rescue => e
+		process_error e
 	end
 
 end
