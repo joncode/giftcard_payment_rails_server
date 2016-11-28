@@ -246,10 +246,8 @@ class Web::V3::GiftsController < MetalCorsController
             end
 
             if @current_redemption.present? && @current_redemption.r_sys != 2 && @current_redemption.gift_id == params[:id].to_i
-                ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
+                resp = Redeem.apply_and_complete(gift: gift, redemption: @current_redemption, qr_code: qrcode,
                     ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
-                resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
-                    pos_obj: ra['pos_obj'], client_id: @current_client.id)
                 if !resp.kind_of?(Hash)
                     status = :bad_request
                     fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
@@ -314,10 +312,8 @@ class Web::V3::GiftsController < MetalCorsController
             if (gift.receiver_id == @current_user.id) && (gift.status != 'redeemed')
                 if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id
 
-                    ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
+                    resp = Redeem.apply_and_complete(gift: gift, redemption: @current_redemption, qr_code: qrcode,
                         ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
-                    resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
-                        pos_obj: ra['pos_obj'], client_id: @current_client.id)
 
                     if !resp.kind_of?(Hash)
                         status = :bad_request

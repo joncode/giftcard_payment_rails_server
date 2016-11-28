@@ -35,6 +35,16 @@ class Redeem
 
 #   -------------
 
+	def self.apply_and_complete(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
+		ra = apply(gift: gift, redemption: redemption, qr_code: qr_code, ticket_num: ticket_num, server: server, client_id: client_id, callback_params: callback_params)
+
+		if ra['success']
+	        complete(redemption: ra['redemption'], gift: ra['gift'],  pos_obj: ra['pos_obj'], client_id: client_id)
+	    else
+	    	ra
+	    end
+	end
+
 	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
 		puts "REDEEM.apply"
 
@@ -81,6 +91,12 @@ class Redeem
 			if callback_params.blank? && qr_code.blank?   # both blank we have no unique data
 				return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 					"response_text" =>  "QR Code not found" }
+			elsif callback_params.blank? && !qr_code.blank?
+				# validate that QR code is a URL
+				unless UrlValidate.uri?(qr_code)
+					return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+						"response_text" =>  "QR Code is invalid, please scan again" }
+				end
 			end
 		end
 
