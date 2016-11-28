@@ -24,7 +24,7 @@ end
 
 Resque.after_fork do
 	puts "Resque after_fork"
-  	ActiveRecord::Base.establish_connection
+  	puts ActiveRecord::Base.establish_connection
   	Resque.redis = Redis.new(:host => host, :port => port, :password => password)
 end
 
