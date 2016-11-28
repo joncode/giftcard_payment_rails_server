@@ -4,7 +4,6 @@ class CardStripe < ActiveRecord::Base
 
 #	-------------
 
-
     validates_presence_of :stripe_id, :name, :zip, :brand, :csv, :month, :year, :last_four
 
 #	-------------
@@ -13,11 +12,27 @@ class CardStripe < ActiveRecord::Base
 
 #	-------------
 
-
 	belongs_to :client
 	belongs_to :partner, polymorphic: true
 
 #	-------------
+
+	attr_accessor :error_message
+
+	def error_message= err
+		if @error_message.nil?
+			@error_message = nil
+		else
+			@error_message += ', ' + err.to_s
+		end
+	end
+
+	def error_message
+		return @error_message unless @error_message.nil?
+		self.errors.full_messages.join(', ')
+	end
+
+#   -------------
 
 	def send_to_stripe
 		o = OpsStripeToken.new(self.as_json)
@@ -33,6 +48,8 @@ class CardStripe < ActiveRecord::Base
 		else
 			self.active = false
 			self.resp_json = o.error.as_json
+			# errors.add(o.error_key.to_sym, o.error_message)
+			@error_message = o.error_message
 		end
 	end
 
