@@ -1,6 +1,6 @@
 require 'stripe'
 
-class OpsStripeCard
+class OpsStripeToken
 	include MoneyHelper
 	include OpsStripeHelper
 
