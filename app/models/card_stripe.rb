@@ -38,7 +38,7 @@ class CardStripe < ActiveRecord::Base
 		o = OpsStripeToken.new(self.as_json)
 		o.tokenize
 		puts o.inspect
-		puts o.response
+		puts o.to_db
 		if o.success
 			self.stripe_id = o.card_id
 			self.stripe_user_id = o.customer_id
