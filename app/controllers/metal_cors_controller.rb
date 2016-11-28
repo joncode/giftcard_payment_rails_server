@@ -85,7 +85,7 @@ protected
 
     def authenticate_general
         # puts "\n\n\n#{request.headers.inspect}"
-        puts "--------------" + params.inspect
+        puts "--------------" + params.inspect unless Rails.env.production?
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
             if (PUBLIC_TOKENS.include?(token))
                 puts "Web  -------------    General Token   -----------------------"
