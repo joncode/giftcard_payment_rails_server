@@ -29,7 +29,9 @@ class CardStripe < ActiveRecord::Base
 			self.ccy = o.ccy if o.ccy
 			self.brand = o.brand if o.brand
 			self.resp_json = o.to_db
+			self.active = true
 		else
+			self.active = false
 			self.resp_json = o.error.as_json
 		end
 	end
