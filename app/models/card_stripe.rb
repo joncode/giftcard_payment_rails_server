@@ -37,6 +37,8 @@ class CardStripe < ActiveRecord::Base
 	def send_to_stripe
 		o = OpsStripeToken.new(self.as_json)
 		o.tokenize
+		puts o.inspect
+		puts o.response
 		if o.success
 			self.stripe_id = o.card_id
 			self.stripe_user_id = o.customer_id
@@ -47,7 +49,7 @@ class CardStripe < ActiveRecord::Base
 			self.active = true
 		else
 			self.active = false
-			self.resp_json = o.error.as_json
+			self.resp_json = o.to_db
 			# errors.add(o.error_key.to_sym, o.error_message)
 			@error_message = o.error_message
 		end
