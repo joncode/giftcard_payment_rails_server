@@ -24,17 +24,7 @@ end
 
 Resque.after_fork do
 	puts "Resque after_fork"
-	if ActiveRecord::Base.connected?
-		puts "ActiveRecord::Base.connected? = TRUE"
-	else
-		begin
-			g = G.l
-			puts g.inspect
-			puts "ActiveRecord::Base.connected? = FALSE but connected"
-		rescue
-			puts ActiveRecord::Base.establish_connection
-		end
-	end
+	puts ActiveRecord::Base.establish_connection
 
   	Resque.redis = Redis.new(:host => host, :port => port, :password => password)
 end
