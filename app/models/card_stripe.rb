@@ -17,7 +17,7 @@ class CardStripe < ActiveRecord::Base
 
 #	-------------
 
-	attr_accessor :error_message
+	attr_accessor :error_message, :cc_hsh
 
 	def error_message= err
 		if @error_message.nil?
@@ -35,7 +35,7 @@ class CardStripe < ActiveRecord::Base
 #   -------------
 
 	def send_to_stripe
-		o = OpsStripeToken.new(self.as_json)
+		o = OpsStripeToken.new(self.cc_hsh)
 		o.tokenize
 		puts o.inspect
 		puts o.to_db
@@ -68,6 +68,9 @@ class CardStripe < ActiveRecord::Base
 		card.month 		= cc_hash["month"]
 		card.year 		= cc_hash["year"]
 		card.last_four 	= cc_hash["last_four"]
+        card.nickname = cc_hash["email"]
+        card.origin = cc_hash["merchant_name"]
+        card.cc_hsh = cc_hash
 		card
 	end
 
