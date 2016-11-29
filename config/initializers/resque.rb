@@ -24,6 +24,12 @@ end
 
 Resque.after_fork do
 	puts "Resque after_fork"
+	begin
+		g = G.l
+		puts g.inspect
+	rescue
+		puts "ActiveRecord::Base crashed"
+	end
 	if ActiveRecord::Base.connected?
 		puts "ActiveRecord::Base.connected? = TRUE"
 	else
