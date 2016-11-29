@@ -9,6 +9,7 @@ class OpsStripeToken
 
 	def initialize args
 		Stripe.api_key = STRIPE_SECRET
+		puts 'OpsStripeToken' + args.inspect
 		@token = args['stripe_id']
 		@customer_id = args['stripe_user_id']
 		@customer_name = args['origin']
