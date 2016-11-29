@@ -15,7 +15,11 @@ class GiftNewRecipientJob
     	if args[:scheduled_at].blank?
     		sched_date = gift.scheduled_at
     	else
-	    	sched_date = TimeGem.string_stamp_to_datetime(args[:scheduled_at])
+            begin
+                sched_date = TimeGem.string_stamp_to_datetime(args[:scheduled_at])
+            rescue
+    	    	sched_date = TimeGem.string_to_datetime(args[:scheduled_at], gift.merchant.zone)
+            end
     	end
 
     	if args[:action_type] == 'receiver_new_send'
