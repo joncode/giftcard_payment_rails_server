@@ -75,7 +75,7 @@ class License < ActiveRecord::Base
 		when 'variable_merchant'
 			(count_merchants * self.amount)
 		when 'variable_redemption'
-			(total_promo_redemptions * self.percentage).to_i
+			(total_promo_redemptions * self.percentage).to_i  # round up / down ?
 		else
 			self.amount
 		end
