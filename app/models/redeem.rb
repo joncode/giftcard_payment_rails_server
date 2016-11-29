@@ -119,6 +119,8 @@ class Redeem
 			else
 				pos_obj, resp = zapper_sync_redemption( redemption, gift, qr_code, redemption.amount )
 			end
+		when 6	# ADMIN
+			pos_obj, resp = internal_redemption( redemption, gift, server )
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }

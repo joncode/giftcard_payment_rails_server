@@ -3,7 +3,7 @@ class Redemption < ActiveRecord::Base
 	include MoneyHelper
 
 	# STATUS ENUM : 'pending', 'done', 'expired'
-	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
+	enum type_of: [ :omnivore, :v2, :v1, :paper, :zapper, :admin ]
 
     default_scope -> { where(active: true) } # indexed - # do NOT remove !@
     scope :live_scope, -> (gift) { where(gift_id: gift.id, status: ['done', 'pending']).order(created_at: :desc) }
@@ -63,7 +63,7 @@ class Redemption < ActiveRecord::Base
 		else
 			case self.r_sys
 			when 1		# synchronous, so should be immediate
-						# 10 minutes
+						# 5 minutes
 				boolean = self.new_token_at < 5.minutes.ago
 			when 2 		# v2 MerchantTools tablet
 						# token lasts for 24 hours
@@ -76,6 +76,9 @@ class Redemption < ActiveRecord::Base
 				boolean = false
 			when 5 		# zapper
 						# 3 minutes
+				boolean = self.new_token_at < 10.minutes.ago
+			when 6		# admin
+						# 10 minutes
 				boolean = self.new_token_at < 10.minutes.ago
 			else
 						# ERROR !
@@ -330,7 +333,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 	def self.convert_type_of_to_r_sys(typ)
 		case typ.to_s
-		when 'pos'
+		when 'omnivore'
 			3
 		when 'v1'
 			1
@@ -340,22 +343,26 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 			4
 		when 'zapper'
 			5
+		when 'admin'
+			6
 		end
 	end
 
 	def self.convert_r_sys_to_type_of(r_sys)
-		return r_sys if [ :pos, :v2, :v1, :paper, :zapper ].include?(r_sys)
+		return r_sys if [ :omnivore, :v2, :v1, :paper, :zapper, :admin ].include?(r_sys)
 		case r_sys.to_i
 		when 1
 			:v1
 		when 2
 			:v2
 		when 3
-			:pos
+			:omnivore
 		when 4
 			:paper
 		when 5
 			:zapper
+		when 6
+			:admin
 		end
 	end
 
