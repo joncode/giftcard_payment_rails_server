@@ -25,9 +25,11 @@ class OpsStripeToken
 			:description => "#{@customer_name} - #{@card_id}",
 			:email => @email
 		)
+		puts @response.inspect
 		@customer_id = @response.id
 		process_card_validation @response.sources.first
 	rescue => e
+		puts e.inspect
 		process_error e
 	end
 
