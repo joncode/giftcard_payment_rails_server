@@ -53,9 +53,14 @@ class TimeGem
         dt.strftime("#{OUTPUT_FORMAT}")
     end
 
+    def self.string_stamp_to_datetime string_stamp
+        string_stamp = DateTime.parse(string_stamp) if string_stamp.kind_of?(String)
+        string_stamp
+    end
+
     def self.string_to_datetime datetime_obj, time_zone_str="UTC"
         if datetime_obj.kind_of?(String)
-            datetime_obj = datetime_obj.gsub('/', '-')
+            datetime_obj.gsub!('/', '-')
             if datetime_obj.split('-')[2].length == 4
                 datetime_obj = DateTime.strptime(datetime_obj + " #{time_zone_str}",  "#{"%m-%d-%Y"} %Z")
             else
