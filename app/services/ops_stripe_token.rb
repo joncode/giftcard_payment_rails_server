@@ -5,7 +5,7 @@ class OpsStripeToken
 	include OpsStripeHelper
 
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
-		:http_status, :customer_name, :token, :card_id, :ccy, :email, :card
+		:http_status, :customer_name, :token, :card_id, :ccy, :email, :card, :customer_id
 
 	def initialize args
 		Stripe.api_key = STRIPE_SECRET
