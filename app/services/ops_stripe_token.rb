@@ -20,10 +20,10 @@ class OpsStripeToken
 	end
 
 	def tokenize
-		return nil if @token.nil? || @customer_name.nil? || @card_id.nil?
+		return nil if @token.nil? || @customer_name.nil? || @email.nil?
 		@response = Stripe::Customer.create(
 			:source => @token,
-			:description => "#{@customer_name} - #{@card_id}",
+			:description => "#{@customer_name} #{@email}",
 			:email => @email
 		)
 		puts @response.inspect
