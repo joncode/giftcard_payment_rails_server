@@ -46,7 +46,7 @@ class Redeem
 	end
 
 	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
-		puts "REDEEM.apply"
+		puts "REDEEM.apply RequestHsh\n"
 
 			# set data and reject invalid submissions
 		if !redemption.kind_of?(Redemption)
@@ -75,7 +75,7 @@ class Redeem
 		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
-		puts "REDEEM.apply RequestHsh\n"
+
 		request_hsh = { gift_id: gift.id, redemption_id: redemption.id, qr_code: qr_code,
 			ticket_num: ticket_num, server: server, client_id: client_id, callback: callback_params }
 		puts request_hsh.inspect

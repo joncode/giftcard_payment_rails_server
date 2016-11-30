@@ -20,7 +20,7 @@ class Web::V3::CoursesController < MetalCorsController
                     # closing this API off for non-Golfnow
             fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
         elsif params[:start_date].blank?
-            fail_web({ err: "INVALID_INPUT", msg: "Misisng parameter (start_date)"})
+            fail_web({ err: "INVALID_INPUT", msg: "Missing parameter (start_date)"})
         else
             begin
                 start_date = TimeGem.string_to_datetime(params[:start_date]).beginning_of_day
