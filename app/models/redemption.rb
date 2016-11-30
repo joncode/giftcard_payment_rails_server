@@ -97,11 +97,7 @@ class Redemption < ActiveRecord::Base
 		return nil if self.status != 'pending'
 		return nil unless ['expired', 'cancel', 'failed'].include?(cancel_type)
 		self.status = cancel_type
-		if self.response.nil?
-			self.response = response
-		else
-			self.response['remove_pending'] = response
-		end
+		self.response = response
 		self.gift_next_value = self.gift_prev_value
 		if save
 			gift = self.gift
@@ -154,7 +150,14 @@ class Redemption < ActiveRecord::Base
     end
 
     def response= obj
-    	self.resp_json = obj
+		if self.resp_json.nil?
+			self.resp_json = obj
+		else
+			hsh = obj
+			hsh[self.response_at.to_s] = self.resp_json
+			self.resp_json = hsh
+			self.response_at = nil
+		end
     end
 
     def request
@@ -162,7 +165,14 @@ class Redemption < ActiveRecord::Base
     end
 
     def request= obj
-    	self.req_json = obj
+		if self.req_json.nil?
+			self.req_json = obj
+		else
+			hsh = obj
+			hsh[self.request_at.to_s] = self.req_json
+			self.req_json = hsh
+			self.request_at = nil
+		end
     end
 
 #   -------------
