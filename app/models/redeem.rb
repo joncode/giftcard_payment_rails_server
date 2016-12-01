@@ -437,10 +437,10 @@ class Redeem
 		end
 		value_amt = gift.original_value - redeemed_amt
 		available_amt = value_amt - reserved_amt
-		if amount > value_amt
+		if amount >= value_amt
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" => "The amount (#{display_money(cents: amount, ccy: gift.ccy)}) received is more than the remaining balance on the gift of #{ display_money(cents: value_amt, ccy: gift.ccy) }" }
-		elsif amount > available_amt
+		elsif amount >= available_amt
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" => "Due to pending redemptions, the amount you entered is more than current available balance #{display_money(cents: available_amt, ccy: gift.ccy)} " }
 		end
