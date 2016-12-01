@@ -354,12 +354,10 @@ class Redeem
 			# V1 & POS & Zapper redemption currently make their own redemptions
 			# if sync is true it means this method is used to create the redemption for ALL R-sys
 			# otherwise just notify the gift and send it down
-		unless sync
-			if (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
-				gift.notify(loc_id, client_id)
-				return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => 'Cannot Start asynchronous redemption' }
-			end
-		end
+		# if !sync && (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
+		# 	gift.notify(loc_id, client_id)
+		# 	return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => 'Cannot Start asynchronous redemption' }
+		# end
 
 				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
 		# if merchant.mode != 'live'
