@@ -391,10 +391,11 @@ class Redeem
 							{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "API - Redeem.rb - Removed for next redemption via #{api}" })
 					end
 				else
-					return response(already_have_one, gift)
+					# return response(already_have_one, gift)
 				end
 			end
 		end
+		puts 'ONTO VALUE LEVEL'
 
 		  # -------------
 		set_gift_current_balance_and_status(gift)
