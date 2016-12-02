@@ -155,7 +155,7 @@ class License < ActiveRecord::Base
 				return false
 			end
 		when 'annual'
-			return (TODAY.month == self.live_date.month && TODAY.day == self.live_date.day)
+			return (TODAY.month == self.live_at.month && TODAY.day == self.live_at.day)
 		else
 			return false
 		end
