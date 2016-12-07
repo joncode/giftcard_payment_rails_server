@@ -395,7 +395,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 	end
 
 	def set_unique_token
-		self.token = UniqueIdMaker.four_digit_token(Redemption, :hex_id, { status: 'pending', active: true })
+		self.token = UniqueIdMaker.four_digit_token(Redemption, :token, { status: 'pending', active: true })
 		self.new_token_at = DateTime.now.utc
 	end
 
