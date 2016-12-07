@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005004504) do
+ActiveRecord::Schema.define(version: 20161207203631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,10 @@ ActiveRecord::Schema.define(version: 20161005004504) do
     t.boolean  "active",     default: true
   end
 
+  add_index "alert_contacts", ["active", "alert_id", "note_id"], name: "index_alert_contacts_on_active_and_alert_id_and_note_id", using: :btree
+  add_index "alert_contacts", ["active", "alert_id"], name: "index_alert_contacts_on_active_and_alert_id", using: :btree
+  add_index "alert_contacts", ["alert_id", "user_id", "user_type"], name: "index_alert_contacts_on_alert_id_and_user_id_and_user_type", using: :btree
+
   create_table "alert_messages", force: :cascade do |t|
     t.integer  "alert_contact_id"
     t.integer  "target_id"
@@ -106,6 +110,8 @@ ActiveRecord::Schema.define(version: 20161005004504) do
     t.boolean  "active",           default: true
   end
 
+  add_index "alert_messages", ["active", "alert_contact_id"], name: "index_alert_messages_on_active_and_alert_contact_id", using: :btree
+
   create_table "alerts", force: :cascade do |t|
     t.string   "name"
     t.string   "system"
@@ -116,6 +122,7 @@ ActiveRecord::Schema.define(version: 20161005004504) do
     t.boolean  "active",     default: true
   end
 
+  add_index "alerts", ["active", "system"], name: "index_alerts_on_active_and_system", using: :btree
   add_index "alerts", ["name"], name: "index_alerts_on_name", using: :btree
 
   create_table "answers", force: :cascade do |t|
