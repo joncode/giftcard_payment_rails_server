@@ -12,7 +12,7 @@ describe Reminder do
 
 	after(:all) do
 		User.delete_all
-		Provider.delete_all
+		Merchant.delete_all
 	end
 
 

@@ -133,7 +133,7 @@ FactoryGirl.define do
         last_name                   "Basic"
         password                    "specspec"
         password_confirmation       "specspec"
-        sequence(:email)            { |n| "#{['f','g','y','t','d','h','c'].sample}thisguy#{n}@gmail.com" }
+        sequence(:email)            { |n| "#{rand(283641)}thisguy#{n}@gmail.com" }
         sequence(:remember_token)   { |n| "token#{n}" }
         # sequence(:facebook_id)      { |n| "98a#{n}fd332" }
         # sequence(:twitter)          { |n| "283s#{n}f6fd3" }
@@ -427,6 +427,7 @@ FactoryGirl.define do
         resp_code   1
         reason_text "This transaction has been approved."
         reason_code 1
+        gateway     'stripe'
         #response    AuthResponse.new
         #transaction AuthTransaction.new
         card_id    { FactoryGirl.create(:visa).id }

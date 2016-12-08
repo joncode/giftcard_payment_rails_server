@@ -5,7 +5,7 @@ describe GiftPromo do
         User.any_instance.stub(:init_confirm_email).and_return(true)
     end
     before(:each) do
-        Provider.delete_all
+        Merchant.delete_all
         @provider = FactoryGirl.create(:merchant)
         @gift_hsh = {}
         @gift_hsh["detail"]         = "this is good through 9PM"

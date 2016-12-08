@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Admt::V2::ProvidersController do
 
     before(:each) do
-        Provider.delete_all
+        Merchant.delete_all
 
          # should require valid admin credentials in every spec
         FactoryGirl.create(:admin_user, remember_token: "Token")

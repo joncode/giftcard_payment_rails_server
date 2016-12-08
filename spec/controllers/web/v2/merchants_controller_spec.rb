@@ -5,7 +5,7 @@ describe Web::V2::MerchantsController do
     before(:each) do
         request.env["HTTP_TKN"] = "nj3tOdJOaZa-qFx0FhCLRQ"
 
-        Provider.delete_all
+        Merchant.delete_all
         @merchant = FactoryGirl.create(:merchant)
     end
 

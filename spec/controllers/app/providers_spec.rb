@@ -5,7 +5,7 @@ describe AppController do
     describe "#providers" do
         before do
             User.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             @r = Region.find_by(name: 'New York')
             @user            = FactoryGirl.create :user
             @first_provider  = FactoryGirl.create :merchant, city_id: @r.id
