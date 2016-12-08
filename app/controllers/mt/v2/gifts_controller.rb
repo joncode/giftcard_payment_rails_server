@@ -9,8 +9,7 @@ class Mt::V2::GiftsController < JsonController
             fail "Redemption not found"
         else
             if redemption.status == 'pending'
-                ra = Redeem.apply(redemption: redemption, server: redeem_params['mt_user_id'])
-                rc = Redeem.complete(redemption: ra['redemption'], pos_obj: ra['pos_obj'], gift: ra['gift'])
+                rc = Redeem.apply_and_complete(redemption: redemption, server: redeem_params['mt_user_id'])
                 if rc['success']
                     success(rc['response_text'])
                 else
