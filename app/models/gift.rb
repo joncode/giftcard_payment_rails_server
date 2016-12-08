@@ -77,6 +77,10 @@ class Gift < ActiveRecord::Base
         redemptions.where(status: 'done')
     end
 
+    def pending_redemptions
+        redemptions.where(status: 'pending')
+    end
+
     has_many    :registers
     has_one     :sms_contact,   autosave: true
 
