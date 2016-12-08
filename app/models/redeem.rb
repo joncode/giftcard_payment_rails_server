@@ -1,8 +1,6 @@
 class Redeem
 	extend MoneyHelper
 
-
-
 	def self.set_gift_current_balance_and_status(gift)
 		set_balance(gift)
 		set_gift_current_status(gift)
@@ -16,10 +14,15 @@ class Redeem
 	def self.set_gift_current_status(gift)
 		return unless ['incomplete', 'open', 'notified', 'redeemeed'].include?(gift.status)
 		if gift.balance == 0
-			if gift.redemptions.select{ |r| r.status == 'pending'}.length > 0
-				gift.status = 'notified'
+			if gift.complete_redemptions.length > 0
+				total_redeemed_amt = gift.complete_redemptions.map(&:amount).sum
+				if total_redeemed_amt < gift.original_value
+					gift.status = 'notified'
+				else
+					gift.status = 'redeemed'
+				end
 			else
-				gift.status = 'redeemed'
+				gift.status = 'notified'
 			end
 		elsif gift.balance != gift.original_value
 			gift.status = 'notified'
