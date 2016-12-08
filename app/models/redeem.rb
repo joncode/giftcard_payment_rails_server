@@ -16,15 +16,13 @@ class Redeem
 		if gift.balance == 0
 			if gift.complete_redemptions.length > 0
 				total_redeemed_amt = gift.complete_redemptions.map(&:amount).sum
-				if total_redeemed_amt < gift.original_value
-					gift.status = 'notified'
-				else
-					gift.status = 'redeemed'
+				unless total_redeemed_amt < gift.original_value
+					return gift.status = 'redeemed'
 				end
-			else
-				gift.status = 'notified'
 			end
-		elsif gift.balance != gift.original_value
+		end
+
+		if gift.balance != gift.original_value
 			gift.status = 'notified'
 		elsif gift.notified_at.present? && gift.receiver_id
 			gift.status = 'notified'
