@@ -45,6 +45,7 @@ describe Redeem do
         resp['gift'].balance.should == @balance
         redemption = resp['redemption']
         redemption.r_sys.should == 4
+        redemption.status.should == 'pending'
         redemption.type_of.should == "paper"
         redemption.gift_id.should == @gift.id
         redemption.merchant_id.should == @merchant.id
@@ -58,6 +59,7 @@ describe Redeem do
         r2 = Redeem.start(gift: @gift, loc_id: nil, amount: @balance/3, api: "web/v3/gifts/#{@gift.id}/start_redemption")
         redemption = r2['redemption']
         redemption.r_sys.should == @merchant.r_sys
+        redemption.status.should == 'pending'
         redemption.type_of.should == "v2"
         redemption.gift_id.should == @gift.id
         redemption.merchant_id.should == @merchant.id
@@ -71,8 +73,13 @@ describe Redeem do
             # COMPLETE THE APP REDEMPTION
         @current_redemption = Redemption.current_pending_redemption(@gift)
         @current_redemption.id.should == r2['redemption'].id
-
+        rc = Redeem.apply_and_complete(redemption: @current_redemption, server: '1')
+        rc['redemption'].request = {"server"=>"1", "gift_card_id"=>"#{@gift.hex_id}", "value"=>3333, "ccy"=>"USD", "redemption_id"=>"#{@current_redemption.hex_id}"}
+        rc['redemption'].status.should == 'done'
+        @gift.reload.balance.should == rc['redemption'].gift_next_value
+        @balance.should == rc['redemption'].gift_prev_value
             # redeem rest of paper gift for remaining value of gift
+        # binding.pry
     end
 
 end

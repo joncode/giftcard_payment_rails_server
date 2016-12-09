@@ -25,11 +25,11 @@ OpsInternalPos = Struct.new(:redemption, :gift, :server) do
     	if success?
     		status = redemption.status
     		redemption.status = 'done'
-			h = { "success" => success?, "response_code" => 'APPLIED', "response_text"=>{"amount_applied" => applied_value, 'msg' => redemption.msg } }
+			h = { "success" => success?, "response_code" => 'APPLIED', "response_text"=>{"amount_applied" => applied_value, 'msg' => redemption.msg }, api: { system: 'OpsInternalPos'} }
 			redemption.status = status
 			h
 		else
-			{ "success" => success?, "response_code" => "ERROR", "response_text"=>{"amount_applied" => 0, 'msg' => 'POS system unavailable' } }
+			{ "success" => success?, "response_code" => "ERROR", "response_text"=>{"amount_applied" => 0, 'msg' => 'POS system unavailable' }, api: { system: 'OpsInternalPos'} }
 		end
 	end
 
