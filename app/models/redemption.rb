@@ -262,13 +262,21 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-	def self.get_all_live_redemptions gift
-		live_scope(gift)
+	def self.get_all_live_redemptions gift, r_sys=nil
+		if r_sys.nil?
+			live_scope(gift)
+		else
+			live_scope(gift).where(r_sys: r_sys)
+		end
 	end
 
-	def self.current_pending_redemption gift, redeems=nil
+	def self.current_pending_redemption gift, redeems=nil, r_sys=nil
 		if redeems.nil?
-			redeems = pending_scope(gift)
+			if r_sys.nil?
+				redeems = pending_scope(gift)
+			else
+				redeems = pending_scope(gift).where(r_sys: r_sys)
+			end
 		end
 		redemption = nil
 		redeems.each do |redeem|

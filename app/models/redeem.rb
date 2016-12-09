@@ -372,8 +372,8 @@ class Redeem
 
 			# check for existing pending redemptions
 		already_have_one = nil
-		redeems = Redemption.get_all_live_redemptions(gift)
-		already_have_one = Redemption.current_pending_redemption(gift, redeems)
+		redeems = Redemption.get_all_live_redemptions(gift, r_sys)
+		already_have_one = Redemption.current_pending_redemption(gift, redeems, r_sys)
 		if already_have_one.present?
 			if already_have_one.r_sys == 4 # paper gift
 					 # paper gifts can be re-drawn with this code
@@ -392,14 +392,17 @@ class Redeem
 							{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "API - Redeem.rb - Removed for next redemption via #{api}" })
 					end
 				else
-					# return response(already_have_one, gift)
+					return response(already_have_one, gift)
 				end
 			end
 		end
-		puts 'ONTO VALUE LEVEL'
+		puts "ONTO VALUE LEVEL Balance: #{gift.balance} - Status: #{gift.status}"
 
 		  # -------------
 		set_gift_current_balance_and_status(gift)
+
+		puts "Balance: #{gift.balance} - Status: #{gift.status}"
+
 		if amount.nil?
 			amount = gift.balance
 		else

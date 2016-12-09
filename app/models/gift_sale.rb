@@ -1,6 +1,14 @@
 class GiftSale < Gift
 
 
+# {"receiver_name"=>"Richard", "receiver_email"=>"hkosoff@gmail.com", "link"=>nil,
+# "origin"=>"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0",
+ # "client_id"=>120, "partner_id"=>571, "partner_type"=>"Merchant",
+ # "shoppingCart"=>[{"price"=>"30", "quantity"=>2, "item_id"=>5370, "item_name"=>"18 Holes (Weekdays)"}],
+  # "giver"=>@user,
+  # "credit_card"=>980195261, "merchant_id"=>571, "value"=>"60", "message"=>"Happy Chanukah\nLove your favorite Golf Conscierge", "scheduled_at"=>"2016-12-16"}
+
+
 #   -------------
 
 

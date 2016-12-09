@@ -1,5 +1,51 @@
 FactoryGirl.define do
 
+#   -------------
+
+    factory :session_token do
+         sequence(:token)    { |n|  "Token#{n}" }
+         user_id 123
+    end
+
+#   -------------
+
+    factory :user do
+        first_name                  "Jimmy"
+        last_name                   "Basic"
+        password                    "specspec"
+        password_confirmation       "specspec"
+        sequence(:email)            { |n| "#{rand(283641)}thisguy#{n}@gmail.com" }
+        sequence(:remember_token)   { |n| "token#{n}" }
+        # sequence(:facebook_id)      { |n| "98a#{n}fd332" }
+        # sequence(:twitter)          { |n| "283s#{n}f6fd3" }
+        sequence(:phone) do
+            phone = ""
+            10.times do
+              phone += (2..8).to_a.sample.to_s
+            end
+            phone
+        end
+        after(:create) do |user|
+            FactoryGirl.create(:session_token, user_id: user.id, token: user.remember_token)
+        end
+        factory :giver do
+            first_name   "Jon"
+            last_name    "Gifter"
+        end
+
+        factory :regifter do
+            first_name   "Will"
+            last_name    "ReGifter"
+        end
+
+        factory :receiver do
+            first_name   "Ron"
+            last_name    "Receiver"
+        end
+    end
+
+#   -------------
+
     factory :admin_user do
         sequence(:remember_token)    { |n|  "Token#{n}" }
         sequence(:email)            { |n|  "tester#{n}@gmail.com" }
@@ -136,6 +182,7 @@ FactoryGirl.define do
         user_id   1
         year  "2017"
         number "4417121029961508"
+        stripe_id 'ch_f293fgh1i23d1'
 
         factory :visa do
             csv       "323"
@@ -203,7 +250,7 @@ FactoryGirl.define do
         gift.cost            "85"
         gift.service         "4"
         gift.credit_card     { FactoryGirl.create(:visa).id }
-        gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
+        gift.shoppingCart    "[{\"detail\":null,\"price\":50,\"quantity\":2,\"item_id\":82,\"item_name\":\"Original Margarita\"}]"
         gift.message         "Factory Message"
         gift.pay_stat       "charge_unpaid"
         gift.payable       { FactoryGirl.create(:sale)}
@@ -264,9 +311,14 @@ FactoryGirl.define do
 
 
     factory :menu_item do
-       name   "Martini"
-       detail "Served with olives"
-       menu_item_id '200-500'
+       name   "Original Margarita"
+       detail "Served with salt"
+       pos_item_id '200-500'
+       ccy 'USD'
+       price "100"
+       price_cents 10000
+       standard true
+       photo "https://res.cloudinary.com/drinkboard/image/upload/v1481137269/errsvuupj0eq1im3ptsh.jpg"
     end
 
     factory :menu_string do
@@ -501,11 +553,6 @@ FactoryGirl.define do
         card_id    { FactoryGirl.create(:visa).id }
     end
 
-    factory :session_token do
-         sequence(:token)    { |n|  "Token#{n}" }
-         user_id 123
-    end
-
     factory :simple_user, :class => 'User' do
         first_name                  "Simple"
         last_name                   "User"
@@ -523,41 +570,6 @@ FactoryGirl.define do
         gift_id      nil
     end
 
-
-    factory :user do
-        first_name                  "Jimmy"
-        last_name                   "Basic"
-        password                    "specspec"
-        password_confirmation       "specspec"
-        sequence(:email)            { |n| "#{rand(283641)}thisguy#{n}@gmail.com" }
-        sequence(:remember_token)   { |n| "token#{n}" }
-        # sequence(:facebook_id)      { |n| "98a#{n}fd332" }
-        # sequence(:twitter)          { |n| "283s#{n}f6fd3" }
-        sequence(:phone) do
-            phone = ""
-            10.times do
-              phone += (2..8).to_a.sample.to_s
-            end
-            phone
-        end
-        after(:create) do |user|
-            FactoryGirl.create(:session_token, user_id: user.id, token: user.remember_token)
-        end
-        factory :giver do
-            first_name   "Jon"
-            last_name    "Gifter"
-        end
-
-        factory :regifter do
-            first_name   "Will"
-            last_name    "ReGifter"
-        end
-
-        factory :receiver do
-            first_name   "Ron"
-            last_name    "Receiver"
-        end
-    end
 
     factory :user_social do
         user_id     1
