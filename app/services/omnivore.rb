@@ -299,7 +299,7 @@ class Omnivore
 				resp = e.response.code
 				msg =  "\n\n (250) Omnivore Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
 				OpsTwilio.text_devs msg: msg
-				puts msp
+				puts msg
 				puts " Error Hash == " + { "code" => e.response.code, "error" => e.response['error']}.inspect
 				resp
 			end
