@@ -101,6 +101,26 @@ class Redeem
 			end
 		end
 
+		if redemption.status != 'pending'
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+						"response_text" =>  "Redemption is #{redemption.status}" }
+		end
+
+		#   -------------
+
+			# Let's get the current gift balance and set the redemption correctly
+		available_balance = gift.balance
+		if (redemption.amount > available_balance) || (redemption.gift_prev_value != available_balance)
+				# redemption must be adjusted
+			redemption.amount = available_balance if (redemption.amount > available_balance)
+			redemption.gift_prev_value = available_balance
+			redemption.gift_next_value = available_balance - redemption.amount
+			hsh = redemption.start_res
+			hsh['updated'] = { "previous_gift_balance"=>redemption.gift_prev_value, "amount_applied"=>redemption.amount, "remaining_gift_balance"=>redemption.gift_next_value }
+			redemption.start_res = hsh
+			redemption.save
+		end
+
 		#   -------------
 
 			# Let's process the redemption

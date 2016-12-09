@@ -79,9 +79,46 @@ describe Redeem do
         @gift.reload.balance.should == rc['redemption'].gift_next_value
         @balance.should == rc['redemption'].gift_prev_value
             # redeem rest of paper gift for remaining value of gift
+        pr = Redeem.apply_and_complete(redemption: resp['redemption'], server: '4')
+        pr['response_text']["amount_applied"].should == rc['redemption'].gift_next_value
+        pr['response_text']["msg"].should == "$#{(rc['redemption'].gift_next_value/100.0).round(2)} was applied (4). Gift has been fully used."
+        pr['redemption'].status.should == 'done'
+        pr['redemption'].gift_prev_value.should == rc['redemption'].gift_next_value
+        pr['redemption'].gift_next_value.should == 0
+
         # binding.pry
     end
 
+    it "should create a paper redemption" do
+            # MAKE A PAPER REDEMPTION
+        resp = Redeem.start(gift: @gift, api: "/papergifts/#{@gift.hex_id}", type_of: :paper)
+        puts resp.inspect
+        resp['success'].should be_true
+        resp['gift'].status.should == @status
+        resp['gift'].balance.should == @balance
+        redemption = resp['redemption']
+        redemption.r_sys.should == 4
+        redemption.status.should == 'pending'
+        redemption.type_of.should == "paper"
+        redemption.gift_id.should == @gift.id
+        redemption.merchant_id.should == @merchant.id
+        redemption.gift_next_value.should == 0
+        redemption.gift_prev_value.should == @balance
+        redemption.amount.should == @balance
+        redemption.start_req.should == {"loc_id"=>nil, "amount"=>nil, "client_id"=>nil, "api"=>"/papergifts/#{@gift.hex_id}", "type_of"=>"paper"}
+        redemption.start_res.should == {"response_code"=>"PENDING",
+            "response_text"=>{"previous_gift_balance"=> @balance, "amount_applied"=> @balance, "remaining_gift_balance"=>0, "msg"=>"Give code #{redemption.token} to your server"}}
+
+            # redeem rest of paper gift for remaining value of gift
+        pr = Redeem.apply_and_complete(redemption: resp['redemption'], server: '4')
+        pr['response_text']["amount_applied"].should == resp['redemption'].gift_prev_value
+        pr['response_text']["msg"].should == "$#{resp['redemption'].gift_prev_value/100} was applied (4). Gift has been fully used."
+        pr['redemption'].status.should == 'done'
+        pr['redemption'].gift_prev_value.should == resp['redemption'].gift_prev_value
+        pr['redemption'].gift_next_value.should == 0
+
+        # binding.pry
+    end
 end
 
 
