@@ -296,7 +296,7 @@ class Web::V3::GiftsController < MetalCorsController
             @current_redemption = Redemption.includes([:merchant, :gift]).find(redemption_id)
         else
             gift = Gift.includes(:merchant).find(params[:id])
-            @current_redemption = Redemption.current_pending_redemption(gift, gift.merchant.r_sys)
+            @current_redemption = Redemption.current_pending_redemption(gift, nil, gift.merchant.r_sys)
             if @current_redemption.nil?
                 resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
                     client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/complete_redemption")
