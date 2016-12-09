@@ -110,6 +110,15 @@ class Redeem
 
 			# Let's get the current gift balance and set the redemption correctly
 		available_balance = gift.balance
+
+		if available_balance == 0
+			redemption.remove_pending( 'cancel',
+							{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "API - Redeem.rb - Gift is already redeemed" })
+			return { 'success' => false, "response_code" => 'ALREADY_REDEEMED',
+					"response_text" => "Gift at #{gift.provider_name} has already been redeemed" }
+		end
+
+
 		if (redemption.amount > available_balance) || (redemption.gift_prev_value != available_balance)
 				# redemption must be adjusted
 			redemption.amount = available_balance if (redemption.amount > available_balance)
