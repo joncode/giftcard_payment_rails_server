@@ -345,7 +345,7 @@ class Web::V3::GiftsController < MetalCorsController
 
     def redemptions
         gift = Gift.find params[:id]
-        _serialized = gift.redemptions.serialize_objs
+        _serialized = gift.redemptions.where.not(r_sys: 4).serialize_objs
         success(_serialized)
         respond
     end
