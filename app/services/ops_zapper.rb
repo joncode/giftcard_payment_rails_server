@@ -235,6 +235,9 @@ class OpsZapper
 #    "POSReference"=>"ITSONME_25_3", "MerchantSiteId"=>71}}
 		@ticket_id = resp['ZapperId']
 		@err_desc = resp["ErrorDescription"]
+		if @err_desc == "Duplicate Payment."
+			@err_desc = "Duplicate Payment. Please wait 1 minute before exact duplicate transaction."
+		end
 		@check_value = resp['OriginalBillAmount'].to_i
 		@extra_value = resp['RequiredAmount'].to_i
 
