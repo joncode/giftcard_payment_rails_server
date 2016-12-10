@@ -82,9 +82,7 @@ class OpsZapper
 #   -------------
 
 	def self.strip_qr_code qr_code
-		x = Base64.strict_encode64(qr_code)
-		x.chomp! if (x[-1..-1] == "\n")
-		x
+		Base64.strict_encode64(qr_code)
 	end
 
 	def self.make_request_hsh gift, qr_code, redeem_amount, redemption
