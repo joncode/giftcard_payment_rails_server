@@ -88,7 +88,7 @@ class OpsZapper
 	def self.make_request_hsh gift, qr_code, redeem_amount, redemption
 		{
 			"qr_code" => strip_qr_code(qr_code),
-            "gift_card_id" => redemption.hex_id,
+            "gift_card_id" => gift.hex_id,
             "value" => redeem_amount,
             "gift_current_value" => redemption.gift_prev_value,
             "ccy" => gift.ccy,
