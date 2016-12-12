@@ -1,4 +1,4 @@
-workers Integer(ENV['PUMA_WORKERS'] || 3)
+workers Integer(ENV['PUMA_WORKERS'] || 5)
 threads Integer(ENV['MIN_THREADS']  || 1), Integer(ENV['MAX_THREADS'] || 1)
 
 
@@ -13,14 +13,15 @@ on_worker_boot do
 		config = ActiveRecord::Base.configurations[Rails.env] || Rails.application.config.database_configuration[Rails.env]
     	config['reaping_frequency'] = ENV['DB_REAP_FREQ'] || 10 # seconds
 		# config['pool'] = ENV['MAX_THREADS'] || 16
-    	config['pool']            =   ENV['DB_POOL'] || 2 #unicorn way
-    	ActiveRecord::Base.establish_connection(config)
+    	config['pool'] =   ENV['DB_POOL'] || 2 #unicorn way
+    	puts "puma.rb (17) Here is ActiveRecord::Base.establish_connection(config)"
+    	puts ActiveRecord::Base.establish_connection(config)
 	end
 
 	ActiveSupport.on_load(:active_record) do
-		ActiveRecord::Base.establish_connection
+    	puts "puma.rb (22) Here is ActiveRecord::Base.establish_connection - no (config)"
+    	puts ActiveRecord::Base.establish_connection
 	end
-
 
 	# If you are using Redis but not Resque, change this
 	if defined?(Resque)
