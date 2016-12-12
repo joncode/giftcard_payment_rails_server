@@ -46,7 +46,7 @@ module Email
             data = {
                 "text"    => 'notify_receiver_proto_join',
                 "gift_id" => gift.id }
-            route_email_system(data)
+            route_email_system(data, false, true)   # dont thread it now  - queue it later
         end
     end
 
@@ -127,14 +127,17 @@ module Email
 
 private
 
-    def route_email_system data, thread_it=true
+    def route_email_system data, thread_it=true, queue_later=false
         puts "Email.rb 131 - route_email_system #{data} #{thread_it}"
         unless Rails.env.development?
             if thread_it  # set this to false if you are already on a background thread
                 puts "Email.rb 134 - Resque.enqueue(MailerJob, #{data})"
                 Resque.enqueue(MailerJob, data)
+            elsif queue_later
+                puts "Email.rb 137 - MailerSlowerJob.perform(#{data})"
+                Resque.enqueue(MailerSlowerJob, data)
             else
-                puts "Email.rb 137 - MailerJob.perform(#{data})"
+                puts "Email.rb 140 - MailerJob.perform(#{data})"
                 MailerJob.perform(data)
             end
         end
