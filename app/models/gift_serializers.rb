@@ -218,7 +218,7 @@ private
 
     def multi_redemption_web_keys gift_hsh
         if gift_merchant = Merchant.unscoped.where(id: self.merchant_id).first
-            if gift_merchant.client.present?
+            if gift_merchant.multi_redeemable?
                 arg_scope = proc { ["All"] }
                 redemptions_merchants = gift_merchant.client.contents(:merchants, &arg_scope)
                 if redemptions_merchants != ["All"]
@@ -245,7 +245,7 @@ private
             gift_hsh['city_id']       = gift_merchant.city_id
             gift_hsh['region_id']     = gift_merchant.region_id
             gift_hsh['region_name']   = gift_merchant.region_name
-            if gift_merchant.client.present?
+            if gift_merchant.multi_redeemable?
                 gift_hsh['multi_loc'] = 'yes'
             else
                 gift_hsh['multi_loc'] = 'no'
@@ -274,7 +274,7 @@ private
         gift_hsh['city_id']            = gift_merchant.city_id
         gift_hsh['region_id']          = gift_merchant.region_id if gift_merchant.region_id
         gift_hsh['region_name']        = gift_merchant.region_name if gift_merchant.region_name
-        if gift_merchant.client.present?
+        if gift_merchant.multi_redeemable?
             gift_hsh['multi_loc'] = 'yes'
         else
             gift_hsh['multi_loc'] = 'no'
