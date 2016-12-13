@@ -40,6 +40,7 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+
 	def self.expire_stale_tokens
 		where(status: 'pending').find_each do |redemption|
 			redemption.stale?
@@ -261,6 +262,11 @@ class Redemption < ActiveRecord::Base
 
 
 #   -------------
+
+
+	def self.current_paper gift
+		where(gift_id: gift.id, r_sys: [4,6], status: 'pending', active: true).order(created_at: :desc)
+	end
 
 	def self.get_all_live_redemptions gift, r_sys=nil
 		if r_sys.nil?

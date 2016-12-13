@@ -27,28 +27,6 @@ class Mt::V2::GiftsController < JsonController
         respond(status)
     end
 
-    # def redeem_old
-    #     request_params = redeem_params
-    #     gift_id        = request_params["gift_id"]
-    #     gift           = Gift.find(gift_id)
-    #     if gift.status == 'notified'
-    #         if gift.token == request_params["token"]
-    #             gift.redeem_gift(request_params["server"])
-    #             success({ "gift_id" => gift.id, "status" => gift.status})
-    #         else
-    #             fail "Token is incorrect for gift #{gift_id}"
-    #         end
-    #     else
-    #         fail_message = if gift.status == 'redeemed'
-    #             "Gift #{gift_id} has already been redeemed"
-    #         else
-    #             "Gift #{gift_id} cannot be redeemed"
-    #         end
-    #         fail fail_message
-    #     end
-    #     respond(status)
-    # end
-
     def proto_join
         pj = ProtoJoin.find create_with_proto_join_params[:proto_join_id]
         gift = GiftProtoJoin.create({ "proto_join" => pj })

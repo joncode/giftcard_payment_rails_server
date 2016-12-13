@@ -375,53 +375,56 @@ class Redeem
 			merchant = gift.merchant
 		end
 
+
+		  # -------------
+
+
+		type_of = type_of.to_sym
+
 		if type_of == :merchant
 			r_sys = merchant.r_sys
 		else
 			r_sys = Redemption.convert_type_of_to_r_sys(type_of)
 		end
 
-			# V1 & POS & Zapper redemption currently make their own redemptions
-			# if sync is true it means this method is used to create the redemption for ALL R-sys
-			# otherwise just notify the gift and send it down
-		# if !sync && (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
-		# 	gift.notify(loc_id, client_id)
-		# 	return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => 'Cannot Start asynchronous redemption' }
-		# end
-
-				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
-		# if merchant.mode != 'live'
-		# 	return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
-		# 		"response_text" => "#{merchant.name} is not currently live" }
-		# end
-
-
-		  # -------------
-
-
-			# check for existing pending redemptions
-		already_have_one = nil
-		redeems = Redemption.get_all_live_redemptions(gift, r_sys)
-		already_have_one = Redemption.current_pending_redemption(gift, redeems, r_sys)
-		if already_have_one.present?
-			if already_have_one.r_sys == 4 # paper gift
-					 # paper gifts can be re-drawn with this code
-				if api.present? && api.match(gift.hex_id)
-					return { 'success' => true, "gift" => gift, "redemption" => already_have_one }
-				else
-					if r_sys == 4
-						return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
-							"response_text" => "Gift has been converted to a Paper Gift Certificate." }
-					end
-				end
+		if type_of == :paper
+				# reissuing a paper cert
+			redeems = Redemption.current_paper(gift)
+			if redeems.length > 1
+				return { 'success' => true, "gift" => gift, "redemption" => redeems.first }
+			elsif redeems.length == 1
+				return { 'success' => true, "gift" => gift, "redemption" => redeems.first }
 			else
-				if sync
-					if already_have_one.merchant_id == gift.merchant_id
-						already_have_one.remove_pending( 'cancel',
-							{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "API - Redeem.rb - Removed for next redemption via #{api}" })
+				# no other paper redemption , move on
+			end
+		end
+
+		if type_of != :paper
+				# check for existing pending redemptions
+					# paper does not issue a non-paper redemption
+			already_have_one = nil
+			redeems = Redemption.get_all_live_redemptions(gift, r_sys)
+			already_have_one = Redemption.current_pending_redemption(gift, redeems, r_sys)
+			if already_have_one.present?
+				if already_have_one.r_sys == 4 # paper gift
+						 # paper gifts can be re-drawn with this code
+					if api.present? && api.match(gift.hex_id)
+						return { 'success' => true, "gift" => gift, "redemption" => already_have_one }
+					else
+						if r_sys == 4
+							return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+								"response_text" => "Gift has been converted to a Paper Gift Certificate." }
+						end
 					end
 				else
-					return response(already_have_one, gift)
+					if sync
+						if already_have_one.merchant_id == gift.merchant_id
+							already_have_one.remove_pending( 'cancel',
+								{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "API - Redeem.rb - Removed for next redemption via #{api}" })
+						end
+					else
+						return response(already_have_one, gift)
+					end
 				end
 			end
 		end
