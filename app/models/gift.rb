@@ -274,9 +274,9 @@ class Gift < ActiveRecord::Base
     end
 
     def override_fee override_obj=nil
-        if [300,301,307].include? self.cat
+        if self.cat >= 300
             return merchant.override_fee(self.value_cents)
-        elsif [100,101,107,150,151,157].include? self.cat
+        elsif self.cat < 200
             return 0
         else
             return 0

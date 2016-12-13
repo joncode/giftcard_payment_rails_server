@@ -70,7 +70,7 @@ class Accountant
 			# nil or not found
 			return "No Location Affiliation" if affiliate.nil?
 
-			register = Register.init_debt(gift, affiliate, merchant.override_fee(gift.value_cents), "aff_loc")
+			register = Register.init_debt(gift, affiliate, gift.override_fee, "aff_loc")
 			return "Register exists" if register.nil?
 
 			if register.save
