@@ -65,7 +65,11 @@
 						</h2>
 					</li>
 					<li>
-						<div style="text-align:center;"><%= @gift.merchant.html_complete_address %></div>
+						<% if @gift.merchant.multi_redeemable? %>
+							<div style="text-align:center;">Redeemable at <%= @gift.provider_name %> Locations</div>
+						<% else %>
+							<div style="text-align:center;"><%= @gift.merchant.html_complete_address %></div>
+						<% end %>
 					</li>
 				</ul>
 			</td>
