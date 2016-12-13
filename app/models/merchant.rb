@@ -69,6 +69,22 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def multi_redeemable?
+        self.client_id.present?
+    end
+
+    def multi_redemption_merchants
+        c = self.client
+        if c.nil?
+            [self.id]
+        else
+            arg_scope = proc { Merchant.where(active: true, paused: false) }
+            c.contents(:merchants, &arg_scope)
+        end
+    end
+
+#   -------------
+
     def pending_redeems
         gifts = Gift.where(merchant_id: self.id, status: ['notified', 'redeemed']).where('new_token_at > ?', reset_time)
         notified_gifts = gifts.where(status: 'notified').order("created_at DESC")
