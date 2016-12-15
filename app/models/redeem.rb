@@ -390,7 +390,7 @@ class Redeem
 		end
 
 		if type_of == :paper
-				# reissuing a paper cert
+				# re-issuing a paper cert
 			redeems = Redemption.current_paper(gift)
 			if redeems.length > 1
 				return { 'success' => true, "gift" => gift, "redemption" => redeems.first }
