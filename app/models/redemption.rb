@@ -68,7 +68,7 @@ class Redemption < ActiveRecord::Base
 				boolean = self.new_token_at < 5.minutes.ago
 			when 2 		# v2 MerchantTools tablet
 						# token lasts for 24 hours
-				boolean = self.new_token_at < (DateTime.now.utc - 24.hours)
+				boolean = self.new_token_at < 24.hours.ago
 			when 3 		# omnivore
 						# 27 seconds
 				boolean = self.new_token_at < 5.minutes.ago
@@ -81,6 +81,9 @@ class Redemption < ActiveRecord::Base
 			when 6		# admin
 						# 10 minutes
 				boolean = self.new_token_at < 10.minutes.ago
+			when 7 		# Clover POS
+						# token lasts for 4 hours
+				boolean = self.new_token_at < 4.hours.ago
 			else
 						# ERROR !
 				OpsTwilio.text_devs msg: "Redemption #{self.id} has unknown R-sys = |#{self.r_sys}|"
@@ -369,11 +372,13 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 			5
 		when 'admin'
 			6
+		when 'clover'
+			7
 		end
 	end
 
 	def self.convert_r_sys_to_type_of(r_sys)
-		return r_sys if [ :omnivore, :v2, :v1, :paper, :zapper, :admin ].include?(r_sys)
+		return r_sys if [ :omnivore, :v2, :v1, :paper, :zapper, :admin, :clover ].include?(r_sys)
 		case r_sys.to_i
 		when 1
 			:v1
@@ -387,6 +392,8 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 			:zapper
 		when 6
 			:admin
+		when 7
+			:clover
 		end
 	end
 

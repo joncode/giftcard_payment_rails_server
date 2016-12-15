@@ -88,7 +88,7 @@ class Redeem
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Ticket Number not found" }
 		end
-		if redemption.r_sys == 5
+		if redemption.r_sys == 5   # zapper sync / async
 			if callback_params.blank? && qr_code.blank?   # both blank we have no unique data
 				return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 					"response_text" =>  "QR Code not found" }
@@ -150,6 +150,8 @@ class Redeem
 				pos_obj, resp = zapper_sync_redemption( redemption, gift, qr_code, redemption.amount )
 			end
 		when 6	# ADMIN
+			pos_obj, resp = internal_redemption( redemption, gift, server )
+		when 7  # Clover
 			pos_obj, resp = internal_redemption( redemption, gift, server )
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
@@ -473,7 +475,7 @@ class Redeem
 			end
 		end
 		value_amt = gift.original_value - redeemed_amt
-		available_amt = value_amt - reserved_amt
+		# available_amt = value_amt - reserved_amt
 		if amount > value_amt
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" => "The amount (#{display_money(cents: amount, ccy: gift.ccy)}) received is more than the remaining balance on the gift of #{ display_money(cents: value_amt, ccy: gift.ccy) }" }
