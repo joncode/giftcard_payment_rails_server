@@ -23,37 +23,9 @@ class Web::V3::CoursesController < MetalCorsController
             fail_web({ err: "INVALID_INPUT", msg: "Missing parameter (start_date)"})
         else
             begin
-                start_date = TimeGem.string_to_datetime(params[:start_date]).beginning_of_day
-                if params[:end_date].blank?
-                    end_date = DateTime.now.utc
-                else
-                    end_date = TimeGem.string_to_datetime(params[:end_date]).beginning_of_day
-                end
-
-                gs = Gift.get_purchases_for_affiliate(GOLFNOW_ID, start_date, end_date)
-
-                resp = {}
-                gs.each do |gift|
-                    client = gift.client
-                    if client.nil? && resp['Missing'].nil?
-                        resp['NA'] = { start_date: params[:start_date], end_date: params[:end_date], url: 'no_client', revenue: 0 }
-                    elsif resp[client.id].nil?
-                        merchant = gift.merchant
-                        fid = merchant && merchant.building_id
-                        if fid
-                            resp[client.id] = { start_date: params[:start_date], end_date: params[:end_date], url: client.url_name, revenue: 0 , golfnow_facility_id: fid }
-                        else
-                            resp[client.id] = { start_date: params[:start_date], end_date: params[:end_date], url: client.url_name, revenue: 0 }
-                        end
-                    end
-                    if client.nil?
-                        resp['NA'][:revenue] += gift.value_cents
-                    else
-                        resp[client.id][:revenue] += gift.value_cents
-                    end
-                end
-                ary_resp = resp.values
-                success(ary_resp)
+                o = OpsGolfnowRevenue.new(start_date: params[:start_date], end_date: params[:end_date])
+                o.perform
+                success(o.res)
             rescue => e
                 puts "500 Internal golfnow api error - #{e.inspect}"
                 fail_web({ err: "INVALID_INPUT", msg: "Data could not be proccessed"})
@@ -63,3 +35,5 @@ class Web::V3::CoursesController < MetalCorsController
     end
 
 end
+
+

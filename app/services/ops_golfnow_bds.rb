@@ -1,4 +1,4 @@
-class OpsGolfnow
+class OpsGolfnowBds
 
 	attr_reader :api_url, :username, :password, :user_add, :auto_add, :auto_skip, :courses, :response
 
@@ -147,7 +147,7 @@ class OpsGolfnow
             h = Hash.from_xml(resp.to_s)
             return @response = { status: 1, data: h }
         rescue => e
-            puts "\n\OpsGolfnow Error code = #{e.inspect}\n\n"
+            puts "\n\OpsGolfnowBds Error code = #{e.inspect}\n\n"
             if e.nil?
                 ress = { "response_code" => "ERROR", "response_text" => 'Contact Support', "code" => 400, "data" => [] }
                 return @response = { status: 0, data: ress, res: ress }
