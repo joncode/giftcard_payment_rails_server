@@ -267,14 +267,17 @@ class Omnivore
 	end
 
 	def omnivore_payload
-		{
-			"auto_close" => false,
+		h = {
 			"type" => "3rd_party",
 			"amount" => @applied_value,
 			"tip" => 0,
 			"tender_type" => @tender_type_id,
 			"payment_source" => @gift_card_id
 		}
+		if ['8crEn8T9'].include?(@pos_merchant_id)
+			h['auto_close'] = false
+		end
+		h
 	end
 
 	def post_redeem
