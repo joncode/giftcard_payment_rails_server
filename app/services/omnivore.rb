@@ -268,6 +268,7 @@ class Omnivore
 
 	def omnivore_payload
 		{
+			"auto_close" => false,
 			"type" => "3rd_party",
 			"amount" => @applied_value,
 			"tip" => 0,
