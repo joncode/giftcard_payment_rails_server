@@ -7,6 +7,7 @@ class MonthlyReportSysAlert < Alert
 		get_data
 		"MONTHLY REPORT\n#{@month_name} #{@year}\n\
 Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})\n\
+Total Amount: #{display_money ccy: 'USD', cents: @total_value}\n\
 MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
 New Users: #{@users}\n\
@@ -17,6 +18,7 @@ Redemptions: #{@redemptions}"
 		get_data
 		"<div><h2>MONTHLY REPORT</h2><h3>#{@month_name} #{@year}</h3>\
 <p><ul><li>Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})</li>\
+<li>Total Amount: #{display_money ccy: 'USD', cents: @total_value}</li>\
 <li>MerchantTools gifts: #{@merchant_gifts}</li>\
 <li>New Merchants: #{@merchants}</li>\
 <li>New Users: #{@users}</li>\

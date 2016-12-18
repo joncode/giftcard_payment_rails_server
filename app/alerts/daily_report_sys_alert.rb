@@ -7,6 +7,7 @@ class DailyReportSysAlert < Alert
 		get_data
 		"DAILY REPORT\n#{@day}\n\
 Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})\n\
+Total Amount: #{display_money ccy: 'USD', cents: @total_value}\n\
 MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
 New Users: #{@users}\n\
@@ -17,6 +18,7 @@ Redemptions: #{@redemptions}"
 		get_data
 		"<div><h2>DAILY REPORT</h2><h3>#{@day}</h3>\
 <p><ul><li>Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})</li>\
+<li>Total Amount: #{display_money ccy: 'USD', cents: @total_value}</li>\
 <li>MerchantTools gifts: #{@merchant_gifts}</li>\
 <li>New Merchants: #{@merchants}</li>\
 <li>New Users: #{@users}</li>\
