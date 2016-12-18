@@ -4,26 +4,11 @@ class WeeklyReportSysAlert < Alert
 #   -------------
 
 	def text_msg
-		get_data
-		"WEEKLY REPORT\nWeek of #{@week_day}\n\
-Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})\n\
-Total Amount: #{display_money ccy: 'USD', cents: @total_value}\n\
-MerchantTools gifts: #{@merchant_gifts}\n\
-New Merchants: #{@merchants}\n\
-New Users: #{@users}\n\
-Redemptions: #{@redemptions}"
+		super 'WEEKLY REPORT'
 	end
 
 	def email_msg
-		get_data
-		"<div><h2>WEEKLY REPORT</h2><h3>Week of #{@week_day}</h3>\
-<p><ul><li>Gift purchases: #{@purchases}</li>\
-<li>Total Amount: #{display_money ccy: 'USD', cents: @total_value}</li>\
-<li>MerchantTools gifts: #{@merchant_gifts}</li>\
-<li>New Merchants: #{@merchants}</li>\
-<li>New Users: #{@users}</li>\
-<li>Redemptions: #{@redemptions}</li>\
-</ul></p></div>".html_safe
+		super 'WEEKLY REPORT'
 	end
 
 	def msg
@@ -33,7 +18,10 @@ Redemptions: #{@redemptions}"
 #   -------------
 
 	def get_data
-		super since: 1.week.ago
+		time_period = 1.week.ago
+		week_day = TimeGem.dt_to_s(time_period)
+		@header = "Week of #{week_day}"
+		super since: time_period
 	end
 
 end

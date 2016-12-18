@@ -4,26 +4,11 @@ class DailyReportSysAlert < Alert
 #   -------------
 
 	def text_msg
-		get_data
-		"DAILY REPORT\n#{@day}\n\
-Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})\n\
-Total Amount: #{display_money ccy: 'USD', cents: @total_value}\n\
-MerchantTools gifts: #{@merchant_gifts}\n\
-New Merchants: #{@merchants}\n\
-New Users: #{@users}\n\
-Redemptions: #{@redemptions}"
+		super 'DAILY REPORT'
 	end
 
 	def email_msg
-		get_data
-		"<div><h2>DAILY REPORT</h2><h3>#{@day}</h3>\
-<p><ul><li>Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})</li>\
-<li>Total Amount: #{display_money ccy: 'USD', cents: @total_value}</li>\
-<li>MerchantTools gifts: #{@merchant_gifts}</li>\
-<li>New Merchants: #{@merchants}</li>\
-<li>New Users: #{@users}</li>\
-<li>Redemptions: #{@redemptions}</li>\
-</ul></p></div>".html_safe
+		super 'DAILY REPORT'
 	end
 
 	def msg
@@ -32,6 +17,10 @@ Redemptions: #{@redemptions}"
 
 #   -------------
 
-
+	def get_data
+		time_period = 24.hours.ago
+        @header = TimeGem.dt_to_s(time_period)
+		super since: time_period
+	end
 
 end

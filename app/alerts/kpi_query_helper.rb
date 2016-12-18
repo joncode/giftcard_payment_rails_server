@@ -2,7 +2,6 @@ module KpiQueryHelper
 
 
 	def get_data since: 24.hours.ago   # defaults to daily report
-		@day = TimeGem.dt_to_s(since)
 		@total_gifts ||= Gift.where(cat: 300).where('created_at > ?', since)
 		@purchases ||= @total_gifts.count
 
@@ -25,7 +24,27 @@ module KpiQueryHelper
 		@paper_certs ||= Redemption.where(active: true, r_sys: 4, status:['pending', 'done']).where('created_at > ?', since).count
 	end
 
+	def text_msg name
+		get_data
+		"#{name}\n#{@header}\n\
+Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})\n\
+Total Amount: #{display_money ccy: 'USD', cents: @total_value}\n\
+MerchantTools gifts: #{@merchant_gifts}\n\
+New Merchants: #{@merchants}\n\
+New Users: #{@users}\n\
+Redemptions: #{@redemptions}"
+	end
 
-
+	def email_msg name
+		get_data
+		"<div><h2>#{name}</h2><h3>#{@header}</h3>\
+<p><ul><li>Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})</li>\
+<li>Total Amount: #{display_money ccy: 'USD', cents: @total_value}</li>\
+<li>MerchantTools gifts: #{@merchant_gifts}</li>\
+<li>New Merchants: #{@merchants}</li>\
+<li>New Users: #{@users}</li>\
+<li>Redemptions: #{@redemptions}</li>\
+</ul></p></div>".html_safe
+	end
 
 end
