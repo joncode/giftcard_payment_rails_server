@@ -35,7 +35,7 @@ module LicenseMaker
 		l.name = 'Annual Single Subscription'
 		l.detail = 'single location'
 		l.detail_action = nil
-		l.amount = 120000
+		l.amount = 30000
 		l.percent = nil
 		l.amount_action = 'single'
 		l.units = 1
