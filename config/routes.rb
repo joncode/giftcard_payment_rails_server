@@ -139,7 +139,7 @@ Drinkboard::Application.routes.draw do
 			resources :clover, only: [] do
 				collection do
 					patch :redeem
-					post :initialize
+					post :init
 				end
 			end
 			resources :courses, only: [:index] do

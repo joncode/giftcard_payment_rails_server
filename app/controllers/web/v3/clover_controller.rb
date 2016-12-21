@@ -1,10 +1,10 @@
 class Web::V3::CloverController < MetalCorsController
 
 	before_action :authentication_no_token, only: [ :redeem ]
-	before_action :authenticate_general, only: [ :initialize ]
+	before_action :authenticate_general, only: [ :init ]
 
 
-	def initialize
+	def init
 		puts init_params.inspect
 		success({
 				status: 1,
