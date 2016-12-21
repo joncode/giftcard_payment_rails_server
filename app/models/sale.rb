@@ -4,6 +4,10 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
+    before_save :set_usd_cents
+
+#   -------------
+
     has_one :gift, as: :payable
     has_one :refunded, class_name: "Gift", as: :refund
     belongs_to :provider
@@ -198,6 +202,15 @@ private
     def notify_developers_for_missing_data
         if self.transaction_id.nil?
             OpsTwilio.text_devs msg: "Sale w/o Transaction ID #{self.id}"
+        end
+    end
+
+    def set_usd_cents
+        return true unless self.usd_cents.nil?
+        if self.ccy == 'USD'
+            self.usd_cents = self.revenue_cents
+        else
+            # deal with currency conversion
         end
     end
 

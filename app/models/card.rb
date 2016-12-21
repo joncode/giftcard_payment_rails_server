@@ -38,6 +38,7 @@ class Card < ActiveRecord::Base
 
 	before_create :send_to_stripe
 	before_save :crypt_number
+
 	# after_create :tokenize_card
 
 	after_commit :card_fraud_detection
