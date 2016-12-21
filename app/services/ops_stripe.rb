@@ -64,6 +64,11 @@ class OpsStripe
 		process_error e
 	end
 
+    def retrieve transaction_id
+        @request = { charge: transaction_id }
+        @response = Stripe::Charge.retrieve(id: transaction_id, expand: ['balance_transaction'])
+    end
+
 #	-------------
 
     def gateway_hash_response r=@response
