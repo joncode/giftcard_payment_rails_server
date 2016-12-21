@@ -5,6 +5,11 @@ class GiftCreatedEvent
     def self.perform gift_id
     	puts "\n gift #{gift_id} is being GiftCreatedEvent.job\n"
     	gift = Gift.find gift_id
+        if gift.payable.class == Sale
+            sale = gift.payable
+            sale.set_usd_cents
+            sale.save
+        end
         if gift.pay_stat != "payment_error"
             Accountant.gift_created_event(gift)
 
