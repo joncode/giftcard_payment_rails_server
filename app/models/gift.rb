@@ -711,7 +711,7 @@ private
         x = { merchant_id: self.merchant_id, value: self.value, receiver_name: self.receiver_name, cat: 300 }
         puts x.inspect
         # if resp is false , save is stopped , therefore exists must be true
-        resp = !Gift.where(x).where('created_at > ?', 1.minute.ago).exists?
+        resp = !Gift.where(x).where('created_at > ?', 1.minute.ago).where.not(status: 'cancel').exists?
         puts "HERE IS DOUBLE CLICK RESP #{resp}"
         unless resp
             errors.add(:duplicate_gift_submitted, "- Our system detected a second identical gift attempt.  Please wait 1 minute if this is in error")
