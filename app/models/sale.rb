@@ -152,7 +152,8 @@ class Sale < ActiveRecord::Base
         self.usd_cents = self.revenue_cents
 
         if self.resp_code == 1 && self.gateway == 'stripe' && self.ccy != 'USD'
-            bt = Stripe::Charge.retrieve(id: self.transaction_id, expand: ['balance_transaction'])
+            o = OpsStripe.new
+            bt = o.retrieve(self.transaction_id)
             self.usd_cents = bt.balance_transaction.amount
         end
 
@@ -215,7 +216,7 @@ private
     end
 
     def notify_developers_for_missing_data
-        if self.transaction_id.nil?
+        if self.transaction_id.nil? && (self.created_at > 2.minutes.ago)
             OpsTwilio.text_devs msg: "Sale w/o Transaction ID #{self.id}"
         end
     end
