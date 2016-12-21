@@ -69,7 +69,7 @@ end
 CLOVER_TOKEN = if local_env
     "BVHA4jduazMQWpZ6lBooSA"
 else
-    ENV['GOLFNOW_TOKEN']
+    ENV['CLOVER_TOKEN']
 end
 
 FACEBOOK_APP_ID = if local_env
