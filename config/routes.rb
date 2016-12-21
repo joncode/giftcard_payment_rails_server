@@ -136,6 +136,12 @@ Drinkboard::Application.routes.draw do
 		namespace :v3 do
 			resources :cards, only: [:create, :index, :destroy]
 			resources :clients, only: [:index, :create]
+			resources :clover, only: [] do
+				collection do
+					patch :redeem
+					post :initialize
+				end
+			end
 			resources :courses, only: [:index] do
 				collection { get :revenue }
 			end

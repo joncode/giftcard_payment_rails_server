@@ -3,7 +3,7 @@ class MetalCorsController < MetalController
 	# before_action :print_params
     # after_action :cross_origin_allow_header
 
-    PUBLIC_TOKENS = [WWW_TOKEN, GOLFNOW_TOKEN]
+    PUBLIC_TOKENS = [WWW_TOKEN, GOLFNOW_TOKEN, CLOVER_TOKEN]
 
 protected
 
