@@ -207,11 +207,15 @@ private
 
     def set_usd_cents
         return true unless self.usd_cents.nil?
-        if self.ccy == 'USD'
-            self.usd_cents = self.revenue_cents
-        else
-            # deal with currency conversion
+        self.usd_cents = self.revenue_cents
+
+        if self.resp_code == 1 && self.gateway == 'stripe' && self.ccy != 'USD'
+            bt = Stripe::Charge.retrieve(id: self.transaction_id, expand: ['balance_transaction'])
+            self.usd_cents = bt.balance_transaction.amount
         end
+
+    rescue => e
+        puts "500 Internal - Sale  #{self.id} :usd_cents ERROR fail #{e.inspect} #{self.revenue_cents} #{self.transaction_id} "
     end
 
 end
