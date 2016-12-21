@@ -5,7 +5,7 @@ class Web::V3::CloverController < MetalCorsController
 
 
 	def initialize
-		# puts init_params.inspect
+		puts init_params.inspect
 		success({
 				status: 1,
 				code: 'INITIALIZED',
@@ -17,7 +17,7 @@ class Web::V3::CloverController < MetalCorsController
 	end
 
 	def redeem
-		# puts redeem_params.inspect
+		puts redeem_params.inspect
 		success({
 					applied_amount: 0,
 					code: "NOT_FOUND",
@@ -32,11 +32,11 @@ private
 
 
     def init_params
-        params.require(:data).permit(:nickname, :token, :last_four, :brand)
+        params.require(:data).permit(:system)
     end
 
     def redeem_params
-        params.require(:data).permit(:nickname, :token, :last_four, :brand)
+        params.require(:data).permit(:system)
     end
 
 
