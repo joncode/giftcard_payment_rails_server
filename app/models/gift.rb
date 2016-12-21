@@ -263,9 +263,23 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def converted_value_cents
+         amt = value_cents
+
+        if self.ccy != 'USD' && self.payable_type == 'Sale'
+            sale = self.payable
+            if sale.usd_cents.nil?
+                sale.set_usd_cents
+                sale.save
+            end
+            amt = original_value * sale.usd_cents / sale.revenue_cents
+        end
+        amt
+    end
+
     def location_fee
         if [300,301,307].include? self.cat
-            return merchant.location_fee(self.value_cents)
+            return merchant.location_fee(converted_value_cents)
         elsif [100,101,107,150,151,157].include? self.cat
             return cost_cents
         else
@@ -275,7 +289,7 @@ class Gift < ActiveRecord::Base
 
     def override_fee override_obj=nil
         if self.cat >= 300
-            return merchant.override_fee(self.value_cents)
+            return merchant.override_fee(converted_value_cents)
         elsif self.cat < 200
             return 0
         else
