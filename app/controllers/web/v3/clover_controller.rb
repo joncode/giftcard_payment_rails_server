@@ -5,7 +5,7 @@ class Web::V3::CloverController < MetalCorsController
 	def initialize
 		success({
 				status: 1,
-				code: 'INITIALIZED'
+				code: 'INITIALIZED',
 				support_phone_number: '1-310-235-3835',
 				application_key: '9ih2ihf2i03h0i2jd23ijd20idje2fw1ihf1i',
 				message: 'ItsOnMe App Initialized - ready to redeem gift cards!'
