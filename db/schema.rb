@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207203631) do
+ActiveRecord::Schema.define(version: 20161221020558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1283,10 +1283,11 @@ ActiveRecord::Schema.define(version: 20161207203631) do
     t.integer  "merchant_id"
     t.integer  "revenue_cents"
     t.string   "gateway"
+    t.string   "ccy"
+    t.integer  "usd_cents"
   end
 
   add_index "sales", ["merchant_id"], name: "index_sales_on_merchant_id", using: :btree
-  add_index "sales", ["provider_id"], name: "index_sales_on_provider_id", using: :btree
 
   create_table "sections", force: :cascade do |t|
     t.string   "name",       limit: 255

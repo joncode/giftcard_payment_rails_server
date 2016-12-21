@@ -60,6 +60,7 @@ class Sale < ActiveRecord::Base
         s.giver_id = cc_hsh["giver_id"]
         s.card_id = cc_hsh["card_id"]
         s.transaction_id = cc_hsh['unique_id']
+        s.ccy = cc_hsh['ccy']
         s
     end
 
@@ -70,7 +71,7 @@ class Sale < ActiveRecord::Base
 
         puts o.inspect
 
-        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"]}
+        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"], 'ccy' => cc_hsh['ccy']}
         resp_hsh = o.gateway_hash_response
         sale_init_hsh.merge!(resp_hsh)
         s  = Sale.new sale_init_hsh
@@ -83,6 +84,7 @@ class Sale < ActiveRecord::Base
     def revenue= amount_str
         rev = amount_str.to_s
         self.revenue_cents = currency_to_cents(rev)
+        self.usd_cents = self.revenue_cents if self.ccy == 'USD'
         super rev
     end
 
