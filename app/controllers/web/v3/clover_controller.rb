@@ -1,8 +1,11 @@
 class Web::V3::CloverController < MetalCorsController
 
-	before_action :authentication_no_token
+	before_action :authentication_no_token, only: [ :redeem ]
+	before_action :authenticate_general, only: [ :initialize ]
+
 
 	def initialize
+		puts init_params.inspect
 		success({
 				status: 1,
 				code: 'INITIALIZED',
@@ -14,6 +17,7 @@ class Web::V3::CloverController < MetalCorsController
 	end
 
 	def redeem
+		puts redeem_params.inspect
 		success({
 					applied_amount: 0,
 					code: "NOT_FOUND",
@@ -23,6 +27,17 @@ class Web::V3::CloverController < MetalCorsController
 		respond
 	end
 
+
+private
+
+
+    def init_params
+        params.require(:data).permit(:nickname, :token, :last_four, :brand)
+    end
+
+    def redeem_params
+        params.require(:data).permit(:nickname, :token, :last_four, :brand)
+    end
 
 
 end
