@@ -25,6 +25,8 @@ class AccountsPayableCronJob
             next if partner.nil?  # cannot create a payment if no partner - this is error
             payment = Payment.get_current_payment_for_partner(partner, sd)
 
+            next if reg.ccy != 'USD'
+
             if reg.debt?
                 case reg.payment_type
                 when :merchant
