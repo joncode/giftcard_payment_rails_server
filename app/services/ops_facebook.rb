@@ -142,7 +142,7 @@ class OpsFacebook
 	end
 
 	def self.more_taggable_friends(friends)
-		more_friends = friends.next_page
+		more_friends = friends.respond_to?(:next_page) ? friends.next_page : []
 		friends = friends + more_friends
 		if more_friends.count == FACEBOOK_OPS_PAGE_LIMIT
 			self.more_taggable_friends(friends)
