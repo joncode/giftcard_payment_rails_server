@@ -13,7 +13,7 @@ class Web::V3::CloverController < MetalCorsController
 				status: 1,
 				code: 'INITIALIZED',
 				support_phone_number: TWILIO_PHONE_NUMBER,
-				application_key: '9ih2ihf2i03h0i2jd23ijd20idje2fw1ihf1i',
+				application_key: Client.where(active: true).last.application_key,
 				message: 'ItsOnMe App Initialized - ready to redeem gift cards!'
 			})
 		respond
