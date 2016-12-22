@@ -6,7 +6,9 @@ class Web::V3::CloverController < MetalCorsController
 
 	def init
 		puts params.inspect
-		#
+		# use information from the clover machine
+		# generate a client key for this clover
+		# how do we connect the clover machine to the merchant record ?
 		success({
 				status: 1,
 				code: 'INITIALIZED',
@@ -37,7 +39,7 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit!
+        params.require(:data).permit(:code)
     end
 
 
