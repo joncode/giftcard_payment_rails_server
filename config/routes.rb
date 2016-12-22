@@ -138,7 +138,7 @@ Drinkboard::Application.routes.draw do
 			resources :clients, only: [:index, :create]
 			resources :clover, only: [] do
 				collection do
-					patch :redeem
+					post :redeem
 					post :init
 				end
 			end
