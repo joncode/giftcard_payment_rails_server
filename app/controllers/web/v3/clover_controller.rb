@@ -43,7 +43,7 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit(:code)
+        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency)
     end
 
 
