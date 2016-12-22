@@ -20,13 +20,18 @@ class Web::V3::CloverController < MetalCorsController
 
 	def redeem
 		puts redeem_params.inspect
-		success({
-					applied_amount: 0,
-					code: "NOT_FOUND",
-					transaction_reference: 'rd_ccd31145',
-					message: 'Gift not found for ID RD-8482-AD45'
-				})
-		respond
+
+		if @client.nil?
+			head :unauthorized
+		else
+			success({
+						applied_amount: 0,
+						code: "NOT_FOUND",
+						transaction_reference: 'rd_ccd31145',
+						message: 'Gift not found for ID RD-8482-AD45'
+					})
+			respond
+		end
 	end
 
 
