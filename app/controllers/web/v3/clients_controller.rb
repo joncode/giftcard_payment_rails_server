@@ -118,6 +118,7 @@ class Web::V3::ClientsController < MetalCorsController
 			domain = slug.to_s
 		end
 		return nil if domain == 'itson'
+		return nil if domain.length < 6
 		domain
 	end
 
