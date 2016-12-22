@@ -51,6 +51,13 @@ protected
             end
         else
             puts "No 'HTTP_X_APPLICATION_KEY' - authenticate_client TRAINING WHEELS"
+            if params
+                puts params.inspect
+                if params[:controller].to_s == 'clover'
+                    head :unauthorized
+                    return false
+                end
+            end
             @current_client = Client.find(1)
             @current_partner = @current_client.partner
         end
