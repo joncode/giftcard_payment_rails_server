@@ -6,10 +6,11 @@ class Web::V3::CloverController < MetalCorsController
 
 	def init
 		puts init_params.inspect
+		#
 		success({
 				status: 1,
 				code: 'INITIALIZED',
-				support_phone_number: '1-310-235-3835',
+				support_phone_number: TWILIO_PHONE_NUMBER,
 				application_key: '9ih2ihf2i03h0i2jd23ijd20idje2fw1ihf1i',
 				message: 'ItsOnMe App Initialized - ready to redeem gift cards!'
 			})
@@ -32,11 +33,11 @@ private
 
 
     def init_params
-        params.require(:data).permit(:system)
+        params.require(:data).permit!
     end
 
     def redeem_params
-        params.require(:data).permit(:system)
+        params.require(:data).permit!
     end
 
 
