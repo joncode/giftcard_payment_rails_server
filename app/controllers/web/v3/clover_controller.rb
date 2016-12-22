@@ -11,7 +11,7 @@ class Web::V3::CloverController < MetalCorsController
 		# how do we connect the clover machine to the merchant record ?
 		success({
 				code: 'INITIALIZED',
-				support_phone_number: TWILIO_PHONE_NUMBER,
+				support_phone_number: TWILIO_PHONE_NUMBER.gsub('+', ''),
 				application_key: Client.where(active: true).last.application_key,
 				message: 'ItsOnMe App Initialized - ready to redeem gift cards!'
 			})
