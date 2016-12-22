@@ -20,12 +20,13 @@ class Web::V3::CloverController < MetalCorsController
 
 	def redeem
 		puts redeem_params.inspect
+		rcode = redeem_params[:code]
 
 		success({
 					applied_amount: 0,
 					code: "NOT_FOUND",
-					transaction_reference: 'rd_ccd31145',
-					message: 'Gift not found for ID RD-8482-AD45'
+					transaction_reference: rcode,
+					message: "Gift not found for ID #{rcode}"
 				})
 		respond
 
