@@ -10,7 +10,6 @@ class Web::V3::CloverController < MetalCorsController
 		# generate a client key for this clover
 		# how do we connect the clover machine to the merchant record ?
 		success({
-				status: 1,
 				code: 'INITIALIZED',
 				support_phone_number: TWILIO_PHONE_NUMBER,
 				application_key: Client.where(active: true).last.application_key,
