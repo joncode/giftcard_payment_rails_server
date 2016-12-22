@@ -5,7 +5,7 @@ class Web::V3::CloverController < MetalCorsController
 
 
 	def init
-		puts init_params.inspect
+		puts params.inspect
 		#
 		success({
 				status: 1,
