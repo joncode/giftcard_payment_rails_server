@@ -12,7 +12,7 @@ class Redeem
 	end
 
 	def self.set_gift_current_status(gift)
-		return unless ['incomplete', 'open', 'notified', 'redeemeed'].include?(gift.status)
+		return 'BAD STATUS' unless ['incomplete', 'open', 'notified', 'redeemed'].include?(gift.status)
 		if gift.balance == 0
 			if gift.complete_redemptions.length > 0
 				total_redeemed_amt = gift.complete_redemptions.map(&:amount).sum
