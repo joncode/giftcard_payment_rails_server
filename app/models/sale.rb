@@ -64,7 +64,7 @@ class Sale < ActiveRecord::Base
         s.giver_id = cc_hsh["giver_id"]
         s.card_id = cc_hsh["card_id"]
         s.transaction_id = cc_hsh['unique_id']
-        s.ccy = cc_hsh['ccy']
+        # s.ccy = cc_hsh['ccy']
         s
     end
 
@@ -75,7 +75,7 @@ class Sale < ActiveRecord::Base
 
         puts o.inspect
 
-        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"], 'ccy' => cc_hsh['ccy']}
+        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"]}
         resp_hsh = o.gateway_hash_response
         sale_init_hsh.merge!(resp_hsh)
         s  = Sale.new sale_init_hsh
