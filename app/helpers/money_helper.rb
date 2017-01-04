@@ -48,7 +48,7 @@ module MoneyHelper
     #### DO NOT CALL :cents_to_currency CALL :display_money INSTEAD
 	def cents_to_currency cents, remove_zeros=true, ccy=nil
 		return nil if cents.blank?
-		new_str = number_to_currency(cents/100.0,  :format => "%n", :negative_format => "(%n)")
+		new_str = number_to_currency(cents/100.0,  :format => "%n", :negative_format => "(%n)", delimiter: "")
 		if remove_zeros
 	        if new_str && new_str[-3..-1] == ".00"
 	            new_str[-3..-1] = ""
