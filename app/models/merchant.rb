@@ -114,6 +114,10 @@ class Merchant < ActiveRecord::Base
         end
     end
 
+    def active_live?
+        self.active && self.mode == "live"
+    end
+
     def mode
         if self.paused
             return "paused"
