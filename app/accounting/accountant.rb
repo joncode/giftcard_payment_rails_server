@@ -65,6 +65,7 @@ class Accountant
 
 		def affiliate_location gift
 
+			return nil if gift.cat != 300
 			merchant = gift.merchant
 			affiliate = Affiliate.where(id: merchant.affiliate_id).first
 			# nil or not found

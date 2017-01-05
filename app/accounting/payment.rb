@@ -25,6 +25,7 @@ class Payment < ActiveRecord::Base
         else
             self.payment_amount = 0
         end
+        self
 	end
 
 	def affiliate

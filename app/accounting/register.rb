@@ -102,7 +102,7 @@ class Register < ActiveRecord::Base
 #   -------------
 
 
-	def reverse_charge
+	def reverse_charge(note=nil)
 		if self.payment.nil?
 			reg = self.destroy
 		else
@@ -113,7 +113,8 @@ class Register < ActiveRecord::Base
 				origin: self.origin,
 				type_of: type_of_value,
 				gift_id: self.gift_id,
-				ccy: self.ccy)
+				ccy: self.ccy,
+				note: note)
 		end
 		puts "Register -reverse_charge- #{reg.inspect}"
 		if reg.amount.to_i == 0
