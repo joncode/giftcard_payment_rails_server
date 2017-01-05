@@ -263,8 +263,16 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def converted_ccy
+        if self.ccy != 'USD' && self.payable_type == 'Sale' && (self.payable.usd_cents != self.payable.revenue_cents)
+            'USD'
+        else
+            self.ccy
+        end
+    end
+
     def converted_value_cents
-         amt = value_cents
+        amt = value_cents
 
         if self.ccy != 'USD' && self.payable_type == 'Sale'
             sale = self.payable
@@ -278,9 +286,9 @@ class Gift < ActiveRecord::Base
     end
 
     def location_fee
-        if [300,301,307].include? self.cat
+        if self.cat >= 300
             return merchant.location_fee(converted_value_cents)
-        elsif [100,101,107,150,151,157].include? self.cat
+        elsif self.cat < 200
             return cost_cents
         else
             return 0

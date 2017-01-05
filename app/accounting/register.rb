@@ -70,7 +70,7 @@ class Register < ActiveRecord::Base
 		reg.origin = origin_type
 		reg.amount = pay_amount
 		reg.gift_id = gift_obj.id
-		reg.ccy = gift_obj.ccy
+		reg.ccy = gift_obj.converted_ccy
 		reg
 	end
 
