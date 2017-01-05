@@ -26,20 +26,33 @@ class Web::V3::CloverController < MetalCorsController
 		rcode = redeem_params[:code]
 		amt = redeem_params[:amount].to_i
 		ccy = redeem_params[:currency]
-		# success({
-		# 			applied_amount: 0,
-		# 			code: "NOT_FOUND",
-		# 			transaction_reference: rcode,
-		# 			message: "Gift not found for ID #{rcode}"
-		# 		})
 
+		x = rand(3)
 
-		fail_web({ data: {
-					applied_amount: display_money(ccy: ccy, cents: amt),
-					code: 'ALREADY_REDEEMED',
-					transaction_reference: rcode,
-					message: "Gift has already been redeemed for ID #{rcode}"
-				}, err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}" } )
+		case x
+		when 0
+			fail_web({ data: {
+						applied_amount: 0,
+						code: "NOT_FOUND",
+						transaction_reference: rcode,
+						message: "Gift not found for ID #{rcode}"
+					}, err:"NOT_FOUND", msg:  "Gift not found for ID #{rcode}" })
+		when 1
+			success({
+					applied_amount: amt,
+					code: 'PAID' ,
+					transaction_reference: rcode
+					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been appliedl."
+				})
+		else
+
+			fail_web({ data: {
+						applied_amount: 0,
+						code: 'ALREADY_REDEEMED',
+						transaction_reference: rcode,
+						message: "Gift has already been redeemed for ID #{rcode}"
+					}, err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}" } )
+		end
 		respond
 
 	end
