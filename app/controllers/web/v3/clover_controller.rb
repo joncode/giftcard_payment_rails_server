@@ -27,7 +27,7 @@ class Web::V3::CloverController < MetalCorsController
 		amt = redeem_params[:amount].to_i
 		ccy = redeem_params[:currency]
 
-		x = rand(3)
+		x = rand(4)
 
 		case x
 		when 0
@@ -36,14 +36,32 @@ class Web::V3::CloverController < MetalCorsController
 						code: "NOT_FOUND",
 						transaction_reference: rcode,
 						message: "Gift not found for ID #{rcode}"
-					}, err:"NOT_FOUND", msg:  "Gift not found for ID #{rcode}" })
+					}, err: "NOT_FOUND", msg:  "Gift not found for ID #{rcode}" })
 		when 1
 			success({
 					applied_amount: amt,
 					code: 'PAID' ,
-					transaction_reference: rcode,
+					transaction_reference: 'rd_6412acd3',
 					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been applied."
 				})
+		when 2
+			namt = amt / 2
+			success({
+					applied_amount: namt,
+					code: 'PARTIAL_PAID' ,
+					transaction_reference: 'rd_6412acd3',
+					message: "Transaction Success - The requested amounts exceeds the gift card value.  #{display_money(ccy: ccy, cents: namt)} has been applied."
+				})
+
+		when 3
+			gamt = amt * 4
+			success({
+					applied_amount: amt,
+					code: 'PAID' ,
+					transaction_reference: 'rd_6412acd3',
+					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been applied.  The gift has #{display_money(ccy: ccy, cents: (gamt - amt))} in value remaining."
+				})
+
 		else
 			fail_web({ data: {
 						applied_amount: 0,
