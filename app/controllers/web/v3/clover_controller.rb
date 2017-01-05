@@ -34,12 +34,12 @@ class Web::V3::CloverController < MetalCorsController
 		# 		})
 
 
-		fail_web({
+		fail_web({ data: {
 					applied_amount: display_money(ccy: ccy, cents: amt),
 					code: 'ALREADY_REDEEMED',
 					transaction_reference: rcode,
 					message: "Gift has already been redeemed for ID #{rcode}"
-				})
+				}, err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}")
 		respond
 
 	end
