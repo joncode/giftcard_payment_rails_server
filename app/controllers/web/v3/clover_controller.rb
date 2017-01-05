@@ -31,12 +31,14 @@ class Web::V3::CloverController < MetalCorsController
 
 		case x
 		when 0
-			fail_web({ data: {
+			fail_web({ err: "NOT_FOUND", msg:  "Gift not found for ID #{rcode}"})
+			@app_response[:data] = {
 						applied_amount: 0,
 						code: "NOT_FOUND",
 						transaction_reference: rcode,
-						message: "Gift not found for ID #{rcode}"
-					}, err: "NOT_FOUND", msg:  "Gift not found for ID #{rcode}", client_id: 'ItsOnMe' })
+						message: "Gift not found for ID #{rcode}",
+						client_id: 'ItsOnMe'
+					}
 		when 1
 			success({
 					applied_amount: amt,
@@ -62,16 +64,18 @@ class Web::V3::CloverController < MetalCorsController
 					code: 'PAID' ,
 					transaction_reference: 'rd_6412acd3',
 					client_id: 'ItsOnMe',
-					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been applied.  The gift has #{display_money(ccy: ccy, cents: (gamt - amt))} in value remaining."
+					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been applied.  The gift has #{display_money(ccy: ccy, cents: (gamt - amt))} remaining value."
 				})
 
 		else
-			fail_web({ data: {
+			fail_web({ err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}"} )
+			@app_response[:data] = {
 						applied_amount: 0,
 						code: 'ALREADY_REDEEMED',
 						transaction_reference: rcode,
-						message: "Gift has already been redeemed for ID #{rcode}"
-					}, err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}", client_id: 'ItsOnMe' } )
+						message: "Gift has already been redeemed for ID #{rcode}",
+						client_id: 'ItsOnMe'
+					}
 		end
 		respond
 	end
