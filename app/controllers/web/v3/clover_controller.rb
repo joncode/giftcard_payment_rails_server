@@ -31,24 +31,24 @@ class Web::V3::CloverController < MetalCorsController
 		x = rand(5)
 
 		# find redemption by hex_id or token
-		@current_redemption = Redemption.find_with_merchant_hex_id_or_token(rcode)
+		# @current_redemption = Redemption.find_with_merchant_hex_id_or_token(rcode)
 
-		if @current_redemption.nil?
-			# return not found
-		else
-			resp = Redeem.apply_and_complete(redemption: @current_redemption, ticket_num: redeem_params[:order_id], server: redeem_params[:employee_id], client_id: @current_client.id)
-            if !resp.kind_of?(Hash)
-                status = :bad_request
-                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
-            elsif resp["success"] == true
-                gift.fire_after_save_queue(@current_client)
-                status = :ok
-                success({msg: resp["response_text"]})
-            else
-                status = :ok
-                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
-            end
-		end
+		# if @current_redemption.nil?
+		# 	# return not found
+		# else
+		# 	resp = Redeem.apply_and_complete(redemption: @current_redemption, ticket_num: redeem_params[:order_id], server: redeem_params[:employee_id], client_id: @current_client.id)
+  #           if !resp.kind_of?(Hash)
+  #               status = :bad_request
+  #               fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+  #           elsif resp["success"] == true
+  #               gift.fire_after_save_queue(@current_client)
+  #               status = :ok
+  #               success({msg: resp["response_text"]})
+  #           else
+  #               status = :ok
+  #               fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+  #           end
+		# end
 
 		case x
 		when 0
