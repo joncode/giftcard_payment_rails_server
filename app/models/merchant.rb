@@ -182,6 +182,7 @@ class Merchant < ActiveRecord::Base
     end
 
     def override_fee(convert_these_cents=nil)
+        return 0 if self.affiliate_id.nil?
         if self.rate == 90
             o_rate = 7
         else
