@@ -18,15 +18,25 @@ class Web::V3::CloverController < MetalCorsController
 		respond
 	end
 
+	# {"amount"=>"456", "service_charge"=>"null", "tax_amount"=>"0", "code"=>"4567", "merchant_id"=>"J4Q1V4P5X0KS0", "order_id"=>"4ASNH66VTXVRJ", "employee_id"=>"05NZK28JC398W", "note"=>nil, "tip_amount"=>"0", "currency"=>"USD"}
+
 	def redeem
 		puts redeem_params.inspect
 		rcode = redeem_params[:code]
 
-		success({
+		# success({
+		# 			applied_amount: 0,
+		# 			code: "NOT_FOUND",
+		# 			transaction_reference: rcode,
+		# 			message: "Gift not found for ID #{rcode}"
+		# 		})
+
+
+		fail_web({
 					applied_amount: 0,
-					code: "NOT_FOUND",
+					code: 'ALREADY_REDEEMED',
 					transaction_reference: rcode,
-					message: "Gift not found for ID #{rcode}"
+					message: "Gift has already been redeemed for ID #{rcode}"
 				})
 		respond
 
