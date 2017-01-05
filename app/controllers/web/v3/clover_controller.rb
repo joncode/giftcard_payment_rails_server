@@ -1,4 +1,5 @@
 class Web::V3::CloverController < MetalCorsController
+	include MoneyHelper
 
 	before_action :authentication_no_token, only: [ :redeem ]
 	before_action :authenticate_general, only: [ :init ]
@@ -23,7 +24,8 @@ class Web::V3::CloverController < MetalCorsController
 	def redeem
 		puts redeem_params.inspect
 		rcode = redeem_params[:code]
-
+		amt = redeem_params[:amount]
+		ccy = redeem_params[:currency]
 		# success({
 		# 			applied_amount: 0,
 		# 			code: "NOT_FOUND",
@@ -33,7 +35,7 @@ class Web::V3::CloverController < MetalCorsController
 
 
 		fail_web({
-					applied_amount: 0,
+					applied_amount: display_money(ccy: ccy, cents: amt),
 					code: 'ALREADY_REDEEMED',
 					transaction_reference: rcode,
 					message: "Gift has already been redeemed for ID #{rcode}"
