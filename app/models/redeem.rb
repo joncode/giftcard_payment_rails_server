@@ -153,7 +153,7 @@ class Redeem
 		when 6	# ADMIN
 			pos_obj, resp = internal_redemption( redemption, gift, server )
 		when 7  # Clover
-			pos_obj, resp = internal_redemption( redemption, gift, server )
+			pos_obj, resp = internal_redemption( redemption, gift, "#{ticket_num}-#{server}" )
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }

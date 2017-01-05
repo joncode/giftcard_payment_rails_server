@@ -14,7 +14,8 @@ class Web::V3::CloverController < MetalCorsController
 				code: 'INITIALIZED',
 				support_phone_number: TWILIO_PHONE_NUMBER.gsub('+', ''),
 				application_key: Client.where(active: true).last.application_key,
-				message: 'ItsOnMe App Initialized - ready to redeem gift cards!'
+				message: 'ItsOnMe App Initialized - ready to redeem gift cards!',
+				client_id: SERVICE_NAME
 			})
 		respond
 	end
@@ -27,7 +28,27 @@ class Web::V3::CloverController < MetalCorsController
 		amt = redeem_params[:amount].to_i
 		ccy = redeem_params[:currency]
 
-		x = rand(4)
+		x = rand(5)
+
+		# find redemption by hex_id or token
+		@current_redemption = Redemption.find_with_merchant_hex_id_or_token(rcode)
+
+		if @current_redemption.nil?
+			# return not found
+		else
+			resp = Redeem.apply_and_complete(redemption: @current_redemption, ticket_num: redeem_params[:order_id], server: redeem_params[:employee_id], client_id: @current_client.id)
+            if !resp.kind_of?(Hash)
+                status = :bad_request
+                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+            elsif resp["success"] == true
+                gift.fire_after_save_queue(@current_client)
+                status = :ok
+                success({msg: resp["response_text"]})
+            else
+                status = :ok
+                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+            end
+		end
 
 		case x
 		when 0
@@ -37,14 +58,14 @@ class Web::V3::CloverController < MetalCorsController
 						code: "NOT_FOUND",
 						transaction_reference: rcode,
 						message: "Gift not found for ID #{rcode}",
-						client_id: 'ItsOnMe'
+						client_id: SERVICE_NAME
 					}
 		when 1
 			success({
 					applied_amount: amt,
 					code: 'PAID' ,
 					transaction_reference: 'rd_6412acd3',
-					client_id: 'ItsOnMe',
+					client_id: SERVICE_NAME,
 					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been applied."
 				})
 		when 2
@@ -53,7 +74,7 @@ class Web::V3::CloverController < MetalCorsController
 					applied_amount: namt,
 					code: 'PARTIAL_PAID' ,
 					transaction_reference: 'rd_6412acd3',
-					client_id: 'ItsOnMe',
+					client_id: SERVICE_NAME,
 					message: "Transaction Success - The requested amounts exceeds the gift card value.  #{display_money(ccy: ccy, cents: namt)} has been applied."
 				})
 
@@ -63,7 +84,7 @@ class Web::V3::CloverController < MetalCorsController
 					applied_amount: amt,
 					code: 'PAID' ,
 					transaction_reference: 'rd_6412acd3',
-					client_id: 'ItsOnMe',
+					client_id: SERVICE_NAME,
 					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been applied.  The gift has #{display_money(ccy: ccy, cents: (gamt - amt))} remaining value."
 				})
 
@@ -74,7 +95,7 @@ class Web::V3::CloverController < MetalCorsController
 						code: 'ALREADY_REDEEMED',
 						transaction_reference: rcode,
 						message: "Gift has already been redeemed for ID #{rcode}",
-						client_id: 'ItsOnMe'
+						client_id: SERVICE_NAME
 					}
 		end
 		respond
