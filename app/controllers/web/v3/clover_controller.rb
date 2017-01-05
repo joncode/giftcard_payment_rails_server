@@ -24,7 +24,7 @@ class Web::V3::CloverController < MetalCorsController
 	def redeem
 		puts redeem_params.inspect
 		rcode = redeem_params[:code]
-		amt = redeem_params[:amount]
+		amt = redeem_params[:amount].to_i
 		ccy = redeem_params[:currency]
 		# success({
 		# 			applied_amount: 0,
