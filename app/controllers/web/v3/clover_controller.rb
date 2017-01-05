@@ -39,7 +39,7 @@ class Web::V3::CloverController < MetalCorsController
 					code: 'ALREADY_REDEEMED',
 					transaction_reference: rcode,
 					message: "Gift has already been redeemed for ID #{rcode}"
-				}, err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}")
+				}, err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}" } )
 		respond
 
 	end
