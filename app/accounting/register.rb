@@ -71,6 +71,9 @@ class Register < ActiveRecord::Base
 		reg.amount = pay_amount
 		reg.gift_id = gift_obj.id
 		reg.ccy = gift_obj.converted_ccy
+		if gift_obj.ccy != gift_obj.converted_ccy
+			reg.note = "Converted from - #{gift_obj.ccy} #{gift.value}"
+		end
 		reg
 	end
 
