@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161221020558) do
+ActiveRecord::Schema.define(version: 20170105010954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -980,6 +980,7 @@ ActiveRecord::Schema.define(version: 20161221020558) do
     t.integer  "refund",                     default: 0
     t.integer  "payment_amount",             default: 0
     t.string   "type_of",                    default: "payment"
+    t.string   "ccy",                        default: "USD"
   end
 
   add_index "payments", ["bank_id", "start_date"], name: "index_payments_on_bank_id_and_start_date", using: :btree
