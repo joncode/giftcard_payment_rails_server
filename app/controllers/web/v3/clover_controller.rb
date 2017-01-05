@@ -41,11 +41,10 @@ class Web::V3::CloverController < MetalCorsController
 			success({
 					applied_amount: amt,
 					code: 'PAID' ,
-					transaction_reference: rcode
-					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been appliedl."
+					transaction_reference: rcode,
+					message: "Transaction Success - #{display_money(ccy: ccy, cents: amt)} has been applied."
 				})
 		else
-
 			fail_web({ data: {
 						applied_amount: 0,
 						code: 'ALREADY_REDEEMED',
@@ -54,7 +53,6 @@ class Web::V3::CloverController < MetalCorsController
 					}, err: 'ALREADY_REDEEMED', msg: "Gift has already been redeemed for ID #{rcode}" } )
 		end
 		respond
-
 	end
 
 
