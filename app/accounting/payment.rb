@@ -16,6 +16,16 @@ class Payment < ActiveRecord::Base
 
 #   -------------
 
+	def recalc
+			# have _amounts .refund & .previous_total set correct
+		self.revenue = self.m_amount + self.u_amount + self.l_amount
+		self.total = self.revenue + self.refund + self.previous_total
+        if self.total > 0
+            self.payment_amount = self.total
+        else
+            self.payment_amount = 0
+        end
+	end
 
 	def affiliate
 		self.partner
