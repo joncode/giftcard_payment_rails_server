@@ -254,8 +254,10 @@ class OpsFacebook
 
 		puts user_social.inspect
 
-		if user_social.present? && user_social.user.id != user.id
+		if user_social.present? && user_social.user_id != user.id
 			return { 'success' => false, 'error' => 'Facebook Account is authorized on a different user account' }
+		elsif user_social.present? && user_social.user_id == user.id
+			return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 		else
 
 			user = add_facebook_info_to_user(facebook_profile, user)
