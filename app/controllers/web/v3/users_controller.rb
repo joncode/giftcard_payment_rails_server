@@ -87,6 +87,7 @@ class Web::V3::UsersController < MetalCorsController
             fail_web fail_web_payload("authorize_app_with_facebook", "Error validating access token: The user has not authorized application")
         else
             resp = OpsFacebook.attach_account(oauth_access_token, profile, @current_user)
+            puts " FACEBOOK " + resp.inspect
             if resp['success']
                 user = resp['user']
                 # user.reload
