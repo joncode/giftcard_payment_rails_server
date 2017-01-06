@@ -249,6 +249,7 @@ class OpsFacebook
 	end
 
 	def self.attach_account oauth_access_token, facebook_profile, user
+		puts "ATTACH FACEBOOK #{facebook_profile.inspect}"
 		user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
 
 		if user_social.present? && user_social.user.id != user.id
