@@ -358,6 +358,25 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 #   -------------
 
+
+	def get_multi_with_token token, mids
+		if token.length == 4
+			where(token: token, merchant_id: mids, status: ['pending', 'done'])
+		else
+			nil
+		end
+	end
+
+	def get_multi_with_hex_id hex_id, mids
+		if hex_id.length == 12
+			where(hex_id: hex_id, merchant_id: mids, status: ['pending', 'done'])
+		else
+			nil
+		end
+	end
+
+#   -------------
+
 	def self.convert_type_of_to_r_sys(typ)
 		case typ.to_s
 		when 'omnivore'

@@ -76,10 +76,24 @@ class Merchant < ActiveRecord::Base
     def multi_redemption_merchants
         c = self.client
         if c.nil?
-            [self.id]
+            [self]
         else
             arg_scope = proc { Merchant.where(active: true, paused: false) }
             c.contents(:merchants, &arg_scope)
+        end
+    end
+
+    def multi_redemption_merchant_ids
+        multi_redemption_merchants.map(&:id)
+    end
+
+    def get_redemptions_for_hex_id_or_token value
+        value = value.to_s
+        if value.length == 4
+            Redemption.get_multi_with_token(value, multi_redemption_merchant_ids)
+        else
+            hex_id = value.downcase.gsub('rd-', 'rd_').gsub('-','')
+            Redemption.get_multi_with_hex_id(hex_id, multi_redemption_merchant_ids)
         end
     end
 
