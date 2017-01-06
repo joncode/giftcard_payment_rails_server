@@ -28,8 +28,8 @@ class User < ActiveRecord::Base
 	validates :email , 		format: { with: VALID_EMAIL_REGEX }, unless: :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
 	validates :password_confirmation, presence: true,   on: :create
-	validates :facebook_id, uniqueness: true, 			if: :facebook_id_exists?
-	validates :twitter,     uniqueness: true, 		    if: :twitter_exists?
+	# validates :facebook_id, uniqueness: true, 			if: :facebook_id_exists?
+	# validates :twitter,     uniqueness: true, 		    if: :twitter_exists?
 
 #	-------------
 
