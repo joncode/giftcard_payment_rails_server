@@ -252,6 +252,8 @@ class OpsFacebook
 		puts "ATTACH FACEBOOK #{facebook_profile.inspect}"
 		user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
 
+		puts user_social.inspect
+
 		if user_social.present? && user_social.user.id != user.id
 			return { 'success' => false, 'error' => 'Facebook Account is authorized on a different user account' }
 		else
