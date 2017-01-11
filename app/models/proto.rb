@@ -88,6 +88,34 @@ class Proto < ActiveRecord::Base
     	super || set_cost_cents
     end
 
+
+#   -------------
+
+
+	def socials_complete?
+		self.socials.count > 0
+	end
+
+	def details_complete?
+		self.expires_at.present? || self.expires_in.present?
+	end
+
+	def items_complete?
+		self.shoppingCart.present?
+	end
+
+	def self.destroy_incomplete_protos
+		dt = 7.days.ago
+		Proto.where( shoppingCart: nil).where('created_at < ?', dt).find_each do |proto|
+			puts "Destroying proto #{proto.id} - shoppingCart"
+			proto.destroy
+		end
+		Proto.where(expires_at: nil, expires_in: nil).where('created_at < ?', dt).find_each do |proto|
+			puts "Destroying proto #{proto.id} - expiration"
+			proto.destroy
+		end
+	end
+
 private
 
 	def set_value_cents

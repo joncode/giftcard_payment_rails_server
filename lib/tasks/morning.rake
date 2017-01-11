@@ -20,6 +20,8 @@ namespace :morning do
             Alert.perform('NEW_CLIENTS_WEEKLY_SYS')
         end
 
+        Proto.destroy_incomplete_protos  # delete incomplete bad proto data that is old
+
     end
 
 end
