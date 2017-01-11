@@ -2,6 +2,8 @@ class Proto < ActiveRecord::Base
     include ShoppingCartHelper
     include MoneyHelper
 
+	default_scope -> { where(active: true) } # indexed
+
 #   -------------
 
     auto_strip_attributes :message, :detail, :title, :desc
@@ -114,6 +116,11 @@ class Proto < ActiveRecord::Base
 			puts "Destroying proto #{proto.id} - expiration"
 			proto.destroy
 		end
+	end
+
+	def destroy
+			# DO NOT DELETE PROTO RECORDS
+		update_column(:active, false)
 	end
 
 private

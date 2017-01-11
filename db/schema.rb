@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170105010954) do
+ActiveRecord::Schema.define(version: 20170111233544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1110,8 +1110,8 @@ ActiveRecord::Schema.define(version: 20170105010954) do
     t.integer  "start_in"
   end
 
+  add_index "protos", ["active"], name: "index_protos_on_active", using: :btree
   add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree
-  add_index "protos", ["provider_id"], name: "index_protos_on_provider_id", using: :btree
 
   create_table "providers", force: :cascade do |t|
     t.string   "name",            limit: 255,                 null: false
