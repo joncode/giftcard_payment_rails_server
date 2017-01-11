@@ -49,15 +49,15 @@ class Web::V3::CloverController < MetalCorsController
 			fail_web({ err: "NOT_FOUND", msg:  "Cannot Complete Initialization - Clover ID #{mid} not found"})
 			@app_response[:data] = {
 					code: 'NOT_FOUND',
-					support_phone_number: TWILIO_PHONE_NUMBER.gsub('+', ''),
+					support_phone_number: TWILIO_PHONE_NUMBER,
 					message: "Cannot Complete Initialization - Clover ID #{mid} not found",
 					client_id: SERVICE_NAME
 				}
 		else
 			success({
 					code: 'INITIALIZED',
-					support_phone_number: TWILIO_PHONE_NUMBER.gsub('+', ''),
-					application_key: client.application_key,
+					support_phone_number: TWILIO_PHONE_NUMBER,
+					application_key: 'MOCK__TESTAPPLICATIONKEYUYh2u3fh23iohfu293',
 					message: 'ItsOnMe App Initialized - ready to redeem gift cards!',
 					client_id: SERVICE_NAME
 				})

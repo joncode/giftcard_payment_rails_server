@@ -178,9 +178,9 @@ else
 end
 
 TWILIO_PHONE_NUMBER = if local_env
-    "+13107364884"
+    "13107364884"
 else
-    ENV['TWILIO_PHONE_NUMBER']
+    ENV['TWILIO_PHONE_NUMBER'].gsub('+', '')
 end
 
 WWW_TOKEN = if local_env
