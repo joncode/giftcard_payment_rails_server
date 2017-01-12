@@ -14,6 +14,7 @@ class Web::V3::CloverController < MetalCorsController
 		app_key = init_params[:application_key]
 		name = init_params[:name].split('|')[0]
 		email = init_params[:name].split('|')[1].gsub(' ','').gsub("(DEV)",'')
+		venue_url = init_params[:serial_number]
 		# if app_key
 		# 	client = Client.include(:partner).find_by(application_key: app_key)
 		# 	if client && client.active
@@ -174,11 +175,11 @@ private
 
 
     def init_params
-        params.require(:data).permit(:application_key, :name, :merchant_id)
+        params.require(:data).permit(:application_key, :name, :merchant_id, :serial_number)
     end
 
     def redeem_params
-        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency)
+        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency, :serial_number)
     end
 
 
