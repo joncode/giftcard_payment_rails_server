@@ -51,15 +51,22 @@ protected
             end
         else
             puts "No 'HTTP_X_APPLICATION_KEY' - authenticate_client TRAINING WHEELS"
-            if params
+            if params && params[:controller].to_s == 'clover'
                 puts params.inspect
-                if params[:controller].to_s == 'clover'
-                    head :unauthorized
-                    return false
-                end
+
+                # head :unauthorized
+                # return false
+
+                # make another clover app
+                # find the merchant , find the previous clover clients
+                # generate a new clover client
+                @current_client = Client.find(1)
+                @current_partner = @current_client.partner
+
+            else
+                @current_client = Client.find(1)
+                @current_partner = @current_client.partner
             end
-            @current_client = Client.find(1)
-            @current_partner = @current_client.partner
         end
 
         if @current_client && @current_partner

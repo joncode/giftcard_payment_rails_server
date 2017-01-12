@@ -30,6 +30,10 @@ class OpsStripe
         @phone = user.phone
     end
 
+    def ccy= ccy='USD'
+        @ccy = ccy
+    end
+
 #	-------------
 
 	def purchase
