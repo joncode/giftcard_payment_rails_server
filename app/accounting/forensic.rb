@@ -18,9 +18,11 @@ class Forensic
 				errored = true
 				m << s
 			end
-			if (s.revenue.nil? || s.revenue_cents.nil?) && s.resp_code == 1
-				errored = true
-				n << s
+			if (s.revenue.nil? || s.revenue_cents.nil?)
+				if s.resp_code == 1
+					errored = true
+					n << s
+				end
 			else
 				if (s.revenue * 100).to_i != s.revenue_cents
 					errored = true
