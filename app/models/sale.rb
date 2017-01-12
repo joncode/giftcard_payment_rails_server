@@ -86,6 +86,15 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
+    def get_gift
+        g = Gift.unscoped.where(payable_id: self.id, payable_type: 'Sale').first
+        if g.nil?
+            g = Gift.unscoped.where(refund_id: self.id, refund_type: 'Sale').first
+        end
+        if g.nil? && self.gift_id.present?
+            g = Gift.unscoped.where(id: self.gift_id).first
+        end
+    end
 
     def success?
         self.resp_code == 1
