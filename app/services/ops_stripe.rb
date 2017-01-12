@@ -7,7 +7,7 @@ class OpsStripe
 		#  :address_validation_error, :cvc_validation_error, :unavailable_validations, :set_ccy
 
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
-		:http_status, :customer_id, :card_id, :ccy, :amount, :unique_id, :resp_code
+		:http_status, :customer_id, :card_id, :ccy, :amount, :unique_id, :resp_code, :ccy
 
 
 	def initialize cc_hsh={}
@@ -79,9 +79,9 @@ class OpsStripe
         hsh["req_json"]        = @request.to_json
     	hsh["transaction_id"]  = @request_id
         if @resp_code == 1
-        	hsh["revenue"] = display_money(cents: r.amount)
+        	hsh["revenue"] = display_money(cents: r.amount, ccy: @ccy)
         else
-        	hsh["revenue"] = display_money(cents: @amount)
+        	hsh["revenue"] = display_money(cents: @amount, ccy: @ccy)
         end
         puts hsh.inspect unless Rails.env.production?
         hsh

@@ -122,9 +122,11 @@ class Sale < ActiveRecord::Base
         return "Missing Transaction ID - Please refund in #{self.gateway}" if self.transaction_id.nil?
         if self.gateway == 'stripe'
             o = OpsStripe.new
+            o.ccy = self.ccy
             o.refund(self.transaction_id)
             resp_hsh = o.gateway_hash_response
             s = Sale.new resp_hsh
+            s.ccy = self.ccy
             s.gateway = 'stripe'
         else
             payment_hsh = {}
