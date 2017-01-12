@@ -83,14 +83,9 @@ class Sale < ActiveRecord::Base
         s
     end
 
+
 #   -------------
 
-    def revenue= amount_str
-        rev = amount_str.to_s
-        self.revenue_cents = currency_to_cents(rev)
-        self.usd_cents = self.revenue_cents if self.ccy == 'USD'
-        super rev
-    end
 
     def success?
         self.resp_code == 1
@@ -150,8 +145,25 @@ class Sale < ActiveRecord::Base
 #   -------------
 
 
+    def revenue= amount_str
+        self.revenue_cents = currency_to_cents(amount_str.to_s)
+        self.usd_cents = self.revenue_cents if self.ccy == 'USD'
+        # rev = cents_to_currency(self.revenue_cents)
+        # super rev
+    end
+
+    def revenue
+        return nil if self.revenue_cents.nil?
+        BigDecimal.new(cents_to_currency(self.revenue_cents))
+    end
+
+    def usd_cents= amt
+        amt = - amt if amt < 0
+        super(amt)
+    end
+
     def set_usd_cents
-        return true unless self.usd_cents.nil?
+        # return true unless self.usd_cents.nil?
         self.usd_cents = self.revenue_cents
 
         if self.resp_code == 1 && self.gateway == 'stripe' && self.ccy != 'USD'

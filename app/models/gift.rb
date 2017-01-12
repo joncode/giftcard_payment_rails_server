@@ -207,9 +207,12 @@ class Gift < ActiveRecord::Base
         currency_to_cents(self.service)
     end
 
+    def purchase_cents
+        self.original_value.to_i + self.service_cents.to_i
+    end
+
     def purchase_total
-        pre_round = self.value_cents.to_i + self.service_cents.to_i
-        display_money cents: pre_round, ccy: self.ccy
+        display_money cents: purchase_cents, ccy: self.ccy
     end
 
     def original_value
@@ -222,7 +225,7 @@ class Gift < ActiveRecord::Base
     end
 
     def total
-        display_money cents: self.value_cents
+        display_money cents: self.value_cents, ccy: self.ccy
     end
 
     def total= amount

@@ -70,8 +70,13 @@ class OpsStripe
 	end
 
     def retrieve transaction_id
-        @request = { charge: transaction_id }
-        @response = Stripe::Charge.retrieve(id: transaction_id, expand: ['balance_transaction'])
+        if transaction_id[0..2] == 're_'
+            @request = { refund: transaction_id }
+            @response = Stripe::Refund.retrieve(id: transaction_id, expand: ['balance_transaction'])
+        else
+            @request = { charge: transaction_id }
+            @response = Stripe::Charge.retrieve(id: transaction_id, expand: ['balance_transaction'])
+        end
     end
 
 #	-------------
