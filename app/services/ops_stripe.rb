@@ -59,8 +59,9 @@ class OpsStripe
 		process_error e
 	end
 
-	def refund charge_id
+	def refund charge_id, amount=nil
 		@request = { charge: charge_id }
+        @request[:amount] = amount.to_i if amount.to_i > 0
 		@response = Stripe::Refund.create(@request)
 		process_refund_response
 		@response

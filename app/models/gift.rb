@@ -368,12 +368,12 @@ class Gift < ActiveRecord::Base
 
 #/----------------------------------payable ducktype refund -----------------------------/
 
-    def void_refund cancel=true
+    def void_refund cancel=true, partial_amt=nil
         if !self.payable.respond_to?(:void_refund)
             return { 'status' => 0 , 'msg' => "You cannot refund a gift made with a #{self.payable_type}"}
         end
 
-        refund = self.payable.void_refund
+        refund = self.payable.void_refund(partial_amt)
         if refund.kind_of?(String)
             return { 'status' => 0, 'msg' => refund }
         end
@@ -404,12 +404,12 @@ class Gift < ActiveRecord::Base
         end
     end
 
-    def void_refund_cancel
-        void_refund
+    def void_refund_cancel partial_amt=nil
+        void_refund(true, partial_amt)
     end
 
-    def void_refund_live
-        void_refund(false)
+    def void_refund_live partial_amt=nil
+        void_refund(false, partial_amt)
     end
 
 
