@@ -25,7 +25,7 @@ class Client < ActiveRecord::Base
 	has_many :gifts
 	has_many :redemptions
 
-	belongs_to :partner,  polymorphic: true
+	belongs_to :partner, polymorphic: true
 
 	enum ecosystem: [ :full, :client, :partner ]
 	enum platform: [ :ios, :android, :menu_widget, :kiosk, :landing_page, :menu_facebook, :redemption, :clover ]

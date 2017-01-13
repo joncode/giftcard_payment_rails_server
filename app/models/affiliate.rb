@@ -20,6 +20,34 @@ class Affiliate < ActiveRecord::Base
 
 #   -------------
 
+    def self.location_fee merchant_location_fee
+        merchant_location_fee == 90 ? 7 : 4
+    end
+
+    def multi_redemption_client
+        self.clients.redemption.first
+    end
+
+    def multi_redeemable?
+        multi_redemption_client.length > 0
+    end
+
+    def multi_redemption_merchants
+        c = self.multi_redemption_client
+        if c.nil?
+            [self]
+        else
+            arg_scope = proc { Merchant.where(active: true, paused: false) }
+            c.contents(:merchants, &arg_scope)
+        end
+    end
+
+    def multi_redemption_merchant_ids
+        multi_redemption_merchants.map(&:id)
+    end
+
+#   -------------
+
 	def create_affiliation(target_type)
 		if target_type == "User"
 			self.total_users += 1

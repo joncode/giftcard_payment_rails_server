@@ -19,6 +19,9 @@ class MerchantSignup < ActiveRecord::Base
 
 #   -------------
 
+	has_many :clients, as: :partner
+
+#   -------------
 
 	def self.get_clover_signup mid
 		return nil if mid.to_s.blank?
@@ -34,7 +37,7 @@ class MerchantSignup < ActiveRecord::Base
 		m.position = 'CloverPOS'
 		m.point_of_sale_system = 'clover'
 		m.name = args[:mid]
-		m.website = args[:website]
+		m.website = args[:device_id]
 		m
 	end
 

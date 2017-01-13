@@ -19,6 +19,10 @@ protected
         confirm_client_owns_token if successful
     end
 
+    def authentication_clover
+        successful = authenticate_general
+    end
+
     def confirm_client_owns_token
         sto = @current_user.session_token_obj
         unless sto.client_id == @current_client.id && sto.partner_id == @current_partner.id && sto.partner_type == @current_partner.class.to_s

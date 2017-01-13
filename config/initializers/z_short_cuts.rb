@@ -16,6 +16,7 @@ M = Merchant
 MS = MerchantSignup
 MI = MenuItem
 OM = Omnivore
+OC = OpsClover
 OS = OpsStripe
 OSC = OpsStripeCard
 OZ = OpsZapper

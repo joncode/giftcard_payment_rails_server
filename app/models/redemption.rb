@@ -363,7 +363,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 		if token.length == 4
 			where(token: token, merchant_id: mids, status: ['pending', 'done'])
 		else
-			nil
+			[]
 		end
 	end
 
@@ -371,7 +371,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 		if hex_id.length == 12
 			where(hex_id: hex_id, merchant_id: mids, status: ['pending', 'done'])
 		else
-			nil
+			[]
 		end
 	end
 

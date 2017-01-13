@@ -69,12 +69,16 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def multi_redemption_client
+        self.client
+    end
+
     def multi_redeemable?
         self.client_id.present?
     end
 
     def multi_redemption_merchants
-        c = self.client
+        c = self.multi_redemption_client
         if c.nil?
             [self]
         else

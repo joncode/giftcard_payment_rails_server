@@ -1,41 +1,124 @@
 class OpsClover
 
-	attr_reader :status, :mid, :key, :client, :merchant, :signup
+	attr_accessor :mid, :key, :app_key, :amount, :ccy, :code
+	attr_reader :status, :client, :merchant, :signup, :args, :device_id, :merchant_name, :merchant_email
 
 	def initialize args={}
+		@args = args
 		if args[:mid].blank? || args[:mid].to_s.length < 5
 			@mid = nil
 		else
 			@mid = args[:mid]
 		end
-		if args[:application_key].blank?
-			@client_key = nil
+		if args[:app_key].blank?
+			@app_key = nil
 		else
-			@client_key = args[:application_key]
+			@app_key = args[:app_key]
 		end
-		set_status
-	end
+		@key = 'g1i12ant_client41314_+mreta12_key-moc1241k=_124)mock_mock' # MOCK of @@app_key
 
-	def set_status
+		@device_id = args[:device_id]
+		@merchant_name = args[:name]
+		@merchant_email = args[:email]
+		@amount = args[:amount] || 0
+		@ccy = args[:ccy]
+		@code = args[:code]
+
 		get_client
 		get_merchant
 		get_signup
-		@status = if @client.nil? && @merchant.nil? && @signup.nil?
-			@mid.nil? ? :blank : :new
-		elsif @client.nil? && @merchant.nil?
-			:requested
+		set_status
+	end
+
+	def stoplight
+		t
+		num = 2
+		num = 0 if [:blank, :new].include?(status)
+		num = 1 if [:live].include?(status)
+		[:stop, :support, :live][num]
+	end
+
+	def meta
+		h = {}
+		h[:application_key] = key
+		h[:merchant_id] = mid
+		h[:stoplight] = stoplight
+		h[:support_phone] = TWILIO_PHONE_NUMBER
+		h[:support_email] = 'support@#itson.me'
+		h
+	end
+
+#   -------------
+
+	def update_status
+		case status
+		when :new
+			make_requeseted
+			meta
+		when :blank
+			meta
+		when :live
+			# do nothing
+			meta
+		when :paused
+			# do nothing
+			meta
+		when :requested
+			# do nothing
+			meta
 		else
-			mode = @merchant.mode
-			if mode == 'live' && @client.nil?
-				:live_init
-			elsif mode == 'live'
-				:live
-			elsif @client.nil?
-				:paused_init
-			else
-				:paused
-			end
+			# do nothing
+			meta
 		end
+	end
+
+	def key= _app_key
+		if @client.respond_to?(:application_key) && @client.application_key
+			_app_key = @client.application_key
+		end
+		@key = _app_key
+	end
+
+	def make_requeseted
+		if status == :new
+			# 1. create a @merchant_signup
+			@signup = MerchantSignup.new_clover @args
+			if @signup.save
+				# 2. make a clover client and connect to the merchant signup
+				@client = Client.new_clover_client(@signup)
+				@client.save
+			end
+
+			# 3. :promote the @merchant_signup clients to the merchant with merchant.promote in ADMT
+			@key = @client
+
+			# 4. set status to :requested
+			set_status
+		end
+		# 5. return the :application_key
+		@key
+	end
+
+#   -------------
+
+	def set_status
+
+		return @status = [:blank, :new, :requested, :paused, :live].sample
+
+		if @client.nil? && @merchant.nil? && @signup.nil?
+			x = @mid.nil? ? :blank : :new
+		elsif @merchant.nil?
+			x = :requested
+		elsif @client.nil?
+			x = :paused
+		elsif @merchant == @client.partner && @merchant.mode == 'live'
+				# check to see if owned by MerchantSignup - auto-move partner to merchant
+				# re-run this method to set status with :mode
+			x = :live
+		else
+			x = :paused
+		end
+		@status = x
 	end
 
 
@@ -43,7 +126,12 @@ class OpsClover
 
 
 	def get_client
-		@client = Client.find_by(application_key: @client_key) if @client_key
+		if @client_key
+			@client = Client.find_by(application_key: @client_key)
+			if @client.respond_to?(:click)
+				@client.click
+			end
+		end
 	end
 
 	def get_merchant
@@ -57,3 +145,34 @@ class OpsClover
 
 
 end
+
+
+
+		# if app_key
+		# 	client = Client.include(:partner).find_by(application_key: app_key)
+		# 	if client && client.active
+		# 		partner = client.partner
+		# 		if partner.pos_merchant_id == mid
+		# 			# good to go
+		# 		else
+		# 			# machine has incorrect application key / merchant ID sync
+		# 		end
+		# 	else
+		# 		# client not found with application key
+		# 	end
+		# else
+		# 	m = Merchant.find_by(pos_merchant_id: mid)
+		# 	if m
+		# 		client = Client.new_clover_client(m)
+		# 		if client.save
+		# 			# ready to go
+		# 		else
+		# 			# failed attempt to make a client
+		# 		end
+		# 	else
+		# 		# merchant not found via clover merchant_id
+		# 	end
+		# end
+		# use information from the clover machine
+		# generate a client key for this clover
+		# how do we connect the clover machine to the merchant record ?
