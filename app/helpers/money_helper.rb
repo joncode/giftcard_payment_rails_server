@@ -54,7 +54,7 @@ module MoneyHelper
 	            new_str[-3..-1] = ""
 	        end
 	    end
-		if ccy
+		if ccy && ccy.upcase
 			CCY[ccy]['symbol'] + new_str
 		else
 			new_str
