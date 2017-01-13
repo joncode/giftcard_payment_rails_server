@@ -377,7 +377,7 @@ class Omnivore
 		rescue => e
 			msg =  "\n\n 306 POSITRONICS ERROR #{e.inspect}"
 			OpsTwilio.text_devs msg: msg
-			puts msp
+			puts msg
 			e
 			unless e.nil?
 				resp = e.response.code
