@@ -54,8 +54,8 @@ module MoneyHelper
 	            new_str[-3..-1] = ""
 	        end
 	    end
-		if ccy && ccy.upcase
-			CCY[ccy]['symbol'] + new_str
+		if ccy.kind_of(String) && ccy.length == 3
+			CCY[ccy.upcase]['symbol'] + new_str
 		else
 			new_str
 		end
