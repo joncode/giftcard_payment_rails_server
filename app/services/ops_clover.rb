@@ -1,6 +1,6 @@
 class OpsClover
 
-	attr_reader :status, :mid, :key, :clienjt, :merchant, :signup
+	attr_reader :status, :mid, :key, :client, :merchant, :signup
 
 	def initialize args={}
 		if args[:mid].blank? || args[:mid].to_s.length < 5

@@ -14,7 +14,9 @@ class Web::V3::CloverController < MetalCorsController
 		app_key = init_params[:application_key]
 		name = init_params[:name].split('|')[0]
 		email = init_params[:name].split('|')[1].gsub(' ','').gsub("(DEV)",'')
-		venue_url = init_params[:serial_number]
+		web_address = init_params[:serial_number]
+		o = OpsClover.new({ mid: mid, application_key: app_key })
+		puts o.inspect
 		# if app_key
 		# 	client = Client.include(:partner).find_by(application_key: app_key)
 		# 	if client && client.active

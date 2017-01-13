@@ -34,6 +34,7 @@ class MerchantSignup < ActiveRecord::Base
 		m.position = 'CloverPOS'
 		m.point_of_sale_system = 'clover'
 		m.name = args[:mid]
+		m.website = args[:website]
 		m
 	end
 
