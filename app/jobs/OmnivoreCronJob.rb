@@ -5,8 +5,8 @@ class OmnivoreCronJob
 	@queue = :subscription
 
 	def self.perform
-		system_downs = O.locs_sys_down
-		tickets_downs = O.locs_tix_down
+		system_downs = Omnivore.locs_sys_down
+		tickets_downs = Omnivore.locs_tix_down
 		msg = ""
 		[system_downs, tickets_downs].each do |res|
 			data = res[:data]
