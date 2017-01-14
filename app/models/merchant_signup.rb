@@ -5,7 +5,7 @@ class MerchantSignup < ActiveRecord::Base
 #   -------------
 
 
-	validates_presence_of  :venue_name, :point_of_sale_system, :name, :email
+	validates_presence_of  :venue_name, :point_of_sale_system, :name
 	validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: true
 	validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: true
 	validates_length_of :name,      :maximum => 100
@@ -32,7 +32,7 @@ class MerchantSignup < ActiveRecord::Base
 	def self.new_clover args
 		m = new
 		m.venue_name = args[:name]
-		m.email = args[:email]
+		# m.email = args[:email]
 		m.message = args[:mid]
 		m.position = 'CloverPOS'
 		m.point_of_sale_system = 'clover'
