@@ -55,7 +55,11 @@ class OpsClover
 		if @client.respond_to?(:application_key) && @client.application_key
 			@key = @client.application_key
 		end
-		return @key
+		if @key == @app_key
+			return nil
+		else
+			return @key
+		end
 	end
 
 	def get_redemptions_for_hex_id_or_token unqiue_id
