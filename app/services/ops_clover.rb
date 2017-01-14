@@ -146,19 +146,23 @@ class OpsClover
 
 
 	def get_client
+		puts "GET CLIENT for #{@app_key}"
 		if @app_key
 			@client = Client.find_by(application_key: @app_key)
 			if @client.respond_to?(:click)
+				puts "CLIENT FOUND #{@client.id}"
 				@client.click
 			end
 		end
 	end
 
 	def get_merchant
+		puts "GET Merchant for #{@mid}"
 		@merchant = Merchant.find_by(pos_merchant_id: @mid) if @mid
 	end
 
 	def get_signup
+		puts "GET MerchantSignup for #{@mid}"
 		@signup = MerchantSignup.get_clover_signup @mid
 	end
 
