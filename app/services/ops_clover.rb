@@ -158,12 +158,18 @@ class OpsClover
 
 	def get_merchant
 		puts "GET Merchant for #{@mid}"
-		@merchant = Merchant.find_by(pos_merchant_id: @mid) if @mid
+		if @client
+			@merchant = @client.partner
+		elsif @mid
+			@merchant = Merchant.find_by(pos_merchant_id: @mid)
+		end
 	end
 
 	def get_signup
 		puts "GET MerchantSignup for #{@mid}"
-		@signup = MerchantSignup.get_clover_signup @mid
+		if @client.nil? || @merchant.nil?
+			@signup = MerchantSignup.get_clover_signup @mid
+		end
 	end
 
 
