@@ -139,6 +139,7 @@ class OpsClover
 			if @client.save
 				# ready to go
 			else
+				@client = nil unless @client.persisted?
 				puts "CLIENT ERROR - #{@client.errors.full_messages}"
 			end
 		end

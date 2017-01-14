@@ -5,13 +5,13 @@ module ClientMaker
 
 	def new_clover_client merchant
 		# find other clients for partner
-		cs = Client.where(platform: :clover, partner_id: merchant.id, partner_type: merchant.class.to_s)
+		cs = Client.where(platform: 7, partner_id: merchant.id, partner_type: merchant.class.to_s)
 		client = Client.new(platform: :clover, ecosystem: :full, data_type: :merchant)
 		client.partner_id = merchant.id
 		client.partner_type = merchant.class.to_s
-		client.url_name = clover_pos_redemtion_url_name(merchant, cs.length)
-		client.name = merchant.venue_name + merchant.website + ' CloverPOS'
-		client.detail = "Clover POS redemption tablet for #{merchant.venue_name}"
+		client.url_name = clover_pos_redemtion_url_name(merchant, cs.length + 1)
+		client.name = merchant.venue_name + ' ' + merchant.website + ' Clover'
+		client.detail = "CloverPOS redemption credentials for #{merchant.venue_name}"
 		client.download_url = nil
 		client.data_id = merchant.id
 		client.data_type = merchant.class.to_s.underscore.to_sym
@@ -102,7 +102,7 @@ module ClientMaker
 #   -------------
 
 	def clover_pos_redemtion_url_name merchant, num
-		"CLOVER-#{merchant.name.parameterize}-VERSION-#{num + 1}-#{merchant.pos_merchant_id}"
+		"CLOVER-#{merchant.venue_name.parameterize}-V#{num}-#{merchant.pos_merchant_id}"
 	end
 
 	def web_menu_url_name partner
