@@ -33,9 +33,9 @@ class OpsClover
 	end
 
 	def stoplight
-		num = 2
+		num = 1
 		num = 0 if [:blank, :new].include?(status)
-		num = 1 if [:live].include?(status)
+		num = 2 if [:live].include?(status)
 		[:stop, :support, :live][num]
 	end
 
@@ -138,8 +138,8 @@ class OpsClover
 
 
 	def get_client
-		if @client_key
-			@client = Client.find_by(application_key: @client_key)
+		if @app_key
+			@client = Client.find_by(application_key: @app_key)
 			if @client.respond_to?(:click)
 				@client.click
 			end
