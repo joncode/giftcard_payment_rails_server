@@ -20,6 +20,7 @@ protected
     end
 
     def authentication_clover
+        puts "\nCLOVER AUTH - #{request.headers["HTTP_X_AUTH_TOKEN"]} - #{request.headers['HTTP_X_APPLICATION_KEY']}\n"
         successful = authenticate_general
     end
 

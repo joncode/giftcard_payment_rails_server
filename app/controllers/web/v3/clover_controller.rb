@@ -88,8 +88,10 @@ class Web::V3::CloverController < MetalCorsController
 		o = OpsClover.new(h)
 		puts o.inspect
 
+		o.update_status
+
 		# find redemption by hex_id or token
-		rs = o.client.partner.get_redemptions_for_hex_id_or_token(h[:code])
+		rs = o.get_redemptions_for_hex_id_or_token(h[:code])
 
 		@pending_redemption = []
 		@done_redemption = []

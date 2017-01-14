@@ -48,6 +48,17 @@ class OpsClover
 		h
 	end
 
+
+	def get_redemptions_for_hex_id_or_token unqiue_id
+		if @merchant
+			@merchant.get_redemptions_for_hex_id_or_token(unique_id)
+		elsif @client
+			@client.partner.get_redemptions_for_hex_id_or_token(unique_id)
+		else
+			[]
+		end
+	end
+
 #   -------------
 
 	def update_status
