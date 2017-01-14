@@ -107,32 +107,30 @@ class OpsClover
 
 
 	def make_client
-
 		merchant_obj = @merchant || @signup
 		if @client.nil? && merchant_obj
 			@client = Client.new_clover_client(@signup)
 			if @client.save
-				puts @client.inspect
 				# ready to go
 			else
-				puts @client.inspect
 				puts "CLIENT ERROR - #{@client.errors.full_messages}"
 			end
 		end
+		puts @client.inspect
+		@client
 	end
 
 	def make_signup
 		if @signup.nil?
 			@signup = MerchantSignup.new_clover @args
+			if @signup.save
+				# 2. make a clover client and connect to the merchant signup
+			else
+				puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
+			end
 		end
-		if @signup.save
-			# 2. make a clover client and connect to the merchant signup
-			puts @signup.inspect
-
-		else
-			puts @signup.inspect
-			puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
-		end
+		puts @signup.inspect
+		@signup
 	end
 
 #   -------------
