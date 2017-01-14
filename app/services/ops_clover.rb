@@ -112,7 +112,6 @@ class OpsClover
 			end
 
 			# 3. :promote the @merchant_signup clients to the merchant with merchant.promote in ADMT
-
 			# 4. set status to :requested
 			set_status
 		end
