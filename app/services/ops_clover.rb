@@ -1,4 +1,5 @@
 class OpsClover
+	include ActionView::Helpers::NumberHelper
 
 	attr_accessor :mid, :key, :app_key, :amount, :ccy, :code
 	attr_reader :status, :client, :merchant, :signup, :args, :device_id, :merchant_name, :merchant_email
@@ -43,7 +44,7 @@ class OpsClover
 		h[:application_key] = key
 		h[:merchant_id] = mid
 		h[:stoplight] = stoplight
-		h[:support_phone] = TWILIO_PHONE_NUMBER
+		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER)
 		h[:support_email] = 'support@#itson.me'
 		h
 	end
