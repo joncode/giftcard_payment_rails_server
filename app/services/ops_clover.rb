@@ -15,8 +15,9 @@ class OpsClover
 		else
 			@app_key = args[:app_key]
 		end
-		@key = 'g1i12ant_client41314_+mreta12_key-moc1241k=_124)mock_mock' # MOCK of @@app_key
+		# @key = 'g1i12ant_client41314_+mreta12_key-moc1241k=_124)mock_mock' # MOCK of @@app_key
 
+		@key = @app_key
 		@device_id = args[:device_id]
 		@merchant_name = args[:name]
 		@merchant_email = args[:email]
@@ -102,7 +103,7 @@ class OpsClover
 
 	def set_status
 
-		return @status = [:blank, :new, :requested, :paused, :live].sample
+		# return @status = [:blank, :new, :requested, :paused, :live].sample
 
 		if @client.nil? && @merchant.nil? && @signup.nil?
 			x = @mid.nil? ? :blank : :new
