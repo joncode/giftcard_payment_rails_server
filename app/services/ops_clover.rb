@@ -155,6 +155,7 @@ class OpsClover
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
 			else
+				@signup = nil unless @signup.persisted?
 				puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
 			end
 		end

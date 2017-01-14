@@ -5,6 +5,7 @@ module ClientMaker
 
 	def new_clover_client merchant
 		# find other clients for partner
+		return nil unless merchant.persisted?
 		cs = Client.where(platform: 7, partner_id: merchant.id, partner_type: merchant.class.to_s)
 		client = Client.new(platform: :clover, ecosystem: :full, data_type: :merchant)
 		client.partner_id = merchant.id
