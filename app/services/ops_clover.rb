@@ -94,22 +94,8 @@ class OpsClover
 	def make_requeseted
 		if status == :new
 			# 1. create a @merchant_signup
-			@signup = MerchantSignup.new_clover @args
-			if @signup.save
-				# 2. make a clover client and connect to the merchant signup
-				puts @signup.inspect
-				@client = Client.new_clover_client(@signup)
-				if @client.save
-					puts @client.inspect
-					# ready to go
-				else
-					puts @client.inspect
-					puts "CLIENT ERROR - #{@client.errors.full_messages}"
-				end
-			else
-				puts @signup.inspect
-				puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
-			end
+			make_signup
+			make_client
 
 			# 3. :promote the @merchant_signup clients to the merchant with merchant.promote in ADMT
 			# 4. set status to :requested
@@ -117,6 +103,36 @@ class OpsClover
 		end
 		# 5. return the :application_key
 		key
+	end
+
+
+	def make_client
+
+		merchant_obj = @merchant || @signup
+		if @client.nil? && merchant_obj
+			@client = Client.new_clover_client(@signup)
+			if @client.save
+				puts @client.inspect
+				# ready to go
+			else
+				puts @client.inspect
+				puts "CLIENT ERROR - #{@client.errors.full_messages}"
+			end
+		end
+	end
+
+	def make_signup
+		if @signup.nil?
+			@signup = MerchantSignup.new_clover @args
+		end
+		if @signup.save
+			# 2. make a clover client and connect to the merchant signup
+			puts @signup.inspect
+
+		else
+			puts @signup.inspect
+			puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
+		end
 	end
 
 #   -------------
@@ -127,6 +143,8 @@ class OpsClover
 
 		if @client.nil? && @merchant.nil? && @signup.nil?
 			x = @mid.nil? ? :blank : :new
+		elsif @client.nil? && @merchant.nil?
+			x = :new
 		elsif @merchant.nil?
 			x = :requested
 		elsif @client.nil?
@@ -167,9 +185,9 @@ class OpsClover
 
 	def get_signup
 		puts "GET MerchantSignup for #{@mid}"
-		if @client.nil? || @merchant.nil?
-			@signup = MerchantSignup.get_clover_signup @mid
-		end
+
+		@signup = MerchantSignup.get_clover_signup @mid
+
 	end
 
 
