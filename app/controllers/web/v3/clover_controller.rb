@@ -37,7 +37,7 @@ class Web::V3::CloverController < MetalCorsController
 					client_id: SERVICE_NAME,
 					application_key: o.key
 				})
-		else :support
+		else #:support
 			fail_web({ err: "SUPPORT", msg:  "Clover connection is #{o.status}"})
 			@app_response[:data] = {
 					code: 'SUPPORT',
@@ -90,46 +90,65 @@ class Web::V3::CloverController < MetalCorsController
 
 		o.update_status
 
-		# find redemption by hex_id or token
-		rs = o.get_redemptions_for_hex_id_or_token(h[:code])
-
-		@pending_redemption = []
-		@done_redemption = []
-		@failed_redemption = []
-
-		rs.each do |r|
-			if r.status == 'pending'
-				@pending_redemption << r
-			elsif r.status == 'done'
-				@done_redemption << r
-			else
-				@failed_redemption << r
-			end
-		end
-
-		if @current_redemption = @pending_redemption.last
-			resp = Redeem.apply_and_complete(redemption: @current_redemption, ticket_num: redeem_params[:order_id], server: redeem_params[:employee_id], client_id: @current_client.id)
-            if !resp.kind_of?(Hash)
-                status = :bad_request
-                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
-            elsif resp["success"] == true
-                gift.fire_after_save_queue(@current_client)
-                status = :ok
-                success({msg: resp["response_text"]})
-            else
-                status = :ok
-                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
-            end
+		case o.stoplight
+		when :stop
+			fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+			@app_response[:data] = {
+					code: 'NOT_REDEEMABLE',
+					message: "Merchant is not active currently.  Please contact support@itson.me",
+					client_id: SERVICE_NAME
+				}
+		when :support
+			fail_web({ err: "SUPPORT", msg:  "Clover connection is #{o.status}"})
+			@app_response[:data] = {
+					code: 'SUPPORT',
+					message: "Clover connection is #{o.status}",
+					client_id: SERVICE_NAME
+				}
 		else
 
-			fail_web({ err: "NOT_FOUND", msg:  "Gift not found for Voucher Code #{h[:code]}"})
-			@app_response[:data] = {
-						applied_amount: 0,
-						code: "NOT_FOUND",
-						transaction_reference: h[:code],
-						message: "Gift not found for Voucher Code #{h[:code]}",
-						client_id: SERVICE_NAME
-					}
+			# find redemption by hex_id or token
+			rs = o.get_redemptions_for_hex_id_or_token(h[:code])
+
+			@pending_redemption = []
+			@done_redemption = []
+			@failed_redemption = []
+
+			rs.each do |r|
+				if r.status == 'pending'
+					@pending_redemption << r
+				elsif r.status == 'done'
+					@done_redemption << r
+				else
+					@failed_redemption << r
+				end
+			end
+
+			if @current_redemption = @pending_redemption.last
+				resp = Redeem.apply_and_complete(redemption: @current_redemption, ticket_num: redeem_params[:order_id], server: redeem_params[:employee_id], client_id: @current_client.id)
+	            if !resp.kind_of?(Hash)
+	                status = :bad_request
+	                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+	            elsif resp["success"] == true
+	                gift.fire_after_save_queue(@current_client)
+	                status = :ok
+	                success({msg: resp["response_text"]})
+	            else
+	                status = :ok
+	                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+	            end
+			else
+
+				fail_web({ err: "NOT_FOUND", msg:  "Gift not found for Voucher Code #{h[:code]}"})
+				@app_response[:data] = {
+							applied_amount: 0,
+							code: "NOT_FOUND",
+							transaction_reference: h[:code],
+							message: "Gift not found for Voucher Code #{h[:code]}",
+							client_id: SERVICE_NAME
+						}
+
+			end
 
 		end
 
@@ -186,7 +205,6 @@ class Web::V3::CloverController < MetalCorsController
 		# 				client_id: SERVICE_NAME
 		# 			}
 		# end
-		respond
 	end
 
 
