@@ -13,6 +13,7 @@ module ClientMaker
 		client.name = merchant.venue_name + ' ' + merchant.website + ' Clover'
 		client.detail = "CloverPOS redemption credentials for #{merchant.venue_name}"
 		client.download_url = nil
+		client.ecosystem = :partner
 		client.data_id = merchant.id
 		client.data_type = merchant.class.to_s.underscore.to_sym
 		return client

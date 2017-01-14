@@ -54,6 +54,7 @@ class Web::V3::CloverController < MetalCorsController
 		@app_response[:meta] = o.meta
 		respond
 
+	end
 #### RANDOM RESPONSES
 		# x = rand(2)
 
@@ -75,7 +76,6 @@ class Web::V3::CloverController < MetalCorsController
 		# 		})
 		# end
 		# respond
-	end
 
 	# {"amount"=>"456", "service_charge"=>"null", "tax_amount"=>"0", "code"=>"4567", "merchant_id"=>"J4Q1V4P5X0KS0", "order_id"=>"4ASNH66VTXVRJ", "employee_id"=>"05NZK28JC398W", "note"=>nil, "tip_amount"=>"0", "currency"=>"USD"}
 
@@ -176,6 +176,7 @@ class Web::V3::CloverController < MetalCorsController
 		@app_response[:meta] = o.meta
 		respond
 
+	end
 
 		# x = rand(5)
 		# case x
@@ -226,7 +227,6 @@ class Web::V3::CloverController < MetalCorsController
 		# 				client_id: SERVICE_NAME
 		# 			}
 		# end
-	end
 
 
 private
