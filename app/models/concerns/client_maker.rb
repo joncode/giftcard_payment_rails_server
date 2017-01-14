@@ -10,10 +10,11 @@ module ClientMaker
 		client.partner_id = merchant.id
 		client.partner_type = merchant.class.to_s
 		client.url_name = clover_pos_redemtion_url_name(merchant, cs.length)
-		client.name = merchant.name + " Clover Client"
-		client.detail = "Clover POS redemption tablet for #{merchant.name}"
-		client.download_url = "clover.#{merchant.website}"
+		client.name = merchant.venue_name + merchant.website + ' CloverPOS'
+		client.detail = "Clover POS redemption tablet for #{merchant.venue_name}"
+		client.download_url = nil
 		client.data_id = merchant.id
+		client.data_type = merchant.to_s.underscore.to_sym
 		return client
 	end
 

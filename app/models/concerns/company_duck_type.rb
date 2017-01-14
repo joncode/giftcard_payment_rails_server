@@ -31,4 +31,7 @@ module CompanyDuckType
 
     alias_method :timezone, :time_zone
 
+    def venue_name
+        name
+    end
 end
