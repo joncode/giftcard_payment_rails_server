@@ -174,9 +174,7 @@ class OpsClover
 
 	def get_merchant
 		puts "GET Merchant for #{@mid}"
-		if @client
-			@merchant = @client.partner
-		elsif @mid
+		if @mid
 			@merchant = Merchant.find_by(pos_merchant_id: @mid)
 		end
 	end
