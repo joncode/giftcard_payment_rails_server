@@ -84,11 +84,11 @@ class OpsClover
 		end
 	end
 
-	def key= _app_key
+	def key
 		if @client.respond_to?(:application_key) && @client.application_key
-			_app_key = @client.application_key
+			@key = @client.application_key
 		end
-		@key = _app_key
+		return @key
 	end
 
 	def make_requeseted
@@ -97,24 +97,27 @@ class OpsClover
 			@signup = MerchantSignup.new_clover @args
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
+				puts @signup.inspect
 				@client = Client.new_clover_client(@signup)
 				if @client.save
+					puts @client.inspect
 					# ready to go
 				else
+					puts @client.inspect
 					puts "CLIENT ERROR - #{@client.errors.full_messages}"
 				end
 			else
+				puts @signup.inspect
 				puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
 			end
 
 			# 3. :promote the @merchant_signup clients to the merchant with merchant.promote in ADMT
-			@key = @client
 
 			# 4. set status to :requested
 			set_status
 		end
 		# 5. return the :application_key
-		@key
+		key
 	end
 
 #   -------------
