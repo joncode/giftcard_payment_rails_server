@@ -14,7 +14,7 @@ module ClientMaker
 		client.detail = "Clover POS redemption tablet for #{merchant.venue_name}"
 		client.download_url = nil
 		client.data_id = merchant.id
-		client.data_type = merchant.to_s.underscore.to_sym
+		client.data_type = merchant.class.to_s.underscore.to_sym
 		return client
 	end
 
