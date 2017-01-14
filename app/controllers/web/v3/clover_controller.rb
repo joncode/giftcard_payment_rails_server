@@ -43,7 +43,7 @@ class Web::V3::CloverController < MetalCorsController
 			else
 				screen_msg = "#{SERVICE_NAME} Merchant account requires support."
 			end
-			fail_web({ err: "SUPPORT", msg:  "Clover connection is #{o.status}"})
+			fail_web({ err: "SUPPORT", msg:  screen_msg})
 			@app_response[:data] = {
 					code: 'SUPPORT',
 					message: screen_msg,
@@ -97,17 +97,22 @@ class Web::V3::CloverController < MetalCorsController
 
 		case o.stoplight
 		when :stop
-			fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+			fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  You may contact support@itson.me"})
 			@app_response[:data] = {
 					code: 'NOT_REDEEMABLE',
-					message: "Merchant is not active currently.  Please contact support@itson.me",
+					message: "Merchant is not active currently.  You may contact support@itson.me",
 					client_id: SERVICE_NAME
 				}
 		when :support
-			fail_web({ err: "SUPPORT", msg:  "Clover connection is #{o.status}"})
+			if o.status == :requested
+				screen_msg = "#{SERVICE_NAME} team is setting up your merchant account."
+			else
+				screen_msg = "#{SERVICE_NAME} Merchant account requires support."
+			end
+			fail_web({ err: "SUPPORT", msg: screen_msg})
 			@app_response[:data] = {
 					code: 'SUPPORT',
-					message: "Clover connection is #{o.status}",
+					message: screen_msg,
 					client_id: SERVICE_NAME
 				}
 		else
@@ -133,10 +138,10 @@ class Web::V3::CloverController < MetalCorsController
 				resp = Redeem.apply_and_complete(redemption: @current_redemption, ticket_num: redeem_params[:order_id], server: redeem_params[:employee_id], client_id: @current_client.id)
 	            if !resp.kind_of?(Hash)
 	                status = :bad_request
-	                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+	                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  You may contact support@itson.me"})
 					@app_response[:data] = {
 										code: 'NOT_REDEEMABLE',
-										message: "Merchant is not active currently.  Please contact support@itson.me",
+										message: "Merchant is not active currently.  You may contact support@itson.me",
 										client_id: SERVICE_NAME
 									}
 	            elsif resp["success"] == true
