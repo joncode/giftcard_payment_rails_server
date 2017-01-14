@@ -41,7 +41,9 @@ class OpsClover
 
 	def meta
 		h = {}
-		h[:application_key] = key
+		if key != @app_key
+			h[:application_key] = key
+		end
 		h[:merchant_id] = mid
 		h[:stoplight] = stoplight
 		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER, area_code: true)
@@ -55,11 +57,7 @@ class OpsClover
 		if @client.respond_to?(:application_key) && @client.application_key
 			@key = @client.application_key
 		end
-		if @key == @app_key
-			return nil
-		else
-			return @key
-		end
+		return @key
 	end
 
 	def get_redemptions_for_hex_id_or_token unqiue_id
