@@ -44,8 +44,8 @@ class OpsClover
 		h[:application_key] = key
 		h[:merchant_id] = mid
 		h[:stoplight] = stoplight
-		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER)
-		h[:support_email] = 'support@#itson.me'
+		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER, area_code: true)
+		h[:support_email] = 'support@itson.me'
 		h
 	end
 
