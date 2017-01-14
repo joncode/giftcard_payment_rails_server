@@ -49,6 +49,14 @@ class OpsClover
 		h
 	end
 
+#   -------------
+
+	def key
+		if @client.respond_to?(:application_key) && @client.application_key
+			@key = @client.application_key
+		end
+		return @key
+	end
 
 	def get_redemptions_for_hex_id_or_token unqiue_id
 		if @merchant
@@ -65,7 +73,7 @@ class OpsClover
 	def update_status
 		case status
 		when :new
-			make_requeseted
+			make_requested
 			meta
 		when :blank
 			meta
@@ -84,14 +92,32 @@ class OpsClover
 		end
 	end
 
-	def key
-		if @client.respond_to?(:application_key) && @client.application_key
-			@key = @client.application_key
+	def set_status
+
+		# return @status = [:blank, :new, :requested, :paused, :live].sample
+
+		if @client.nil? && @merchant.nil? && @signup.nil?
+			x = @mid.nil? ? :blank : :new
+		elsif @client.nil? && @merchant.nil?
+			x = :new
+		elsif @merchant.nil?
+			x = :requested
+		elsif @client.nil?
+			x = :paused
+		elsif @merchant == @client.partner && @merchant.mode == 'live'
+				# check to see if owned by MerchantSignup - auto-move partner to merchant
+				# re-run this method to set status with :mode
+			x = :live
+		else
+			x = :paused
 		end
-		return @key
+		@status = x
 	end
 
-	def make_requeseted
+
+#   -------------
+
+	def make_requested
 		if status == :new
 			# 1. create a @merchant_signup
 			make_signup
@@ -132,33 +158,6 @@ class OpsClover
 		puts @signup.inspect
 		@signup
 	end
-
-#   -------------
-
-	def set_status
-
-		# return @status = [:blank, :new, :requested, :paused, :live].sample
-
-		if @client.nil? && @merchant.nil? && @signup.nil?
-			x = @mid.nil? ? :blank : :new
-		elsif @client.nil? && @merchant.nil?
-			x = :new
-		elsif @merchant.nil?
-			x = :requested
-		elsif @client.nil?
-			x = :paused
-		elsif @merchant == @client.partner && @merchant.mode == 'live'
-				# check to see if owned by MerchantSignup - auto-move partner to merchant
-				# re-run this method to set status with :mode
-			x = :live
-		else
-			x = :paused
-		end
-		@status = x
-	end
-
-
-#   -------------
 
 
 	def get_client
