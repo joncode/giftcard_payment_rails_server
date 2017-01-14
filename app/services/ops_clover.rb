@@ -141,8 +141,8 @@ class OpsClover
 			if @client.save
 				# ready to go
 			else
-				@client = nil unless @client.persisted?
 				puts "CLIENT ERROR - #{@client.errors.full_messages}"
+				@client = nil unless @client.persisted?
 			end
 		end
 		puts @client.inspect
@@ -155,8 +155,8 @@ class OpsClover
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
 			else
-				@signup = nil unless @signup.persisted?
 				puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
+				@signup = nil unless @signup.persisted?
 			end
 		end
 		puts @signup.inspect
