@@ -22,7 +22,7 @@ class MerchantSignup < ActiveRecord::Base
 	has_many :clients, as: :partner
 
 	def pos_merchant_id
-		if self.point_of_sale_system == 'clover' && self.message == 'CloverPOS'
+		if self.point_of_sale_system == 'clover' && self.position == 'CloverPOS'
 			self.message
 		end
 	end
