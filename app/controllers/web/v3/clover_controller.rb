@@ -85,7 +85,6 @@ class Web::V3::CloverController < MetalCorsController
 		h = {}
 		h[:mid] = redeem_params[:merchant_id]
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
-		@current_client = Client.find_by(applications_key: h[:app_key]) if h[:app_key].present?
 		h[:device_id] = redeem_params[:serial_number]
 		h[:code] = redeem_params[:code]
 		h[:amount] = redeem_params[:amount].to_i
@@ -94,6 +93,7 @@ class Web::V3::CloverController < MetalCorsController
 		o = OpsClover.new(h)
 		puts o.inspect
 
+		@current_client = o.client
 		o.update_status
 
 		case o.stoplight
