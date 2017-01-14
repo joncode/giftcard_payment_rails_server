@@ -21,7 +21,7 @@ class OpsClover
 		@key = @app_key
 		@device_id = args[:device_id]
 		@merchant_name = args[:name]
-		@merchant_email = args[:email]
+		@merchant_email = args[:email].gsub(' ','')
 		@amount = args[:amount] || 0
 		@ccy = args[:ccy]
 		@code = args[:code]
