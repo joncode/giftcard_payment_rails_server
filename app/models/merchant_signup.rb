@@ -27,6 +27,12 @@ class MerchantSignup < ActiveRecord::Base
 		end
 	end
 
+	def device_id
+		if self.point_of_sale_system == 'clover' && self.position == 'CloverPOS'
+			self.website
+		end
+	end
+
 #   -------------
 
 	def self.get_clover_signup mid

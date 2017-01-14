@@ -34,4 +34,13 @@ module CompanyDuckType
     def venue_name
         name
     end
+
+
+    def device_id
+        if self.respond_to?(:device_id)
+            self.device_id
+        elsif self.respond_to?(:tender_type_id)
+            self.tender_type_id
+        end
+    end
 end
