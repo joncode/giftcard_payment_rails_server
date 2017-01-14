@@ -98,7 +98,13 @@ class OpsClover
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
 				@client = Client.new_clover_client(@signup)
-				@client.save
+				if @client.save
+					# ready to go
+				else
+					puts "CLIENT ERROR - #{@client.errors.full_messages}"
+				end
+			else
+				puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
 			end
 
 			# 3. :promote the @merchant_signup clients to the merchant with merchant.promote in ADMT
