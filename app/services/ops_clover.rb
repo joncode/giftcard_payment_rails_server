@@ -31,7 +31,6 @@ class OpsClover
 	end
 
 	def stoplight
-		t
 		num = 2
 		num = 0 if [:blank, :new].include?(status)
 		num = 1 if [:live].include?(status)
