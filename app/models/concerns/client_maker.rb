@@ -102,7 +102,7 @@ module ClientMaker
 #   -------------
 
 	def clover_pos_redemtion_url_name merchant, num
-		"CLOVER-#{merchant.venue_name.parameterize}-V#{num}-#{merchant.pos_merchant_id}"
+		"CLOVER-#{merchant.pos_merchant_id}-#{merchant.venue_name.parameterize}-V#{num}"
 	end
 
 	def web_menu_url_name partner
