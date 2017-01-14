@@ -33,15 +33,20 @@ class Web::V3::CloverController < MetalCorsController
 		when :live
 			success({
 					code: 'LIVE',
-					message: 'ItsOnMe Tender Initialized - ready to redeem gift cards!',
+					message: "#{SERVICE_NAME} Tender Initialized - ready to redeem gift cards!",
 					client_id: SERVICE_NAME,
 					application_key: o.key
 				})
 		else #:support
+			if o.status == :requested
+				screen_msg = "#{SERVICE_NAME} team is setting up your merchant account."
+			else
+				screen_msg = "#{SERVICE_NAME} Merchant account requires support."
+			end
 			fail_web({ err: "SUPPORT", msg:  "Clover connection is #{o.status}"})
 			@app_response[:data] = {
 					code: 'SUPPORT',
-					message: "Clover connection is #{o.status}",
+					message: screen_msg,
 					client_id: SERVICE_NAME
 				}
 		end
