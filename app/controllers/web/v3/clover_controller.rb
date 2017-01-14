@@ -129,6 +129,11 @@ class Web::V3::CloverController < MetalCorsController
 	            if !resp.kind_of?(Hash)
 	                status = :bad_request
 	                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+					@app_response[:data] = {
+										code: 'NOT_REDEEMABLE',
+										message: "Merchant is not active currently.  Please contact support@itson.me",
+										client_id: SERVICE_NAME
+									}
 	            elsif resp["success"] == true
 	                gift.fire_after_save_queue(@current_client)
 	                status = :ok
@@ -136,6 +141,11 @@ class Web::V3::CloverController < MetalCorsController
 	            else
 	                status = :ok
 	                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+					@app_response[:data] = {
+										code: resp["response_code"],
+										message: resp["response_text"],
+										client_id: SERVICE_NAME
+									}
 	            end
 			else
 
