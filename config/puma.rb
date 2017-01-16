@@ -18,10 +18,10 @@ on_worker_boot do
     	puts ActiveRecord::Base.establish_connection(config)
 	end
 
-	ActiveSupport.on_load(:active_record) do
-    	puts "puma.rb (22) Here is ActiveRecord::Base.establish_connection - no (config)"
-    	puts ActiveRecord::Base.establish_connection
-	end
+	# ActiveSupport.on_load(:active_record) do
+ #    	puts "puma.rb (22) Here is ActiveRecord::Base.establish_connection - no (config)"
+ #    	puts ActiveRecord::Base.establish_connection
+	# end
 
 	# If you are using Redis but not Resque, change this
 	if defined?(Resque)
