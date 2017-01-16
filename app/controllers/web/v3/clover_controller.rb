@@ -146,6 +146,7 @@ class Web::V3::CloverController < MetalCorsController
 										client_id: SERVICE_NAME
 									}
 	            elsif resp["success"] == true
+	                gift = resp['gift'] || @current_redemption.gift
 	                gift.fire_after_save_queue(@current_client)
 	                status = :ok
 	                success({msg: resp["response_text"]})
