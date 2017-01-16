@@ -1,6 +1,17 @@
 class Redeem
 	extend MoneyHelper
 
+	def self.change_amount(redemption, new_amount)
+		return redemption if redemption.status != 'pending'
+		if new_amount.to_i < redemption.amount
+			redemption.update(amount: new_amount)
+			return redemption
+		else
+				# do not change , return the lower applied_amount
+			return redemption
+		end
+	end
+
 	def self.set_gift_current_balance_and_status(gift)
 		set_balance(gift)
 		set_gift_current_status(gift)

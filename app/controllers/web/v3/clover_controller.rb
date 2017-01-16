@@ -136,6 +136,7 @@ class Web::V3::CloverController < MetalCorsController
 			end
 
 			if @current_redemption = @pending_redemption.last
+				Redeem.change_amount(@current_redemption, h[:amount])
 				resp = Redeem.apply_and_complete(redemption: @current_redemption, ticket_num: redeem_params[:order_id], server: redeem_params[:employee_id], client_id: @current_client.id)
 	            if !resp.kind_of?(Hash)
 	                status = :bad_request
