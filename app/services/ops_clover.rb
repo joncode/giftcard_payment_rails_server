@@ -179,6 +179,8 @@ class OpsClover
 		puts "GET Merchant for #{@mid}"
 		if @mid
 			@merchant = Merchant.find_by(pos_merchant_id: @mid)
+		elsif @client && @client.partner_type == "Merchant"
+			@merchant = @client.partner
 		end
 	end
 
