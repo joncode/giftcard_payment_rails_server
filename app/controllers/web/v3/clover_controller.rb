@@ -149,7 +149,11 @@ class Web::V3::CloverController < MetalCorsController
 	                gift = resp['gift'] || @current_redemption.gift
 	                gift.fire_after_save_queue(@current_client)
 	                status = :ok
-	                success({msg: resp["response_text"]})
+	                h = resp['response_text']
+	                h['code'] = 'SUCCESS'
+	                h['message'] = resp['msg']
+	                h['client_id'] = SERVICE_NAME
+	                success(h)
 	            else
 	                status = :ok
 	                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
@@ -163,7 +167,7 @@ class Web::V3::CloverController < MetalCorsController
 
 				fail_web({ err: "NOT_FOUND", msg:  "Gift not found for Voucher Code #{h[:code]}"})
 				@app_response[:data] = {
-							applied_amount: 0,
+							amount_applied: 0,
 							code: "NOT_FOUND",
 							transaction_reference: h[:code],
 							message: "Gift not found for Voucher Code #{h[:code]}",
