@@ -153,6 +153,7 @@ class Web::V3::CloverController < MetalCorsController
 	                h['code'] = 'SUCCESS'
 	                h['message'] = resp['msg']
 	                h['client_id'] = SERVICE_NAME
+	                h['transaction_id'] = @current_redemption.hex_id
 	                success(h)
 	            else
 	                status = :ok
