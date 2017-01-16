@@ -3,7 +3,7 @@ class Redemption < ActiveRecord::Base
 	include MoneyHelper
 
 	# STATUS ENUM : 'pending', 'done', 'expired'
-	enum type_of: [ :omnivore, :v2, :v1, :paper, :zapper, :admin ]
+	enum type_of: [ :omnivore, :v2, :v1, :paper, :zapper, :admin, :clover ]
 
     default_scope -> { where(active: true) } # indexed - # do NOT remove !@
     scope :live_scope, -> (gift) { where(gift_id: gift.id, status: ['done', 'pending']).order(created_at: :desc) }
