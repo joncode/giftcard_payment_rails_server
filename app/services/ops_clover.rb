@@ -60,7 +60,7 @@ class OpsClover
 		return @key
 	end
 
-	def get_redemptions_for_hex_id_or_token unqiue_id
+	def get_redemptions_for_hex_id_or_token unique_id
 		if @merchant
 			@merchant.get_redemptions_for_hex_id_or_token(unique_id)
 		elsif @client
