@@ -4,7 +4,7 @@ class Redeem
 	def self.change_amount(redemption, new_amount)
 		return redemption if redemption.status != 'pending'
 		if new_amount.to_i < redemption.amount
-			redemption.update(amount: new_amount)
+			redemption.update(amount: new_amount, gift_next_value: (gift_prev_value - new_amount))
 			return redemption
 		else
 				# do not change , return the lower applied_amount
