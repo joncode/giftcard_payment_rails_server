@@ -105,7 +105,12 @@ class OpsClover
 		elsif @merchant.nil?
 			x = :requested
 		elsif @client.nil?
-			x = :paused
+			make_client
+			if @client.kind_of?(Client)
+				x = :live
+			else
+				x = :paused
+			end
 		elsif @merchant == @client.partner && @merchant.mode == 'live'
 				# check to see if owned by MerchantSignup - auto-move partner to merchant
 				# re-run this method to set status with :mode
