@@ -112,11 +112,22 @@ class OpsClover
 				x = :paused
 			end
 		elsif @merchant == @client.partner && @merchant.mode == 'live'
-				# check to see if owned by MerchantSignup - auto-move partner to merchant
-				# re-run this method to set status with :mode
 			x = :live
 		else
+				# check to see if owned by MerchantSignup - auto-move partner to merchant
+				# re-run this method to set status with :mode
+				# How to auto-move the merchant sign up client to the merchant via clover mid
 			x = :paused
+			if @client.partner.class.to_s == 'MerchantSignup'
+				if @merchant && @merchant.pos_merchant_id == @client.partner.pos_merchant_id
+					@client.partner = @merchant
+					if @client.save && @merchant.mode == 'live'
+						x = :live
+					else
+						puts "CLIENT ERROR - #{@client.errors.full_messages}"
+					end
+				end
+			end
 		end
 		@status = x
 	end
@@ -142,7 +153,7 @@ class OpsClover
 	def make_client
 		merchant_obj = @merchant || @signup
 		if @client.nil? && merchant_obj
-			@client = Client.new_clover_client(@signup)
+			@client = Client.new_clover_client(merchant_obj)
 			if @client.save
 				# ready to go
 			else
