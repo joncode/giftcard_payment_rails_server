@@ -203,7 +203,9 @@ class OpsClover
 	def get_signup
 		puts "GET MerchantSignup for #{@mid}"
 
-		@signup = MerchantSignup.get_clover_signup @mid
+		if @mid && @merchant.nil?
+			@signup = MerchantSignup.get_clover_signup @mid
+		end
 
 	end
 
