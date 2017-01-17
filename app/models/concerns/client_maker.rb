@@ -10,7 +10,7 @@ module ClientMaker
 		client = Client.new(platform: :clover, ecosystem: :full, data_type: :merchant)
 		client.partner_id = merchant.id
 		client.partner_type = merchant.class.to_s
-		client.url_name = clover_pos_redemtion_url_name(merchant, cs.length + 1)
+		client.url_name = clover_pos_redemtion_url_name(merchant, DateTime.now.utc.to_i)
 		client.name = merchant.venue_name + ' ' + merchant.website + ' Clover'
 		client.detail = "CloverPOS redemption credentials for #{merchant.venue_name}"
 		client.download_url = nil
