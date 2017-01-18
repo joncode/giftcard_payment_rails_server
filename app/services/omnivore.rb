@@ -38,7 +38,7 @@ class Omnivore
 		@next 			 = nil
 		@brand_card_applied = false
 		@direct_redeem = args["direct_redeem"] || false
-		@ccy = 'USD'
+		@ccy = args["ccy"] || 'USD'
 	end
 
 	def r_sys

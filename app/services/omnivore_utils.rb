@@ -16,7 +16,8 @@ module OmnivoreUtils
                     "gift_current_value" => gift.balance,
                     "value" => new_value,
                     "brand_card_ids_ary" => gift.brand_card_ids,
-                    "direct_redeem" => merchant.pos_direct }
+                    "direct_redeem" => merchant.pos_direct,
+                    'ccy' => gift.ccy }
         new(pos_hsh)
 	end
 
@@ -28,7 +29,8 @@ module OmnivoreUtils
                     "gift_current_value" => redemption.gift_prev_value,
                     "value" => redemption.amount,
                     "brand_card_ids_ary" => [],
-                    "direct_redeem" => merchant.pos_direct }
+                    "direct_redeem" => merchant.pos_direct,
+                    'ccy' => redemption.ccy }
         new(pos_hsh)
     end
 
