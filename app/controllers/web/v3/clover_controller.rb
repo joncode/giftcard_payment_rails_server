@@ -12,11 +12,8 @@ class Web::V3::CloverController < MetalCorsController
 		h = {}
 		h[:mid] = init_params[:merchant_id]
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
-		h[:name] = init_params[:name].split(' | ')[0]
-		h[:email] = init_params[:name].split(' | ')[1]
-		h[:email] = h[:email].gsub(" (DEV)",'')
-		h[:email] = h[:email].gsub("(DEV)",'')
-		h[:email].gsub!(' ','')
+		name_str = init_params[:name].split(' (DEV)')[0]
+		h[:name], h[:email] = name_str.split(' | ')
 		h[:device_id] = init_params[:serial_number]
 
 		o = OpsClover.new(h)
