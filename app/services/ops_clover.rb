@@ -166,7 +166,7 @@ class OpsClover
 	end
 
 	def make_signup
-		if @signup.nil? && @merchant_name.present? && @merchant_email.persent?
+		if @signup.nil? && @merchant_name.present? && @merchant_email.present?
 			@signup = MerchantSignup.new_clover @args
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
