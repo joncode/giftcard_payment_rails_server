@@ -15,6 +15,8 @@ class Web::V3::CloverController < MetalCorsController
 		name_str = init_params[:name]
 		name_str = name_str.split(" (DEV)")[0]
 		h[:name], h[:email] = name_str.split(" | ")
+		h[:email].gsub!(' (DEV)')
+		h[:email].gsub!('(DEV)')
 		h[:device_id] = init_params[:serial_number]
 
 		o = OpsClover.new(h)
