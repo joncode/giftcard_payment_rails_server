@@ -9,6 +9,7 @@ CR = Card
 CL = Client
 FBO = OpsFacebook
 G = Gift
+IN = Invite
 LS = List
 LC = License
 LG = ListGraph
