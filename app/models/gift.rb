@@ -107,6 +107,21 @@ class Gift < ActiveRecord::Base
         []
     end
 
+    def stoplight meta=nil
+        if meta && meta == :help
+            return { meta: [ :redemption, :payment, :notified],
+                modes: [:stop, :support, :live]
+            }
+        end
+        if !active
+            :stop
+        elsif self.pay_stat == 'payment_error' || self.status == 'cancel'
+            :support
+        else
+            :live
+        end
+    end
+
 #   -------------
 
     def invite_link
@@ -275,7 +290,7 @@ class Gift < ActiveRecord::Base
     end
 
     def converted_value_cents
-        amt = value_cents
+        amt = original_value
 
         if self.ccy != 'USD' && self.payable_type == 'Sale'
             sale = self.payable

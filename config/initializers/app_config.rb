@@ -20,6 +20,17 @@ class Object
         (self.methods - Object.methods).sort_by { |m| m }
     end
 
+
+    def stoplight meta=nil
+        if meta == :help
+            return { meta: [], modes: [:stop, :support, :live]}
+        end
+        :live
+    end
+
+    def sl meta=nil
+        stoplight meta
+    end
 end
 
 

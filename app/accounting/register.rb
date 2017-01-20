@@ -146,6 +146,12 @@ class Register < ActiveRecord::Base
 		FEE_TYPES[origin.to_sym]
 	end
 
+
+	def destroy
+		return "Register is on a payment - cannot destroy" if self.payment_id.present?
+		super
+	end
+
 private
 
 	def save_affiliation

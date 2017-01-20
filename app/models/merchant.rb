@@ -203,6 +203,9 @@ class Merchant < ActiveRecord::Base
         return 0 if self.affiliate_id.nil?
         if self.rate == 90
             o_rate = 7
+        elsif self.rate == 85
+            OpsTwilio.text_devs msg: "Location fee 85% #{self.id}"
+            o_rate = 4
         else
             o_rate = 4
         end
