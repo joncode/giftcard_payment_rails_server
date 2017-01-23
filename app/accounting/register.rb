@@ -5,6 +5,8 @@ class Register < ActiveRecord::Base
 
 	validates_presence_of :partner_id, :partner_type
 
+#   -------------
+
 	after_create :save_affiliation
 
 #   -------------
@@ -12,20 +14,22 @@ class Register < ActiveRecord::Base
 		#  Merchant || Affiliate == Partner
 	belongs_to :partner,  polymorphic: true, autosave: true
 	belongs_to :gift
+
+	def gift
+		Gift.unscoped.where(id: self.gift_id).first
+	end
+
 	belongs_to :payment
 	belongs_to :license
 
 #   -------------
 
+	# cat 'ACCRUAL', 'REFUND', 'ADJUST'
 	FEE_TYPES = { iom: "ItsOnMe", loc: "Location Fee", aff_user: "User Override", aff_loc: "Commission Fee", aff_link: "Promo Link" }
 	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link, :subscription, :promo ]
 	enum type_of: [ :debt, :credit ]
+
 	attr_accessor :affiliation
-
-
-
-#   -------------
-
 
 #   -------------
 
@@ -79,7 +83,7 @@ class Register < ActiveRecord::Base
 
 	def self.paid_already? gift_obj, origin_type
 		if origins[origin_type].nil?
-			puts "500 Internal - WRONG ORIGIN TYPE Register[29] #{origin_type} - #{gift_id}"
+			puts "500 Internal - WRONG ORIGIN TYPE Register[29] #{origin_type} - #{gift_obj.id}"
 			return true
 		end
 		exists?(gift_id: gift_obj.id, origin: origins[origin_type])
@@ -107,12 +111,14 @@ class Register < ActiveRecord::Base
 			reg = self.destroy
 		else
 			type_of_value = self.debt? ? 1 : 0
+			cat_value = self.debt? ? 'REFUND' : 'ACCRUAL'
 			reg = Register.create(amount: self.amount,
 				partner_type: self.partner_type,
 				partner_id: self.partner_id,
 				origin: self.origin,
 				type_of: type_of_value,
 				gift_id: self.gift_id,
+				cat: cat_value,
 				ccy: self.ccy,
 				note: note)
 		end
