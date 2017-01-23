@@ -379,12 +379,12 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 	def self.convert_type_of_to_r_sys(typ)
 		case typ.to_s
-		when 'omnivore'
-			3
 		when 'v1'
 			1
 		when 'v2'
 			2
+		when 'omnivore'
+			3
 		when 'paper'
 			4
 		when 'zapper'
@@ -397,7 +397,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 	end
 
 	def self.convert_r_sys_to_type_of(r_sys)
-		return r_sys if [ :omnivore, :v2, :v1, :paper, :zapper, :admin, :clover ].include?(r_sys)
+		return r_sys if type_ofs.symbolize_keys.keys.include?(r_sys)
 		case r_sys.to_i
 		when 1
 			:v1
