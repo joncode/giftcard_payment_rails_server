@@ -83,7 +83,7 @@ class Register < ActiveRecord::Base
 
 	def self.paid_already? gift_obj, origin_type
 		if origins[origin_type].nil?
-			puts "500 Internal - WRONG ORIGIN TYPE Register[29] #{origin_type} - #{gift_id}"
+			puts "500 Internal - WRONG ORIGIN TYPE Register[29] #{origin_type} - #{gift_obj.id}"
 			return true
 		end
 		exists?(gift_id: gift_obj.id, origin: origins[origin_type])
