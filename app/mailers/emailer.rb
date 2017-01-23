@@ -53,6 +53,11 @@ module Emailer
         template.notify_receiver
     end
 
+    def remind_receiver data
+        template = GiftTemplateMainMailer.new(data["gift_id"], :reminder)
+        template.notify_receiver
+    end
+
     def notify_receiver_proto_join data
         template = GiftTemplateMainMailer.new(data["gift_id"])
         template.notify_receiver

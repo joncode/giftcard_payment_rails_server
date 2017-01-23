@@ -5,12 +5,16 @@ class GiftTemplateMainMailer
 
 #   -------------
 
-	def initialize(gift_id)
+	def initialize(gift_id, reminder=false)
 		@gift = Gift.find(gift_id)
         @email = destination_email
 		@bcc  = nil
         @subject = "#{@gift.giver_name} sent you a Gift!"
-        @template = get_template_name
+        if reminder == :reminder
+            @template = 'reminder-gift-2017-23-1'
+        else
+            @template = get_template_name
+        end
     end
 
 #   -------------

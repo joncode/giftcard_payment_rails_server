@@ -18,6 +18,22 @@ module Email
         end
     end
 
+    def remind_receiver thread_it=true
+        gift = self
+        obj_email = gift.receiver ? gift.receiver.email : nil
+        email     = gift.receiver_email || obj_email
+
+        unless email.blank?
+            puts "REMINDER emailing the gift receiver for #{gift.id} #{thread_it}"
+            user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
+
+            data = {"text"        => 'remind_receiver',
+                    "gift_id"     => gift.id
+                    }
+            route_email_system(data, thread_it, true)
+        end
+    end
+
     def notify_receiver_boomerang
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
