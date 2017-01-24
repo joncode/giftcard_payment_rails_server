@@ -16,9 +16,9 @@ class Reminder
                     puts "reminder for gift ID = #{gift.id}"
                     if gift.merchant.active_live?
                         if gift.receiver
-                            gift.notify_receiver if gift.receiver.not_suspended?
+                            gift.remind_receiver if gift.receiver.not_suspended?
                         else
-                            gift.notify_receiver
+                            gift.remind_receiver
                         end
                     end
                     break
