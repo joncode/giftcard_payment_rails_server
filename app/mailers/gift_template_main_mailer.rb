@@ -78,7 +78,7 @@ class GiftTemplateMainMailer
         if @gift.giver_type == "User" && @gift.receiver_id.nil?
             important_msg = "".html_safe
         elsif @gift.expires_at.present?
-            important_msg = "<span style='color:#23a9e1;'>Important: </span> This gift will expire. Please claim and use before #{make_date_s(@gift.expires_at)}. #{@gift.detail}".html_safe
+            important_msg = "<span style='color:#23a9e1;'>Important: </span> This gift will expire. Please claim and use before #{make_date_s(@gift.expires_at)}.".html_safe
         else
             important_msg = "Enjoy and have fun!".html_safe
         end
