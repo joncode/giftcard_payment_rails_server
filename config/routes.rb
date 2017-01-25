@@ -178,6 +178,7 @@ Drinkboard::Application.routes.draw do
 					patch :associate
 				end
 				collection do
+					get :list
 					post :promo
 				end
 			end

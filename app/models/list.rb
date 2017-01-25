@@ -28,7 +28,7 @@ class List < ActiveRecord::Base
 	has_many :lists, through: :list_graphs, source: :item, source_type: 'List'
 	belongs_to :owner, polymorphic: true
 
-	attr_accessor :offset
+	attr_accessor :offset, :gifts
 
 #   -------------
 
@@ -46,7 +46,7 @@ class List < ActiveRecord::Base
 	end
 
 	def self.item_types
-		['list', 'merchant', 'menu_item']
+		['list', 'merchant', 'menu_item', 'gift']
 	end
 
 	def self.templates
@@ -95,6 +95,8 @@ class List < ActiveRecord::Base
 			menu_items
 		elsif self.item_type == 'list'
 			lists
+		elsif self.item_type == 'gift'
+			gifts
 		else
 			merchants + menu_items + lists
 		end

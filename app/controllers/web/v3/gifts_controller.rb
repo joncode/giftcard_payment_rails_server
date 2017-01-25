@@ -7,6 +7,19 @@ class Web::V3::GiftsController < MetalCorsController
     rescue_from Timeout::Error, :with => :rescue_from_timeout
     rescue_from Rack::Timeout::RequestTimeoutException, :with => :rescue_from_timeout
 
+    def list
+        choice = nil
+        choice = params[:scope] unless params[:scope].blank? # :used, :received, :sent
+        limit = params[:limit].to_i > 0 ? params[:limit].to_i : 50
+        offset = params[:offset].to_i
+
+        list = ListSpecials.user_gifts(user: @current_user, client: @current_client,
+            choice: choice, limit: limit, offset: offset)
+
+        success(list)
+        respond
+    end
+
     def index
         user_id = params[:user_id]
         if user_id && user_id != @current_user.id

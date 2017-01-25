@@ -14,12 +14,12 @@ AND (g.created_at >= '#{start_date}' AND g.created_at < '#{end_date}')"
         Gift.find_by_sql(query)
     end
 
-    def pending_redeems_for merchant
-        gifts = where(merchant_id: merchant.id, status: ['notified', 'redeemed']).where('new_token_at > ?', reset_time)
-        notified_gifts = gifts.where(status: 'notified').order("created_at DESC")
-        redeemed_gifts = gifts.where(status: 'redeemed').order("redeemed_at DESC")
-        notified_gifts + redeemed_gifts
-    end
+    # def pending_redeems_for merchant
+    #     gifts = where(merchant_id: merchant.id, status: ['notified', 'redeemed']).where('new_token_at > ?', reset_time)
+    #     notified_gifts = gifts.where(status: 'notified').order("created_at DESC")
+    #     redeemed_gifts = gifts.where(status: 'redeemed').order("redeemed_at DESC")
+    #     notified_gifts + redeemed_gifts
+    # end
 
     def find_gift_for_mt_user_and_code(mt_user_id, code)
         query = "SELECT g.* FROM gifts g, invites i , merchants m \
@@ -84,30 +84,66 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
         return give_gifts, rec_gifts
     end
 
+    def count_user_scope user: , client_partner: , limit: nil, offset: 0, type: nil
+        get_user_scope(user: user, client_partner: client_partner, limit: limit, offset: offset, type: type).count
+    end
+
+    def get_user_scope user: , client_partner: , limit: 100, offset: 0, type: nil
+        if client_partner.kind_of?(Client)
+            if client_partner.full?
+                yes_where_hsh = {}
+            elsif client_partner.partner?
+                partner = client.partner
+                yes_where_hsh = { partner_type: partner.class.to_s, partner_id: partner.id }
+            else
+                     # client.client?
+                yes_where_hsh = { client_id: client_partner.id }
+            end
+        elsif client_partner.kind_of?(Affiliate) || client_partner.kind_of?(Merchant)
+            yes_where_hsh = { partner_type: client_partner.class.to_s, partner_id: client_partner.id }
+        else
+            yes_where_hsh = {}
+        end
+
+        not_where_hsh = { pay_stat: ['unpaid', 'payment_error'] }
+        case type
+        when :sent
+                # giver_id = user.id
+            user_where_str = "giver_type = 'User' AND giver_id = :user_id"
+            not_where_hsh[:status] = ['cancel', 'regifted']
+        when :used
+                # receiver_id = user.id
+            user_where_str = "receiver_id = :user_id"
+            yes_where_hsh[:status] = 'redeemed'
+        when :received
+                # receiver_id = user.id
+            user_where_str = "receiver_id = :user_id"
+            not_where_hsh[:status] = ['cancel', 'regifted', 'schedule']
+        else
+            user_where_str = "(receiver_id = :user_id AND status != 'schedule') OR (giver_type = 'User' AND giver_id = :user_id)"
+            not_where_hsh[:status] = ['cancel', 'regifted']
+        end
+
+        includes(:merchant, :giver, :receiver)
+            .where.not(not_where_hsh)
+            .where(yes_where_hsh)
+            .where(user_where_str, user_id: user.id)
+            .limit(limit)
+            .offset(offset)
+            .order(created_at: :desc)
+    end
+
     def get_user_activity user
-        giver_gifts = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(giver_id: user.id, giver_type: "User").order("created_at DESC")
-        rec_gifts   = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error'], status: 'schedule').where(receiver_id: user.id).order("created_at DESC")
-        (giver_gifts + rec_gifts).uniq { |g| g.id }
+        get_user_scope user: user, client_partner: nil, limit: nil
     end
 
     def get_user_activity_in_client user, client_or_id=nil
         if client_or_id.nil?
-            get_user_activity user
+            client = nil
         else
             client = client_or_id.kind_of?(Client) ? client_or_id : Client.find(client_or_id)
-            if client.full?
-                get_user_activity user
-            elsif client.partner?
-                partner = client.partner
-                giver_gifts = includes(:merchant).includes(:giver).where(active: true, partner_type: partner.class.to_s, partner_id: partner.id, giver_id: user.id, giver_type: "User").where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
-                rec_gifts   = includes(:merchant).includes(:giver).where(active: true, partner_type: partner.class.to_s, partner_id: partner.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error'], status: 'schedule').order("created_at DESC")
-                (giver_gifts + rec_gifts).uniq { |g| g.id }
-            else    # client.client?
-                giver_gifts = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, giver_id: user.id, giver_type: "User").where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
-                rec_gifts   = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error'], status: 'schedule').order("created_at DESC")
-                (giver_gifts + rec_gifts).uniq { |g| g.id }
-            end
         end
+        get_user_scope user: user, client_partner: client, limit: nil
     end
 
     def transactions user
