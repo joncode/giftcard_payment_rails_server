@@ -13,14 +13,14 @@ module Formatters
 
     def make_url_string str
         if str.kind_of?(String)
-            str = str.gsub('&', 'and').gsub('@', 'at').parameterize.tr('-','_')
+            str = make_slug(str).tr('-','_')
         end
         str
     end
 
     def make_slug str
         if str.kind_of?(String)
-            str = str.gsub('&', 'and').gsub('@', 'at').parameterize
+            str = str.gsub("'", '').gsub(',', '').gsub('.', '').gsub("`", '').gsub(';', '').gsub('&', 'and').gsub('@', 'at').parameterize
         end
         str
     end
@@ -39,7 +39,7 @@ module Formatters
     end
 
     def full_address
-        "#{self.address},  #{self.city}, #{self.state}"
+        "#{self.address}, #{self.city}, #{self.state}"
     end
 
     def html_complete_address
