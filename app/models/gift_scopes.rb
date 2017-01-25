@@ -61,7 +61,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
 #### USER SCOPES
 
     def get_gifts user
-        includes(:merchant).includes(:giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        includes(:merchant, :giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_notifications user
@@ -79,8 +79,8 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
     end
 
     def get_archive user
-        give_gifts = includes(:merchant).includes(:receiver).where(giver_id: user).order("created_at DESC")
-        rec_gifts  = includes(:merchant).includes(:giver).where(receiver_id: user).where(status: ['regifted','redeemed']).order("redeemed_at DESC")
+        give_gifts = includes(:merchant, :receiver).where(giver_id: user).order("created_at DESC")
+        rec_gifts  = includes(:merchant, :giver).where(receiver_id: user).where(status: ['regifted','redeemed']).order("redeemed_at DESC")
         return give_gifts, rec_gifts
     end
 
@@ -118,7 +118,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
         when :received
                 # receiver_id = user.id
             user_where_str = "receiver_id = :user_id"
-            not_where_hsh[:status] = ['cancel', 'regifted', 'schedule']
+            yes_where_hsh[:status] = ['open', 'notified']
         else
             user_where_str = "(receiver_id = :user_id AND status != 'schedule') OR (giver_type = 'User' AND giver_id = :user_id)"
             not_where_hsh[:status] = ['cancel', 'regifted']
