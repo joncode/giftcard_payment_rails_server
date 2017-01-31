@@ -68,6 +68,7 @@ class EmailAlerts
             puts "EmailAlerts[50] - Request Mandrill with TemplateName: user \nMessage:\n#{message} \n"
             m = MANDRILL_CLIENT
             response = m.messages.send_template("user", nil, message)
+
             puts "Response from Mandrill #{response.inspect}"
             puts "``````````````````````````````````````````````"
 

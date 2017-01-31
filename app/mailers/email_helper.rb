@@ -342,11 +342,11 @@ module EmailHelper
 		</div>
 				<br />
 		<div style='padding-bottom:20px;'>
-					On 	<a href='https://www.itson.me/docs/onesheet.pdf' target='_blank'
+					On 	<a href='https://www.dropbox.com/s/jtte99kryt2z03c/One%20Sheet%20%2B%20Contract%202017.pdf?dl=0' target='_blank'
 							style='color:#4C37FA;'>
 							this one sheet
 						</a>
-					you will see how ItsOnMe®:
+					, you will see how ItsOnMe®:
 				</div>
 				<div>
 					<ol>
@@ -360,12 +360,6 @@ module EmailHelper
 						<li>Updates marketing capabilities so a venue can drive new
 							and existing customers to their business with no risk and
 							no out of pocket cost.
-						</li>
-						<li>
-							<a href='https://www.itson.me/docs/onesheet.pdf' target='_blank'
-								style='color:#4C37FA;'>
-								See the one sheet
-							</a>
 						</li>
 					</ol>
 				</div>
