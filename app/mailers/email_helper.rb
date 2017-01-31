@@ -109,7 +109,7 @@ module EmailHelper
 		if !gift.receiver_email.blank?
 			receiver_info += " email: " + gift.receiver_email
 		elsif !gift.receiver_phone.blank?
-			receiver_info += " phone: " + gift.receiver_phone
+			receiver_info += " phone: " + number_to_phone(gift.receiver_phone)
 		elsif !gift.facebook_id.blank?
 			receiver_info += " via facebook"
 		elsif !gift.twitter.blank?
