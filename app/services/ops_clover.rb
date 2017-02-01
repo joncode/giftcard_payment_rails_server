@@ -2,7 +2,8 @@ class OpsClover
 	include ActionView::Helpers::NumberHelper
 
 	attr_accessor :mid, :key, :app_key, :amount, :ccy, :code
-	attr_reader :status, :client, :merchant, :signup, :args, :device_id, :merchant_name, :merchant_email
+	attr_reader :status, :client, :merchant, :signup, :args, :device_id,
+		:merchant_hsh, :merchant_name, :merchant_email
 
 	def initialize args={}
 		@args = args
@@ -17,6 +18,10 @@ class OpsClover
 			@app_key = args[:app_key]
 		end
 		# @key = 'g1i12ant_client41314_+mreta12_key-moc1241k=_124)mock_mock' # MOCK of @@app_key
+
+		@merchant_hsh = args[:merchant]
+
+		puts "OpsClover INIT - merchant hsh = #{@merchant_hsh}"
 
 		@key = @app_key
 		@device_id = args[:device_id]
@@ -208,7 +213,6 @@ class OpsClover
 		end
 
 	end
-
 
 
 end

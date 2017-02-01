@@ -8,7 +8,8 @@ class Web::V3::CloverController < MetalCorsController
 	# {"merchant_id"=>"J4Q1V4P5X0KS0", "application_key"=>"DXVQlmSoxvSo-lnKazbk2wTJkZtAIA-_Ot-gtFc--79Q", "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)"}
 
 	def init
-		puts params.inspect
+		# puts params.inspect
+		puts init_params.inspect
 		h = {}
 		h[:mid] = init_params[:merchant_id]
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
@@ -18,6 +19,10 @@ class Web::V3::CloverController < MetalCorsController
 		h[:email].gsub!(' (DEV)')
 		h[:email].gsub!('(DEV)')
 		h[:device_id] = init_params[:serial_number]
+
+		mhsh = init_params[:merchant]
+		h[:mid] = mhsh[:id]
+		h[:merchant] = mhsh
 
 		o = OpsClover.new(h)
 		puts o.inspect
@@ -242,7 +247,7 @@ private
 
 
     def init_params
-        params.require(:data).permit(:application_key, :name, :merchant_id, :serial_number)
+        params.require(:data).permit(:application_key, :name, :merchant_id, :serial_number, :merchant)
     end
 
     def redeem_params
