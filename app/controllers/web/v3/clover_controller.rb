@@ -7,6 +7,11 @@ class Web::V3::CloverController < MetalCorsController
 
 	# {"merchant_id"=>"J4Q1V4P5X0KS0", "application_key"=>"DXVQlmSoxvSo-lnKazbk2wTJkZtAIA-_Ot-gtFc--79Q", "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)"}
 
+	# {"data"=>{"merchant"=>{"zip"=>"89101", "phone"=>"702-555-1212", "locale"=>"en_US", "state"=>"NV", "address1"=>"123 Mockingbird Lane", "address2"=>"Apt 2b",
+	# "device_id"=>"abacc7fc-1f67-4cd5-9f9c-d0073b048fbf", "address3"=>"", "support_email"=>"dev@clover.com", "city"=>"Las Vegas", "currency"=>"USD", "id"=>"J4Q1V4P5X0KS0",
+	# "time_zone"=>"Pacific Standard Time", "support_phone"=>"(000) 000-0000", "name"=>"ItsOnMe Test Merchant"}, "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)",
+	# "serial_number"=>"b73f3293e5b33823"}, "format"=>"json", "controller"=>"web/v3/clover", "action"=>"init"}
+
 	def init
 		# puts params.inspect
 		puts init_params.inspect

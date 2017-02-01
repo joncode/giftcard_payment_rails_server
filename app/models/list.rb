@@ -11,7 +11,7 @@ class List < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :token, :name, :owner_type, :owner_id
+	validates_presence_of :token, :name#, :owner_type, :owner_id
 	validates_uniqueness_of :token, conditions: -> { where(active: true) }
 
 #   -------------
@@ -98,7 +98,7 @@ class List < ActiveRecord::Base
 		elsif self.item_type == 'gift'
 			gifts
 		else
-			merchants + menu_items + lists
+			merchants + menu_items + lists + gifts
 		end
 	end
 

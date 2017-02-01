@@ -21,7 +21,7 @@ namespace :morning do
         end
 
         Proto.destroy_incomplete_protos  # delete incomplete bad proto data that is old
-
+        ListByStateMakerJob.perform
     end
 
 end
