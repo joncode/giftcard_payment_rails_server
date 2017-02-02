@@ -97,6 +97,36 @@ class Redemption < ActiveRecord::Base
 		return boolean
     end
 
+    def expires_at
+    	return nil if self.new_token_at.nil?
+		case self.r_sys
+		when 1		# synchronous, so should be immediate
+					# 5 minutes
+			self.new_token_at + 5.minutes
+		when 2 		# v2 MerchantTools tablet
+					# token lasts for 24 hours
+			self.new_token_at + 24.hours
+		when 3 		# omnivore
+					# 27 seconds
+			self.new_token_at + 5.minutes
+		when 4  	# paper certificate
+					# does not expire
+			nil
+		when 5 		# zapper
+					# 3 minutes
+			self.new_token_at + 10.minutes
+		when 6		# admin
+					# 10 minutes
+			self.new_token_at + 10.minutes
+		when 7 		# Clover POS
+					# token lasts for 4 hours
+			self.new_token_at + 4.hours
+		else
+					# ERROR !
+			nil
+		end
+    end
+
 	def remove_pending cancel_type, response
 		return nil if self.status != 'pending'
 		return nil unless ['expired', 'cancel', 'failed'].include?(cancel_type)
@@ -260,7 +290,11 @@ class Redemption < ActiveRecord::Base
 	end
 
 	def serialize
-		serializable_hash except: [ :active, :client_id ]
+		h = serializable_hash except: [ :active, :client_id ]
+		if self.status == 'pending'
+			h[:expires_at] = expires_at
+		end
+		h
 	end
 
 
