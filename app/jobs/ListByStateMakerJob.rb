@@ -50,5 +50,68 @@ class ListByStateMakerJob
 		puts "ListByStateMakerJob END"
 	end
 
+	def self.recents
+
+		mhsh = {}
+		itemhsh = {}
+
+		Gift.where(created_at: 4.weeks.ago).find_each do |gift|
+
+			mid = gift.merchant_id
+			if mhsh[mid].nil?
+				{ mid: mid, merchant: g.merchant, val: 0, gifts: [], type: 'Merchant' }
+			end
+			mhsh[mid][:val] += g.original_value
+			mhsh[mid][:gifts] << gift
+
+			 # [{"detail"=>"ItsOnMe digital gifts carry a balance and can be used on multiple visits. Any printed certificate is one-time use only.",
+			 # "price"=>"10", "photo"=>"https://res.cloudinary.com/drinkboard/image/upload/v1415464767/srjgwfrtymydnfam1csh.jpg", "ccy"=>"USD",
+			  # "price_cents"=>1000, "item_id"=>1382, "item_name"=>"$10 gift voucher", "quantity"=>1}]
+			items_hsh = gift.cart_ary
+
+			items_hsh.each do |it_hsh|
+
+				it_hsh = it_hsh.symbolize_keys
+				mi = MenuItem.find(it_hsh[:item_id])
+
+				if itemhsh[mi.id].nil?
+					{ item_id: mi.id, menu_item: mi, val: o , gifts: [], type: 'MenuItem'}
+				end
+				items_hsh[mi.id][:val] += it_hsh[:price_cents] * it_hsh[:quantity]
+				items_hsh[mi.id][:gifts] << gift
+
+			end
+
+		end
+
+		# get the current merchant list and the menu item lists
+		l1 = List.where( token: 'recent_merchant_primary')
+		l2 = List.where( token: 'recent_mennu_items_primary')
+		# loop thru mhsh & item_hsh and sort by the :val amount
+
+		l1.list_graphs.destroy_all
+		l2.list_graphs.destroy_all
+
+		mary = mhsh.sort_by { |k,v| v[:val] }.reverse
+		mary.each do |ary|
+			hsh = ary[1]
+			lg  = ListGraph.new(item_id: hsh[:item_id], item_type: hsh[:type])
+			l1 << lg
+		end
+		l1.save
+
+		ith = items_hsh.sort_by { |k,v| v[:val] }.reverse
+		ith.each do |it|
+			hsh = ary [1]
+			lg  = ListGraph.new(item_id: hsh[:item_id], item_type: hsh[:type])
+			l2 << lg
+		end
+		l2.save
+
+
+		# delete last run items
+		# make a list ordered by the :val amount
+		# what to do about old list amounts  ?
+	end
 
 end

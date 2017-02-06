@@ -32,7 +32,7 @@ module MoneyHelper
 		display_money string: str, ccy: ccy
 	end
 
-	def display_money cents: nil, ccy: nil, zeros: false, dollar_f: nil, string: nil
+	def display_money cents: nil, ccy: nil, zeros: false, dollar_f: nil, string: nil, delimiter: ''
 		value = if cents.present?
 			cents
 		elsif dollar_f.present?
@@ -42,13 +42,13 @@ module MoneyHelper
 		else
 			cents
 		end
-		cents_to_currency value, !zeros, ccy
+		cents_to_currency value, !zeros, ccy, delimiter
 	end
 
     #### DO NOT CALL :cents_to_currency CALL :display_money INSTEAD
-	def cents_to_currency cents, remove_zeros=true, ccy=nil
+	def cents_to_currency cents, remove_zeros=true, ccy=nil, delimiter=''
 		return nil if cents.blank?
-		new_str = number_to_currency(cents/100.0,  :format => "%n", :negative_format => "(%n)", delimiter: "")
+		new_str = number_to_currency(cents/100.0,  :format => "%n", :negative_format => "(%n)", delimiter: delimiter)
 		if remove_zeros
 	        if new_str && new_str[-3..-1] == ".00"
 	            new_str[-3..-1] = ""
