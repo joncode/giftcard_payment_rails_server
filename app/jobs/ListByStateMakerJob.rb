@@ -66,7 +66,7 @@ class ListByStateMakerJob
 
 			 # [{"detail"=>"ItsOnMe digital gifts carry a balance and can be used on multiple visits. Any printed certificate is one-time use only.",
 			 # "price"=>"10", "photo"=>"https://res.cloudinary.com/drinkboard/image/upload/v1415464767/srjgwfrtymydnfam1csh.jpg", "ccy"=>"USD",
-			  # "price_cents"=>1000, "item_id"=>1382, "item_name"=>"$10 gift voucher", "quantity"=>1}]
+			 # "price_cents"=>1000, "item_id"=>1382, "item_name"=>"$10 gift voucher", "quantity"=>1}]
 			items_hsh = gift.cart_ary
 
 			items_hsh.each do |it_hsh|
@@ -75,18 +75,18 @@ class ListByStateMakerJob
 				mi = MenuItem.find(it_hsh[:item_id])
 
 				if itemhsh[mi.id].nil?
-					{ item_id: mi.id, menu_item: mi, val: o , gifts: [], type: 'MenuItem'}
+					{ item_id: mi.id, menu_item: mi, val: 0, gifts: [], type: 'MenuItem' }
 				end
-				items_hsh[mi.id][:val] += it_hsh[:price_cents] * it_hsh[:quantity]
-				items_hsh[mi.id][:gifts] << gift
+				itemhsh[mi.id][:val] += it_hsh[:price_cents] * it_hsh[:quantity]
+				itemhsh[mi.id][:gifts] << gift
 
 			end
 
 		end
 
 		# get the current merchant list and the menu item lists
-		l1 = List.where( token: 'recent_merchant_primary')
-		l2 = List.where( token: 'recent_mennu_items_primary')
+		l1 = List.where(token: 'recent-merchant-monthly')
+		l2 = List.where(token: 'recent-mennu-items-monthly')
 		# loop thru mhsh & item_hsh and sort by the :val amount
 
 		l1.list_graphs.destroy_all
