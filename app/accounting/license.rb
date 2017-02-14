@@ -169,12 +169,23 @@ class License < ActiveRecord::Base
 		end
 	end
 
+	def make_annual_register_today?
+		last_register = Register.last_for_license(self)
+		if last_register.nil?
+			return true
+		elsif (TODAY.month == self.live_at.month && TODAY.day == self.live_at.day)
+			return true
+		else
+			return false
+		end
+	end
+
 	def make_register_today?
 		case self.recurring_type
 		when 'monthly'
 			make_monthly_register_today?
 		when 'annual'
-			return (TODAY.month == self.live_at.month && TODAY.day == self.live_at.day)
+			make_annual_register_today?
 		else
 			return false
 		end
