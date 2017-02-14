@@ -142,18 +142,37 @@ class License < ActiveRecord::Base
 
 #   -------------
 
+	def make_monthly_register_today?
+		last_register = Register.last_for_license(self)
+		if last_register.nil?
+			return true
+		elsif TODAY.month == last_register.created_at.month
+			return false
+		elsif (TODAY - 1.month).month == last_register.created_at.month
+			if self.live_at.day <= TODAY.day
+					# license should have register already , so make one
+					# so license is Jan 4 , and date is Feb 7
+				return true
+			elsif (TODAY == TODAY.end_of_month) && (self.live_at.day >= TODAY.end_of_month.day)
+					# charge is on the last day of current month - Jan 31 gets sent on Feb 28
+				return true
+			else
+					# not time to make the register
+					# license is Jan 12 and the date is feb 7
+				return false
+			end
+		else
+			msg = "REGISTERS ARE OVER A MONTH OLD FAIL #{self.id}"
+			puts msg.inspect
+			OpsTwilio.text_devs msg: msg
+			return false
+		end
+	end
+
 	def make_register_today?
 		case self.recurring_type
 		when 'monthly'
-			dd = TODAY.day - (self.process_day || 5)
-			weekday = self.weekday || 'monday'
-			if (0...7).cover?(dd) && TODAY.send("#{weekday}?")
-				# if todays date minus the process date is 0+ but less than 7 - in correct week
-				#  and today is the weekday
-				return true
-			else
-				return false
-			end
+			make_monthly_register_today?
 		when 'annual'
 			return (TODAY.month == self.live_at.month && TODAY.day == self.live_at.day)
 		else
