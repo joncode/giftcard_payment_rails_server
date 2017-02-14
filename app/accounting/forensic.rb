@@ -1,5 +1,10 @@
 class Forensic
 
+	def self.fix_value_cost_and_service
+		values = Gift.where(cat: 300, value: ['0', nil])
+	end
+
+
 	def self.gifts
 		Gift.includes(:registers).all.find_each do |g|
 

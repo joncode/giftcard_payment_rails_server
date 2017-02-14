@@ -12,35 +12,46 @@ class AccountsReceivable
 
 		end
 
-		def make_registers_and_invoices
+#   -------------
+
+		def make_registers
 			puts "AR - make_registers_and_invoices"
 				# 	1. gets all the licenses
 			License.get_live.each do |license|
-				register license
+				register(license)
 			end
 			# MUST calculate all the licenses before
 			# C. generate the invoice and send
-			invoice_and_notify
+			# invoice_and_notify
 		end
 
 		def register license
 			puts "AR - register"
-			return nil unless license.make_register_today?
+			if license.make_register_today?
 				# 	2. asks the license for a charge object
-			hsh = license.charge_object
-			puts hsh.inspect
-				# 	3. makes a register with the charge object
-			# reg = Register.create_with_charge_object(hsh)
-			# 	# 	4. saves the register
-			# if reg.save
-			# 	# success
-			# else
-			# 	msg = "REGISTER FAIL #{reg.errors.full_messages}"
-			# 	puts msg.inspect
-			# 	OpsTwilio.text_devs msg: msg
-			# end
-			# reg
+				reg = generate_register_for_license(license)
+				puts reg.inspect
+				reg
+			else
+				puts "NOT TODAY (#{license.id})"
+				return nil
+			end
 		end
+
+		def generate_register_for_license(license)
+			co = license.charge_object
+			reg = Register.init_with_charge_object(co)
+			if reg.save
+				return reg
+			else
+				msg = "AccountsReceivable(40) REGISTER FAIL #{reg.errors.full_messages}"
+				puts msg.inspect
+				OpsTwilio.text_devs msg: msg
+				return reg
+			end
+		end
+
+#   -------------
 
 		def invoice_and_notify
 			puts "AR - invoice_and_notify"

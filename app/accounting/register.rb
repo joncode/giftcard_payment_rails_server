@@ -24,7 +24,10 @@ class Register < ActiveRecord::Base
 
 #   -------------
 
-	# cat 'ACCRUAL', 'REFUND', 'ADJUST'
+	def self.cats
+		['ACCRUAL', 'REFUND', 'ADJUST']
+	end
+
 	FEE_TYPES = { iom: "ItsOnMe", loc: "Location Fee", aff_user: "User Override", aff_loc: "Commission Fee", aff_link: "Promo Link" }
 	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link, :subscription, :promo ]
 	enum type_of: [ :debt, :credit ]
@@ -50,7 +53,12 @@ class Register < ActiveRecord::Base
 		reg.ccy = charge_object[:ccy]
 		reg.license_id = charge_object[:license_id]
 		reg.note = charge_object[:name] + '|' + charge_object[:detail]
+		reg.cat = cats[0]
 		reg
+	end
+
+	def self.last_for_license(license)
+		where(license_id: license.id).order(created_at: :desc).last
 	end
 
 #   -------------
@@ -111,7 +119,7 @@ class Register < ActiveRecord::Base
 			reg = self.destroy
 		else
 			type_of_value = self.debt? ? 1 : 0
-			cat_value = self.debt? ? 'REFUND' : 'ACCRUAL'
+			cat_value = self.debt? ? Register.cats[1] : Register.cats[0]
 			reg = Register.create(amount: self.amount,
 				partner_type: self.partner_type,
 				partner_id: self.partner_id,

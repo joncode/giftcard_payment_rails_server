@@ -6,7 +6,9 @@ class OmnivoreCronJob
 
 	def self.perform
 		system_downs = Omnivore.locs_sys_down
+		puts system_downs.inspect
 		tickets_downs = Omnivore.locs_tix_down
+		puts tickets_downs.inspect
 		msg = ""
 		[system_downs, tickets_downs].each do |res|
 			data = res[:data]

@@ -11,10 +11,10 @@ class AccountsReceivableCronJob
 		AccountsReceivable.check_licenses
 
 		# B. generate the recurring registers
-		AccountsReceivable.make_registers_and_invoices
+		AccountsReceivable.make_registers
 
 		# D. process the payment
-		AccountsReceivable.process
+		# AccountsReceivable.process
 	rescue => e
 		puts "500 Internal AccountsReceivableCronJob #{e.inspect}"
     end
