@@ -142,6 +142,45 @@ class Redemption < ActiveRecord::Base
 		end
 	end
 
+	def run_operation operation
+		if operation == 'cancel'
+			return remove_pending('cancel', { 'response_code' => 'API_SYSTEM_EXPIRE', 'response_text' => "API run_opertion cancel" })
+		end
+		case operation.type_of
+		when 'complete'
+			if self.status == 'pending'
+				remove_pending('done', { 'response_code' => 'API_SYSTEM_REDEEM', 'response_text' => "API run_opertion completed" })
+			end
+		when 'cancel'
+			if self.status == 'pending'
+				remove_pending('cancel', { 'response_code' => 'API_SYSTEM_EXPIRE', 'response_text' => "API run_opertion cancel" })
+			end
+		when 'unredeem'
+			if self.status == 'done'
+				unredeem({ 'response_code' => 'API_SYSTEM_UNREDEEM', 'response_text' => "API run_opertion unredeem" })
+			end
+		when 'deactivate'
+			toggle_active
+		when 'activate'
+			toggle_active
+		else
+			false
+		end
+	end
+
+	def toggle_active
+		if toggle!(:active)
+			msg = "Active set to #{self.active} on #{DateTime.now.utc}"
+		else
+			msg = "Could not set active"
+		end
+		if self.response.nil?
+			self.response = { 'toggle_active' => msg  }
+		else
+			self.response['toggle_active'] = response
+		end
+	end
+
 #   -------------
 
     def paper_id
