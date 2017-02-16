@@ -32,6 +32,16 @@ class Payment < ActiveRecord::Base
 		self.partner
 	end
 
+	def status
+		if self.total <= 0
+			"NEG"
+		elsif self.paid
+			"PAID"
+		else
+			"DUE"
+		end
+	end
+
 #   -------------
 
 	def self.get_unpaid_invoices

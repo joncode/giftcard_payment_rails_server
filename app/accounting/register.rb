@@ -36,6 +36,10 @@ class Register < ActiveRecord::Base
 
 #   -------------
 
+	def self.get_unpaid_in_range start_date: , end_date:
+		where(created_at: start_date .. end_date, payment_id: nil)
+	end
+
 	def self.get_unpaid_invoices
 		where(partner_id: nil, gift_id: nil).where.not(license_id: nil)
 	end

@@ -14,9 +14,10 @@ class AccountsPayableCronJob
         sd = sd.beginning_of_day
         ed = Payment.get_end_date_of_payment(sd)
 
-        registers = Register.where(created_at: sd ... ed)
+        registers = Register.get_unpaid_in_range start_date: sd, end_date: ed
+        # registers = Register.where(created_at: sd ... ed, payment_id: nil)
         # registers = Register.where('payment_id IS NULL AND created_at < ?', ed)
-        # binding.pry
+
         registers.each do |reg|
 
             next if reg.subscription?
