@@ -19,6 +19,7 @@ class AccountsPayableCronJob
         # binding.pry
         registers.each do |reg|
 
+            next if reg.subscription?
             next if self.already_paid?(reg) # already paid
             partner = reg.partner
 
