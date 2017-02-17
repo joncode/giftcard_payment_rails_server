@@ -13,6 +13,11 @@ namespace :payments do
 	    rescue => e
 	    	puts "500 Internal PAYMENT CALCULATOR 2 #{e.inspect}"
 	    end
+	    begin
+		    puts PaymentSyncCronJob::perform
+	    rescue => e
+	    	puts "500 Internal PAYMENT CALCULATOR 3 #{e.inspect}"
+	    end
     end
 
 end
