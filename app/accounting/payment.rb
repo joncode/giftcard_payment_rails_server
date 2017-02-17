@@ -5,6 +5,8 @@ class Payment < ActiveRecord::Base
 
 	before_create :set_partner_to_bank_owner
 
+	before_save :set_status
+
 #   -------------
 
 	has_many :registers
@@ -111,6 +113,17 @@ private
 		end
 	end
 
+	def set_status
+		if self.status != 'HOLD'
+			if self.total <= 0
+				self.status = 'NEG'
+			elsif self.paid
+				self.status = 'PAID'
+			else
+				self.status = 'DUE'
+			end
+		end
+	end
 
 end
 
