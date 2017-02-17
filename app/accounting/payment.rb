@@ -14,12 +14,13 @@ class Payment < ActiveRecord::Base
 	belongs_to :partner,  polymorphic: true
 	belongs_to :bank
 
+
 #   -------------
 
 	def recalc
 			# have _amounts .refund & .previous_total set correct
 		self.revenue = self.m_amount + self.u_amount + self.l_amount
-		self.total = self.revenue + self.refund + self.previous_total
+		self.total = self.revenue + self.refund + self.previous_total + self.adjusts
         if self.total > 0
             self.payment_amount = self.total
         else
@@ -32,18 +33,9 @@ class Payment < ActiveRecord::Base
 		self.partner
 	end
 
-	def status
-		if self.total <= 0
-			"NEG"
-		elsif self.paid
-			"PAID"
-		else
-			"DUE"
-		end
-	end
-
 
 #   -------------
+
 
 	def self.get_unpaid_invoices
 		where(paid: false, type_of: 'invoice')
