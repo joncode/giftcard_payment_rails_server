@@ -42,6 +42,7 @@ class Payment < ActiveRecord::Base
 		end
 	end
 
+
 #   -------------
 
 	def self.get_unpaid_invoices

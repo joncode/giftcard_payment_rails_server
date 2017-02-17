@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170120201734) do
+ActiveRecord::Schema.define(version: 20170217073509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -981,11 +981,15 @@ ActiveRecord::Schema.define(version: 20170120201734) do
     t.integer  "payment_amount",             default: 0
     t.string   "type_of",                    default: "payment"
     t.string   "ccy",                        default: "USD"
+    t.string   "status",                     default: "NEG"
+    t.integer  "adjusts",                    default: 0
   end
 
   add_index "payments", ["bank_id", "start_date"], name: "index_payments_on_bank_id_and_start_date", using: :btree
   add_index "payments", ["paid", "start_date"], name: "index_payments_on_paid_and_start_date", using: :btree
   add_index "payments", ["partner_id", "partner_type"], name: "index_payments_on_partner_id_and_partner_type", using: :btree
+  add_index "payments", ["status", "bank_id"], name: "index_payments_on_status_and_bank_id", using: :btree
+  add_index "payments", ["status"], name: "index_payments_on_status", using: :btree
 
   create_table "place_graphs", force: :cascade do |t|
     t.integer  "place_id"
