@@ -12,7 +12,7 @@ class AddStatusAndAdjustsToPayments < ActiveRecord::Migration
 
 	def set_status_on_payments
 		Payment.find_each do |payment|
-			if payment.partner_type == 'Merchant' && (payment.partner.mode == 'paused' || !payment.partner.active)
+			if payment.partner_type == 'Merchant' && (payment.partner.nil? || payment.partner.mode == 'paused' || !payment.partner.active)
 				payment.update_column :status, 'HOLD'
 			elsif payment.total <= 0
 				# payment.update_column :status, 'NEG'
