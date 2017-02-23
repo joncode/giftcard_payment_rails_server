@@ -6,8 +6,8 @@ class MerchantSignup < ActiveRecord::Base
 
 
 	validates_presence_of  :venue_name, :point_of_sale_system, :name
-	validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: true
-	validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: true
+	# validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: true
+	# validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: true
 	validates_length_of :name,      :maximum => 100
 	validates_length_of :position,  :maximum => 100
 	validates_length_of :venue_name,:maximum => 100
