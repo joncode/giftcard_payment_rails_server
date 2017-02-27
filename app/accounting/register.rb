@@ -28,7 +28,13 @@ class Register < ActiveRecord::Base
 		['ACCRUAL', 'REFUND', 'ADJUST']
 	end
 
-	FEE_TYPES = { iom: "ItsOnMe", loc: "Location Fee", aff_user: "User Override", aff_loc: "Commission Fee", aff_link: "Promo Link" }
+	def fee_type
+		return 'N/A' if origin.nil?
+		FEE_TYPES[origin.to_sym]
+	end
+
+	FEE_TYPES = { iom: "ItsOnMe", loc: "Location Fee", aff_user: "User Override", aff_loc: "Commission Fee", aff_link: "Promo Link",
+			subscription: 'Subscription', promo: 'Promotion' }
 	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link, :subscription, :promo ]
 	enum type_of: [ :debt, :credit ]
 
