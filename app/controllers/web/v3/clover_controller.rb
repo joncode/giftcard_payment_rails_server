@@ -26,6 +26,7 @@ class Web::V3::CloverController < MetalCorsController
 		h[:device_id] = init_params[:serial_number]
 
 		mhsh = init_params[:merchant]
+		puts "HERE is MERCHANT_HSH #{mhsh.inspect}"
 		h[:mid] = mhsh[:id]
 		h[:merchant] = mhsh
 
@@ -256,8 +257,29 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency, :serial_number, :application_key)
+        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency, :serial_number, :application_key)
     end
 
 
 end
+
+
+
+# {"data"=>{
+	# "merchant"=>
+		# {"zip"=>"89101", "phone"=>"702-555-1212", "website"=>"https://www.itson.me", "locale"=>"en_US", "state"=>"NV", "vat"=>false,
+		# 	"address1"=>"123 Mockingbird Lane", "address2"=>"Apt 2b", "device_id"=>"abacc7fc-1f67-4cd5-9f9c-d0073b048fbf", "address3"=>"",
+		# 	"support_email"=>"dev@clover.com", "city"=>"Las Vegas", "currency"=>"USD", "id"=>"J4Q1V4P5X0KS0", "time_zone"=>"Pacific Standard Time",
+		# 	"support_phone"=>"(000) 000-0000", "name"=>"ItsOnMe Test Merchant",
+		#   "account"=>"Account {name=ItsOnMe Test Merchant | richard1@rangerllt.com (DEV), type=com.clover.account}",
+		# 	"mid"=>"RCTST0000008099"
+		#  },
+	#  "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)",
+	#  "serial_number"=>"[FILTERED]"}
+	# }
+
+
+
+
+
+

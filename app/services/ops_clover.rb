@@ -140,6 +140,7 @@ class OpsClover
 
 #   -------------
 
+
 	def make_requested
 		if status == :new
 			# 1. create a @merchant_signup
@@ -153,7 +154,6 @@ class OpsClover
 		# 5. return the :application_key
 		key
 	end
-
 
 	def make_client
 		merchant_obj = @merchant || @signup
@@ -184,6 +184,8 @@ class OpsClover
 		@signup
 	end
 
+
+#   -------------
 
 	def get_client
 		puts "GET CLIENT for #{@app_key}"
