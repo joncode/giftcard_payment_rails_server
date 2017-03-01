@@ -28,20 +28,6 @@ class Web::V3::CloverController < MetalCorsController
 		end
 		puts "HERE is MERCHANT_HSH #{h.inspect}"
 
-
-		# h[:mid] = init_params[:merchant_id]
-		# h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
-		# name_str = init_params[:name]
-		# name_str = name_str.split(" (DEV)")[0]
-		# h[:name], h[:email] = name_str.split(" | ")
-		# h[:email].gsub!(' (DEV)')
-		# h[:email].gsub!('(DEV)')
-		# h[:device_id] = init_params[:serial_number]
-
-		# mhsh = init_params[:merchant]
-		# h[:mid] = mhsh[:id]
-		# h[:merchant] = mhsh
-
 		o = OpsClover.new(h)
 		puts o.inspect
 
