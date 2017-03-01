@@ -19,7 +19,7 @@ class OpsClover
 		end
 		# @key = 'g1i12ant_client41314_+mreta12_key-moc1241k=_124)mock_mock' # MOCK of @@app_key
 
-		@merchant_hsh = args[:merchant]
+		@merchant_hsh = args
 
 		puts "OpsClover INIT - merchant hsh = #{@merchant_hsh}"
 

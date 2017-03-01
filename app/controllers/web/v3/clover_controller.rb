@@ -16,19 +16,28 @@ class Web::V3::CloverController < MetalCorsController
 		# puts params.inspect
 		puts init_params.inspect
 		h = {}
-		h[:mid] = init_params[:merchant_id]
+		h = init_params[:merchant]
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
-		name_str = init_params[:name]
-		name_str = name_str.split(" (DEV)")[0]
-		h[:name], h[:email] = name_str.split(" | ")
-		h[:email].gsub!(' (DEV)')
-		h[:email].gsub!('(DEV)')
-		h[:device_id] = init_params[:serial_number]
+		h[:serial_number] = init_params[:serial_number]
 
-		mhsh = init_params[:merchant]
-		puts "HERE is MERCHANT_HSH #{mhsh.inspect}"
-		h[:mid] = mhsh[:id]
-		h[:merchant] = mhsh
+		if h[:email].kind_of?(String) && ' ' == h[:email].last
+			h[:email] = h[:email][0 ... -1]
+		end
+		puts "HERE is MERCHANT_HSH #{h.inspect}"
+
+
+		# h[:mid] = init_params[:merchant_id]
+		# h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
+		# name_str = init_params[:name]
+		# name_str = name_str.split(" (DEV)")[0]
+		# h[:name], h[:email] = name_str.split(" | ")
+		# h[:email].gsub!(' (DEV)')
+		# h[:email].gsub!('(DEV)')
+		# h[:device_id] = init_params[:serial_number]
+
+		# mhsh = init_params[:merchant]
+		# h[:mid] = mhsh[:id]
+		# h[:merchant] = mhsh
 
 		o = OpsClover.new(h)
 		puts o.inspect
@@ -253,32 +262,64 @@ private
 
 
     def init_params
-        params.require(:data).permit(:application_key, :name, :merchant_id, :serial_number, :merchant)
+        params.require(:data).permit(:name, :merchant_id, :serial_number, :merchant)
     end
 
     def redeem_params
-        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency, :serial_number, :application_key)
+        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency, :serial_number)
     end
 
 
 end
 
 
+__END__
 
-# {"data"=>{
-	# "merchant"=>
-		# {"zip"=>"89101", "phone"=>"702-555-1212", "website"=>"https://www.itson.me", "locale"=>"en_US", "state"=>"NV", "vat"=>false,
-		# 	"address1"=>"123 Mockingbird Lane", "address2"=>"Apt 2b", "device_id"=>"abacc7fc-1f67-4cd5-9f9c-d0073b048fbf", "address3"=>"",
-		# 	"support_email"=>"dev@clover.com", "city"=>"Las Vegas", "currency"=>"USD", "id"=>"J4Q1V4P5X0KS0", "time_zone"=>"Pacific Standard Time",
-		# 	"support_phone"=>"(000) 000-0000", "name"=>"ItsOnMe Test Merchant",
-		#   "account"=>"Account {name=ItsOnMe Test Merchant | richard1@rangerllt.com (DEV), type=com.clover.account}",
-		# 	"mid"=>"RCTST0000008099"
-		#  },
-	#  "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)",
-	#  "serial_number"=>"[FILTERED]"}
-	# }
+ {"data"=>{
+	 "merchant"=>
+		 {"zip"=>"89101", "phone"=>"702-555-1212", "website"=>"https://www.itson.me", "locale"=>"en_US", "state"=>"NV", "vat"=>false,
+		 	"address1"=>"123 Mockingbird Lane", "address2"=>"Apt 2b", "device_id"=>"abacc7fc-1f67-4cd5-9f9c-d0073b048fbf", "address3"=>"",
+		 	"support_email"=>"dev@clover.com", "city"=>"Las Vegas", "currency"=>"USD", "id"=>"J4Q1V4P5X0KS0", "time_zone"=>"Pacific Standard Time",
+		 	"support_phone"=>"(000) 000-0000", "name"=>"ItsOnMe Test Merchant",
+		   "account"=>"Account {name=ItsOnMe Test Merchant | richard1@rangerllt.com (DEV), type=com.clover.account}",
+		 	"mid"=>"RCTST0000008099"
+		  },
+	  "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)",
+	  "serial_number"=>"[FILTERED]"}
+	 }
 
+ if ' ' == x.last
+ 	x = x[0 ... -1]
+ end
 
+ h = init_params[:merchant]
+ h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
+ h[:serial_number] = init_params[:serial_number]
+ h[:merchant_id] = h[:id]
+
+ {"merchant"=>
+ 	{"zip"=>"89101",
+ 		"phone"=>"702-555-1212",
+ 		"website"=>"https://www.itson.me",
+ 		 "locale"=>"en_US",
+ 		 "state"=>"NV",
+ 		 "vat"=>false,
+ 		 "address1"=>"123 Mockingbird Lane",
+ 		 "address2"=>"Apt 2b",
+ 		 "device_id"=>"abacc7fc-1f67-4cd5-9f9c-d0073b048fbf",
+ 		 "address3"=>"",
+ 		 "support_email"=>"dev@clover.com",
+ 		  "city"=>"Las Vegas",
+ 		  "currency"=>"USD",
+ 		  "id"=>"J4Q1V4P5X0KS0",
+ 		  "time_zone"=>"Pacific Standard Time",
+ 		  "email"=>"richard1@rangerllt.com ",
+ 		  "support_phone"=>"(000) 000-0000",
+ 		  "name"=>"ItsOnMe Test Merchant",
+ 		  "account"=>"Account {name=ItsOnMe Test Merchant | richard1@rangerllt.com (DEV), type=com.clover.account}",
+ 		  "mid"=>"RCTST0000008099"},
+ 	 "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)",
+ 	 "serial_number"=>"b73f3293e5b33823"}
 
 
 
