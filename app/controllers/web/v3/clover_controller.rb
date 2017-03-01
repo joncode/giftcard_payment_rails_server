@@ -17,6 +17,7 @@ class Web::V3::CloverController < MetalCorsController
 		puts init_params.inspect
 		h = {}
 		h = init_params[:merchant]
+		h = h.symbolize_keys
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
 		h[:serial_number] = init_params[:serial_number]
 		h[:pos_merchant_id] = h[:id]
