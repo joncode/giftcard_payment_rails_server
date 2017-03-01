@@ -264,7 +264,7 @@ private
 
 
     def init_params
-        params.require(:data).permit(:name, :merchant_id, :serial_number, :merchant)
+        params.require(:data).permit!
     end
 
     def redeem_params
