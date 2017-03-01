@@ -94,9 +94,9 @@ class Web::V3::CloverController < MetalCorsController
 		puts redeem_params.inspect
 
 		h = {}
-		h[:mid] = redeem_params[:merchant_id]
+		h[:pos_merchant_id] = redeem_params[:merchant_id]
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
-		h[:device_id] = redeem_params[:serial_number]
+		h[:serial_number] = redeem_params[:serial_number]
 		h[:code] = redeem_params[:code]
 		h[:amount] = redeem_params[:amount].to_i
 		h[:ccy] = redeem_params[:currency]
