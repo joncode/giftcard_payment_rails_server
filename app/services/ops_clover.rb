@@ -46,7 +46,7 @@ class OpsClover
 			h[:application_key] = key
 		end
 		h[:merchant_id] = pos_merchant_id
-		h[:stoplight] = :live
+		h[:stoplight] = stoplight
 		h[:support_phone] = TWILIO_QUICK_NUM
 		h[:support_email] = 'support@itson.me'
 		h
