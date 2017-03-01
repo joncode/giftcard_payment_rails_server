@@ -6,26 +6,26 @@ class OpsClover
 		:merchant_name, :merchant_email
 
 	def initialize args={}
-		@args = args
-		if args[:pos_merchant_id].blank? || args[:pos_merchant_id].to_s.length < 5
+		@args = args.symbolize_keys
+		if @args[:pos_merchant_id].blank? || @args[:pos_merchant_id].to_s.length < 5
 			@pos_merchant_id = nil
 		else
-			@pos_merchant_id = args[:pos_merchant_id]
+			@pos_merchant_id = @args[:pos_merchant_id]
 		end
-		if args[:app_key].blank?
+		if @args[:app_key].blank?
 			@app_key = nil
 		else
-			@app_key = args[:app_key]
+			@app_key = @args[:app_key]
 		end
 		# @key = 'g1i12ant_client41314_+mreta12_key-moc1241k=_124)mock_mock' # MOCK of @@app_key
 
 		@key = @app_key
-		@device_id = args[:device_id]
-		@merchant_name = args[:name]
-		@merchant_email = args[:email]
-		@amount = args[:amount] || 0
-		@ccy = args[:ccy]
-		@code = args[:code]
+		@device_id = @args[:device_id]
+		@merchant_name = @args[:name]
+		@merchant_email = @args[:email]
+		@amount = @args[:amount] || 0
+		@ccy = @args[:ccy]
+		@code = @args[:code]
 
 		get_client
 		get_merchant
