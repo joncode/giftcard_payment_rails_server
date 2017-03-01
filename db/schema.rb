@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217073509) do
+ActiveRecord::Schema.define(version: 20170301190251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -751,6 +751,10 @@ ActiveRecord::Schema.define(version: 20170217073509) do
     t.datetime "updated_at"
     t.boolean  "active",                           default: true
     t.string   "address",              limit: 255
+    t.integer  "merchant_id"
+    t.string   "pos_merchant_id"
+    t.string   "device_id"
+    t.json     "data"
   end
 
   add_index "merchant_signups", ["active"], name: "index_merchant_signups_on_active", using: :btree

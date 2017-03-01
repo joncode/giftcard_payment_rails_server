@@ -1,16 +1,16 @@
 class OpsClover
 	include ActionView::Helpers::NumberHelper
 
-	attr_accessor :mid, :key, :app_key, :amount, :ccy, :code
+	attr_accessor :pos_merchant_id, :key, :app_key, :amount, :ccy, :code
 	attr_reader :status, :client, :merchant, :signup, :args, :device_id,
 		:merchant_hsh, :merchant_name, :merchant_email
 
 	def initialize args={}
 		@args = args
-		if args[:mid].blank? || args[:mid].to_s.length < 5
-			@mid = nil
+		if args[:pos_merchant_id].blank? || args[:pos_merchant_id].to_s.length < 5
+			@pos_merchant_id = nil
 		else
-			@mid = args[:mid]
+			@pos_merchant_id = args[:pos_merchant_id]
 		end
 		if args[:app_key].blank?
 			@app_key = nil
@@ -49,7 +49,7 @@ class OpsClover
 		if key != @app_key
 			h[:application_key] = key
 		end
-		h[:merchant_id] = mid
+		h[:merchant_id] = pos_merchant_id
 		h[:stoplight] = stoplight
 		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER, area_code: true)
 		h[:support_email] = 'support@itson.me'
@@ -104,7 +104,7 @@ class OpsClover
 		# return @status = [:blank, :new, :requested, :paused, :live].sample
 
 		if @client.nil? && @merchant.nil? && @signup.nil?
-			x = @mid.nil? ? :blank : :new
+			x = @pos_merchant_id.nil? ? :blank : :new
 		elsif @client.nil? && @merchant.nil?
 			x = :new
 		elsif @merchant.nil?
@@ -121,7 +121,7 @@ class OpsClover
 		else
 				# check to see if owned by MerchantSignup - auto-move partner to merchant
 				# re-run this method to set status with :mode
-				# How to auto-move the merchant sign up client to the merchant via clover mid
+				# How to auto-move the merchant sign up client to the merchant via clover pos_merchant_id
 			x = :paused
 			if @client.partner.class.to_s == 'MerchantSignup'
 				if @merchant && @merchant.pos_merchant_id == @client.partner.pos_merchant_id
@@ -199,19 +199,19 @@ class OpsClover
 	end
 
 	def get_merchant
-		puts "GET Merchant for #{@mid}"
-		if @mid
-			@merchant = Merchant.find_by(pos_merchant_id: @mid)
+		puts "GET Merchant for #{@pos_merchant_id}"
+		if @pos_merchant_id
+			@merchant = Merchant.find_by(pos_merchant_id: @pos_merchant_id)
 		elsif @client && @client.partner_type == "Merchant"
 			@merchant = @client.partner
 		end
 	end
 
 	def get_signup
-		puts "GET MerchantSignup for #{@mid}"
+		puts "GET MerchantSignup for #{@pos_merchant_id}"
 
-		if @mid && @merchant.nil?
-			@signup = MerchantSignup.get_clover_signup @mid
+		if @pos_merchant_id && @merchant.nil?
+			@signup = MerchantSignup.get_clover_signup @pos_merchant_id
 		end
 
 	end
@@ -225,7 +225,7 @@ end
 		# 	client = Client.include(:partner).find_by(application_key: app_key)
 		# 	if client && client.active
 		# 		partner = client.partner
-		# 		if partner.pos_merchant_id == mid
+		# 		if partner.pos_merchant_id == pos_merchant_id
 		# 			# good to go
 		# 		else
 		# 			# machine has incorrect application key / merchant ID sync
@@ -234,7 +234,7 @@ end
 		# 		# client not found with application key
 		# 	end
 		# else
-		# 	m = Merchant.find_by(pos_merchant_id: mid)
+		# 	m = Merchant.find_by(pos_merchant_id: pos_merchant_id)
 		# 	if m
 		# 		client = Client.new_clover_client(m)
 		# 		if client.save

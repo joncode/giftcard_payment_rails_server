@@ -21,35 +21,32 @@ class MerchantSignup < ActiveRecord::Base
 
 	has_many :clients, as: :partner
 
-	def pos_merchant_id
-		if self.point_of_sale_system == 'clover' && self.position == 'CloverPOS'
-			self.message
-		end
-	end
-
-	def device_id
-		if self.point_of_sale_system == 'clover' && self.position == 'CloverPOS'
-			self.website
-		end
-	end
+	belongs_to :merchant
 
 #   -------------
 
-	def self.get_clover_signup mid
-		return nil if mid.to_s.blank?
-		return nil unless mid.to_s.length > 5
-		find_by(message: mid)
+	def self.get_clover_signup pos_merchant_id
+		return nil if pos_merchant_id.to_s.blank?
+		return nil unless pos_merchant_id.to_s.length > 5
+		find_by(pos_merchant_id: pos_merchant_id)
 	end
 
 	def self.new_clover args
+		args.delete(:app_key)
 		m = new
-		m.venue_name = args[:name]
-		# m.email = args[:email]
-		m.message = args[:mid]
+		m.data = args
+		m.message = "Clover Machine Initialized - Signup Requested"
 		m.position = 'CloverPOS'
 		m.point_of_sale_system = 'clover'
-		m.name = args[:email]
-		m.website = args[:device_id]
+		m.venue_name = args[:name]
+		m.name = args[:name]
+		m.email = args[:email]
+		m.phone = args[:phone]
+		m.address = args[:address1]
+		m.website = args[:website]
+		m.venue_url = args[:website]
+		m.device_id = args[:device_id]
+		m.pos_merchant_id = args[:pos_merchant_id]
 		m
 	end
 

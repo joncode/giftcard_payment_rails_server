@@ -28,6 +28,7 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     before_save     :add_region_name
+
     after_commit :clear_www_cache, on: [:create, :update, :destroy]
 
 #   -------------
@@ -35,6 +36,7 @@ class Merchant < ActiveRecord::Base
     has_one :affiliate, through: :affiliation
     has_one :affiliation, as: :target
     has_one :provider
+    has_one :merchant_signup
 
     has_many :campaign_items
     has_many :gifts
