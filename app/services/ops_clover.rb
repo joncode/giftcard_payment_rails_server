@@ -77,22 +77,18 @@ class OpsClover
 		case status
 		when :new
 			make_requested
-			meta
 		when :blank
-			meta
+			# do nothing
 		when :live
 			# do nothing
-			meta
 		when :paused
 			# do nothing
-			meta
 		when :requested
 			# do nothing
-			meta
 		else
 			# do nothing
-			meta
 		end
+		meta
 	end
 
 	def set_status
@@ -125,7 +121,7 @@ class OpsClover
 					if @client.save && @merchant.mode == 'live'
 						x = :live
 					else
-						puts "CLIENT ERROR - #{@client.errors.full_messages}"
+						puts "OpsClover - CLIENT ERROR - #{@client.errors.full_messages}"
 					end
 				end
 			end
@@ -158,7 +154,7 @@ class OpsClover
 			if @client.save
 				# ready to go
 			else
-				puts "CLIENT ERROR - #{@client.errors.full_messages}"
+				puts "OpsClover - CLIENT ERROR - #{@client.errors.full_messages}"
 				@client = nil unless @client.persisted?
 			end
 		end
@@ -172,7 +168,7 @@ class OpsClover
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
 			else
-				puts "SIGNUP ERROR - #{@signup.errors.full_messages}"
+				puts "OpsClover - SIGNUP ERROR - #{@signup.errors.full_messages}"
 				@signup = nil unless @signup.persisted?
 			end
 		end
@@ -188,7 +184,7 @@ class OpsClover
 		if @app_key
 			@client = Client.find_by(application_key: @app_key)
 			if @client.respond_to?(:click)
-				puts "CLIENT FOUND #{@client.id}"
+				puts "OpsClover - CLIENT FOUND #{@client.id}"
 				@client.click
 			end
 		end
