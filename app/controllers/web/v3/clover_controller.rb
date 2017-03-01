@@ -19,7 +19,9 @@ class Web::V3::CloverController < MetalCorsController
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
 		h[:serial_number] = init_params[:serial_number]
 		h[:pos_merchant_id] = h[:id]
+		mid = h[:id]
 		h[:ccy] = h[:currency]
+
 
 		if h[:email].kind_of?(String) && ' ' == h[:email].last
 			h[:email] = h[:email][0 ... -1]

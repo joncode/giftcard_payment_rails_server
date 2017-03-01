@@ -184,7 +184,7 @@ class OpsClover
 #   -------------
 
 	def get_client
-		puts "GET CLIENT for #{@app_key}"
+		puts "OpsClover - GET CLIENT for #{@app_key}"
 		if @app_key
 			@client = Client.find_by(application_key: @app_key)
 			if @client.respond_to?(:click)
@@ -195,7 +195,7 @@ class OpsClover
 	end
 
 	def get_merchant
-		puts "GET Merchant for #{@pos_merchant_id}"
+		puts "OpsClover - GET Merchant for #{@pos_merchant_id}"
 		if @pos_merchant_id
 			@merchant = Merchant.find_by(pos_merchant_id: @pos_merchant_id)
 		elsif @client && @client.partner_type == "Merchant"
@@ -204,7 +204,7 @@ class OpsClover
 	end
 
 	def get_signup
-		puts "GET MerchantSignup for #{@pos_merchant_id}"
+		puts "OpsClover - GET MerchantSignup for #{@pos_merchant_id}"
 
 		if @pos_merchant_id && @merchant.nil?
 			@signup = MerchantSignup.get_clover_signup @pos_merchant_id
