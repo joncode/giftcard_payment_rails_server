@@ -70,6 +70,7 @@ class CardStripe < ActiveRecord::Base
 		card.last_four 	= cc_hash["last_four"]
         card.nickname = cc_hash["email"]
         card.origin = cc_hash["merchant_name"]
+        card.user_id = cc_hash['user_id']
 		card
 	end
 

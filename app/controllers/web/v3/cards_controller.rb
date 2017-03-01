@@ -14,7 +14,12 @@ class Web::V3::CardsController < MetalCorsController
     def create
         create_with = card_params
         create_with["user_id"] = @current_user.id
-        card = Card.create_card_from_hash create_with
+
+        if params[:stripe_id].present?
+            card = CardStripe.create_card_from_hash create_with
+        else
+            card = Card.create_card_from_hash create_with
+        end
 
         card.client = @current_client
         card.partner = @current_partner
@@ -61,7 +66,7 @@ private
     end
 
     def card_params
-        params.require(:data).permit(:nickname, :number, :brand, :csv, :month, :year, :name, :zip)
+        params.require(:data).permit(:nickname, :number, :brand, :csv, :month, :year, :name, :zip, :email, :stripe_user_id, :stripe_id, :last_four)
     end
 
 end
