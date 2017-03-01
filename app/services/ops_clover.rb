@@ -47,7 +47,7 @@ class OpsClover
 		end
 		h[:merchant_id] = pos_merchant_id
 		h[:stoplight] = stoplight
-		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER, area_code: true)
+		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER, delimiter: " ")
 		h[:support_email] = 'support@itson.me'
 		h
 	end
@@ -178,6 +178,7 @@ class OpsClover
 
 
 #   -------------
+
 
 	def get_client
 		puts "OpsClover - GET CLIENT for #{@app_key}"
