@@ -13,8 +13,6 @@ class Web::V3::CloverController < MetalCorsController
 	# "serial_number"=>"b73f3293e5b33823"}, "format"=>"json", "controller"=>"web/v3/clover", "action"=>"init"}
 
 	def init
-		# puts params.inspect
-		puts init_params.inspect
 		h = {}
 		h = init_params[:merchant]
 		h = h.symbolize_keys
