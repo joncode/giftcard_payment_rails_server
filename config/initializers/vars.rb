@@ -183,6 +183,13 @@ else
     ENV['TWILIO_PHONE_NUMBER'].gsub('+', '')
 end
 
+include ActionView::Helpers::NumberHelper
+if TWILIO_PHONE_NUMBER[0] == '1'
+    TWILIO_QUICK_NUM = number_to_phone(TWILIO_PHONE_NUMBER[1 .. -1], delimiter: "-")
+else
+    TWILIO_QUICK_NUM = number_to_phone(TWILIO_PHONE_NUMBER, delimiter: "-")
+end
+
 WWW_TOKEN = if local_env
      "nj3tOdJOaZa-qFx0FhCLRQ"
 else

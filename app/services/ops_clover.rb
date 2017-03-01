@@ -47,7 +47,7 @@ class OpsClover
 		end
 		h[:merchant_id] = pos_merchant_id
 		h[:stoplight] = :live
-		h[:support_phone] = number_to_phone(TWILIO_PHONE_NUMBER, delimiter: " ")
+		h[:support_phone] = TWILIO_QUICK_NUM
 		h[:support_email] = 'support@itson.me'
 		h
 	end
