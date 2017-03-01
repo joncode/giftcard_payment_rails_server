@@ -182,7 +182,7 @@ class OpsClover
 	def get_client
 		puts "OpsClover - GET CLIENT for #{@app_key}"
 		if @app_key
-			@client = Client.find_by(application_key: @app_key)
+			@client = Client.find_by(application_key: @app_key, active: true)
 			if @client.respond_to?(:click)
 				puts "OpsClover - CLIENT FOUND #{@client.id}"
 				@client.click
@@ -193,7 +193,7 @@ class OpsClover
 	def get_merchant
 		puts "OpsClover - GET Merchant for #{@pos_merchant_id}"
 		if @pos_merchant_id
-			@merchant = Merchant.find_by(pos_merchant_id: @pos_merchant_id)
+			@merchant = Merchant.find_by(pos_merchant_id: @pos_merchant_id, active: true)
 		elsif @client && @client.partner_type == "Merchant"
 			@merchant = @client.partner
 		end

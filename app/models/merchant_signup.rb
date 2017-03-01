@@ -28,7 +28,7 @@ class MerchantSignup < ActiveRecord::Base
 	def self.get_clover_signup pos_merchant_id
 		return nil if pos_merchant_id.to_s.blank?
 		return nil unless pos_merchant_id.to_s.length > 5
-		find_by(pos_merchant_id: pos_merchant_id)
+		find_by(pos_merchant_id: pos_merchant_id, active: true)
 	end
 
 	def self.new_clover args
