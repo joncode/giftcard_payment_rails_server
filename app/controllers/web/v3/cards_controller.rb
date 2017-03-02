@@ -15,7 +15,7 @@ class Web::V3::CardsController < MetalCorsController
         create_with = card_params
         create_with["user_id"] = @current_user.id
 
-        if params[:stripe_id].blank? && params['stripe_id'].blank?
+        if create_with[:stripe_id].blank? && create_with['stripe_id'].blank?
             card = Card.create_card_from_hash(create_with)
         else
             create_with.delete(:number)
