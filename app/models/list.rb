@@ -143,6 +143,11 @@ class List < ActiveRecord::Base
 		return self
 	end
 
+	def alphabetize key=:name
+		# alphabetize any list based on key
+
+	end
+
 #   -------------
 
 	def list_id

@@ -37,7 +37,7 @@ class UserAfterCreateEvent
 			giver_name_for_gift = "PT's Entertainment Group"
 
 			menu_item = MenuItem.find 5448
-			hsh = menu_item.serialize_to_app(1)
+			hsh = menu_item.serialize_with_quantity(1)
 			sc = [hsh].to_json
 
 			detail = "This gift is good until June 30th, please enjoy before then."

@@ -584,14 +584,14 @@ class Gift < ActiveRecord::Base
             if item_hsh['price'].to_f > mitem.price.to_f
                     # price is now lower than customer thinks it will be
                     # ignore
-                new_hsh = mitem.serialize_to_app(quantity)
+                new_hsh = mitem.serialize_with_quantity(quantity)
             elsif item_hsh['price'].to_f == mitem.price.to_f
                     # all good
-                new_hsh = mitem.serialize_to_app(quantity)
+                new_hsh = mitem.serialize_with_quantity(quantity)
             elsif item_hsh['price'].to_f < mitem.price.to_f
                     # new price is greater than customer price
                 OpsTwilio.text_devs msg: "#{self.id} Menu Item Price is wrong on gift - menu item #{mitem.id} #{mitem.price} at Q #{quantity} - item price = #{item_hsh['price']}"
-                hsh = mitem.serialize_to_app(quantity)
+                hsh = mitem.serialize_with_quantity(quantity)
                 hsh['price'] = item_hsh['price']
                 new_hsh = hsh
             end

@@ -25,7 +25,7 @@ describe Redeem do
 
         hsh = {"receiver_name"=>@rec.name, "receiver_email"=> @rec.email, "link"=>nil,
             "origin"=>"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0",
-            "client_id"=>120, "partner_id"=> @merchant.id, "partner_type"=>"Merchant", "shoppingCart"=>[@menu_item.serialize_to_app(1)].to_json,
+            "client_id"=>120, "partner_id"=> @merchant.id, "partner_type"=>"Merchant", "shoppingCart"=>[@menu_item.serialize_with_quantity(1)].to_json,
             "giver"=>@user,  "credit_card"=> @card.id, "merchant_id"=>@merchant.id, "value"=>@menu_item.price, "message"=>"Happy Chanukah\nLove your favorite Golf Conscierge"}
             # MAKE A GIFT
         @gift = GiftSale.create hsh

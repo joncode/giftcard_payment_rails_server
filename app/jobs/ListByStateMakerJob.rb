@@ -45,6 +45,8 @@ class ListByStateMakerJob
 				l.list_graphs << lg
 			end
 
+			l.alphabetize
+
 		end; nil
 		puts "ListByStateMakerJob END"
 	end

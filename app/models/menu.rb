@@ -73,6 +73,7 @@ class Menu < ActiveRecord::Base
                 section_id: voucher_section.id,
                 position: index,
                 standard: true,
+                promo: true,
                 ccy: self.ccy
             )
         end

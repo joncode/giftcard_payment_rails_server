@@ -38,7 +38,7 @@ class Web::V3::PromosController < MetalCorsController
 		request_params = redbull_params
 		merchant = Merchant.find(request_params[:loc_id])
 		menu_item = MenuItem.get_voucher_for_amount(merchant.menu_id, '40')
-		input['shoppingCart'] = [menu_item.serialize_to_app(1)].to_json
+		input['shoppingCart'] = [menu_item.serialize_with_quantity(1)].to_json
 		input['client_id'] = @current_client.id
 		input['partner_id'] = @current_partner.id
 		input['partner_type'] = @current_partner.class.to_s

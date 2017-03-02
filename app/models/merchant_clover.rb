@@ -15,6 +15,10 @@ class MerchantClover
 					puts "\n\n\nsend_comprehensive_setup_email(m)"
 					puts m.inspect
 					puts "\n\n\n"
+					# add auto merchant to the metro area lists that are appropriate
+					# add the city ID if necessary
+					# bust the cache and add merchant to WBG
+					# default banner photo for the auto-created merchants
 				else
 					# invite not persisted
 				end
