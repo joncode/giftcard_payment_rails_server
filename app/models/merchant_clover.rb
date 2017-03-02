@@ -1,15 +1,20 @@
 class MerchantClover
 
-	def self.run signup
-		m = make(signup)
+	def self.make signup
+
+		puts "\n\n MerchantClover MAKE \n\n"
+
+		m = init(signup)
 		if m.save
 			signup.update(merchant_id: m.id)
-			ListByStateMakerJob.perform
-			l = License.clover_license(merchant)
+			l = License.clover_license(m)
 			if l.save
-				i = Invite.new_invite company, m.signup_email
+				ListByStateMakerJob.perform
+				i = Invite.new_invite(m, m.signup_email)
 				if i.save
-					send_comprehensive_setup_email(m)
+					puts "\n\n\nsend_comprehensive_setup_email(m)"
+					puts m.inspect
+					puts "\n\n\n"
 				else
 					# invite not persisted
 				end
@@ -19,14 +24,15 @@ class MerchantClover
 		else
 			# merchant not persisted
 		end
+		m
 	end
 
-	def self.make signup
+	def self.init signup
 		m = Merchant.new
 		m.name = signup.data['name']
-		m.signup_email = signup.data['email']
 		m.phone = signup.data['phone']
 		m.email = signup.data['email']
+		m.signup_email = signup.data['email']
 		m.website = signup.data['website']
 		m.address = signup.data['address1']
 		m.address_2 = signup.data['address2']
@@ -34,7 +40,7 @@ class MerchantClover
 		m.state = signup.data['state']
 		m.zip = signup.data['zip']
 		m.ccy = signup.data['ccy']
-		m.tz = generate_timzone_for(signup.data['timezone'])
+		m.tz = generate_timzone_for(signup.data['time_zone'])
 		m.pos_merchant_id = signup.data['pos_merchant_id']
 		m.r_sys = 7
 		m.paused = false

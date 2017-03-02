@@ -32,7 +32,7 @@ class ListByStateMakerJob
 
 			l.list_graphs.each do |lg|
 				m = lg.item
-				if !m.active || !m.live || m.paused || m.zip.match('11111')
+				if m.nil? || !m.active || !m.live || m.paused || m.zip.match('11111')
 					lg.destroy
 				end
 			end

@@ -1,3 +1,7 @@
+ #  {:zip=>"89101", :phone=>"702-555-1212", :website=>"https://www.itson.me", :locale=>"en_US", :state=>"NV", :vat=>false, :address1=>"123 Mockingbird Lane", :address2=>"Apt 2b", :device_id=>"74e6a379-9a1f-4511-ac6c-96e4b54c10b8", :address3=>"", :support_email=>"dev@clover.com", :city=>"Las Vegas", :currency=>"USD", :id=>"J4Q1V4P5X0KS0", :time_zone=>"Pacific Standard Time", :email=>"richard1@rangerllt.com", :support_phone=>"(000) 000-0000", :name=>"ItsOnMe Test Merchant", :account=>"Account {name=ItsOnMe Test Merchant | richard1@rangerllt.com (DEV), type=com.clover.account}", :mid=>"RCTST0000008099", :app_key=>"", :serial_number=>"C010UQ61030017", :pos_merchant_id=>"J4Q1V4P5X0KS0", :ccy=>"USD"}
+
+
+
 class OpsClover
 	include ActionView::Helpers::NumberHelper
 
@@ -167,12 +171,22 @@ class OpsClover
 			@signup = MerchantSignup.new_clover @args
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
+				@merchant = MerchantClover.make(@signup)
+				if @merchant.persisted?
+
+				else
+					# merchant not persisted
+					@merchant = nil
+				end
 			else
 				puts "OpsClover - SIGNUP ERROR - #{@signup.errors.full_messages}"
 				@signup = nil unless @signup.persisted?
 			end
 		end
+		puts "\n\n"
 		puts @signup.inspect
+		puts "\n\n"
+
 		@signup
 	end
 

@@ -17,7 +17,7 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
-    validates_presence_of :name, :address, :state, :zip, :city_id
+    validates_presence_of :name, :address, :state, :zip
     validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
     validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates :signup_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
@@ -28,6 +28,7 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     before_save     :add_region_name
+    before_save :set_live_at
 
     after_create  :create_menu
     after_create  :create_quick_gifts
@@ -304,6 +305,8 @@ private
         end
     end
 
+#   -------------
+
     def create_quick_gifts
         mis = self.menu.menu_items if self.menu
         mis.each do |menu_item|
@@ -322,6 +325,13 @@ private
             menu
         end
     end
+
+    def set_live_at
+        if self.live_at.nil? && self.mode == 'live'
+            self.live_at = TimeGem.change_time_to_zone(DateTime.now.utc, self.zone).to_date
+        end
+    end
+
 end
 
 

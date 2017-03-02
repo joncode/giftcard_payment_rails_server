@@ -123,7 +123,52 @@ class Proto < ActiveRecord::Base
 		update_column(:active, false)
 	end
 
+
+#   -------------
+
+
+	def self.new_with_current_company(merchant)
+		Proto.new(cat: 200,
+			merchant_id: merchant.id,
+			provider_name: merchant.name,
+			giver_id: merchant.id,
+			giver_type: 'BizUser',
+			giver_name: "#{merchant.name} Staff"
+		)
+	end
+
+	def self.new_with_menu_item(item: mi, exp: nil, detail: nil, title: nil, company: nil)
+
+		this_company = company || item.menu.owner
+		return nil if this_company.nil?
+		p = Proto.new_with_current_company(this_company)
+		p.quick = true
+
+		p.value = item.price
+		p.value_cents = item.price_cents
+		p.cost = '0'
+		p.cost_cents = 0
+		p.ccy = item.ccy
+		p.shoppingCart = [item.serialize_with_quantity].to_json
+
+		p.message = "Enjoy this gift card for #{item.name}"
+		p.detail = detail || default_detail
+		p.days = exp.to_i unless exp.blank?
+		p.title = title
+		p
+	end
+
+	def default_detail
+		Proto.default_detail
+	end
+
+	def self.default_detail
+		"Enjoy this gift. Text support if you have any questions."
+	end
+
+
 private
+
 
 	def set_value_cents
 		self.value_cents = currency_to_cents(self.value)

@@ -11,6 +11,8 @@ class Menu < ActiveRecord::Base
         self.owner_type.constantize.find(self.owner_id)
     end
 
+    MENU_SECTIONS_INIT   = ["Gifting Menu", "Gift Vouchers"]
+
 #   -------------
 
     attr_accessor :ccy

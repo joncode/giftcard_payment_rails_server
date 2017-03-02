@@ -140,6 +140,45 @@ GIFT_CAT = { 100 => "Admin", 101 => "AdmRegift", 107 => "AdmBoom", 150 => "AdmCa
 
 REDEMPTION_HSH = {1 => "V1" , 2 => "V2",  3 => "Pos", 4 => 'Paper' }
 
+MENU_INT    = { "full" => 1, "promo" => 2 }
+MENU_STRING = { 1 => "full", 2 => "promo" }
+
+MENU_GIFTCARD_IMAGE = "https://res.cloudinary.com/drinkboard/image/upload/v1415302572/giftcard-dollaramount.png"
+BLACK_GIFTCARD_IMAGE = 'https://res.cloudinary.com/drinkboard/image/upload/v1484690957/giftcards/backgrounds/IOM_GiftCard_Black|dollaramount|.png'
+LIGHTS_GIFTCARD_IMAGE = 'https://res.cloudinary.com/drinkboard/image/upload/v1484690926/giftcards/backgrounds/IOM_GiftCard_Lights|dollaramount|.png'
+MOUNTAIN_GIFTCARD_IMAGE = 'https://res.cloudinary.com/drinkboard/image/upload/v1484690943/giftcards/backgrounds/IOM_GiftCard_GolfMountain|dollaramount|.png'
+GOLFBALL_GIFTCARD_IMAGE = 'https://res.cloudinary.com/drinkboard/image/upload/v1484690932/giftcards/backgrounds/IOM_GiftCard_Golf|dollaramount|.png'
+
+CARD_IMGS = {:black => [
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690957/giftcards/backgrounds/IOM_GiftCard_Black5.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690951/giftcards/backgrounds/IOM_GiftCard_Black10.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690954/giftcards/backgrounds/IOM_GiftCard_Black25.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690956/giftcards/backgrounds/IOM_GiftCard_Black50.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690924/giftcards/backgrounds/IOM_GiftCard_Black75.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690951/giftcards/backgrounds/IOM_GiftCard_Black100.png'
+],:lights => [
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690926/giftcards/backgrounds/IOM_GiftCard_Lights5.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690924/giftcards/backgrounds/IOM_GiftCard_Lights10.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690923/giftcards/backgrounds/IOM_GiftCard_Lights25.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690933/giftcards/backgrounds/IOM_GiftCard_Lights50.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690936/giftcards/backgrounds/IOM_GiftCard_Lights75.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690929/giftcards/backgrounds/IOM_GiftCard_Lights100.png'
+],:mountain => [
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690943/giftcards/backgrounds/IOM_GiftCard_GolfMountain5.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690940/giftcards/backgrounds/IOM_GiftCard_GolfMountain10.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690946/giftcards/backgrounds/IOM_GiftCard_GolfMountain25.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690948/giftcards/backgrounds/IOM_GiftCard_GolfMountain50.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690944/giftcards/backgrounds/IOM_GiftCard_GolfMountain75.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690940/giftcards/backgrounds/IOM_GiftCard_GolfMountain100.png'
+],:golfball => [
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690932/giftcards/backgrounds/IOM_GiftCard_Golf5.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690932/giftcards/backgrounds/IOM_GiftCard_Golf10.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690928/giftcards/backgrounds/IOM_GiftCard_Golf25.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690934/giftcards/backgrounds/IOM_GiftCard_Golf50.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690936/giftcards/backgrounds/IOM_GiftCard_Golf75.png',
+    'https://res.cloudinary.com/drinkboard/image/upload/v1484690928/giftcards/backgrounds/IOM_GiftCard_Golf100.png']
+}
+
 # LOCATION DATA
 
 CANADIAN_HSH = {
