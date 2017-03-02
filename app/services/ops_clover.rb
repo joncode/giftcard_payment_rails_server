@@ -171,12 +171,15 @@ class OpsClover
 			@signup = MerchantSignup.new_clover @args
 			if @signup.save
 				# 2. make a clover client and connect to the merchant signup
-				@merchant = MerchantClover.make(@signup)
-				if @merchant.persisted?
+				get_merchant
+				if @merchant.nil?
+					@merchant = MerchantClover.make(@signup)
+					if @merchant.persisted?
 
-				else
-					# merchant not persisted
-					@merchant = nil
+					else
+						# merchant not persisted
+						@merchant = nil
+					end
 				end
 			else
 				puts "OpsClover - SIGNUP ERROR - #{@signup.errors.full_messages}"
