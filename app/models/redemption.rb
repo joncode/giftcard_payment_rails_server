@@ -433,19 +433,11 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 
 	def self.get_multi_with_token token, mids
-		if token.length == 4
-			where(token: token, merchant_id: mids, status: ['pending', 'done'])
-		else
-			[]
-		end
+		where(token: token, merchant_id: mids, status: ['pending', 'done'])
 	end
 
 	def self.get_multi_with_hex_id hex_id, mids
-		if hex_id.length == 12
-			where(hex_id: hex_id, merchant_id: mids, status: ['pending', 'done'])
-		else
-			[]
-		end
+		where(hex_id: hex_id, merchant_id: mids, status: ['pending', 'done'])
 	end
 
 #   -------------
