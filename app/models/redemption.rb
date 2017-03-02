@@ -440,7 +440,9 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 		where(hex_id: hex_id, merchant_id: mids, status: ['pending', 'done'])
 	end
 
+
 #   -------------
+
 
 	def self.convert_type_of_to_r_sys(typ)
 		case typ.to_s

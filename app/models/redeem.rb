@@ -91,7 +91,7 @@ class Redeem
 
 		request_hsh = { gift_id: gift.id, redemption_id: redemption.id, qr_code: qr_code,
 			ticket_num: ticket_num, server: server, client_id: client_id, callback: callback_params }
-		puts request_hsh.inspect
+		puts "Redeem - APPLY - " + request_hsh.inspect
 
 		merchant = redemption.merchant
 
@@ -144,6 +144,7 @@ class Redeem
 
 		#   -------------
 
+
 			# Let's process the redemption
 		case redemption.r_sys
 		when 1   # V1
@@ -154,7 +155,7 @@ class Redeem
 		when 3   # OMNIVORE
 			pos_obj, resp = omnivore_redemption( redemption, gift, ticket_num, redemption.amount, merchant )
 		when 4   # PAPER
-			pos_obj, resp = internal_redemption( redemption, gift, server )
+			pos_obj, resp = internal_redemption( redemption, gift, "#{ticket_num}-#{server}" )
 		when 5   # ZAPPER
 			if callback_params.present?
 				pos_obj, resp = zapper_callback_redemption( redemption, gift, callback_params )
@@ -184,12 +185,14 @@ class Redeem
 	# 			"response_text" =>  "System Error, unable to apply redemption. Pease try again later" }
 	end
 
+
 #   -------------
+
 
 	def self.internal_redemption(redemption, gift, server)
 			# OpsIomApiPos is defined at bottom of this file
 		v1_pos_obj = OpsIomApiPos.new(redemption, gift, server)
-		redemption.request = v1_pos_obj.make_request_hsh
+		redemption.request = v1_pos_obj.make_request_hshj
 		redemption.save
 		return [ v1_pos_obj, v1_pos_obj.response ]
 	end
