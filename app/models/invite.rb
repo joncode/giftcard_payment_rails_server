@@ -30,12 +30,11 @@ class Invite < ActiveRecord::Base
         self.new.generate_token
     end
 
-    def self.new_invite company, mt_user, rank='Admin'
-        Invite.new({ mt_user_id: mt_user.id,
-                         email: mt_user.email,
-                         rank: rank,
-                         company_id: company.id,
-                         company_type: company.class.to_s })
+    def self.new_invite company, email, rank='Admin'
+        Invite.new({ email: email,
+                        rank: rank,
+                        company_id: company.id,
+                        company_type: company.class.to_s })
     end
 
 #   -------------

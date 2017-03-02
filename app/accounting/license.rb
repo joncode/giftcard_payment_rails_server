@@ -10,7 +10,7 @@ class License < ActiveRecord::Base
 	# ENUM :recurring_type 'monthly', 'annual'
 	# ENUM :origin  'subscription', 'promo'
 	# ENUM :amount_action  'single', 'multiple' , 'variable_merchant', 'variable_redemption'
-	# ENUM :charge_type 'card', 'ach', 'wire', 'check'
+	# ENUM :charge_type 'card', 'ach', 'wire', 'check', '3rd_party'
 
 
 #   -------------

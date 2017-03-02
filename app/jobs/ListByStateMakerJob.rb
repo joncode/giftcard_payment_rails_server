@@ -41,11 +41,10 @@ class ListByStateMakerJob
 			ms.sort_by! {|m| m.name }
 
 			ms.each do |m|
-
 				lg = ListGraph.new(item_id: m.id, item_type: m.class.to_s)
 				l.list_graphs << lg
-
 			end
+
 		end; nil
 		puts "ListByStateMakerJob END"
 	end

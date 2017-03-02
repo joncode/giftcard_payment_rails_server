@@ -40,15 +40,20 @@ class MenuItem < ActiveRecord::Base
 		unshorten_photo_url self.photo
 	end
 
-    def serialize_to_app(quantity=nil)
-        item_hash = self.serializable_hash only: [ :photo, :detail, :price, :price_cents, :ccy ]
+    def serialize_to_app
+        item_hash = self.serializable_hash only: [ :detail, :price, :price_cents, :photo, :ccy, :pos_item_id ]
         item_hash["item_id"]   = self.id
         item_hash["item_name"] = self.name
-        item_hash["pos_item_id"] = self.pos_item_id if self.pos_item_id.present?
-        if quantity.present?
-            item_hash['quantity'] = quantity
-        end
         return item_hash
+    end
+
+    def serialize_with_quantity quantity=1
+        hash = serialize_to_app
+        hash["quantity"]    = quantity.to_i
+        hash["price_promo"] = self.price_promo
+        hash["price_promo_cents"] = self.price_promo_cents
+        hash["section"]     = self.section.name
+        hash
     end
 
     def section_name

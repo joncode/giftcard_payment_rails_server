@@ -29,6 +29,9 @@ class Merchant < ActiveRecord::Base
 
     before_save     :add_region_name
 
+    after_create  :create_menu
+    after_create  :create_quick_gifts
+
     after_commit :clear_www_cache, on: [:create, :update, :destroy]
 
 #   -------------
@@ -301,6 +304,24 @@ private
         end
     end
 
+    def create_quick_gifts
+        mis = self.menu.menu_items if self.menu
+        mis.each do |menu_item|
+            proto = Proto.new_with_menu_item(item: menu_item, company: self)
+            proto.save if proto.kind_of?(Proto)
+        end
+    end
+
+    def create_menu
+        menu = MenuFull.create(owner_id: self.id, owner_type: self.class.to_s)
+        if menu.persisted?
+            menu.compile_menu_to_app
+            self.update(menu_id: menu.id)
+            menu
+        else
+            menu
+        end
+    end
 end
 
 

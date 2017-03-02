@@ -1,5 +1,12 @@
 module LicenseMaker
 
+	def clover_license(merchant)
+		# generate clover license which does not create registers
+		l = monthly_basic(merchant)
+		l.charge_type = '3rd_party'
+		l
+	end
+
 	def monthly_basic(partner = nil)
 		l = new
 		l.over_type = 'Monthly Basic'
