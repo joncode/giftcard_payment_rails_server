@@ -99,11 +99,9 @@ class OpsClover
 
 		# return @status = [:blank, :new, :requested, :paused, :live].sample
 
-		if @client.nil? && @merchant.nil? && @signup.nil?
+		if @merchant.nil? && @signup.nil?
 			x = @pos_merchant_id.nil? ? :blank : :new
-		elsif @client.nil? && @merchant.nil?
-			x = :new
-		elsif @merchant.nil?
+		elsif @merchant.nil? && @signup.present?
 			x = :requested
 		elsif @client.nil?
 			make_client
