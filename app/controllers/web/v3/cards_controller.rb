@@ -18,6 +18,8 @@ class Web::V3::CardsController < MetalCorsController
         if params[:stripe_id].blank?
             card = Card.create_card_from_hash(create_with)
         else
+            create_with.delete(:number)
+            create_with.delete('number')
             card = CardStripe.create_card_from_hash(create_with)
         end
 
@@ -28,6 +30,7 @@ class Web::V3::CardsController < MetalCorsController
         if card.active && card.persisted?
             success card.token_serialize
         else
+            puts "CARD ERROR #{card.errors.messages} - "
             fail_web fail_web_payload("not_created_card", card.error_message)
             # status = :bad_request
         end
