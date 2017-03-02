@@ -192,7 +192,7 @@ class Redeem
 	def self.internal_redemption(redemption, gift, server)
 			# OpsIomApiPos is defined at bottom of this file
 		v1_pos_obj = OpsIomApiPos.new(redemption, gift, server)
-		redemption.request = v1_pos_obj.make_request_hshj
+		redemption.request = v1_pos_obj.make_request_hsh
 		redemption.save
 		return [ v1_pos_obj, v1_pos_obj.response ]
 	end
