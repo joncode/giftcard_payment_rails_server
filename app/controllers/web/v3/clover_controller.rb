@@ -178,15 +178,25 @@ class Web::V3::CloverController < MetalCorsController
 	            end
 			else
 
-				fail_web({ err: "NOT_FOUND", msg:  "Gift not found for Voucher Code #{h[:code]}"})
-				@app_response[:data] = {
-							amount_applied: 0,
-							code: "NOT_FOUND",
-							transaction_reference: h[:code],
-							message: "Gift not found for Voucher Code #{h[:code]}",
-							client_id: SERVICE_NAME
-						}
-
+				if @done_redemption.length > 0
+					fail_web({ err: "NOT_REDEEMABLE", msg:  "Redemption already complete for Voucher Code #{h[:code]}"})
+					@app_response[:data] = {
+								amount_applied: 0,
+								code: "NOT_REDEEMABLE",
+								transaction_reference: h[:code],
+								message: "Redemption already complete for Voucher Code #{h[:code]}",
+								client_id: SERVICE_NAME
+							}
+				else
+					fail_web({ err: "NOT_FOUND", msg:  "Gift not found for Voucher Code #{h[:code]}"})
+					@app_response[:data] = {
+								amount_applied: 0,
+								code: "NOT_FOUND",
+								transaction_reference: h[:code],
+								message: "Gift not found for Voucher Code #{h[:code]}",
+								client_id: SERVICE_NAME
+							}
+				end
 			end
 
 		end
