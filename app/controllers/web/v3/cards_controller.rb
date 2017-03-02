@@ -15,10 +15,10 @@ class Web::V3::CardsController < MetalCorsController
         create_with = card_params
         create_with["user_id"] = @current_user.id
 
-        if params[:stripe_id].present?
-            card = CardStripe.create_card_from_hash create_with
+        if params[:stripe_id].blank?
+            card = Card.create_card_from_hash(create_with)
         else
-            card = Card.create_card_from_hash create_with
+            card = CardStripe.create_card_from_hash(create_with)
         end
 
         card.client = @current_client
