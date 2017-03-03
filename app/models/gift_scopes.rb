@@ -93,7 +93,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
             if client_partner.full?
                 yes_where_hsh = {}
             elsif client_partner.partner?
-                partner = client.partner
+                partner = client_partner.partner
                 yes_where_hsh = { partner_type: partner.class.to_s, partner_id: partner.id }
             else
                      # client.client?
