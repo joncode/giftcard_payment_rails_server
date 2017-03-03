@@ -35,7 +35,7 @@ class CardStripe < ActiveRecord::Base
 #   -------------
 
 	def send_to_stripe
-		o = OpsStripeToken.new(self.as_json)
+		o = OpsStripeToken.new(self.as_json, self.user)
 		o.tokenize
 		puts o.inspect
 		puts o.to_db
