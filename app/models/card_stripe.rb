@@ -12,8 +12,13 @@ class CardStripe < ActiveRecord::Base
 
 #	-------------
 
+	has_many   :sales
+	has_many   :gifts, 	:through => :sales
+	has_many   :orders,	:through => :sales
+
 	belongs_to :client
 	belongs_to :partner, polymorphic: true
+	belongs_to :user, autosave: true
 
 #	-------------
 
