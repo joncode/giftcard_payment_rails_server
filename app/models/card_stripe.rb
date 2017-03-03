@@ -37,6 +37,12 @@ class CardStripe < ActiveRecord::Base
 		self.errors.full_messages.join(', ')
 	end
 
+	def token_serialize
+		card_hash = self.serializable_hash only: [ "nickname", "last_four" ]
+		card_hash["card_id"] = self.id
+		card_hash
+	end
+
 #   -------------
 
 	def send_to_stripe
