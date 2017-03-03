@@ -149,6 +149,8 @@ LIGHTS_GIFTCARD_IMAGE = 'https://res.cloudinary.com/drinkboard/image/upload/v148
 MOUNTAIN_GIFTCARD_IMAGE = 'https://res.cloudinary.com/drinkboard/image/upload/v1484690943/giftcards/backgrounds/IOM_GiftCard_GolfMountain|dollaramount|.png'
 GOLFBALL_GIFTCARD_IMAGE = 'https://res.cloudinary.com/drinkboard/image/upload/v1484690932/giftcards/backgrounds/IOM_GiftCard_Golf|dollaramount|.png'
 
+MERCHANT_BANNER_IMAGES = ['http://res.cloudinary.com/drinkboard/image/upload/v1488577678/sites/Clover_Merchant_1.jpg','http://res.cloudinary.com/drinkboard/image/upload/v1488577683/sites/Clover_Merchant_2.jpg']
+
 CARD_IMGS = {:black => [
     'https://res.cloudinary.com/drinkboard/image/upload/v1484690957/giftcards/backgrounds/IOM_GiftCard_Black5.png',
     'https://res.cloudinary.com/drinkboard/image/upload/v1484690951/giftcards/backgrounds/IOM_GiftCard_Black10.png',

@@ -27,7 +27,7 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
-    before_save     :add_region_name
+    before_save :add_region_name
     before_save :set_live_at
 
     after_create  :create_menu

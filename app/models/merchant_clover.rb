@@ -53,6 +53,7 @@ class MerchantClover
 		m.rate = '95'
 		m.pos_sys = 'Clover'
 		m.tou = true
+		m.photo = MERCHANT_BANNER_IMAGES.sample
 		m
 	end
 
