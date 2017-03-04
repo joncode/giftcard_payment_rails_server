@@ -1,4 +1,5 @@
 class MerchantClover
+    extend Emailer
 
 	def self.make signup
 
@@ -19,6 +20,11 @@ class MerchantClover
 					# add the city ID if necessary
 					# bust the cache and add merchant to WBG
 					# default banner photo for the auto-created merchants
+					h = {}
+					h['token'] = i.invite_tkn
+					h['email'] = i.email
+					h['merchant_id'] = i.company_id
+					merchant_invite(h)
 				else
 					# invite not persisted
 				end
