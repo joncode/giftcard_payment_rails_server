@@ -2,6 +2,7 @@ class Merchant < ActiveRecord::Base
     include CompanyDuckType
     include ShortenPhotoUrlHelper
     include Formatter
+    include Utility
     include MerchantSerializers
     include RedeemHelper
 
@@ -14,6 +15,7 @@ class Merchant < ActiveRecord::Base
 
     before_validation :extract_phone_digits
     before_validation :strip_whitespace_and_fix_case
+    before_validation   :create_token
 
 #   -------------
 
@@ -330,6 +332,10 @@ private
         if self.live_at.nil? && self.mode == 'live'
             self.live_at = TimeGem.change_time_to_zone(DateTime.now.utc, self.zone).to_date
         end
+    end
+
+    def create_token
+        self.token = generate_token if self.token.nil?
     end
 
 end
