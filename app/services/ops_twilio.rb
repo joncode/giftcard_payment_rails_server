@@ -35,6 +35,7 @@ class OpsTwilio
 		end
 
 		def text_devs msg:
+			return
 			text to: DEVELOPER_TEXT, msg: msg
 		end
 
