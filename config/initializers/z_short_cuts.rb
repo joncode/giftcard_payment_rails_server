@@ -23,6 +23,7 @@ OSC = OpsStripeCard
 OZ = OpsZapper
 PL = Place
 PLG = PlaceGraph
+PR = Proto
 PM = Payment
 RD = Redemption
 RG = Register

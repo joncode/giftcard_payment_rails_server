@@ -48,7 +48,7 @@ class Admt::V2::GiftCampaignsController < JsonController
 private
 
 	def gift_params
-		params.require(:data).permit(:receiver_phone, :receiver_email, :payable_id)
+		params.require(:data).permit(:receiver_name, :receiver_phone, :receiver_email, :payable_id)
 	end
 
 end

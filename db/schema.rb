@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170301190251) do
+ActiveRecord::Schema.define(version: 20170318031800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1116,6 +1116,7 @@ ActiveRecord::Schema.define(version: 20170301190251) do
     t.string   "promo_code"
     t.integer  "maximum"
     t.integer  "start_in"
+    t.boolean  "brand_card",                default: false
   end
 
   add_index "protos", ["active"], name: "index_protos_on_active", using: :btree

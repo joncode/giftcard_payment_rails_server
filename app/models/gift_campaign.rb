@@ -1,6 +1,6 @@
 class GiftCampaign < Gift
 
-    # args = params.require(:data).permit(:receiver_phone, :receiver_email, :payable_id)
+    # args = params.require(:data).permit(:receiver_name, :receiver_phone, :receiver_email, :payable_id)
 
     validate   :is_giftable
 
@@ -12,6 +12,9 @@ class GiftCampaign < Gift
 #   -------------
 
     def self.create args={}
+
+        # args = params.require(:data).permit(:receiver_name, :receiver_phone, :receiver_email, :payable_id)
+
         gift = super
         if gift.persisted?
             gift.messenger
@@ -40,6 +43,7 @@ private
         args["value"]         = campaign_item.value
         args["cost"]          = campaign_item.cost
         args["brand_card"]    = campaign_item.brand_card
+        args
     end
 
     def expires_at_calc expires_at, expires_in
