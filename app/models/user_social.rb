@@ -23,7 +23,7 @@ class UserSocial < ActiveRecord::Base
 
 #   -------------
 
-    after_save :collect_incomplete_gifts
+    after_commit :collect_incomplete_gifts
     after_commit :subscribe_mailchimp, on: :create
     after_commit :fire_after_save_queue, on: [:create, :update, :destroy]
     after_commit :unsubscribe_mailchimp, on: [:create, :update, :destroy]
