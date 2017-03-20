@@ -22,10 +22,11 @@ class List < ActiveRecord::Base
 
 #   -------------
 
+	has_many :clients
 	has_many :list_graphs, dependent: :destroy
+	has_many :lists, through: :list_graphs, source: :item, source_type: 'List'
 	has_many :merchants, through: :list_graphs, source: :item, source_type: 'Merchant'
 	has_many :menu_items, through: :list_graphs, source: :item, source_type: 'MenuItem'
-	has_many :lists, through: :list_graphs, source: :item, source_type: 'List'
 	belongs_to :owner, polymorphic: true
 
 	attr_accessor :offset, :gifts

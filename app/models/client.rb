@@ -12,7 +12,7 @@ class Client < ActiveRecord::Base
 
 #	-------------
 
-    after_save      :clear_cache
+    after_save :clear_cache
 
 #	-------------
 
@@ -25,6 +25,7 @@ class Client < ActiveRecord::Base
 	has_many :gifts
 	has_many :redemptions
 
+	belongs_to :list
 	belongs_to :partner, polymorphic: true
 
 	enum ecosystem: [ :full, :client, :partner ]

@@ -3,7 +3,7 @@ class Web::V3::ListsController < MetalCorsController
     before_action :authentication_no_token
 
     def index
-    	list = List.find_by_owner @current_client
+    	list = @current_client.list
     	if list.kind_of?(List)
 			success list
 		else
