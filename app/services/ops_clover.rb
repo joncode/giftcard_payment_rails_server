@@ -123,7 +123,7 @@ class OpsClover
 					if @client.save && @merchant.mode == 'live'
 						x = :live
 					else
-						puts "OpsClover - CLIENT ERROR - #{@client.errors.full_messages}"
+						puts "OpsClover 126 - CLIENT ERROR - #{@client.errors.full_messages}"
 					end
 				end
 			end
@@ -156,7 +156,7 @@ class OpsClover
 			if @client.save
 				# ready to go
 			else
-				puts "OpsClover - CLIENT ERROR - #{@client.errors.full_messages}"
+				puts "OpsClover 159 - CLIENT ERROR - #{@client.errors.full_messages}"
 				@client = nil unless @client.persisted?
 			end
 		end
@@ -180,7 +180,7 @@ class OpsClover
 					end
 				end
 			else
-				puts "OpsClover - SIGNUP ERROR - #{@signup.errors.full_messages}"
+				puts "OpsClover 183 - SIGNUP ERROR - #{@signup.errors.full_messages}"
 				@signup = nil unless @signup.persisted?
 			end
 		end
