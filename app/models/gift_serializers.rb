@@ -31,7 +31,6 @@ module GiftSerializers
         gift_hsh["delivery_method"] = self.delivery_method
         gift_hsh["delivery_email"] = self.receiver_email
         gift_hsh["delivery_phone"] = self.receiver_phone
-
         gift_hsh
     end
 
@@ -200,6 +199,7 @@ private
 
     def basic_data gift_hsh
         gift_hsh["gift_id"]  = self.id
+        gift_hsh["hex_id"]  = self.hex_id
         gift_hsh["status"] = self.status
         gift_hsh["cat"] = self.cat
         gift_hsh["created_at"] = self.created_at
