@@ -7,9 +7,10 @@ class OpsClover
 
 	attr_accessor :pos_merchant_id, :key, :app_key, :amount, :ccy, :code
 	attr_reader :status, :client, :merchant, :signup, :args, :device_id,
-		:merchant_name, :merchant_email
+		:merchant_name, :merchant_email, :error
 
 	def initialize args={}
+		@error = nil
 		@args = args.symbolize_keys
 		if @args[:pos_merchant_id].blank? || @args[:pos_merchant_id].to_s.length < 5
 			@pos_merchant_id = nil
@@ -80,7 +81,9 @@ class OpsClover
 	def update_status
 		case status
 		when :new
-			make_requested
+			make_signup
+			make_client
+			set_status
 		when :blank
 			# do nothing
 		when :live
@@ -88,7 +91,9 @@ class OpsClover
 		when :paused
 			# do nothing
 		when :requested
-			# do nothing
+			make_merchant
+			make_client
+			set_status
 		else
 			# do nothing
 		end
@@ -100,7 +105,7 @@ class OpsClover
 		# return @status = [:blank, :new, :requested, :paused, :live].sample
 
 		if @merchant.nil? && @signup.nil?
-			x = @pos_merchant_id.nil? ? :blank : :new
+			x = @pos_merchant_id.blank? ? :blank : :new
 		elsif @merchant.nil? && @signup.present?
 			x = :requested
 		elsif @client.nil?
@@ -135,20 +140,6 @@ class OpsClover
 #   -------------
 
 
-	def make_requested
-		if status == :new
-			# 1. create a @merchant_signup
-			make_signup
-			make_client
-
-			# 3. :promote the @merchant_signup clients to the merchant with merchant.promote in ADMT
-			# 4. set status to :requested
-			set_status
-		end
-		# 5. return the :application_key
-		key
-	end
-
 	def make_client
 		merchant_obj = @merchant || @signup
 		if @client.nil? && merchant_obj
@@ -164,21 +155,31 @@ class OpsClover
 		@client
 	end
 
+	def make_merchant
+		if @signup && @signup.persisted?
+			get_merchant
+			if @merchant.nil?
+				@merchant = MerchantClover.make(@signup)
+				unless @merchant.persisted?
+					# merchant not persisted
+					@error = @merchant.errors.full_messages[0]
+
+					@merchant = nil
+				end
+			end
+		end
+		puts "\n\n"
+		puts @merchant.inspect
+		puts "\n\n"
+		set_status
+		@merchant
+	end
+
 	def make_signup
 		if @signup.nil? && @merchant_name.present? && @merchant_email.present?
 			@signup = MerchantSignup.new_clover @args
 			if @signup.save
-				# 2. make a clover client and connect to the merchant signup
-				get_merchant
-				if @merchant.nil?
-					@merchant = MerchantClover.make(@signup)
-					if @merchant.persisted?
-
-					else
-						# merchant not persisted
-						@merchant = nil
-					end
-				end
+				make_merchant
 			else
 				puts "OpsClover 183 - SIGNUP ERROR - #{@signup.errors.full_messages}"
 				@signup = nil unless @signup.persisted?
@@ -197,7 +198,7 @@ class OpsClover
 
 	def get_client
 		puts "OpsClover 199 - GET CLIENT for #{@app_key}"
-		if @app_key
+		if !@app_key.blank?
 			@client = Client.find_by(application_key: @app_key, active: true)
 			if @client.respond_to?(:click)
 				puts "OpsClover - 203 CLIENT FOUND #{@client.id}"

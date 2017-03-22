@@ -7,10 +7,14 @@ class MerchantClover
 
 		m = init(signup)
 		if m.save
+			if Rails.env.development?
+				ListByStateMakerJob.perform
+			else
+				Resque.enqueue(ListByStateMakerJob)
+			end
 			signup.update(merchant_id: m.id)
 			l = License.clover_license(m)
 			if l.save
-				ListByStateMakerJob.perform
 				i = Invite.new_invite(m, m.signup_email)
 				if i.save
 					puts "\n\n\nsend_comprehensive_setup_email(m)"
@@ -27,12 +31,18 @@ class MerchantClover
 					merchant_invite(h)
 				else
 					# invite not persisted
+					puts "MerchantClover 30 - invite failure"
+					puts i.errors.full_messages
 				end
 			else
 				# license not persisted
+				puts "MerchantClover 35 - license failure"
+				puts l.errors.full_messages
 			end
 		else
 			# merchant not persisted
+			puts "MerchantClover 40 - merchant failure"
+			puts m.errors.full_messages
 		end
 		m
 	end

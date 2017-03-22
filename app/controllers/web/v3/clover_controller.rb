@@ -22,10 +22,10 @@ class Web::V3::CloverController < MetalCorsController
 		mid = h[:id]
 		h[:ccy] = h[:currency]
 
-
 		if h[:email].kind_of?(String) && ' ' == h[:email].last
 			h[:email] = h[:email][0 ... -1]
 		end
+		h[:email].gsub!(',','') if h[:email].kind_of?(String)
 		puts "HERE is MERCHANT_HSH #{h.inspect}"
 
 		o = OpsClover.new(h)
@@ -55,6 +55,7 @@ class Web::V3::CloverController < MetalCorsController
 			else
 				screen_msg = "#{SERVICE_NAME} Merchant account requires support."
 			end
+			screen_msg = o.error if o.error.present?
 			fail_web({ err: "SUPPORT", msg:  screen_msg})
 			@app_response[:data] = {
 					code: 'SUPPORT',
@@ -62,6 +63,7 @@ class Web::V3::CloverController < MetalCorsController
 					client_id: SERVICE_NAME
 				}
 		end
+
 		@app_response[:meta] = o.meta
 		respond
 
