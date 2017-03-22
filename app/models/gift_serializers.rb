@@ -10,6 +10,7 @@ module GiftSerializers
         end
         gift_hsh = {}
         basic_data gift_hsh
+        gift_hsh["hex_id"]  = self.hex_id
         money_and_items gift_hsh
         gift_hsh["giver"]              = sender.name
         gift_hsh["giver_photo"]        = sender.get_photo
@@ -199,7 +200,7 @@ private
 
     def basic_data gift_hsh
         gift_hsh["gift_id"]  = self.id
-        gift_hsh["hex_id"]  = self.hex_id
+
         gift_hsh["status"] = self.status
         gift_hsh["cat"] = self.cat
         gift_hsh["created_at"] = self.created_at
