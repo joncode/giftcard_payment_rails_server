@@ -21,10 +21,12 @@ module ShoppingCartHelper
         cart_ary.count
     end
 
-    def cart_ary
-        begin
-            JSON.parse(self.shoppingCart)
-        rescue
+    def cart_ary shoppingCart_string=nil
+        if shoppingCart_string
+            JSON.parse shoppingCart_string
+        elsif self.shoppingCart
+            JSON.parse self.shoppingCart
+        else
             []
         end
     end
