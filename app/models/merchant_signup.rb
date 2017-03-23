@@ -42,7 +42,7 @@ class MerchantSignup < ActiveRecord::Base
 		m.name = args[:name]
 		m.email = args[:email].gsub(',','') if args[:email].kind_of?(String)
 		m.phone = args[:phone].gsub(/[^0-9]/,'') if args[:phone].kind_of?(String)
-		m.address = args[:address1]
+		m.address = args[:address1].titleize if args[:address1].kind_of?(String)
 		m.website = args[:website]
 		m.venue_url = args[:website]
 		m.device_id = args[:device_id]
