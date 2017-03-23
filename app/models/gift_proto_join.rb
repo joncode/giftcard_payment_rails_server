@@ -93,6 +93,7 @@ private
 		args['expires_at']    = expires_at_calc(proto)
 		args['scheduled_at']  = scheduled_at_calc(proto)
 		args['cat']           = proto.cat
+		args['brand_card']    = proto.brand_card
 		args
 	end
 
