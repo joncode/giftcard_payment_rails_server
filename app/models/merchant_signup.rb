@@ -16,6 +16,9 @@ class MerchantSignup < ActiveRecord::Base
 	validates_length_of :message,   :maximum => 500
 	validates_length_of :point_of_sale_system,  :maximum => 100
 
+#   -------------
+
+	after_commit :notify_internal, on: :create
 
 #   -------------
 
@@ -73,6 +76,12 @@ class MerchantSignup < ActiveRecord::Base
             # DO NOT DELETE RECORDS
         update_column(:active, false)
     end
+
+#   -------------
+
+	def notify_internal
+		Resque.enqueue(InternalMailerJob, { 'method' => 'mail_notice_submit_merchant_setup', 'args' => m })
+	end
 
 end
 # == Schema Information
