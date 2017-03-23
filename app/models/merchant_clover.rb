@@ -54,9 +54,9 @@ class MerchantClover
 		m.email = signup.data['email']
 		m.signup_email = signup.data['email']
 		m.website = signup.data['website']
-		m.address = signup.data['address1'].titleize if signup.data['address1'].kind_of(String)
+		m.address = signup.data['address1'].titleize if signup.data['address1'].kind_of?(String)
 		m.address_2 = signup.data['address2']
-		m.city_name = signup.data['city'].titleize if signup.data['city'].kind_of(String)
+		m.city_name = signup.data['city'].titleize if signup.data['city'].kind_of?(String)
 		m.state = signup.data['state']
 		m.zip = signup.data['zip']
 		m.ccy = signup.data['ccy']
