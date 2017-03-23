@@ -43,6 +43,8 @@ private
         args["pay_stat"]     = old_gift.pay_stat
         remove_receiver_data_and_add_old_gift_giver_as_receiver(args)
         args["receiver"] = old_gift.giver
+        args['brand_card'] = old_gift.brand_card
+        args
     end
 
     def boomerang_cat(cat)
