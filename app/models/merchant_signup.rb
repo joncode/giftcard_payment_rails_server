@@ -80,7 +80,7 @@ class MerchantSignup < ActiveRecord::Base
 #   -------------
 
 	def notify_internal
-		Resque.enqueue(InternalMailerJob, { 'method' => 'mail_notice_submit_merchant_setup', 'args' => m })
+		Resque.enqueue(InternalMailerJob, { 'method' => 'mail_notice_submit_merchant_setup', 'args' => self })
 	end
 
 end
