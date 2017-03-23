@@ -28,7 +28,7 @@ module OmnivoreUtils
                     "tender_type_id" => merchant.tender_type_id,
                     "gift_current_value" => redemption.gift_prev_value,
                     "value" => redemption.amount,
-                    "brand_card_ids_ary" => [],
+                    "brand_card_ids_ary" => redemption.brand_card_ids,
                     "direct_redeem" => merchant.pos_direct,
                     'ccy' => redemption.ccy }
         new(pos_hsh)

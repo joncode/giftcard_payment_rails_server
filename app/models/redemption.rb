@@ -34,9 +34,14 @@ class Redemption < ActiveRecord::Base
 	belongs_to :merchant
 
 	def gift
-		Gift.unscoped.find self.gift_id
+ 		@gift ||= Gift.unscoped.where(id: self.gift_id).first
 	end
 
+    def brand_card_ids
+        return gift.brand_card_ids
+	rescue
+		return []
+    end
 
 #   -------------
 
