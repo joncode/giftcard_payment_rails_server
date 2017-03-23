@@ -40,8 +40,8 @@ class MerchantSignup < ActiveRecord::Base
 		m.point_of_sale_system = 'clover'
 		m.venue_name = args[:name]
 		m.name = args[:name]
-		m.email = args[:email]
-		m.phone = args[:phone]
+		m.email = args[:email].gsub(',','') if args[:email].kind_of?(String)
+		m.phone = args[:phone].gsub(/[^0-9]/,'') if args[:phone].kind_of?(String)
 		m.address = args[:address1]
 		m.website = args[:website]
 		m.venue_url = args[:website]

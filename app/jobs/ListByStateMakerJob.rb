@@ -1,5 +1,7 @@
 class ListByStateMakerJob
 
+    @queue = :database
+
 	def self.perform
 		puts "ListByStateMakerJob START"
 		mhsh = {}
