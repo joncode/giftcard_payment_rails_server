@@ -39,7 +39,7 @@ elsif Rails.env.staging?
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
-    HELP_CONTACT_ARY     = [{ "email" => "support@itson.me", "name" => "Craig"},{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
+    HELP_CONTACT_ARY = [{ "email" => "support@itson.me", "name" => "Craig"},{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
 
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 else
