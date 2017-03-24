@@ -18,9 +18,9 @@ if Rails.env.production?
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     API_URL          = "https://api.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "david.leibner@itson.me", "name" => "David"}
-    HELP_CONTACT_ARY     = [{ "email" => "david.leibner@itson.me", "name" => "David"}, { "email" => "support@itson.me", "name" => "Craig"}]
+    HELP_CONTACT_ARY     = [{ "email" => "david.leibner@itson.me", "name" => "David"}, { "email" => "info@itson.me", "name" => "Craig"}]
 
-    ADMIN_NOTICE_CONTACT = ["david.leibner@itson.me", "support@itson.me"]
+    ADMIN_NOTICE_CONTACT = ["david.leibner@itson.me", "info@itson.me"]
 elsif Rails.env.staging?
     PAGE_NAME        = "#{SERVICE_NAME} (staging)"
     TEST_URL         = "http://qa.drinkboardapp.com"
@@ -38,10 +38,10 @@ elsif Rails.env.staging?
     WBG_CLIENT_ID = 1
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
-    HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
-    HELP_CONTACT_ARY = [{ "email" => "support@itson.me", "name" => "Craig"},{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
+    HELP_CONTACT     = { "email" => "info@itson.me", "name" => "Craig"}
+    HELP_CONTACT_ARY = [{ "email" => "info@itson.me", "name" => "Craig"},{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
 
-    ADMIN_NOTICE_CONTACT = ["support@itson.me"]
+    ADMIN_NOTICE_CONTACT = ["info@itson.me"]
 else
     PAGE_NAME        = "Dev #{SERVICE_NAME} (local)"
     TEST_URL         = "http://0.0.0.0:3001"
@@ -62,7 +62,7 @@ else
     HELP_CONTACT     = { "email" => "jon.gutwillig@itson.me", "name" => "Jon"}
     HELP_CONTACT_ARY     = [{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
 
-    ADMIN_NOTICE_CONTACT = ["support@itson.me"]
+    ADMIN_NOTICE_CONTACT = ["info@itson.me"]
 end
 
 GOLFNOW_ID = Rails.env.staging? ? 28 : 31
