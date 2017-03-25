@@ -65,9 +65,21 @@ class ListByStateMakerJob
 				end
 			end
 
+				# sort lists alphabetically
 			l.alphabetize
-			l_golf.alphabetize
-			l_food.alphabetize
+
+				# remove lists with 0 merchants
+			if l_golf.total_items == 0
+				l_golf.toggle! :active
+			else
+				l_golf.alphabetize
+			end
+
+			if l_food.total_items == 0
+				l_food.toggle! :active
+			else
+				l_food.alphabetize
+			end
 
 		end; nil
 
