@@ -37,15 +37,15 @@ class ListByStateMakerJob
 			# get full state list
 			name = "#{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
 			l = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
-			puts "500 Internal " + l.errors.messages
+			puts "500 Internal " + l.errors.full_messages unless l.errors.messages.empty?
 
 			name = "Golf - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
 			l_golf = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
-			puts "500 Internal " + l_golf.errors.messages
+			puts "500 Internal " + l_golf.errors.full_messages unless l_golf.errors.messages.empty?
 
 			name = "Restaurants - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
 			l_food = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
-			puts "500 Internal " + l_food.errors.messages
+			puts "500 Internal " + l_food.errors.full_messages unless l_food.errors.messages.empty?
 
 				# remove inactive items from each list
 			l.remove_inactive_items
