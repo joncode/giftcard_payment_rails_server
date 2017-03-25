@@ -36,15 +36,15 @@ class ListByStateMakerJob
 
 			# get full state list
 			name = "#{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
-			l = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
+			l = List.find_or_create_by( name: name, item_type: 'merchant' )
 			puts "500 Internal " + l.errors.full_messages unless l.errors.messages.empty?
 
 			name = "Golf - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
-			l_golf = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
+			l_golf = List.find_or_create_by( name: name, item_type: 'merchant')
 			puts "500 Internal " + l_golf.errors.full_messages unless l_golf.errors.messages.empty?
 
 			name = "Restaurants - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
-			l_food = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
+			l_food = List.find_or_create_by( name: name, item_type: 'merchant')
 			puts "500 Internal " + l_food.errors.full_messages unless l_food.errors.messages.empty?
 
 				# remove inactive items from each list
@@ -66,18 +66,21 @@ class ListByStateMakerJob
 			end
 
 				# sort lists alphabetically
+			l.update(active: true) unless l.active
 			l.alphabetize
 
 				# remove lists with 0 merchants
 			if l_golf.total_items == 0
 				l_golf.destroy
 			else
+				l_golf.update(active: true) unless l_golf.active
 				l_golf.alphabetize
 			end
 
 			if l_food.total_items == 0
 				l_food.destroy
 			else
+				l_food.update(active: true) unless l_food.active
 				l_food.alphabetize
 			end
 
