@@ -146,16 +146,11 @@ class List < ActiveRecord::Base
 
 	def alphabetize key=:name
 		# alphabetize any list based on key
-		alph_ary = self.items.sort_by do |i|
-			i.send(key).downcase
-		end
-		h = {}
-		alph_ary.each_with_index do |item, ind|
-			h[item.id] = ind
-		end
-		self.list_graphs.each do |lg|
-			pos = h[lg.item_id]
-			lg.update(position: pos) if lg.position != pos
+		alph_ary = self.items.order(key => :asc)
+
+		alph_ary.each_with_index do |item, num|
+			lg = self.list_graphs.where(item_id: item.id, item_type: item.class.to_s).where.not(position: num).first
+			lg.update(position: num) if lg
 		end
 	end
 
