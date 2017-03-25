@@ -66,21 +66,21 @@ class ListByStateMakerJob
 			end
 
 				# sort lists alphabetically
-			l.update(active: true) unless l.active
+			l.update(active: true) if !l.active
 			l.alphabetize
 
 				# remove lists with 0 merchants
 			if l_golf.total_items == 0
 				l_golf.destroy
 			else
-				l_golf.update(active: true) unless l_golf.active
+				l_golf.update(active: true) if !l_golf.active
 				l_golf.alphabetize
 			end
 
 			if l_food.total_items == 0
 				l_food.destroy
 			else
-				l_food.update(active: true) unless l_food.active
+				l_food.update(active: true) if !l_food.active
 				l_food.alphabetize
 			end
 

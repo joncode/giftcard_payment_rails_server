@@ -150,8 +150,8 @@ class List < ActiveRecord::Base
 			i.send(key).downcase
 		end
 		h = {}
-		alph_ary.each_with_index do |item, pos|
-			h[item.id] = pos
+		alph_ary.each_with_index do |item, ind|
+			h[item.id] = ind
 		end
 		self.list_graphs.each do |lg|
 			pos = h[lg.item_id]
