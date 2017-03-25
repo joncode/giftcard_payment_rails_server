@@ -159,6 +159,18 @@ class List < ActiveRecord::Base
 		end
 	end
 
+	def remove_inactive_items
+		self.list_graphs.each do |lg|
+				# ducktype method
+			list_item = lg.item
+			if list_item.nil? || list_item.active_live?
+				lg.destroy
+			end
+		end
+		self
+	end
+
+
 #   -------------
 
 	def list_id

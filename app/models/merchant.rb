@@ -141,7 +141,7 @@ class Merchant < ActiveRecord::Base
     end
 
     def active_live?
-        self.active && self.mode == "live"
+        self.active && self.mode == "live" && !self.zip.match('11111')
     end
 
     def mode

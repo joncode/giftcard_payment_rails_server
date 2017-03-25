@@ -6,7 +6,10 @@ class ListByStateMakerJob
 		puts "ListByStateMakerJob START"
 		mhsh = {}
 		nona = []
+		# get all active live merchant in batches
 		ms = M.where(active: true, live: true, paused: false).find_each do |m|
+
+			# skip bad zips
 			next if m.zip.match '11111'
 			if CANADIAN_HSH[m.state].present?
 				# Canadian merchant
@@ -28,28 +31,46 @@ class ListByStateMakerJob
 
 		mhsh.each do | k , v |
 
+			# k = state abbreviation
+			# value = { country: 'US', type: 'state' , abbr: m.state, name: USA_HSH[m.state], ms: [] }
+
+			# get full state list
 			name = "#{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
 			l = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
-			puts l.errors.messages
+			puts "500 Internal " + l.errors.messages
 
-			l.list_graphs.each do |lg|
-				m = lg.item
-				if m.nil? || !m.active || !m.live || m.paused || m.zip.match('11111')
-					lg.destroy
-				end
-			end
+			name = "Golf - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
+			l_golf = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
+			puts "500 Internal " + l_golf.errors.messages
+
+			name = "Restaurants - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
+			l_food = List.find_or_create_by( name: name, item_type: 'merchant', active: true )
+			puts "500 Internal " + l_food.errors.messages
+
+				# remove inactive items from each list
+			l.remove_inactive_items
+			l_golf.remove_inactive_items
+			l_food.remove_inactive_items
 
 			ms = v[:ms]
 			ms.sort_by! {|m| m.name }
 
 			ms.each do |m|
-				lg = ListGraph.new(item_id: m.id, item_type: m.class.to_s)
-				l.list_graphs << lg
+					# model prevents duplicates
+				l.items << m
+				if m.affiliate_id == 31
+					l_golf.items << m
+				else
+					l_food.items << m
+				end
 			end
 
 			l.alphabetize
+			l_golf.alphabetize
+			l_food.alphabetize
 
 		end; nil
+
 		puts "ListByStateMakerJob END"
 	end
 
@@ -89,7 +110,7 @@ class ListByStateMakerJob
 
 		# get the current merchant list and the menu item lists
 		l1 = List.where(token: 'recent-merchant-monthly')
-		l2 = List.where(token: 'recent-mennu-items-monthly')
+		l2 = List.where(token: 'recent-menu-items-monthly')
 		# loop thru mhsh & item_hsh and sort by the :val amount
 
 		l1.list_graphs.destroy_all
