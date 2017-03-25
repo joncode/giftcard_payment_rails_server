@@ -70,13 +70,13 @@ class ListByStateMakerJob
 
 				# remove lists with 0 merchants
 			if l_golf.total_items == 0
-				l_golf.toggle! :active
+				l_golf.destroy
 			else
 				l_golf.alphabetize
 			end
 
 			if l_food.total_items == 0
-				l_food.toggle! :active
+				l_food.destroy
 			else
 				l_food.alphabetize
 			end
