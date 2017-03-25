@@ -58,7 +58,7 @@ class ListByStateMakerJob
 			ms.each do |m|
 					# model prevents duplicates
 				l.items << m
-				if m.affiliate_id == 31
+				if m.affiliate_id == GOLFNOW_ID
 					l_golf.items << m
 				else
 					l_food.items << m
