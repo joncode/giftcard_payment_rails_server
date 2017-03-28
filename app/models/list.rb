@@ -195,7 +195,6 @@ class List < ActiveRecord::Base
 		self.photo
 	end
 
-
 private
 
 	def set_token_from_name

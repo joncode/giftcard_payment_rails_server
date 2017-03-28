@@ -1,5 +1,5 @@
 class ListByStateMakerJob
-
+	extend Formatters
     @queue = :database
 
 	def self.perform
@@ -36,15 +36,30 @@ class ListByStateMakerJob
 
 			# get full state list
 			name = "#{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
-			l = List.find_or_create_by( name: name, item_type: 'merchant' )
+			token = make_slug(name)
+			l = List.find_by( token: token, item_type: 'merchant' )
+			if l.blank?
+				l = List.new(name: name, item_type: 'merchant')
+				l.save
+			end
 			puts "500 Internal " + l.errors.full_messages unless l.errors.messages.empty?
 
 			name = "Golf - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
-			l_golf = List.find_or_create_by( name: name, item_type: 'merchant')
+			token = make_slug(name)
+			l_golf = List.find_by( token: token, item_type: 'merchant')
+			if l_golf.blank?
+				l_golf = List.new(name: name, item_type: 'merchant')
+				l_golf.save
+			end
 			puts "500 Internal " + l_golf.errors.full_messages unless l_golf.errors.messages.empty?
 
 			name = "Restaurants - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
-			l_food = List.find_or_create_by( name: name, item_type: 'merchant')
+			token = make_slug(name)
+			l_food = List.find_by( token: token, item_type: 'merchant')
+			if l_food.blank?
+				l_food = List.new(name: name, item_type: 'merchant')
+				l_food.save
+			end
 			puts "500 Internal " + l_food.errors.full_messages unless l_food.errors.messages.empty?
 
 				# remove inactive items from each list
