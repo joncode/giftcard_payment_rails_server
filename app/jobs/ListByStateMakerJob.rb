@@ -41,26 +41,34 @@ class ListByStateMakerJob
 			if l.blank?
 				l = List.new(name: name, item_type: 'merchant')
 				l.save
-				l.update_column(:name, v[:name].capitalize + ", #{v[:country]}")
+			end
+			if l.name == name
+				l.update_column(:name, "#{v[:country]} - " + v[:name].capitalize)
 			end
 			puts "500 Internal " + l.errors.full_messages unless l.errors.messages.empty?
 
+			# get golf list
 			name = "Golf - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
 			token = make_slug(name)
 			l_golf = List.find_by( token: token, item_type: 'merchant')
 			if l_golf.blank?
 				l_golf = List.new(name: name, item_type: 'merchant')
 				l_golf.save
+			end
+			if l_golf.name == name
 				l_golf.update_column(:name, v[:name].capitalize + ' Courses')
 			end
 			puts "500 Internal " + l_golf.errors.full_messages unless l_golf.errors.messages.empty?
 
+			# get restaurant list
 			name = "Restaurants - #{v[:country]} #{v[:type].capitalize} - #{v[:name]}"
 			token = make_slug(name)
 			l_food = List.find_by( token: token, item_type: 'merchant')
 			if l_food.blank?
 				l_food = List.new(name: name, item_type: 'merchant')
 				l_food.save
+			end
+			if l_food.name == name
 				l_food.update_column(:name, v[:name].capitalize + ' Restaurants')
 			end
 			puts "500 Internal " + l_food.errors.full_messages unless l_food.errors.messages.empty?
