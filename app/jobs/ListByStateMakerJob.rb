@@ -43,7 +43,7 @@ class ListByStateMakerJob
 				l.save
 			end
 			if l.name == name
-				l.update_column(:name, "#{v[:country]} - " + v[:name].capitalize)
+				l.update_column(:name, "#{v[:country]} - " + v[:name].titleize)
 			end
 			puts "500 Internal " + l.errors.full_messages unless l.errors.messages.empty?
 
@@ -56,7 +56,7 @@ class ListByStateMakerJob
 				l_golf.save
 			end
 			if l_golf.name == name
-				l_golf.update_column(:name, v[:name].capitalize + ' Courses')
+				l_golf.update_column(:name, v[:name].titleize + ' Courses')
 			end
 			puts "500 Internal " + l_golf.errors.full_messages unless l_golf.errors.messages.empty?
 
@@ -69,7 +69,7 @@ class ListByStateMakerJob
 				l_food.save
 			end
 			if l_food.name == name
-				l_food.update_column(:name, v[:name].capitalize + ' Restaurants')
+				l_food.update_column(:name, v[:name].titleize + ' Restaurants')
 			end
 			puts "500 Internal " + l_food.errors.full_messages unless l_food.errors.messages.empty?
 
