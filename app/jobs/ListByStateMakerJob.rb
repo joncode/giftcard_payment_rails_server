@@ -41,6 +41,7 @@ class ListByStateMakerJob
 			if l.blank?
 				l = List.new(name: name, item_type: 'merchant')
 				l.save
+				l.update_column(:name, v[:name].capitalize + ", #{v[:country]}")
 			end
 			puts "500 Internal " + l.errors.full_messages unless l.errors.messages.empty?
 
@@ -50,6 +51,7 @@ class ListByStateMakerJob
 			if l_golf.blank?
 				l_golf = List.new(name: name, item_type: 'merchant')
 				l_golf.save
+				l_golf.update_column(:name, v[:name].capitalize + ' Courses')
 			end
 			puts "500 Internal " + l_golf.errors.full_messages unless l_golf.errors.messages.empty?
 
@@ -59,6 +61,7 @@ class ListByStateMakerJob
 			if l_food.blank?
 				l_food = List.new(name: name, item_type: 'merchant')
 				l_food.save
+				l_food.update_column(:name, v[:name].capitalize + ' Restaurants')
 			end
 			puts "500 Internal " + l_food.errors.full_messages unless l_food.errors.messages.empty?
 
