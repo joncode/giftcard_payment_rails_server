@@ -680,9 +680,18 @@ private
 
 	def add_giver_name
         if self.giver_name.blank?
-    		if giver = User.find(self.giver_id)
-    			self.giver_name = giver.username
-    		end
+    		g = self.giver
+            if g.respond_to?(:username)
+                self.giver_name = giver.username
+            elsif g.respond_to?(:fullname)
+                self.giver_name = giver.fullname
+            elsif g.respond_to?(:name)
+                self.giver_name = giver.name
+            elsif g.respond_to?(:venue_name)
+    			self.giver_name = giver.venue_name
+            else
+                self.giver_name = "ItsOnMe Group"
+            end
         end
 	end
 
