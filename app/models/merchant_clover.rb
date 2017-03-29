@@ -49,7 +49,7 @@ class MerchantClover
 
 	def self.init signup
 		m = Merchant.new
-		m.name = signup.data['name']
+		m.name = signup.data['name'].titleize if signup.data['name'].kind_of?(String)
 		m.phone = signup.data['phone']
 		m.email = signup.data['email']
 		m.signup_email = signup.data['email']
