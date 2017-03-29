@@ -70,7 +70,6 @@ private
 		args = {}
 		proto_join.convert_to_gift_receiver(args)
 
-		args['giver']         = proto.giver
 		if individual_item_hsh.present?
 			args['cost']          = individual_item_hsh[:cost]
 			args['value']         = individual_item_hsh[:value]
@@ -84,6 +83,7 @@ private
 		end
 
 		args['giver']         = proto.giver
+		args['giver_name'] = proto.giver_name
 		args['merchant_id']   = proto.merchant_id
 		args['provider_name'] = proto.provider_name
 
