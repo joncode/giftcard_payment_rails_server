@@ -26,7 +26,7 @@ class GiftPromoCode
                         end
                     end
                 else
-                    fail_msg = "we're sorry but this promo has reached capacity and is no longer live"
+                    fail_msg = proto.gifting_fail_msg
                 end
             end
             if gifts.empty?

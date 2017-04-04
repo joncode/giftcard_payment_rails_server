@@ -34,6 +34,18 @@ class Proto < ActiveRecord::Base
 
 #   -------------
 
+	def gifting_fail_msg
+		return "we're sorry but this promo is no longer active" if !self.active
+		return "we're sorry but this promo is no longer live" if !self.live
+		if (!self.expires_at.nil? && (DateTime.now.utc > self.expires_at))
+			return "we're sorry but this promo has expired"
+		end
+		if (!self.maximum.nil? && (self.processed >= self.maximum))
+			return "we're sorry but this promo has reached capacity and is no longer live"
+		end
+		return "we're sorry but this promo has reached capacity and is no longer live"
+	end
+
 	def gifting?
 		return false unless self.active
 		return false unless self.live
