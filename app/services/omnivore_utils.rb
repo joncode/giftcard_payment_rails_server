@@ -103,9 +103,10 @@ module OmnivoreUtils
 
     def get resource, obj_id=nil, meth=nil
         begin
-            obj_id = obj_id.present? ? (obj_id + "/") : nil
+            o_slsh = obj_id.present? ? '/' : ''
+            m_slsh = meth.present? ? '/' : ''
             response = RestClient.get(
-                "#{OMNIVORE_V1_API_URL}/#{resource}/#{obj_id}#{meth}",
+                "#{OMNIVORE_V1_API_URL}/#{resource}#{o_slsh}#{obj_id}#{m_slsh}#{meth}",
                 {:content_type => :json, accept: :json, :'Api-Key' => OMNIVORE_API_KEY }
             )
             resp = JSON.parse response
