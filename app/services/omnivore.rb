@@ -323,7 +323,7 @@ class Omnivore
 	end
 
 	def get_paginated_tickets
-		@next = @next.split('tickets/')[1]
+		@next = @next.split('tickets/')[1] if @next.kind_of?(String)
 		begin
 			puts @next.inspect
 			response = RestClient.get(
