@@ -288,9 +288,9 @@ class Omnivore
 
 		begin
 			response = RestClient.post(
-			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@ticket_id}/payments/",
+			    "#{OMNIVORE_V1_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@ticket_id}/payments/",
 			    payload,
-			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			    { :content_type => :json, accept: :json, :'Api-Key' => OMNIVORE_API_KEY }
 			)
 			@json = JSON.parse(response)
 			# puts r.inspect
@@ -327,8 +327,8 @@ class Omnivore
 		begin
 			puts @next.inspect
 			response = RestClient.get(
-			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@next}",
-			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			    "#{OMNIVORE_V1_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@next}",
+			    { :content_type => :json, accept: :json, :'Api-Key' => OMNIVORE_API_KEY }
 			)
 			resp = JSON.parse(response)
 			if resp.kind_of?(Hash) && resp["_embedded"].present? && resp["_embedded"]["tickets"].present?
@@ -370,8 +370,8 @@ class Omnivore
 	def get_tickets_at_location loc_id=@pos_merchant_id
 		begin
 			response = RestClient.get(
-			    "#{POSITRONICS_API_URL}/locations/#{loc_id}/tickets?where=eq(open,true)",
-			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			    "#{OMNIVORE_V1_API_URL}/locations/#{loc_id}/tickets?where=eq(open,true)",
+			    { :content_type => :json, accept: :json, :'Api-Key' => OMNIVORE_API_KEY }
 			)
 			JSON.parse(response)
 		rescue => e
@@ -393,8 +393,8 @@ class Omnivore
 
         begin
             response = RestClient.get(
-                "#{POSITRONICS_API_URL}/#{resource}/#{obj_id}#{meth}",
-                {:content_type => :json, :'Api-Key' =>  POSITRONICS_API_KEY }
+                "#{OMNIVORE_V1_API_URL}/#{resource}/#{obj_id}#{meth}",
+                { :content_type => :json, accept: :json, :'Api-Key' => OMNIVORE_API_KEY }
             )
             r = JSON.parse(response)
             # puts r.inspect + "\n ^^^ utils get"

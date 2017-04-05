@@ -105,13 +105,13 @@ module OmnivoreUtils
         begin
             obj_id = obj_id.present? ? (obj_id + "/") : nil
             response = RestClient.get(
-                "#{POSITRONICS_API_URL}/#{resource}/#{obj_id}#{meth}",
-                {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+                "#{OMNIVORE_V1_API_URL}/#{resource}/#{obj_id}#{meth}",
+                {:content_type => :json, accept: :json, :'Api-Key' => OMNIVORE_API_KEY }
             )
             resp = JSON.parse response
             return { status: 1, data: resp }
         rescue => e
-            puts "\n\OmnivoreUtils Error code = #{e.inspect}\n\n"
+            puts "\n\OmnivoreUtils 114 Error code = #{e.inspect}\n\n"
             if e.nil?
                 response = { "response_code" => "ERROR", "response_text" => 'Contact Support', "code" => 400, "data" => [] }
                 return { status: 0, data: response, res: response }

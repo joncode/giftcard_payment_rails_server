@@ -127,6 +127,16 @@ else
     ENV['NEXT_GEN_PASS']
 end
 
+############  OMNIVORE CONSTANTS
+
+OMNIVORE_V1_API_URL = "https://api.omnivore.io/1.0"
+
+OMNIVORE_API_KEY = if local_env
+    '203d714b6a3642379ce7ccbabe4e9926'
+else
+    ENV['OMNIVORE_API_KEY']
+end
+
 POSITRONICS_API_KEY = if local_env
     '203d714b6a3642379ce7ccbabe4e9926'
 else
@@ -134,6 +144,8 @@ else
 end
 
 POSITRONICS_API_URL = "https://api.omnivore.io/0.1"
+
+############  ----------------
 
 REDBULL_TOKEN = if local_env
      "O0LgUixWOE7Dec1Y_INA6Q"
