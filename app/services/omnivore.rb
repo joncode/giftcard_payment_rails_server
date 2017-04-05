@@ -272,7 +272,7 @@ class Omnivore
 			"amount" => @applied_value,
 			"tip" => 0,
 			"tender_type" => @tender_type_id,
-			"payment_source" => @gift_card_id
+			"comment" => @gift_card_id
 		}
 		if ['8crEn8T9'].include?(@pos_merchant_id)
 			h['auto_close'] = false
@@ -463,9 +463,13 @@ class Omnivore
 		puts r.inspect
 		if @code == 200
 	        items =  r["_embedded"]["menu_items"].map do |m|
-	        	if m['price'].to_i > 0
+	        	if m['price_per_unit'].to_i > 0
+		            mi = { name: m["name"], price: m["price_per_unit"], pos_menu_item_id: m["id"] }
+		            puts "\n OM 468 price_per_unit here #{mi.inspect}"
+		            mi
+		        elsif m['price'].to_i > 0
 		            mi = { name: m["name"], price: m["price"], pos_menu_item_id: m["id"] }
-		            puts "\nhere #{mi.inspect}"
+		            puts "\n OM 472 price here #{mi.inspect}"
 		            mi
 		        else
 		        	nil
