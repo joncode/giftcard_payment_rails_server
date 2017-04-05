@@ -132,7 +132,7 @@ end
 OMNIVORE_V1_API_URL = "https://api.omnivore.io/1.0"
 
 OMNIVORE_API_KEY = if local_env
-    '203d714b6a3642379ce7ccbabe4e9926'
+    '927fb54708bd4176b2a2e6d05609cbbc'
 else
     ENV['OMNIVORE_API_KEY']
 end
