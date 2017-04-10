@@ -222,6 +222,18 @@ class Web::V3::CloverController < MetalCorsController
 
 	end
 
+
+
+	# redemptions: []
+	# [{
+	# 	index_id, item_id, price, quantity, item_name
+	# }]
+
+
+	# [{
+	# 	index_id, item_id, amount_applied (reflects quantity)
+	# }]
+
 		# x = rand(5)
 		# case x
 		# when 0

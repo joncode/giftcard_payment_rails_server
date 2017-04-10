@@ -1,6 +1,7 @@
 class MenuItem < ActiveRecord::Base
 	include ShortenPhotoUrlHelper
     include Formatters
+    include MoneyHelper
 
 #   -------------
 
@@ -10,6 +11,8 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
+    before_save :set_cents
+
 	after_save :set_token
 
 #   -------------
@@ -18,6 +21,22 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
+    def price
+        puts 'PRICE WRAP'
+        str = display_money(cents: self.price_cents)
+        if price_o != str
+            puts "PRICE INCORRECT #{str} != #{price_o} 500 Internal "
+        end
+        str
+    end
+
+    def price_o
+        self.read_attribute(:price)
+    end
+
+    def price_s
+        display_money(cents: self.price_cents, ccy: self.ccy, delimiter: ',')
+    end
 
 	def self.get_voucher_for_amount(menu_id, amount='40')
 		voucher_section = Section.get_voucher(menu_id)
@@ -100,6 +119,14 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
+    def owner
+        if mi = self.menu
+            mi.owner
+        else
+            nil
+        end
+    end
+
     def owner_type
     	if o = owner
     		o.class.name
@@ -110,14 +137,6 @@ class MenuItem < ActiveRecord::Base
     	if o = owner
     		o.id
     	end
-    end
-
-    def owner
-        if mi = self.menu
-            mi.owner
-        else
-            nil
-        end
     end
 
     def owner_name
@@ -139,9 +158,17 @@ class MenuItem < ActiveRecord::Base
 #   -------------
 
     def set_token
-        if self.token.nil?
+        if self.token.nil? || (self.token != make_slug("#{self.id}-#{self.name}"))
             self.update_column(:token, make_slug("#{self.id}-#{self.name}"))
         end
+    end
+
+    def set_cents
+        self.price_cents = currency_to_cents self.price
+        if self.price_promo.blank?
+            self.price_promo = nil
+        end
+        self.price_promo_cents = currency_to_cents self.price_promo
     end
 
 end

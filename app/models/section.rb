@@ -22,6 +22,10 @@ class Section < ActiveRecord::Base
 
     has_many   :menu_items, dependent: :destroy
 
+    def items
+        menu_items
+    end
+
     belongs_to :menu
 
 #	-------------

@@ -3,7 +3,7 @@ class Menu < ActiveRecord::Base
     has_many    :sections, 	dependent: :destroy
     belongs_to  :merchant
 
-    validates_presence_of   :owner_id, :owner_type
+    validates_presence_of :owner_id, :owner_type
 
     after_create :make_sections
 
@@ -11,11 +11,11 @@ class Menu < ActiveRecord::Base
         self.owner_type.constantize.find(self.owner_id)
     end
 
-    MENU_SECTIONS_INIT   = ["Gifting Menu", "Gift Vouchers"]
+    MENU_SECTIONS_INIT = ["Gifting Menu", "Gift Vouchers"]
 
 #   -------------
 
-    attr_accessor :ccy
+    attr_writer :ccy
     def ccy
         @ccy || self.owner.ccy
     end
