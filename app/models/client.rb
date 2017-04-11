@@ -104,6 +104,10 @@ AND #{content_symbol}.id = contents.content_id"
 
 #	-------------  CLASS METHODS
 
+	def self.booking(book_id)
+		where(data_id: book_id, data_type: 8).first
+	end
+
 	def self.legacy_client platform=nil, agent_str=''
         if platform == 'android' || agent_str.match(/Android/)
             find(ANDROID_CLIENT_ID)
@@ -129,7 +133,9 @@ AND #{content_symbol}.id = contents.content_id"
 		menu_widget.where(active: true).where(sql)
 	end
 
+
 private
+
 
 	def create_unique_application_key
 		self.application_key = create_session_token

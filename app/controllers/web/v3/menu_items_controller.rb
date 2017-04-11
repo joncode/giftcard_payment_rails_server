@@ -19,4 +19,16 @@ class Web::V3::MenuItemsController < MetalCorsController
         respond
     end
 
+    def book
+        book = Book.find_with_token(params[:id])
+
+        if book.kind_of?(Book)
+            success book.list_serialize
+        else
+            fail_web({ err: "INVALID_INPUT", msg: "Menu Item could not be found"})
+        end
+
+        respond
+    end
+
 end

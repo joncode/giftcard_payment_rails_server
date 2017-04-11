@@ -184,7 +184,11 @@ Drinkboard::Application.routes.draw do
 			end
 
 			resources :lists, only: [ :index, :show ]
-			resources :menu_items, only: [ :show ]
+			resources :menu_items, only: [ :show ] do
+				member do
+					get :book
+				end
+			end
 
 			resources :merchants, only: [:index, :show] do
 				member do
