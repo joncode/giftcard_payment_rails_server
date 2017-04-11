@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170320211220) do
+ActiveRecord::Schema.define(version: 20170410224122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,6 +232,24 @@ ActiveRecord::Schema.define(version: 20170320211220) do
   end
 
   add_index "banks", ["merchant_id"], name: "index_banks_on_merchant_id", using: :btree
+
+  create_table "books", force: :cascade do |t|
+    t.boolean  "active",       default: true
+    t.string   "name"
+    t.string   "zinger"
+    t.text     "detail"
+    t.text     "notes"
+    t.json     "members"
+    t.json     "photos"
+    t.integer  "advance_days"
+    t.integer  "min_ppl"
+    t.integer  "max_ppl"
+    t.string   "ccy"
+    t.integer  "price"
+    t.integer  "price_wine"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
 
   create_table "boomerangs", force: :cascade do |t|
   end
