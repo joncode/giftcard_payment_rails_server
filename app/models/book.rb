@@ -47,10 +47,18 @@ class Book < ActiveRecord::Base
    		}
     end
 
+    def prices_serialize
+    	[
+    		{ price: self.price, ccy: self.ccy, title: 'Price without Wine'},
+    		{ price: self.price_wine, ccy: self.ccy, title: 'Price with Wine'}
+    	]
+    end
+
     def list_serialize
     	h = basic_serialize
-    	h.merge!(self.photos)
-    	h.merge!(self.members)
+    	h[:photos] = photos_serialize
+    	h[:members] = members_serialize
+    	h[:prices] = prices_serialize
     	h
     end
 
@@ -164,6 +172,14 @@ class Book < ActiveRecord::Base
 		set_member_key 'other', str
 	end
 
+	def members_serialize
+		ps = self.members
+		ary = []
+		ps.each do |k,v|
+			ary << { name: v, title: k.titleize }
+		end
+		ary
+	end
 
 # ---------------
 
@@ -190,6 +206,15 @@ class Book < ActiveRecord::Base
 			h[key] = photo_url
 		end
 		self.photos = h
+	end
+
+	def photos_serialize
+		ps = self.photos
+		ary = []
+		ps.each do |k,v|
+			ary << { url: v, detail: "#{k} detail" }
+		end
+		ary
 	end
 
 	def photo1
