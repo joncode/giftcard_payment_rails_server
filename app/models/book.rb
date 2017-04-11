@@ -38,7 +38,7 @@ class Book < ActiveRecord::Base
 	    	# owner_type: self.owner_type, owner_id: self.owner_id,
 	    	# owner: self.owner_list_serialize,
 	     		# LIST META DATA
-	    	type: 'book', id: self.id, active: self.active,
+	    	type: 'book', id: self.id, active: self.active, token: token,
 	    	href: itsonme_url, api_url: api_url, shop_url: shop_url,
 	        	# LIST PRESENTATION DATA
 	    	name: self.name, zinger: self.zinger, detail: self.detail, notes: self.notes,
@@ -59,11 +59,11 @@ class Book < ActiveRecord::Base
     end
 
     def api_url
-    	"#{APIURL}/menu_items/#{self.token}/book"
+    	"#{APIURL}/menu_items/#{token}/book"
     end
 
     def itsonme_url
-        "#{CLEAR_CACHE}/share/menu_items/#{self.token}/book"
+        "#{CLEAR_CACHE}/share/menu_items/#{token}/book"
     end
 
     def get_photo

@@ -87,7 +87,7 @@ class MenuItem < ActiveRecord::Base
 	    	owner_type: self.owner_type, owner_id: self.owner_id,
 	    	owner: self.owner_list_serialize,
 	     		# LIST META DATA
-	    	type: 'menu_item', id: self.id, active: self.active,
+	    	type: 'menu_item', id: self.id, active: self.active, token: self.token,
 	    	href: itsonme_url, api_url: api_url, shop_url: shop_url,
 	        	# LIST PRESENTATION DATA
 	    	name: self.name, zinger: self.section_name, detail: self.detail,
