@@ -12,6 +12,18 @@ class Book < ActiveRecord::Base
 		:photo1, :photo2, :photo3, :photo4
 
 
+	def self.statuses
+		['live', 'coming_soon']
+	end
+
+	def status= str
+		str = str.to_s
+		if Book.statuses.include?(str)
+			super(str)
+		else
+			puts "Status is not available - try Book.statuses for options"
+		end
+	end
 
     def ccy
     	super || 'USD'
@@ -38,7 +50,8 @@ class Book < ActiveRecord::Base
 	    	# owner_type: self.owner_type, owner_id: self.owner_id,
 	    	# owner: self.owner_list_serialize,
 	     		# LIST META DATA
-	    	type: 'book', id: self.id, active: self.active, token: token,
+	    	type: 'book', id: self.id, token: token,
+	    	active: self.active, status: self.status,
 	    	href: itsonme_url, api_url: api_url, shop_url: shop_url,
 	        	# LIST PRESENTATION DATA
 	    	name: self.name, zinger: self.zinger, detail: self.detail, notes: self.notes,
