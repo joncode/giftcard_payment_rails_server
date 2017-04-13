@@ -21,14 +21,14 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
-    def price
-        puts 'PRICE WRAP'
-        str = display_money(cents: self.price_cents)
-        if price_o != str
-            puts "PRICE INCORRECT #{str} != #{price_o} 500 Internal "
-        end
-        str
-    end
+    # def price
+    #     puts 'PRICE WRAP'
+    #     str = display_money(cents: self.price_cents)
+    #     if price_o != str
+    #         puts "PRICE INCORRECT #{str} != #{price_o} 500 Internal "
+    #     end
+    #     str
+    # end
 
     def price_o
         self.read_attribute(:price)
@@ -165,7 +165,7 @@ class MenuItem < ActiveRecord::Base
 
     def set_cents
         if self.price_cents.blank?
-            self.price_cents = currency_to_cents self.price_o
+            self.price_cents = currency_to_cents self.price
         end
         if self.price_promo.blank?
             self.price_promo = nil
