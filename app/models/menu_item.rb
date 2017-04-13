@@ -164,11 +164,16 @@ class MenuItem < ActiveRecord::Base
     end
 
     def set_cents
-        self.price_cents = currency_to_cents self.price
+        if self.price_cents.blank?
+            self.price_cents = currency_to_cents self.price_o
+        end
         if self.price_promo.blank?
             self.price_promo = nil
+            self.price_promo_cents = nil
         end
-        self.price_promo_cents = currency_to_cents self.price_promo
+        if self.price_promo_cents.blank? && !self.price_promo.blank?
+            self.price_promo_cents = currency_to_cents self.price_promo
+        end
     end
 
 end
