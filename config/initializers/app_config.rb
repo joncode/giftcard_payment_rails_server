@@ -34,6 +34,24 @@ class Object
 end
 
 
+class Array
+
+    def pattr *args
+        if self.count > 0
+            self.map do |obj|
+                x = "ID = #{obj.id}"
+                args.each do |attribute|
+                    x += " | #{attribute} = #{obj.send(attribute)}"
+                end
+                puts x
+            end
+        else
+            puts "No Items in array"
+        end
+        nil
+    end
+end
+
 
 class ActiveSupport::TimeWithZone
 
