@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170412235521) do
+ActiveRecord::Schema.define(version: 20170418205758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -370,6 +370,8 @@ ActiveRecord::Schema.define(version: 20170412235521) do
     t.string   "stripe_id"
     t.string   "address"
     t.text     "resp_json"
+    t.string   "term"
+    t.integer  "amount"
   end
 
   add_index "cards", ["active"], name: "index_cards_on_active", using: :btree
