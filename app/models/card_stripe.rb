@@ -84,6 +84,7 @@ class CardStripe < ActiveRecord::Base
         card.user_id = cc_hash['user_id']
         card.term = cc_hash['term']
         card.amount = cc_hash['amount']
+        card.ccy = 'USD' if card.amount.present?
 		card
 	end
 

@@ -5,6 +5,7 @@ A = Affiliate
 AL = Alert
 AC = AlertContact
 AM = AlertMessage
+BG = Booking
 BK = Book
 BN = Bank
 CR = Card
