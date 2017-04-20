@@ -13,7 +13,7 @@ module MoneyHelper
 			# no cents
 			"#{dollars.to_i.to_words.titleize} #{CCY[ccy]['name'].pluralize(dollars.to_i)}"
 		else
-			ary = flo.to_s.split(CCY[ccy]["decimal_mark"])
+			ary = dollars.to_s.split(CCY[ccy]["decimal_mark"])
 			dollars = ary[0].to_i
 			cents = ary[1].to_i
 			"#{dollars.to_words.titleize} #{CCY[ccy]['name'].pluralize(dollars)} & #{cents.to_words.titleize} #{CCY[ccy]['subunit'].pluralize(cents)}"

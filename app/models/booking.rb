@@ -2,12 +2,18 @@ class Booking < ActiveRecord::Base
 	include AuditTrail
 	include MoneyHelper
 
+	auto_strip_attributes :name, :email, :phone, :note
+
 #   -------------
 
 
     before_save :set_unique_hex_id, on: :create
     before_save :set_default_dates, on: :create
     before_save :set_default_payment, on: :create
+
+#   -------------
+
+	belongs_to :book
 
 #   -------------
 
