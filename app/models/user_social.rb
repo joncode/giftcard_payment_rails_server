@@ -125,7 +125,7 @@ class UserSocial < ActiveRecord::Base
     end
 
     def self.double_check_incomplete_gifts
-        uss = UserSocial.where("updated_at > ?", 31.minutes.ago).find_each do |us|
+        UserSocial.where("updated_at > ?", 31.minutes.ago).find_each do |us|
             CollectIncompleteGiftsV2Job.perform(us.id)
         end
     end
