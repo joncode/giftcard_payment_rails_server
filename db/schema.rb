@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170419012958) do
+ActiveRecord::Schema.define(version: 20170426003742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -245,8 +245,14 @@ ActiveRecord::Schema.define(version: 20170419012958) do
     t.integer  "book_id"
     t.integer  "price_unit"
     t.text     "note"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "link_id"
+    t.string   "status",     default: "no_date"
+    t.string   "origin"
+    t.datetime "date1"
+    t.datetime "date2"
+    t.datetime "event_at"
   end
 
   create_table "books", force: :cascade do |t|
@@ -266,6 +272,7 @@ ActiveRecord::Schema.define(version: 20170419012958) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.string   "status",       default: "coming_soon"
+    t.integer  "merchant_id"
   end
 
   create_table "boomerangs", force: :cascade do |t|

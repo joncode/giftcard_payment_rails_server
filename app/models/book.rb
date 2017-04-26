@@ -47,8 +47,9 @@ class Book < ActiveRecord::Base
     def basic_serialize
 		{
 	    		# LIST OWNER DATA
-	    	# owner_type: self.owner_type, owner_id: self.owner_id,
-	    	# owner: self.owner_list_serialize,
+	    	owner_type: 'Merchant',
+	    	owner_id: self.merchant_id,
+	        owner: self.merchant.list_serialize,
 	     		# LIST META DATA
 	    	type: 'book', id: self.id, token: token,
 	    	active: self.active, status: self.status,
@@ -56,8 +57,7 @@ class Book < ActiveRecord::Base
 	        	# LIST PRESENTATION DATA
 	    	name: self.name, zinger: self.zinger, detail: self.detail, notes: self.notes,
 	        photo: self.get_photo, ccy: self.ccy, price: self.price, price_wine: self.price_wine,
-	        advance_days: self.advance_days, min_ppl: self.min_ppl, max_ppl: self.max_ppl,
-	        merchant: { name: 'Merchant Name' }
+	        advance_days: self.advance_days, min_ppl: self.min_ppl, max_ppl: self.max_ppl
    		}
     end
 
