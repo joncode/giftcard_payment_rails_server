@@ -6,6 +6,8 @@ class Book < ActiveRecord::Base
 
 	validates_presence_of :name
 
+	belongs_to :merchant
+
 	before_save :tighten_up_json
 
 	attr_accessor :price_dollars, :price_wine_dollars, :chef, :sommelier, :general_manager, :other,
@@ -44,12 +46,18 @@ class Book < ActiveRecord::Base
 
 # ---------------
 
+	def merchant_list_serialize
+		m = self.merchant
+		return { name: 'Merchant Name' } if m.nil?
+		m
+	end
+
     def basic_serialize
 		{
 	    		# LIST OWNER DATA
 	    	owner_type: 'Merchant',
 	    	owner_id: self.merchant_id,
-	        owner: self.merchant.list_serialize,
+	        owner: merchant_list_serialize,
 	     		# LIST META DATA
 	    	type: 'book', id: self.id, token: token,
 	    	active: self.active, status: self.status,
