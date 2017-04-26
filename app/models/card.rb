@@ -25,7 +25,6 @@ class Card < ActiveRecord::Base
  	before_validation :convert_number_to_string
 	before_validation :save_last_four
 	before_validation :upcase_zip
-	before_validation :set_nickname
 
 #   -------------
 
@@ -38,6 +37,7 @@ class Card < ActiveRecord::Base
 #   -------------
 
 	before_create :send_to_stripe
+	before_create :set_nickname
 	before_save :crypt_number
 
 	# after_create :tokenize_card

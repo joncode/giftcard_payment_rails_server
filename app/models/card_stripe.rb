@@ -8,7 +8,7 @@ class CardStripe < ActiveRecord::Base
 
 #	-------------
 
-	before_validation :set_nickname
+	before_create :set_nickname
 
 	before_save :send_to_stripe
 
