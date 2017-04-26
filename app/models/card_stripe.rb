@@ -8,6 +8,8 @@ class CardStripe < ActiveRecord::Base
 
 #	-------------
 
+	before_validation :set_nickname
+
 	before_save :send_to_stripe
 
 #	-------------
@@ -89,7 +91,11 @@ class CardStripe < ActiveRecord::Base
 		card
 	end
 
-
+   	def set_nickname
+   		if self.nickname.blank?
+   			self.nickname = "#{self.brand} - #{self.last_four}"
+   		end
+   	end
 
 
 end

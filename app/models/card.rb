@@ -25,6 +25,7 @@ class Card < ActiveRecord::Base
  	before_validation :convert_number_to_string
 	before_validation :save_last_four
 	before_validation :upcase_zip
+	before_validation :set_nickname
 
 #   -------------
 
@@ -371,6 +372,13 @@ private
 	   		self.zip = self.zip.upcase
 	   	end
    	end
+
+   	def set_nickname
+   		if self.nickname.blank?
+   			self.nickname = "#{self.brand} - #{self.last_four}"
+   		end
+   	end
+
 end
 
 # == Schema Information
