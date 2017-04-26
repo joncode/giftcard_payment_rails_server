@@ -73,6 +73,7 @@ class CardStripe < ActiveRecord::Base
 		card.stripe_id 	= cc_hash["stripe_id"]
 		card.stripe_user_id = cc_hash["stripe_user_id"]
 		card.name 		= cc_hash["name"]
+		card.nickname 	= cc_hash["nickname"]
 		card.zip 		= cc_hash['zip']
 		card.brand 		= cc_hash["brand"]
 		card.csv 		= cc_hash["csv"]
