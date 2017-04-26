@@ -134,6 +134,11 @@ Drinkboard::Application.routes.draw do
 		end
 
 		namespace :v3 do
+			resources :bookings, only: [] do
+				member do
+					post :inquiry
+				end
+			end
 			resources :cards, only: [:create, :index, :destroy]
 			resources :clients, only: [:index, :create]
 			resources :clover, only: [] do
