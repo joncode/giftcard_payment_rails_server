@@ -1,19 +1,134 @@
 class Booking < ActiveRecord::Base
-	include AuditTrail
+	# include AuditTrail
 	include MoneyHelper
 
 	auto_strip_attributes :name, :email, :phone, :note
 
-#   -------------
-
-
-    before_save :set_unique_hex_id, on: :create
-    before_save :set_default_dates, on: :create
-    before_save :set_default_payment, on: :create
 
 #   -------------
 
 	belongs_to :book
+
+	attr_accessor :time1, :time2
+
+#   -------------
+
+    before_save :set_unique_hex_id, on: :create
+    before_save :set_status
+
+#   -------------
+
+    def time1
+		s = self.date1
+		if s.respond_to?(:to_formatted_s)
+			x = s.to_formatted_s(:only_time)
+			x.gsub!(':00','')
+			x.strip
+		else
+			s
+		end
+    end
+
+    def time2
+		s = self.date2
+		if s.respond_to?(:to_formatted_s)
+			x = s.to_formatted_s(:only_time)
+			x.gsub!(':00','')
+			x.strip
+		else
+			s
+		end
+    end
+
+
+#   -------------
+
+	def date1_to_s
+		s = self.date1
+		if s.respond_to?(:to_formatted_s)
+			s.to_formatted_s(:numeric_date_time)
+		else
+			s
+		end
+	end
+
+	def date2_to_s
+		s = self.date2
+		if s.respond_to?(:to_formatted_s)
+			s.to_formatted_s(:numeric_date_time)
+		else
+			s
+		end
+	end
+
+	def event_at_to_s
+		s = self.event_at
+		if s.respond_to?(:to_formatted_s)
+			s.to_formatted_s(:numeric_date_time)
+		else
+			s
+		end
+	end
+
+	def accept_date(num=nil)
+		if num == 1
+			self.event_at = self.date1
+			self.status = 'date_accepted'
+		elsif num == 2
+			self.event_at = self.date2
+			self.status = 'date_accepted'
+		end
+		save
+	end
+
+	def next_status
+		case self.status
+		when 'no_date'
+			'request_date'
+		when 'request_date'
+			'accept_date'
+		when 'date_accepted'
+			'payment_request'
+		when 'payment_received'
+			'complete'
+		else
+			self.status
+		end
+	end
+
+	def status
+		s = super
+		if s == 'no_date' && (self.date1.present? || self.date2.present?)
+			self.update_column(:status, 'request_date')
+			return 'request_date'
+		end
+		s
+	end
+
+#   -------------
+
+
+	def book_name
+		b = self.book
+		if b.respond_to?(:name)
+			b.name
+		end
+	end
+
+	def merchant
+		if b = self.book
+			b.merchant
+		else
+			nil
+		end
+	end
+
+	def merchant_name
+		b = self.merchant
+		if b.respond_to?(:name)
+			b.name
+		end
+	end
 
 #   -------------
 
@@ -22,54 +137,20 @@ class Booking < ActiveRecord::Base
     end
 
     def self.status_date
-    	[ :no_date, :request_date, :merchant_accept_date, :customer_accept_date, :complete ]
+    	[ :no_date, :request_date, :date_accepted, :complete ]
     end
 
 #   -------------
 
-	def dates option=nil
-		get_audit_trail(super(),option)
-	end
-
-	def dates= hsh
-		super set_audit_trail(self.dates, hsh)
-	end
-
-	def payments option=nil
-		get_audit_trail(super(),option)
-	end
-
-	def payments= hsh
-		super set_audit_trail(self.payments, hsh)
-	end
-
-	def default_date
-		{
-			origin: :system,
-			status: :no_date,
-		 	next: :request_date
-		}
-	end
-
-	def default_payment
-		{
-			status: :unpaid,
-			next: :charge_customer
-		}
-	end
 
 
 private
 
-	def set_default_dates
-		if self.dates.blank?
-			self.dates = default_date
-		end
-	end
-
-	def set_default_payment
-		if self.payments.blank?
-			self.payments = default_payment
+	def set_status
+		if self.date1.respond_to?(:to_formatted_s) || self.date2.respond_to?(:to_formatted_s)
+			if self.status.nil?
+				self.status == 'request_date'
+			end
 		end
 	end
 
