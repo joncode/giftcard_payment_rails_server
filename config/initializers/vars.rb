@@ -42,18 +42,6 @@ else
     ActiveMerchant::Billing::Base.mode = :test
 end
 
-FIRST_DATA_LOGIN_CAD = if local_env
-    'SC9794-68'
-else
-    ENV['FIRST_DATA_LOGIN_CAD']
-end
-
-FIRST_DATA_PASSWORD_CAD = if local_env
-    '9inAG7jSLjWn5WbKnDEJFyU4I95SOnPV'
-else
-    ENV['FIRST_DATA_PASSWORD_CAD']
-end
-
 CATCH_PHRASE = if local_env
     "Theres no place like home"
 else
@@ -65,6 +53,24 @@ CCS_KEY = if local_env
 else
     ENV['CCS_KEY']
 end
+
+if local_env
+    CLOVER_APP_ID = 'N3GM3VPY0PZ36'
+    CLOVER_APP_SECRET = '6178d2fc-e6cb-3973-d7c5-0fbeef50d3d5'
+    CLOVER_BASE_URL = 'https://apisandbox.dev.clover.com'
+    CLOVER_TENDER_ID = 'Z0Q0TK1NY0Y1T'
+    ORDER_PAYMENT_NOTE = 'ItsOnMe test'
+    PROMO_DISCOUNT_NAME = 'ItsOnMe Promotional Discount test'
+else
+    CLOVER_APP_ID = ENV['CLOVER_APP_ID']
+    CLOVER_APP_SECRET = ENV['CLOVER_APP_SECRET']
+    CLOVER_BASE_URL = 'https://api.dev.clover.com'
+    CLOVER_TENDER_ID = ENV['CLOVER_TENDER_ID']
+    ORDER_PAYMENT_NOTE = 'ItsOnMe'
+    PROMO_DISCOUNT_NAME = 'ItsOnMe Promotional Discount'
+end
+
+CLOVER_TENDER = { id: CLOVER_TENDER_ID }
 
 CLOVER_TOKEN = if local_env
     "BVHA4jduazMQWpZ6lBooSA"
@@ -82,6 +88,18 @@ FACEBOOK_APP_SECRET = if local_env
     '4a04ff8b8f97e0830089e1953ebbfdfb'
 else
     ENV['FACEBOOK_APP_SECRET']
+end
+
+FIRST_DATA_LOGIN_CAD = if local_env
+    'SC9794-68'
+else
+    ENV['FIRST_DATA_LOGIN_CAD']
+end
+
+FIRST_DATA_PASSWORD_CAD = if local_env
+    '9inAG7jSLjWn5WbKnDEJFyU4I95SOnPV'
+else
+    ENV['FIRST_DATA_PASSWORD_CAD']
 end
 
 GOLFNOW_TOKEN = if local_env
