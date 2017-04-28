@@ -45,7 +45,7 @@ class Web::V3::BookingsController < MetalCorsController
 private
 
 	def create_params
-		params.require(:booking).permit( :time1, :time2, :date1, :date2, :book_id, :name, :phone, :email, :note, :guests, :price_unit )
+		params.require(:data).permit( :time1, :time2, :date1, :date2, :book_id, :name, :phone, :email, :note, :guests, :price_unit )
 	end
 
 end
