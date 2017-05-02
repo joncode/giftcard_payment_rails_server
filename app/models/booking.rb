@@ -2,7 +2,7 @@ class Booking < ActiveRecord::Base
 	# include AuditTrail
 	include MoneyHelper
 
-	auto_strip_attributes :name, :email, :phone, :note
+	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_desc
 
 
 #   -------------
