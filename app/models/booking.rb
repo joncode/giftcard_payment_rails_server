@@ -98,7 +98,7 @@ class Booking < ActiveRecord::Base
 
 	def status
 		s = super
-		if s == 'no_date' && (self.date1.present? || self.date2.present?)
+		if self.persisted? && s == 'no_date' && (self.date1.present? || self.date2.present?)
 			self.update_column(:status, 'request_date')
 			return 'request_date'
 		end
