@@ -137,6 +137,7 @@ Drinkboard::Application.routes.draw do
 			resources :bookings, only: [] do
 				member do
 					post :inquiry
+					patch :accept
 				end
 			end
 			resources :cards, only: [:create, :index, :destroy]

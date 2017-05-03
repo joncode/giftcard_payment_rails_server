@@ -77,6 +77,9 @@ class Booking < ActiveRecord::Base
 		elsif num == 2
 			self.event_at = self.date2
 			self.status = 'date_accepted'
+		else
+			errors.add(:date_accepted, "is not a valid acceptance date")
+			return false
 		end
 		save
 	end

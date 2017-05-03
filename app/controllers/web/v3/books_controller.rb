@@ -15,7 +15,20 @@ class Web::V3::BookingsController < MetalCorsController
 		respond
 	end
 
+	def accept
+			# :agree_tos, :cancellation, :stripe_card_id, :date_accepted
+		bk = Booking.find(params[:id])
+		if bk.accept_date(accept_params[:date_accepted])
+			success bk
+		else
+			fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })
+		end
+		respond
+	end
+
+
 #	-------------
+
 
     def parse_params_to_datetimes params_hsh
     	params_hsh.each_key do |k|
@@ -43,6 +56,10 @@ class Web::V3::BookingsController < MetalCorsController
 
 
 private
+
+	def accept_params
+		params.require(:data).permit( :agree_tos, :cancellation, :stripe_card_id, :date_accepted )
+	end
 
 	def create_params
 		params.require(:data).permit( :price_desc, :time1, :time2, :date1, :date2, :book_id, :name, :phone, :email, :note, :guests, :price_unit )
