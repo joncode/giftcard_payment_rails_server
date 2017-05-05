@@ -1,9 +1,14 @@
 class Web::V3::BookingsController < MetalCorsController
-    before_action :authentication_no_token, only: [ :inquiry ]
+    before_action :authentication_no_token, only: [ :inquiry, :accept, :show ]
 
     def show
     	bk = Booking.find(params[:id])
-    	book = bk.book
+		if bk
+			success bk.serialize
+		else
+			fail_web({ err: "NOT_FOUND" })
+		end
+		respond
     end
 
 	def inquiry
