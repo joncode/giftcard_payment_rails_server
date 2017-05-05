@@ -83,6 +83,8 @@ class Book < ActiveRecord::Base
     	h[:prices] = prices_serialize
     	h
     end
+    alias_method :serialize, :list_serialize
+
 
     def shop_url
         itsonme_url

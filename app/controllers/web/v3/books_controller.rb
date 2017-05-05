@@ -1,6 +1,11 @@
 class Web::V3::BookingsController < MetalCorsController
     before_action :authentication_no_token, only: [ :inquiry ]
 
+    def show
+    	bk = Booking.find(params[:id])
+    	book = bk.book
+    end
+
 	def inquiry
 		h = parse_params_to_datetimes(create_params)
 		h[:book_id] = params[:id]
@@ -8,7 +13,7 @@ class Web::V3::BookingsController < MetalCorsController
 		h[:date2] = add_time_to_date(h[:time2], h[:date2])
 		bk = Booking.new(h)
 		if bk.save
-			success bk
+			success bk.serialize
 		else
 			fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })
 		end
@@ -19,7 +24,7 @@ class Web::V3::BookingsController < MetalCorsController
 			# :agree_tos, :cancellation, :stripe_card_id, :date_accepted
 		bk = Booking.find(params[:id])
 		if bk.accept_date(accept_params[:date_accepted])
-			success bk
+			success bk.serialize
 		else
 			fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })
 		end

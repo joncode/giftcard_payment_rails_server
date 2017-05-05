@@ -134,7 +134,7 @@ Drinkboard::Application.routes.draw do
 		end
 
 		namespace :v3 do
-			resources :bookings, only: [] do
+			resources :bookings, only: [ :show ] do
 				member do
 					post :inquiry
 					patch :accept

@@ -18,6 +18,28 @@ class Booking < ActiveRecord::Base
 
 #   -------------
 
+	# {"id"=>5, "active"=>true, "hex_id"=>"bk_3dbdc6a9", "name"=>"Kyle Hadley", "email"=>"klyemar@gmail.com",
+	# "phone"=>"3602244244", "guests"=>8, "dates"=>nil, "payments"=>nil, "book_id"=>1, "price_unit"=>12000,
+	# "note"=>"Test", "created_at"=>Wed, 03 May 2017 16:38:14 UTC +00:00,
+	# "updated_at"=>Wed, 03 May 2017 16:38:14 UTC +00:00, "link_id"=>nil,
+	# "status"=>"request_date", "origin"=>nil, "date1"=>Sun, 05 Mar 2017 00:00:00 UTC +00:00,
+	# "date2"=>Fri, 05 May 2017 00:00:00 UTC +00:00, "event_at"=>nil, "price_desc"=>nil}
+
+	def serialize
+		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone,
+			 :guests, :book_id, :price_unit, :price_desc, :status, :note, :created_at, :origin ]
+		h[:book] = self.book ? self.book.list_serialize : nil
+		if self.event_at.present?
+			h[:event_at] = self.event_at
+		else
+			h[:date1] = self.date1
+			h[:date2] = self.date2
+		end
+		h
+	end
+
+#   -------------
+
     def time1
 		s = self.date1
 		if s.respond_to?(:to_formatted_s)
