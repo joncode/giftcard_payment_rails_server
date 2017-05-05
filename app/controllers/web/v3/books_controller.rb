@@ -68,7 +68,7 @@ class Web::V3::BookingsController < MetalCorsController
 private
 
 	def accept_params
-		params.require(:data).permit( :agree_tos, :cancellation, :stripe_card_id, :date_accepted )
+		params.require(:data).permit( :agree_tos, :cancellation, :stripe_user_id, :stripe_id, :date_accepted )
 	end
 
 	def create_params

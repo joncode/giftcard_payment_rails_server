@@ -12,6 +12,9 @@ ActiveRecord::Base.class_eval do
 		return record
 	end
 
+	define_method(:zz) do
+		self.serialize
+	end
 end
 
 
