@@ -10,7 +10,7 @@ class UserAfterSaveJob
 			RedisWrap.set_profile(user.id, user.login_client_serialize)
 			user.user_socials.each do |us|
 				if us.active
-					CollectIncompleteGiftsV2Job.peform(us.id)
+					CollectIncompleteGiftsV2Job.perform(us.id)
 				end
 			end
 		end
