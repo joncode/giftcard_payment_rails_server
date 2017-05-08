@@ -102,7 +102,7 @@ class List < ActiveRecord::Base
 		elsif self.item_type == 'gift'
 			gifts
 		else
-			[]
+			merchants.to_a + books.to_a + menu_items.to_a + lists.to_a + gifts.to_a
 		end
 	end
 
