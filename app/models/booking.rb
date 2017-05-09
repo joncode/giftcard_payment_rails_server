@@ -29,6 +29,7 @@ class Booking < ActiveRecord::Base
 		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone,
 			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin ]
 		h[:book] = self.book ? self.book.list_serialize : nil
+		h[:price_total] = price_total
 		if self.event_at.present?
 			h[:event_at] = self.event_at
 		else
@@ -36,6 +37,10 @@ class Booking < ActiveRecord::Base
 			h[:date2] = self.date2
 		end
 		h
+	end
+
+	def price_total
+		self.price_unit * guests
 	end
 
 #   -------------
@@ -180,7 +185,7 @@ private
 
 	def set_status
 		if self.date1.respond_to?(:to_formatted_s) || self.date2.respond_to?(:to_formatted_s)
-			if self.status.nil?
+			if self.status.blank?
 				self.status == 'request_date'
 			end
 		end
