@@ -28,7 +28,7 @@ class Web::V3::BookingsController < MetalCorsController
 	def accept
 			# :agree_tos, :cancellation, :stripe_card_id, :date_accepted
 		bk = Booking.find(params[:id])
-		if bk.accept_date(accept_params[:date_accepted])
+		if bk.accept_booking(accept_params[:stripe_id], accept_params[:stripe_user_id])
 			success bk.serialize
 		else
 			fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })

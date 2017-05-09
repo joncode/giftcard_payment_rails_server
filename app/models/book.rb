@@ -48,7 +48,7 @@ class Book < ActiveRecord::Base
 
 	def merchant_list_serialize
 		m = self.merchant
-		return { name: 'Merchant Name' } if m.nil?
+		return { name: 'Merchant' } if m.nil?
 		m
 	end
 

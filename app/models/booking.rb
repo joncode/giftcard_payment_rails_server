@@ -92,6 +92,13 @@ class Booking < ActiveRecord::Base
 		end
 	end
 
+	def accept_booking(stripe_id, stripe_user_id)
+		self.status = next_status
+		self.stripe_id = stripe_id
+		self.stripe_user_id = stripe_user_id
+		save
+	end
+
 	def accept_date(num=nil)
 		if num == 1
 			self.event_at = self.date1
