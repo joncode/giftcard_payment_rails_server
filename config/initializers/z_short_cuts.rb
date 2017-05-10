@@ -23,6 +23,7 @@ MS = MerchantSignup
 OM = Omnivore
 OC = OpsClover
 OS = OpsStripe
+OSA = OpsStripeAccount
 OSC = OpsStripeCard
 OZ = OpsZapper
 PL = Place

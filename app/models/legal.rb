@@ -34,6 +34,9 @@ class Legal < ActiveRecord::Base
 		# do nothing
 	end
 
+	def dob_obj
+		TimeGem.string_stamp_to_datetime(self.date_of_birth)
+	end
 
 private
 
