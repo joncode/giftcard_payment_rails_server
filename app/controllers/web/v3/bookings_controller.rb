@@ -2,7 +2,7 @@ class Web::V3::BookingsController < MetalCorsController
     before_action :authentication_no_token, only: [ :inquiry, :accept, :show ]
 
     def show
-    	bk = Booking.find(params[:id])
+    	bk = Booking.find_by(hex_id: params[:id])
 		if bk
 			success bk.serialize
 		else
@@ -27,7 +27,7 @@ class Web::V3::BookingsController < MetalCorsController
 
 	def accept
 			# :agree_tos, :cancellation, :stripe_card_id, :date_accepted
-		bk = Booking.find(params[:id])
+		bk = Booking.find_by(hex_id: params[:id])
 		if bk.accept_booking(accept_params[:stripe_id], accept_params[:stripe_user_id])
 			success bk.serialize
 		else

@@ -18,6 +18,9 @@ class Booking < ActiveRecord::Base
 
 #   -------------
 
+
+#   -------------
+
 	# {"id"=>5, "active"=>true, "hex_id"=>"bk_3dbdc6a9", "name"=>"Kyle Hadley", "email"=>"klyemar@gmail.com",
 	# "phone"=>"3602244244", "guests"=>8, "dates"=>nil, "payments"=>nil, "book_id"=>1, "price_unit"=>12000,
 	# "note"=>"Test", "created_at"=>Wed, 03 May 2017 16:38:14 UTC +00:00,
