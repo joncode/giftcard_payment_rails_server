@@ -36,7 +36,7 @@ class OpsStripeAccount
 		end
 
 		if @account
-			@ext_acct = @account.external_accounts.create({
+			@ext_acct = @account.external_accounts.create(external_account: {
 				object: 'bank_account',
 				country: @country,
 				currency: @ccy,

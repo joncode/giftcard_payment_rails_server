@@ -9,13 +9,13 @@ class Bank < ActiveRecord::Base
 
 #   -------------
 
-    validates :aba, length: { is: 9, if: :aba_changed? }, confirmation: true
+    validates :aba, length: { within: 6..10, if: :aba_changed? }, confirmation: true
     validates :aba_confirmation, presence: true, if: :aba_changed?
     validates :account_number, length: { within: 6..14, if: :account_number_changed? }, confirmation: true
     validates :account_number_confirmation, presence: true, if: :account_number_changed?
     validates_length_of :state , :is => 2
     validates_length_of :zip, :within => 5..10
-    validates_presence_of :merchant_id, :name, :address, :city, :account_name, :acct_type, :aba, :account_number
+    validates_presence_of :name, :address, :city, :account_name, :acct_type, :aba, :account_number
 
 #   -------------
 
@@ -73,7 +73,11 @@ class Bank < ActiveRecord::Base
 
     def display_aba current_user=nil
         if current_user == :acct
-            Bank.decrypt self.aba
+            if Rails.env.production?
+                Bank.decrypt self.aba
+            else
+                '11000-000'
+            end
         else
             self.public_aba
         end
@@ -81,14 +85,18 @@ class Bank < ActiveRecord::Base
 
     def display_account_number current_user=nil
         if current_user == :acct
-            Bank.decrypt self.account_number
+            if Rails.env.production?
+                Bank.decrypt self.account_number
+            else
+                '000123456789'
+            end
         else
             self.public_account_number
         end
     end
 
     def encrypt_account_info
-        cipher = Gibberish::RSA.new(GIBBERISH_PUB)
+        cipher = Gibberish::RSA.new(GIBBERISH_PUBLIC_KEY)
         if account_number_not_encrypted
             self.public_account_number = ("X" * (self.account_number.length - 4)) + self.account_number.last(4)
             self.account_number        = cipher.encrypt(self.account_number)
