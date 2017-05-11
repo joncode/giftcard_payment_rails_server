@@ -3,7 +3,6 @@ namespace :morning do
     desc "demo gifts"
     task cron: :environment do
 
-    begin
     		# generate admin reports
     	puts "MORNING CRON #{DateTime.now.utc} - DAILY_REPORT_SYS"
     	puts Alert.perform('DAILY_REPORT_SYS')
@@ -26,8 +25,6 @@ namespace :morning do
         ListByStateMakerJob.perform
 
         Booking.reminders
-    rescue => e
-        puts "500 Internal MORNING CRON FAIL #{e.inspect}"
     end
 
 end
