@@ -2,6 +2,8 @@ namespace :morning do
 
     desc "demo gifts"
     task cron: :environment do
+
+    begin
     		# generate admin reports
     	puts "MORNING CRON #{DateTime.now.utc} - DAILY_REPORT_SYS"
     	puts Alert.perform('DAILY_REPORT_SYS')
