@@ -15,7 +15,10 @@ class OpsCloverApi
 		@h = args.stringify_keys!
 		@merchant_id = @h['merchant_id']
 		@auth_token = @h['auth_token']
-		@header = { :content_type => :json, :accept => :json, 'Authorization' => "Bearer #{@auth_token}" }
+	end
+
+	def get_tender
+		return get_api(['tenders'], { filter: 'label==ItsOnMe'}
 	end
 
 	def get_hours
@@ -76,20 +79,43 @@ class OpsCloverApi
 
 #	private
 
-	def get_api terms
-		terms = ['v3/merchants', merchant_id] + terms
-		terms = terms.join('/')
-		return get(terms, @header )
+
+#	-------------    API CONNECT
+
+	def get_api terms=[], query={}
+		return get terms_to_resource(terms, query)
 	end
 
-    def get resource, header={}
+	def post_api terms, body
+		return post terms_to_resource(terms, {}), body
+	end
+
+	def header
+		{ :content_type => :json, :accept => :json, 'Authorization' => "Bearer #{@auth_token}" }
+	end
+
+	def terms_to_resource terms, query
+		terms = [terms] unless terms.kind_of?(Array)
+		resource = (['v3/merchants', merchant_id] + terms).join('/')
+
+		query = {} unless query.kind_of?(Hash)
+		resource += query[:order_by].present? ? "?order_by=#{query[:order_by]}" : ''
+		resource += query[:filter].present? ? "?filter=#{query[:filter]}" : ''
+		return resource
+	end
+
+    def get resource
+
          response = RestClient.get(
             "#{CLOVER_BASE_URL}/#{resource}",
             header
         )
-#       resp = JSON.parse response
+
+		resp = JSON.parse response
         return { status: 1, data: response }
+
     rescue Exception => e
+
         puts "\nOpsCloverApi.get - Error code = #{e.inspect}\n\n"
         if e.nil?
             response = { "response_code" => "ERROR", "response_text" => 'Contact Support', "code" => 400, "data" => [] }
@@ -99,19 +125,22 @@ class OpsCloverApi
         end
     end
 
-    def post terms, body
-		terms = ['v3/merchants', merchant_id] + terms
-		terms = terms.join('/')
-		body = body.to_json
-		header = @header.to_json
-    	puts 'terms=' + terms
+    def post resource, body
+    	puts 'resource=' + resource
     	puts 'body=' + body
-    	puts 'header=' + header
-    	response = RestClient.post( "#{CLOVER_BASE_URL}/#{terms}", body, @header )
+
+    	response = RestClient.post(
+    		"#{CLOVER_BASE_URL}/#{resource}",
+    		body.to_json,
+    		header
+		)
      	resp = JSON.parse response
-	   	puts 'resp=' + resp.to_json
+
+	   	puts 'resp=' + resp.inspect
 		return { status: 1, data: resp }
+
     rescue Exception => e
+
         puts "\nOpsCloverApi.post - Error code = #{e.inspect}\n\n"
         if e.nil?
             response = { "response_code" => "ERROR", "response_text" => 'Contact Support', "code" => 400, "data" => [] }
