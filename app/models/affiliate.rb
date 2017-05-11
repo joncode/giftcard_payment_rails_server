@@ -18,6 +18,10 @@ class Affiliate < ActiveRecord::Base
 	has_many :registers,    as: :partner
 	has_many :users, 	 through: :affiliations, source: :target, source_type: 'User'
 
+    def country
+        { 'USD' => 'US' , "CAD" => 'CA', "GBP" => 'GB'}[self.ccy]
+    end
+
 #   -------------
 
     def self.location_fee merchant_location_fee

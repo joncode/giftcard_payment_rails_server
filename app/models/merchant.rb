@@ -198,6 +198,9 @@ class Merchant < ActiveRecord::Base
         self.city_name = name
     end
 
+    def country
+        { 'USD' => 'US' , "CAD" => 'CA', "GBP" => 'GB'}[self.ccy]
+    end
 
     def location_fee(convert_these_cents=nil)
         r_cents = self.rate / 100.0

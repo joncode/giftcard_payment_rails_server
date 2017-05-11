@@ -60,6 +60,33 @@ class Bank < ActiveRecord::Base
         hsh
     end
 
+    def self.decrypt data
+        if data.present?
+            cipher = Gibberish::RSA.new(GIBBERISH_PRIVATE_KEY)
+            cipher.decrypt(data)
+        else
+            ""
+        end
+    end
+
+#   -------------
+
+    def display_aba current_user=nil
+        if current_user == :acct
+            Bank.decrypt self.aba
+        else
+            self.public_aba
+        end
+    end
+
+    def display_account_number current_user=nil
+        if current_user == :acct
+            Bank.decrypt self.account_number
+        else
+            self.public_account_number
+        end
+    end
+
     def encrypt_account_info
         cipher = Gibberish::RSA.new(GIBBERISH_PUB)
         if account_number_not_encrypted
