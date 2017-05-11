@@ -37,8 +37,7 @@ class NewClientsWeeklySysAlert < Alert
 		@merchant_ids ||= get_merchant_ids
 		return "" if !@merchant_ids.kind_of?(Hash) || @merchant_ids.keys.length == 0
 		email_str = ""
-		@merchant_ids.each do |k,v|
-			m = v
+		@merchant_ids.each do |k,m|
 			cs = m.clients
 			gn_str = ""
 			ga_str = ""
