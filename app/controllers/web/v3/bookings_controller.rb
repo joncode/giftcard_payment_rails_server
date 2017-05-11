@@ -29,11 +29,19 @@ class Web::V3::BookingsController < MetalCorsController
 	def accept
 			# :agree_tos, :cancellation, :stripe_card_id, :date_accepted
 		bk = Booking.find_by(hex_id: params[:id])
-		if bk.accept_booking(accept_params[:stripe_id], accept_params[:stripe_user_id])
-			bk.booking_confirmed
-			success bk.serialize
+		if !accept_params[:agree_tos] || !accept_params[:cancellation]
+			fail_web({ err: "INVALID_INPUT", msg: "You must accept the Terms of Service and Cancellation policy" })
 		else
-			fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })
+			if bk && bk.accept_booking(accept_params[:stripe_id], accept_params[:stripe_user_id])
+				bk.booking_confirmed
+				success bk.serialize
+			else
+				if bk
+					fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })
+				else
+					fail_web({ err: "NOT_FOUND", msg: "No booking found for #{params[:id]}" })
+				end
+			end
 		end
 		respond
 	end

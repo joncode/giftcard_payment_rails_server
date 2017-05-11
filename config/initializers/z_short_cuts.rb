@@ -22,6 +22,7 @@ MN = Menu
 MS = MerchantSignup
 OM = Omnivore
 OC = OpsClover
+OCA = OpsCloverApi
 OS = OpsStripe
 OSA = OpsStripeAccount
 OSC = OpsStripeCard
