@@ -18,6 +18,7 @@ class Web::V3::BookingsController < MetalCorsController
 		h[:date2] = add_time_to_date(h[:time2], h[:date2])
 		bk = Booking.new(h)
 		if bk.save
+			bk.customer_submits_inquiry
 			success bk.serialize
 		else
 			fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })
@@ -29,6 +30,7 @@ class Web::V3::BookingsController < MetalCorsController
 			# :agree_tos, :cancellation, :stripe_card_id, :date_accepted
 		bk = Booking.find_by(hex_id: params[:id])
 		if bk.accept_booking(accept_params[:stripe_id], accept_params[:stripe_user_id])
+			bk.booking_confirmed
 			success bk.serialize
 		else
 			fail_web({ err: "INVALID_INPUT", msg: bk.errors.full_messages })

@@ -1,4 +1,5 @@
 class Booking < ActiveRecord::Base
+	include BookingLifecycle
 	# include AuditTrail
 	include MoneyHelper
 

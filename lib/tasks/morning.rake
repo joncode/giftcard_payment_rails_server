@@ -22,6 +22,10 @@ namespace :morning do
 
         Proto.destroy_incomplete_protos  # delete incomplete bad proto data that is old
         ListByStateMakerJob.perform
+
+        Booking.reminders
+    rescue => e
+        puts "500 Internal MORNING CRON FAIL #{e.inspect}"
     end
 
 end
