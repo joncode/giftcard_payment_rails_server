@@ -104,6 +104,7 @@ class Web::V3::CloverController < MetalCorsController
 		h[:code] = redeem_params[:code]
 		h[:amount] = redeem_params[:amount].to_i
 		h[:ccy] = redeem_params[:currency]
+		h[:auth_token] = redeem_params[:auth_token]
 
 		o = OpsClover.new(h)
 		puts o.inspect
@@ -293,7 +294,7 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit(:code, :amount, :service_charge, :tax_amount, :merchant, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency, :serial_number)
+        params.require(:data).permit(:auth_token, :code, :amount, :service_charge, :tax_amount, :merchant, :merchant_id, :order_id, :employee_id, :note, :tip_amount, :currency, :serial_number)
     end
 
 

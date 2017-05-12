@@ -58,19 +58,15 @@ if local_env
     CLOVER_APP_ID = 'N3GM3VPY0PZ36'
     CLOVER_APP_SECRET = '6178d2fc-e6cb-3973-d7c5-0fbeef50d3d5'
     CLOVER_BASE_URL = 'https://apisandbox.dev.clover.com'
-    CLOVER_TENDER_ID = 'Z0Q0TK1NY0Y1T'
     ORDER_PAYMENT_NOTE = 'ItsOnMe test'
     PROMO_DISCOUNT_NAME = 'ItsOnMe Promotional Discount test'
 else
     CLOVER_APP_ID = ENV['CLOVER_APP_ID']
     CLOVER_APP_SECRET = ENV['CLOVER_APP_SECRET']
     CLOVER_BASE_URL = 'https://api.dev.clover.com'
-    CLOVER_TENDER_ID = ENV['CLOVER_TENDER_ID']
     ORDER_PAYMENT_NOTE = 'ItsOnMe'
     PROMO_DISCOUNT_NAME = 'ItsOnMe Promotional Discount'
 end
-
-CLOVER_TENDER = { id: CLOVER_TENDER_ID }
 
 CLOVER_TOKEN = if local_env
     "BVHA4jduazMQWpZ6lBooSA"
