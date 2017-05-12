@@ -107,13 +107,13 @@ module EmailHelper
 	def text_for_invoice_giver gift
 		receiver_info = gift.receiver_name
 		if !gift.receiver_email.blank?
-			receiver_info += " email: " + gift.receiver_email
+			receiver_info += " <p>email: " + gift.receiver_email + '</p>'
 		elsif !gift.receiver_phone.blank?
-			receiver_info += " phone: " + number_to_phone(gift.receiver_phone)
+			receiver_info += " <p>phone: " + number_to_phone(gift.receiver_phone) + '</p>'
 		elsif !gift.facebook_id.blank?
-			receiver_info += " via facebook"
+			receiver_info += " <p>via facebook</p>"
 		elsif !gift.twitter.blank?
-			receiver_info += " via twitter"
+			receiver_info += " <p>via twitter</p>"
 		end
 		"<div style=#{default_style}><div style='width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
 			<div>Thanks for gifting local with ItsOnMe!</div></div></div>

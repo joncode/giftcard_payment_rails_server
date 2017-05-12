@@ -3,8 +3,24 @@ namespace :minute do
     desc "every ten minutes cron"
     task cron: :environment do
 
-        Redemption.expire_stale_tokens
-        UserSocial.double_check_incomplete_gifts
+        start_time = DateTime.now.utc
+    	puts "MINUTE CRON Start #{start_time} "
+
+        begin
+            Redemption.expire_stale_tokens
+        rescue => e
+            puts "500 Internal Redemption.expire_stale_tokens #{e.inspect}"
+        end
+
+        begin
+            UserSocial.double_check_incomplete_gifts
+        rescue => e
+            puts "500 Internal UserSocial.double_check_incomplete_gifts #{e.inspect}"
+        end
+
+
+        end_time = DateTime.now.utc.to_i - start_time.to_i
+        puts "MINUTE CRON End #{end_time} seconds"
     end
 
 end

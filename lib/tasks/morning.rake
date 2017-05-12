@@ -1,30 +1,65 @@
 namespace :morning do
 
-    desc "demo gifts"
+    desc "runs once per day"
     task cron: :environment do
 
     		# generate admin reports
-    	puts "MORNING CRON #{DateTime.now.utc} - DAILY_REPORT_SYS"
-    	puts Alert.perform('DAILY_REPORT_SYS')
-    	if DateTime.now.utc.monday?
-    		puts "MORNING CRON #{DateTime.now.utc} - WEEKLY_REPORT_SYS"
-			Alert.perform('WEEKLY_REPORT_SYS')
-		end
+        start_time = DateTime.now.utc
+    	puts "MORNING CRON Start #{start_time} "
 
-        if DateTime.now.utc.day == 2
-            puts "MORNING CRON #{DateTime.now.utc} - MONTHLY_REPORT_SYS"
-            Alert.perform('MONTHLY_REPORT_SYS')
+        begin
+            puts Alert.perform('DAILY_REPORT_SYS')
+        rescue => e
+            puts "500 Internal DAILY_REPORT_SYS #{e.inspect}"
         end
 
-        if DateTime.now.utc.wednesday?
-            puts "MORNING CRON #{DateTime.now.utc} - NEW_CLIENTS_WEEKLY_SYS"
-            Alert.perform('NEW_CLIENTS_WEEKLY_SYS')
+        begin
+            if DateTime.now.utc.monday?
+                puts "MORNING CRON #{DateTime.now.utc} - WEEKLY_REPORT_SYS"
+                Alert.perform('WEEKLY_REPORT_SYS')
+            end
+        rescue => e
+            puts "500 Internal WEEKLY_REPORT_SYS #{e.inspect}"
         end
 
-        Proto.destroy_incomplete_protos  # delete incomplete bad proto data that is old
-        ListByStateMakerJob.perform
+        begin
+            if DateTime.now.utc.day == 2
+                puts "MORNING CRON #{DateTime.now.utc} - MONTHLY_REPORT_SYS"
+                Alert.perform('MONTHLY_REPORT_SYS')
+            end
+        rescue => e
+            puts "500 Internal MONTHLY_REPORT_SYS #{e.inspect}"
+        end
 
-        Booking.reminders
+        begin
+            if DateTime.now.utc.wednesday?
+                puts "MORNING CRON #{DateTime.now.utc} - NEW_CLIENTS_WEEKLY_SYS"
+                Alert.perform('NEW_CLIENTS_WEEKLY_SYS')
+            end
+        rescue => e
+            puts "500 Internal NEW_CLIENTS_WEEKLY_SYS #{e.inspect}"
+        end
+
+        begin
+            Booking.reminders
+        rescue => e
+            puts "500 Internal Booking.reminders #{e.inspect}"
+        end
+
+        begin
+            Proto.destroy_incomplete_protos  # delete incomplete bad proto data that is old
+        rescue => e
+            puts "500 Internal destroy_incomplete_protos #{e.inspect}"
+        end
+
+        begin
+            ListByStateMakerJob.perform
+        rescue => e
+            puts "500 Internal ListByStateMakerJob #{e.inspect}"
+        end
+
+        end_time = DateTime.now.utc.to_i - start_time.to_i
+        puts "MORNING CRON End #{end_time} seconds"
     end
 
 end
