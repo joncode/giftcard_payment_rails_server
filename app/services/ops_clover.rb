@@ -7,7 +7,7 @@ class OpsClover
 
 	attr_accessor :pos_merchant_id, :key, :app_key, :amount, :ccy, :code
 	attr_reader :status, :client, :merchant, :signup, :args, :device_id,
-		:merchant_name, :merchant_email, :error
+		:merchant_name, :merchant_email, :error, :auth_token
 
 	def initialize args={}
 		@error = nil
@@ -22,6 +22,13 @@ class OpsClover
 		else
 			@app_key = @args[:app_key]
 		end
+
+		if @args[:auth_token].blank?
+			@auth_token = nil
+		else
+			@auth_token = @args[:auth_token]
+		end
+
 		# @key = 'g1i12ant_client41314_+mreta12_key-moc1241k=_124)mock_mock' # MOCK of @@app_key
 
 		@key = @app_key
@@ -214,6 +221,8 @@ class OpsClover
 		elsif @client && @client.partner_type == "Merchant"
 			@merchant = @client.partner
 		end
+		@merchant.clover_auth_token = @auth_token
+		@merchant
 	end
 
 	def get_signup
@@ -257,4 +266,4 @@ end
 		# end
 		# use information from the clover machine
 		# generate a client key for this clover
-		# how do we connect the clover machine to the merchant record ?
+		# how do we connect the clover machine to the merchant record

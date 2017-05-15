@@ -12,6 +12,14 @@ class Web::V3::CloverController < MetalCorsController
 	# "time_zone"=>"Pacific Standard Time", "support_phone"=>"(000) 000-0000", "name"=>"ItsOnMe Test Merchant"}, "name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)",
 	# "serial_number"=>"b73f3293e5b33823"}, "format"=>"json", "controller"=>"web/v3/clover", "action"=>"init"}
 
+ # {"data"=>{"merchant"=>{"zip"=>"89101", "phone"=>"702-555-1212", "website"=>"https://www.itson.me", "locale"=>"en_US", "state"=>"NV", "vat"=>false,
+ # 	"address1"=>"123 Mockingbird Lane", "auth_token"=>"dec6d9ae-13d4-b71c-ce48-7d1617b036de", "address2"=>"Apt 2b", "device_id"=>"abacc7fc-1f67-4cd5-9f9c-d0073b048fbf",
+ # 	"address3"=>"", "base_url"=>"https://apisandbox.dev.clover.com", "support_email"=>"dev@clover.com", "city"=>"Las Vegas", "currency"=>"USD", "id"=>"J4Q1V4P5X0KS0",
+ # 	"time_zone"=>"Pacific Standard Time", "email"=>"richard1@rangerllt.comDEVtypecom.clover.account", "support_phone"=>"(000) 000-0000", "name"=>"ItsOnMe Test Merchant",
+ # 	"account"=>"Account {name=ItsOnMe Test Merchant | richard1@rangerllt.com (DEV), type=com.clover.account}", "mid"=>"RCTST0000008099"},
+ # 	"name"=>"ItsOnMe Test Merchant | richard1@rangerllt.com (DEV)", "serial_number"=>"b73f3293e5b33823"}}
+
+
 	def init
 		h = {}
 		h = init_params[:merchant]

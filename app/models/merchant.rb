@@ -78,6 +78,20 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def clover_auth_token
+        self.tender_type_id
+    end
+
+    def clover_auth_token= auth_token
+        if auth_token.present? && clover_auth_token != auth_token
+            puts "Merchant::clover_auth_token setting auth_token #{self.id}"
+            update(tender_type_id: auth_token)
+        end
+    end
+
+
+#   -------------
+
     def multi_redemption_client
         self.client
     end
@@ -142,7 +156,7 @@ class Merchant < ActiveRecord::Base
     end
 
     def active_live?
-        self.active && self.mode == "live" && !self.zip.match('11111')
+        self.active && mode == "live" && !self.zip.match('11111')
     end
 
     def mode
@@ -325,7 +339,7 @@ private
         menu = MenuFull.create(owner_id: self.id, owner_type: self.class.to_s)
         if menu.persisted?
             menu.compile_menu_to_app
-            self.update(menu_id: menu.id)
+            update(menu_id: menu.id)
             menu
         else
             menu
