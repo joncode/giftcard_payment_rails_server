@@ -13,9 +13,9 @@ class OpsCloverApi
 
 	def initialize args={}
 		@h = args.stringify_keys!
-		@merchant_id = @h['merchant_id']
+		@merchant_id = @h['pos_merchant_id']
 		@auth_token = @h['auth_token']
-		@tender_id = get_tender_id
+		@tender_id = nil
 	end
 
 #	-------------
@@ -58,6 +58,8 @@ class OpsCloverApi
 		# MONEY VALUE REDEMPTION
 		#	def post_order_payment order_id, device_id, amount, tax_amount, note
 	def post_order_payment
+		@tender_id = get_tender_id
+		raise 'OpsCloverApi: Missing Order Data' if @tender_id.blank?
 		order_id = @h['order_id']
 
 		if order_id && @h['device_id'] && @h['amount']
