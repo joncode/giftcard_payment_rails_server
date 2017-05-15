@@ -63,7 +63,11 @@ if local_env
 else
     CLOVER_APP_ID = ENV['CLOVER_APP_ID']
     CLOVER_APP_SECRET = ENV['CLOVER_APP_SECRET']
-    CLOVER_BASE_URL = 'https://api.dev.clover.com'
+    if Rails.env.production?
+        CLOVER_BASE_URL = 'https://api.dev.clover.com'
+    else
+        CLOVER_BASE_URL = 'https://apisandbox.dev.clover.com'
+    end
     ORDER_PAYMENT_NOTE = 'ItsOnMe'
     PROMO_DISCOUNT_NAME = 'ItsOnMe Promotional Discount'
 end
