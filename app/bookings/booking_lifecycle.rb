@@ -1,5 +1,5 @@
 module BookingLifecycle
-    extend ActiveSupport::Concern
+    include ActiveSupport::Concern
 
 #   -------------  CLASS API SURFACE
 
@@ -24,25 +24,35 @@ module BookingLifecycle
 #   -------------  INSTANCE API SURFACE
 
     def customer_submits_inquiry
-			# send email to customer confirming that we have received their inquiry
-			# Send Alert to IOM team that inquiry has occurred
-			# Send Alert to the Merchant that inquiry has occurred ?
-    	EmailBooking.send_inquiry_confirmation_to_customer self.id
+        if Rails.env.development?
+            BookingEvent(self.id, 'customer_inquiry')
+        else
+            Resque.enqueue(BookingEvent, self.id, 'customer_inquiry')
+        end
     end
 
     def send_purchase_link_to_customer
-    	EmailBooking.send_purchase_link_to_customer self.id
+        if Rails.env.development?
+            BookingEvent(self.id, 'merchant_confirms_date')
+        else
+            Resque.enqueue(BookingEvent, self.id, 'merchant_confirms_date')
+        end
     end
 
     def booking_confirmed
-		# send email to customer receipt - confirming purchase
-		# Send Alert to IOM team that inquiry has occurred
-		# Send Alert to the Merchant that inquiry has occurred ?
-		EmailBooking.send_booking_confirmation_to_customer self.id
+        if Rails.env.development?
+            BookingEvent(self.id, 'customer_purchase_complete')
+        else
+            Resque.enqueue(BookingEvent, self.id, 'customer_purchase_complete')
+        end
     end
 
     def send_reminder(days_till)
-    	EmailBooking.send_email_reminder self.id, days_till
+        if Rails.env.development?
+            BookingEvent(self.id, 'send_reminder', days_till)
+        else
+            Resque.enqueue(BookingEvent, self.id, 'send_reminder', days_till)
+        end
     end
 
 

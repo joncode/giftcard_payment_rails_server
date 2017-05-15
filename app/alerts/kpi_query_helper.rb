@@ -33,17 +33,17 @@ module KpiQueryHelper
 		purchase_str = ''
 		@ccy_vals.each do |k,v|
 			next if v == 0
-			purchase_str += "#{k} Purchases: #{display_money ccy: k, cents: v, delimiter: ','}\n"
+			purchase_str += "\t#{k} Purchases: #{display_money ccy: k, cents: v, delimiter: ','}\n"
 		end
 
 		"#{name}\n#{@header}\n\
-Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})\n\
+Gift Purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})\n\
 #{purchase_str}\
 MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
 New Users: #{@users}\n\
 Redemptions: #{@redemptions}\n\
-PaperCerts: #{@paper_certs}"
+Paper Certs: #{@paper_certs}"
 	end
 
 	def email_msg name
@@ -52,16 +52,19 @@ PaperCerts: #{@paper_certs}"
 		purchase_str = ''
 		@ccy_vals.each do |k,v|
 			next if v == 0
+			purchase_str = "<li><ul>" if purchase_str.blank?
 			purchase_str += "<li>#{k} Purchases: #{display_money ccy: k, cents: v, delimiter: ','}</li>"
 		end
+		purchase_str = "</ul></li>" unless purchase_str.blank?
+
 		"<div><h2>#{name}</h2><h3>#{@header}</h3>\
-<p><ul><li>Gift purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})</li>\
+<p><ul><li>Gift Purchases: #{@purchases} (Golf-#{@golf_p}/Food-#{@food_p})</li>\
 #{purchase_str}\
 <li>MerchantTools gifts: #{@merchant_gifts}</li>\
 <li>New Merchants: #{@merchants}</li>\
 <li>New Users: #{@users}</li>\
 <li>Redemptions: #{@redemptions}</li>\
-<li>PaperCerts: #{@paper_certs}</li>\
+<li>Paper Certs: #{@paper_certs}</li>\
 </ul></p></div>".html_safe
 	end
 
