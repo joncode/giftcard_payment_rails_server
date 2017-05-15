@@ -221,8 +221,10 @@ class OpsClover
 		elsif @client && @client.partner_type == "Merchant"
 			@merchant = @client.partner
 		end
-		@merchant.clover_auth_token = @auth_token
-		@merchant
+		if @merchant
+			@merchant.clover_auth_token = @auth_token
+			@merchant
+		end
 	end
 
 	def get_signup
