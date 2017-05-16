@@ -62,6 +62,7 @@ class MerchantClover
 		m.ccy = signup.data['ccy']
 		m.tz = generate_timzone_for(signup.data['time_zone'])
 		m.pos_merchant_id = signup.data['pos_merchant_id']
+		m.clover_auth_token = signup.data['auth_token']
 		m.r_sys = 7
 		m.paused = false
 		m.live = true

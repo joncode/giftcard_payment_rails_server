@@ -1,6 +1,5 @@
 class Booking < ActiveRecord::Base
 	include BookingLifecycle
-	# include AuditTrail
 	include MoneyHelper
 
 	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_desc
@@ -17,9 +16,37 @@ class Booking < ActiveRecord::Base
     before_save :set_unique_hex_id, on: :create
     before_save :set_status
 
+#   -------------  CLASS API SURFACE
+
+
+    def self.status_payment
+    	[ :unpaid, :customer_charged, :merchant_paid, :customer_refunded ]
+    end
+
+    def self.status_date
+    	[ :no_date, :request_date, :date_accepted, :complete ]
+    end
+
+    def self.reminders
+    	where(active: true, status: 'complete').where.not(event_at: nil).find_each do |booking|
+    		dt = DateTime.now.utc
+    		[7,1].each do |d|
+
+    			if booking.event_at < d.days.ago && booking.event_at > (d +1).days.ago
+
+    				puts "BookingLifecycle.reminder (11) - reminder for booking #{booking.id}"
+    				if booking.merchant && booking.merchant.active_live?
+    					booking.send_reminder(d)
+    				else
+    					puts "500 Internal - booking #{booking.id} Reminder at inactive merchant"
+    				end
+    			end
+    		end
+    	end
+    end
+
+
 #   -------------
-
-
 #   -------------
 
 	# {"id"=>5, "active"=>true, "hex_id"=>"bk_3dbdc6a9", "name"=>"Kyle Hadley", "email"=>"klyemar@gmail.com",
@@ -171,15 +198,6 @@ class Booking < ActiveRecord::Base
 		end
 	end
 
-#   -------------
-
-    def self.status_payment
-    	[ :unpaid, :customer_charged, :merchant_paid, :customer_refunded ]
-    end
-
-    def self.status_date
-    	[ :no_date, :request_date, :date_accepted, :complete ]
-    end
 
 #   -------------
 
