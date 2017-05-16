@@ -1,0 +1,44 @@
+class EmailBooking < EmailAbstract
+	# inherits from /app/mailers/email_abstract.rb
+
+	include ActionView::Helpers::NumberHelper
+
+	def initialize booking, template, subject
+		super()
+		email_data_hsh = {
+			"subject" => subject,
+			"html"    => "<div><p>#{booking.name}</p></div>".html_safe,
+			"email"   => booking.email,
+			"name"	  => booking.name
+		}
+		data = email_data_hsh
+		@booking = booking
+		@book = booking.book
+		@merchant = @booking.merchant
+		@template = template
+		@subject = email_data_hsh['subject']
+		@body = email_data_hsh['html']
+		@to_emails  = [{"email" => email_data_hsh['email'], "name" => email_data_hsh['name'] }]
+		set_email_message_data
+		set_vars
+	end
+
+	def set_vars
+		h = { 	'book_name' => @booking.book_name,
+				'merchant_name' => @merchant.name,
+				'merchant_address' => @merchant.address,
+				'merchant_city_state_zip' => @merchant.city_state_zip,
+				'merchant_phone' => number_to_phone(@merchant.phone),
+				'primary_date' => @booking.date1,
+				'secondary_date' => @booking.date2,
+				'book_price_desc' => @booking.price_desc,
+				'book_price' => @booking.price_unit,
+				'guests' => @booking.guests,
+				'booking_price_total' => @booking.price_total,
+				'important' => @booking.note
+			}
+		set_vars_ary(h)
+	end
+
+
+end

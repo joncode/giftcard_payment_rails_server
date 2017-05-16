@@ -1,5 +1,4 @@
 module BookingLifecycle
-    include ActiveSupport::Concern
 
 
 #   -------------  INSTANCE API SURFACE

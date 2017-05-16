@@ -67,11 +67,11 @@ class Booking < ActiveRecord::Base
 			h[:date1] = self.date1
 			h[:date2] = self.date2
 		end
-		h
+		h.stringify_keys
 	end
 
 	def price_total
-		self.price_unit * guests
+		self.price_unit.to_i * guests.to_i
 	end
 
 #   -------------

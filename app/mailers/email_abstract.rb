@@ -2,7 +2,7 @@ require 'mandrill'
 
 class EmailAbstract
 
-	attr_reader  :mandrill
+	attr_reader  :mandrill, :message, :subject, :template
 
 	def initialize #data
 		@mandrill = MANDRILL_CLIENT
@@ -27,7 +27,7 @@ class EmailAbstract
 	end
 
 	def set_email_message_data
-        @message          = {
+        @message = {
             "subject"     => @subject,
             "from_name"   => @from_name,
             "from_email"  => @from_email,
@@ -43,6 +43,15 @@ class EmailAbstract
         request_mandrill_with_template @message
     end
 
+    def set_vars_ary hsh
+        set_email_message_data unless @message.kind_of?(Hash)
+        ary = []
+        hsh.each do |k, v|
+            ary << { 'name' => k, 'content' => v }
+        end
+        ary
+        @message["global_merge_vars"] = ary
+    end
 
 #   -------------
 
