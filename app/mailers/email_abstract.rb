@@ -53,6 +53,13 @@ class EmailAbstract
         @message["global_merge_vars"] = ary
     end
 
+    def format_date dt
+        if dt.respond_to?(:to_formatted_s)
+            dt = dt.to_formatted_s(:long_ordinal)
+        end
+        dt
+    end
+
 #   -------------
 
 
