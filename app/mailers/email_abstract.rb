@@ -4,9 +4,9 @@ class EmailAbstract
 
 	attr_reader  :mandrill
 
-	def initialize data
+	def initialize #data
 		@mandrill = MANDRILL_CLIENT
-		data = data
+		#data = data
 		@template = 'user'
 		@from_email = NO_REPLY_EMAIL
 		@from_name = SERVICE_NAME
@@ -16,13 +16,10 @@ class EmailAbstract
 	end
 
 	def data= data
+        puts "EmailAbstrcat data= #{data.inspect}"
         @subject = data["subject"]
-        if data['email'].kind_of?(String)
-            email = [data['email']]
-        else
-            email = data["email"]
-        end
-        @to_emails  = email.map { |mail| {"email" => mail, "name" => "ItsOnMe Staff (#{mail})"} }
+
+        @to_emails  = [{"email" => data['email'], "name" => data['name'] }]
 
         @body = data["text"] if data["text"].present?
         @body = data['html'].html_safe if data['html'].present?
@@ -34,7 +31,7 @@ class EmailAbstract
             "subject"     => @subject,
             "from_name"   => @from_name,
             "from_email"  => @from_email,
-            "to"          => @to_email,
+            "to"          => @to_emails,
             "global_merge_vars" => [
                 { "name" => "body", "content" => @body }
             ]
@@ -42,6 +39,7 @@ class EmailAbstract
 	end
 
     def send_email
+        return "No Email to send" if @message.blank?
         request_mandrill_with_template @message
     end
 
@@ -55,7 +53,7 @@ class EmailAbstract
         end
     end
 
-    def request_mandrill_with_template(message)
+    def request_mandrill_with_template(message=@message)
         puts "``````````````````````````````````````````````"
         if Rails.env.staging? || Rails.env.production?
             # unless Rails.env.development?

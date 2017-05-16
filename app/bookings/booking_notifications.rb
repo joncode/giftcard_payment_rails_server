@@ -11,6 +11,9 @@ class BookingNotifications
 				# Send Alert to IOM team that inquiry has occurred
 				# Send Alert to the Merchant that inquiry has occurred ?
 			booking = Booking.find booking_id
+			template = 'booking-inquiry-receipt'
+			e = EmailBooking.new(booking, template, 'Top100 Booking Inquiry')
+			e.send_email
 		end
 
 		def send_purchase_link_to_customer booking_id
@@ -18,6 +21,9 @@ class BookingNotifications
 
 				# send the purchase link to the accept and purchase booking page
 			booking = Booking.find booking_id
+			template = 'booking-confirmation-request'
+			e = EmailBooking.new(booking, template, 'Top100 Booking Purchase')
+			e.send_email
 		end
 
 		def send_booking_confirmation_to_customer booking_id
@@ -27,6 +33,9 @@ class BookingNotifications
 				# Send Alert to IOM team that inquiry has occurred
 				# Send Alert to the Merchant that inquiry has occurred ?
 			booking = Booking.find booking_id
+			template = 'booking-confirmation-receipt'
+			e = EmailBooking.new(booking, template, 'Top100 Booking Confirmation')
+			e.send_email
 		end
 
 		def send_email_reminder booking_id, days_till
@@ -34,6 +43,13 @@ class BookingNotifications
 
 			# send email to customer with reminder of the upcoming event
 			booking = Booking.find booking_id
+			if days_till > 6
+				template = 'booking-reminder-week-prior'
+			else
+				template = 'booking-reminder-day-prior'
+			end
+			e = EmailBooking.new(booking, template, 'Top100 Booking Reminder')
+			e.send_email
 		end
 
 	end
