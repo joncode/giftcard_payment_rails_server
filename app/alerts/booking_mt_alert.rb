@@ -31,7 +31,7 @@ class BookingMtAlert < Alert
 #   -------------
 
 	def get_data
-		@data = booking.serialize
+		@data = booking.to_text
 	end
 
 end
