@@ -8,7 +8,7 @@ namespace :minute do
 
         begin
             bank_ary = Bank.where('created_at > ?', 10.minutes.ago)
-            Alert.perform("BANK_ADDED_SYS", bank_ary)
+            Alert.perform("BANK_ADDED_SYS", bank_ary) unless bank_ary.empty?
         rescue => e
             puts "500 Internal Bank.created_at.10.minutes #{e.inspect}"
         end
