@@ -3,6 +3,7 @@ class GiftPurchasedSysAlert < GiftPurchasedMtAlert
 #############   THIS FILE IS AN ADMIN COPY OF GiftPurchasedMtAlert
 #######
 
+
 #   -------------
 
 	def get_data

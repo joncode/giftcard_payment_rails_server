@@ -14,9 +14,24 @@ class Book < ActiveRecord::Base
 		:photo1, :photo2, :photo3, :photo4
 
 
+# ---------------
+
+	def self.find_with_token tkn
+		if tkn.kind_of?(String) && tkn[0..5] == "#{BOOKING_ID}-"
+			t = tkn.gsub("#{BOOKING_ID}-", '')
+			id = t.split('-').first
+			if id.to_i.to_s == id
+				return find(id)
+			end
+		end
+		raise ActiveRecord::RecordNotFound
+	end
+
 	def self.statuses
 		['live', 'coming_soon']
 	end
+
+# ---------------
 
 	def status= str
 		str = str.to_s
@@ -31,17 +46,12 @@ class Book < ActiveRecord::Base
     	super || 'USD'
     end
 
-# ---------------
-
-	def self.find_with_token tkn
-		if tkn.kind_of?(String) && tkn[0..5] == "#{BOOKING_ID}-"
-			t = tkn.gsub("#{BOOKING_ID}-", '')
-			id = t.split('-').first
-			if id.to_i.to_s == id
-				return find(id)
-			end
+	def price_desc cents
+		if self.price_wine == cents
+			"Price per person with Wine"
+		else
+			"Price per person w/o Wine"
 		end
-		raise ActiveRecord::RecordNotFound
 	end
 
 # ---------------

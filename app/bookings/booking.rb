@@ -146,7 +146,12 @@ class Booking < ActiveRecord::Base
 			errors.add(:date_accepted, "is not a valid acceptance date")
 			return false
 		end
-		save
+		if save
+			send_purchase_link_to_customer
+			true
+		else
+			false
+		end
 	end
 
 	def next_status

@@ -16,6 +16,10 @@ class Web::V3::BookingsController < MetalCorsController
 		h[:book_id] = params[:id]
 		h[:date1] = add_time_to_date(h[:time1], h[:date1])
 		h[:date2] = add_time_to_date(h[:time2], h[:date2])
+		if h[:price_desc].blank?
+			book = Book.find(h[:book_id])
+			h[:price_desc] = book.price_desc(h[:price_unit])
+		end
 		bk = Booking.new(h)
 		if bk.save
 			bk.customer_submits_inquiry

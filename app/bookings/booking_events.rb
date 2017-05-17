@@ -36,4 +36,3 @@ end
 
 # ADMT - merchant confirms booking date
     # generate booking link and send to customer to complete purchase
-
