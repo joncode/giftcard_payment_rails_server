@@ -21,6 +21,7 @@ class EmailBooking < EmailAbstract
 
 	def set_vars
 		h = { 	'book_name' => @booking.book_name,
+				'booking_id' => @booking.hex_id,
 				'booking_date' => format_date(@booking.event_at),
 				'merchant_name' => @merchant.name,
 				'merchant_address' => @merchant.address,

@@ -7,6 +7,11 @@ class BookingMtAlert < Alert
 		self.target
 	end
 
+
+	def note
+		self.target.merchant
+	end
+
 #   -------------
 
 	def text_msg
