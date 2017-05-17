@@ -23,6 +23,7 @@ class EmailBooking < EmailAbstract
 		h = { 	'book_name' => @booking.book_name,
 				'booking_id' => @booking.hex_id,
 				'booking_date' => format_date(@booking.event_at),
+				'booking_link' => CLEAR_CACHE + "/bookings/" + @booking.hex_id,
 				'merchant_name' => @merchant.name,
 				'merchant_address' => @merchant.address,
 				'merchant_city_state_zip' => @merchant.city_state_zip,
