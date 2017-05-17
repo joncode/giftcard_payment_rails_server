@@ -20,8 +20,8 @@ class EmailBooking < EmailAbstract
 		@template = template
 		@subject = email_data_hsh['subject']
 		@body = email_data_hsh['html']
-		set_bcc
 		@to_emails  = [{"email" => email_data_hsh['email'], "name" => email_data_hsh['name'] }]
+		set_bcc
 		set_email_message_data
 		set_vars
 	end
