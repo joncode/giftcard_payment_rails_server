@@ -14,6 +14,7 @@ class BookingNotifications
 			template = 'booking-inquiry-receipt'
 			e = EmailBooking.new(booking, template, 'Top100 Booking Inquiry')
 			e.send_email
+			Alert.perform "BOOKING_SYS", booking
 		end
 
 		def send_purchase_link_to_customer booking_id
@@ -24,6 +25,7 @@ class BookingNotifications
 			template = 'booking-confirmation-request'
 			e = EmailBooking.new(booking, template, 'Top100 Booking Purchase')
 			e.send_email
+			Alert.perform "BOOKING_SYS", booking
 		end
 
 		def send_booking_confirmation_to_customer booking_id
@@ -36,6 +38,7 @@ class BookingNotifications
 			template = 'booking-confirmation-receipt'
 			e = EmailBooking.new(booking, template, 'Top100 Booking Confirmation')
 			e.send_email
+			Alert.perform "BOOKING_SYS", booking
 		end
 
 		def send_email_reminder booking_id, days_till
@@ -50,6 +53,7 @@ class BookingNotifications
 			end
 			e = EmailBooking.new(booking, template, 'Top100 Booking Reminder')
 			e.send_email
+			Alert.perform "BOOKING_SYS", booking
 		end
 
 	end

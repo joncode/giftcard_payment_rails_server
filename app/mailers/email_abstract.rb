@@ -26,6 +26,10 @@ class EmailAbstract
         set_email_message_data
 	end
 
+    def set_bcc
+        @to_emails.concat(HELP_CONTACT_ARY.map{ |h| h['type'] = 'bcc'; h })
+    end
+
 	def set_email_message_data
         @message = {
             "subject"     => @subject,
