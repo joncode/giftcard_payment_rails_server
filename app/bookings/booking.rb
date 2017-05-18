@@ -4,7 +4,6 @@ class Booking < ActiveRecord::Base
 
 	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_desc
 
-
 #   -------------
 
 	belongs_to :book
@@ -15,16 +14,17 @@ class Booking < ActiveRecord::Base
 
     before_save :set_unique_hex_id, on: :create
     before_save :set_status
+    before_save :set_expires_at
 
 #   -------------  CLASS API SURFACE
 
 
     def self.status_payment
-    	[ :unpaid, :customer_charged, :merchant_paid, :customer_refunded ]
+    	[ :unpaid, :customer_charged, :payment_request, :merchant_paid, :customer_refunded ]
     end
 
     def self.status_date
-    	[ :no_date, :request_date, :date_accepted, :complete ]
+    	[ :no_date, :request_date, :payment_request, :date_accepted, :complete ]
     end
 
     def self.reminders
@@ -70,7 +70,7 @@ class Booking < ActiveRecord::Base
 
 	def serialize
 		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone,
-			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin ]
+			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin, :expires_at ]
 		h[:book] = self.book ? self.book.list_serialize : nil
 		h[:price_total] = price_total
 		if self.event_at.present?
@@ -219,13 +219,19 @@ class Booking < ActiveRecord::Base
 #   -------------
 
 
-
 private
+
+
+	def set_expires_at
+		if self.status.to_s == "payment_request"
+			self.expires_at = DateTime.now.utc + 48.hours
+		end
+	end
 
 	def set_status
 		if self.date1.respond_to?(:to_formatted_s) || self.date2.respond_to?(:to_formatted_s)
 			if self.status.blank?
-				self.status == 'request_date'
+				self.status.to_s == 'request_date'
 			end
 		end
 	end
