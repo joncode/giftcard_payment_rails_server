@@ -22,21 +22,24 @@ class EmailBooking < EmailAbstract
 	def set_vars
 		h = { 	'book_name' => @booking.book_name,
 				'booking_id' => @booking.hex_id,
-				'booking_date' => format_date(@booking.event_at),
-				'booking_link' => CLEAR_CACHE + "/bookings/" + @booking.hex_id,
+				'booking_link' => @booking.customer_link,
 				'merchant_name' => @merchant.name,
 				'merchant_address' => @merchant.address,
 				'merchant_city_state_zip' => @merchant.city_state_zip,
 				'merchant_phone' => number_to_phone(@merchant.phone),
-				'primary_date' => format_date(@booking.date1),
-				'secondary_date' => format_date(@booking.date2),
 				'book_price_desc' => @booking.price_desc,
 				'book_price' => display_money(ccy: @book.ccy, cents: @booking.price_unit),
 				'guests' => @booking.guests,
 				'booking_price_total' => display_money(ccy: @book.ccy, cents: @booking.price_total),
 				'important' => (@booking.note || ''),
-				'support_phone' => TWILIO_QUICK_NUM
+				'support_phone' => TWILIO_QUICK_NUM,
+				'booking_date' => '',
+				'primary_date' => '',
+				'secondary_date' => ''
 			}
+		h['booking_date'] = format_date(@booking.event_at) if @booking.event_at.preset?
+		h['primary_date'] = format_date(@booking.date1) if @booking.date1.preset?
+		h['secondary_date'] = format_date(@booking.date2) if @booking.date2.preset?
 		set_vars_ary(h)
 	end
 

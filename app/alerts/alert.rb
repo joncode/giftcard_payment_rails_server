@@ -90,6 +90,16 @@ class Alert < ActiveRecord::Base
 
 #   -------------
 
+	def link_tag_email src, text
+		"<a href='#{src}'>#{text}</a>"
+	end
+
+	def link_tag_text src, text
+		"<a href='#{src}'>#{text}</a>"
+	end
+
+#   -------------
+
 	def destroy
 			# DO NOT DELETE RECORDS
 		update_column(:active, false)

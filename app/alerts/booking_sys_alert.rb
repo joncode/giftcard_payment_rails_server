@@ -7,12 +7,18 @@ class BookingSysAlert < BookingMtAlert
 
 	def text_msg
 		get_data
-		"Booking Concierge Alert\n#{@data}"
+		"#{@data[:customer_name]} has booked the #{@data[:book_name]} top100 experience.\n Status has changed to '#{@data[:status]}'.\n Booking ID = #{@data[:hex_id]}\n #{link_tag_text(@data[:admin_link], 'View Booking on ADMT')}"
+
 	end
 
 	def email_msg
 		get_data
-		"<div><h2>Booking Concierge Alert</h2><p>#{@data}</p></div>".html_safe
+		"<div><h2>Booking Concierge Alert</h2>
+<p>#{@data[:customer_name]} has booked the #{@data[:book_name]} top100 experience.</p>
+<p>Booking status has changed to '#{@data[:status]}'</p>
+<p>Booking ID = #{@data[:hex_id]}</p>
+<p>#{link_tag_email(@data[:admin_link], 'View Booking on ADMT')}</p>
+</div>".html_safe
 	end
 
 	def msg
@@ -22,7 +28,12 @@ class BookingSysAlert < BookingMtAlert
 #   -------------
 
 	def get_data
-		@data = booking.to_text
+		@data = { customer_name: booking.name,
+				book_name: booking.book_name,
+				hex_id: booking.hex_id,
+				status: booking.status.titleize,
+				admin_link: booking.admin_link
+			}
 	end
 
 end

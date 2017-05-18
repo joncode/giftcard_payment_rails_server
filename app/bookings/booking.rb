@@ -56,6 +56,14 @@ class Booking < ActiveRecord::Base
 	# "status"=>"request_date", "origin"=>nil, "date1"=>Sun, 05 Mar 2017 00:00:00 UTC +00:00,
 	# "date2"=>Fri, 05 May 2017 00:00:00 UTC +00:00, "event_at"=>nil, "price_desc"=>nil}
 
+	def customer_link
+		CLEAR_CACHE + "/bookings/" + self.hex_id
+	end
+
+	def admin_link
+		PUBLIC_URL_AT + "/bookings/" + self.hex_id
+	end
+
 	def to_text
 		"#{self.name} has booked the #{self.book_name} top100 experience. Status has changed to '#{self.status.titleize}'. Booking ID = #{self.hex_id}"
 	end
