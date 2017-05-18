@@ -34,7 +34,7 @@ class EmailBooking < EmailAbstract
 				'book_price' => display_money(ccy: @book.ccy, cents: @booking.price_unit),
 				'guests' => @booking.guests,
 				'booking_price_total' => display_money(ccy: @book.ccy, cents: @booking.price_total),
-				'important' => @booking.note,
+				'important' => (@booking.note || ''),
 				'support_phone' => TWILIO_QUICK_NUM
 			}
 		set_vars_ary(h)
