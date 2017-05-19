@@ -33,7 +33,7 @@ class Booking < ActiveRecord::Base
     end
 
     def self.reminders
-    	where(active: true).where.not(event_at: nil).find_each do |booking|
+    	where(active: true).where.not(event_at: nil, stripe_id: nil).find_each do |booking|
     		dt = DateTime.now.utc
     		[7,1].each do |d|
 
