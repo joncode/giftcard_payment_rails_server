@@ -91,6 +91,10 @@ class Booking < ActiveRecord::Base
 		self.price_unit.to_i * guests.to_i
 	end
 
+	def expired?
+		self.expires_at && self.expires_at < DateTime.now.utc
+	end
+
 #   -------------
 
     def time1

@@ -35,6 +35,8 @@ class Web::V3::BookingsController < MetalCorsController
 		bk = Booking.find_by(hex_id: params[:id])
 		if !accept_params[:agree_tos] || !accept_params[:cancellation]
 			fail_web({ err: "INVALID_INPUT", msg: "You must accept the Terms of Service and Cancellation policy" })
+		elsif bk.expired?
+			fail_web({ err: "INVALID_INPUT", msg: "This booking has expired." })
 		else
 			if bk && bk.accept_booking(accept_params[:stripe_id], accept_params[:stripe_user_id])
 				bk.booking_confirmed

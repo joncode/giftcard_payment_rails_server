@@ -1,6 +1,7 @@
 class BookingDateValidator < ActiveModel::Validator
 
     def validate(record)
+        return true if record.event_at.present?
         book = record.book
         if book
             earliest_booking_date = book.book_by
