@@ -37,9 +37,9 @@ class EmailBooking < EmailAbstract
 				'primary_date' => '',
 				'secondary_date' => ''
 			}
-		h['booking_date'] = format_date(@booking.event_at) if @booking.event_at.preset?
-		h['primary_date'] = format_date(@booking.date1) if @booking.date1.preset?
-		h['secondary_date'] = format_date(@booking.date2) if @booking.date2.preset?
+		h['booking_date'] = format_date(@booking.event_at) if @booking.event_at.present?
+		h['primary_date'] = format_date(@booking.date1) if @booking.date1.present?
+		h['secondary_date'] = format_date(@booking.date2) if @booking.date2.present?
 		set_vars_ary(h)
 	end
 
