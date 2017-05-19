@@ -4,15 +4,15 @@ class Book < ActiveRecord::Base
 
     auto_strip_attributes :name, :zinger, :detail, :notes
 
-	validates_presence_of :name
+	validates_presence_of :name, :merchant_id, :advance_days
 
 	belongs_to :merchant
-
-	before_save :tighten_up_json
-
 	attr_accessor :price_dollars, :price_wine_dollars, :chef, :sommelier, :general_manager, :other,
 		:photo1, :photo2, :photo3, :photo4
 
+# ---------------
+
+	before_save :tighten_up_json
 
 # ---------------
 
@@ -95,6 +95,9 @@ class Book < ActiveRecord::Base
     end
     alias_method :serialize, :list_serialize
 
+    def book_by
+    	DateTime.now.utc + (self.advance_days || 0).days
+    end
 
     def shop_url
         itsonme_url

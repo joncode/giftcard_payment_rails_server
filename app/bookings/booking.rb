@@ -12,6 +12,11 @@ class Booking < ActiveRecord::Base
 
 #   -------------
 
+	validates_presence_of :book
+	validates_with BookingDateValidator
+
+#   -------------
+
     before_save :set_unique_hex_id, on: :create
     before_save :set_status
     before_save :set_expires_at
@@ -116,7 +121,7 @@ class Booking < ActiveRecord::Base
 	def date1_to_s
 		s = self.date1
 		if s.respond_to?(:to_formatted_s)
-			s.to_formatted_s(:numeric_date_time)
+			s.to_formatted_s(:custom_long_ordinal)
 		else
 			s
 		end
@@ -125,7 +130,7 @@ class Booking < ActiveRecord::Base
 	def date2_to_s
 		s = self.date2
 		if s.respond_to?(:to_formatted_s)
-			s.to_formatted_s(:numeric_date_time)
+			s.to_formatted_s(:custom_long_ordinal)
 		else
 			s
 		end
@@ -134,7 +139,7 @@ class Booking < ActiveRecord::Base
 	def event_at_to_s
 		s = self.event_at
 		if s.respond_to?(:to_formatted_s)
-			s.to_formatted_s(:numeric_date_time)
+			s.to_formatted_s(:custom_long_ordinal)
 		else
 			s
 		end
