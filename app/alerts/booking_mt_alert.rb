@@ -1,7 +1,15 @@
 class BookingMtAlert < Alert
 
-#############   THIS FILE IS AN ADMIN COPY OF GiftPurchasedMtAlert
-#######
+
+    def booking
+        self.target
+    end
+
+    def note
+        self.target.merchant
+    end
+
+#   -------------
 
 	def text_msg
 		get_data
