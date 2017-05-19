@@ -27,7 +27,7 @@ class EmailBooking < EmailAbstract
 				'merchant_address' => @merchant.address,
 				'merchant_city_state_zip' => @merchant.city_state_zip,
 				'merchant_phone' => number_to_phone(@merchant.phone),
-				'book_price_desc' => @booking.price_desc,
+				'book_price_desc' => (@booking.price_desc || 'Booking Price Per Guest'),
 				'book_price' => display_money(ccy: @book.ccy, cents: @booking.price_unit),
 				'guests' => @booking.guests,
 				'booking_price_total' => display_money(ccy: @book.ccy, cents: @booking.price_total),
