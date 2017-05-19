@@ -232,7 +232,7 @@ private
 
 
 	def set_expires_at
-		if self.status.to_s == "payment_request"
+		if self.expires_at.nil? && self.event_at.present?
 			self.expires_at = DateTime.now.utc + 48.hours
 		end
 	end
