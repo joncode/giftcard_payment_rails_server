@@ -35,7 +35,8 @@ class EmailBooking < EmailAbstract
 				'support_phone' => TWILIO_QUICK_NUM,
 				'booking_date' => '',
 				'primary_date' => '',
-				'secondary_date' => ''
+				'secondary_date' => '',
+				'expires_interval' => @booking.expires_interval
 			}
 		h['booking_date'] = format_date(@booking.event_at) if @booking.event_at.present?
 		h['primary_date'] = format_date(@booking.date1) if @booking.date1.present?

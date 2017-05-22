@@ -24,7 +24,7 @@ class BookingNotifications
 				# send the purchase link to the accept and purchase booking page
 			booking = Booking.find booking_id
 			template = 'booking-confirmation-request'
-			e = EmailBooking.new(booking, template, 'Top100 Booking Purchase')
+			e = EmailBooking.new(booking, template, 'Top100 Booking Confirm Booking')
 			e.send_email
 			Alert.perform "BOOKING_SYS", booking
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
@@ -38,7 +38,7 @@ class BookingNotifications
 				# Send Alert to the Merchant that inquiry has occurred ?
 			booking = Booking.find booking_id
 			template = 'booking-confirmation-receipt'
-			e = EmailBooking.new(booking, template, 'Top100 Booking Confirmation')
+			e = EmailBooking.new(booking, template, 'Top100 Booking Purchase Complete')
 			e.send_email
 			Alert.perform "BOOKING_SYS", booking
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?

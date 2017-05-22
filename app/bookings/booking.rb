@@ -4,6 +4,8 @@ class Booking < ActiveRecord::Base
 
 	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_desc
 
+	EXPIRES_INTERVAL = 24
+
 #   -------------
 
 	belongs_to :book
@@ -61,6 +63,10 @@ class Booking < ActiveRecord::Base
 	# "status"=>"request_date", "origin"=>nil, "date1"=>Sun, 05 Mar 2017 00:00:00 UTC +00:00,
 	# "date2"=>Fri, 05 May 2017 00:00:00 UTC +00:00, "event_at"=>nil, "price_desc"=>nil}
 
+	def expires_interval
+		EXPIRES_INTERVAL
+	end
+
 	def customer_link
 		CLEAR_CACHE + "/bookings/" + self.hex_id
 	end
@@ -76,7 +82,8 @@ class Booking < ActiveRecord::Base
 	def serialize
 		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone,
 			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin, :expires_at ]
-		h[:book] = self.book ? self.book.list_serialize : nil
+		h[:expires_interval] = EXPIRES_INTERVAL
+ 		h[:book] = self.book ? self.book.list_serialize : nil
 		h[:price_total] = price_total
 		if self.event_at.present?
 			h[:event_at] = self.event_at
@@ -233,7 +240,7 @@ private
 
 	def set_expires_at
 		if self.expires_at.nil? && self.event_at.present?
-			self.expires_at = DateTime.now.utc + 48.hours
+			self.expires_at = DateTime.now.utc + EXPIRES_INTERVAL.hours
 		end
 	end
 
@@ -252,3 +259,5 @@ private
     end
 
 end
+
+
