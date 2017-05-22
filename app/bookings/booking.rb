@@ -95,11 +95,22 @@ class Booking < ActiveRecord::Base
 	end
 
 	def price_total
-		self.price_unit.to_i * guests.to_i
+		self.price_unit.to_i * self.guests.to_i
 	end
 
 	def expired?
 		self.expires_at && self.expires_at < DateTime.now.utc
+	end
+
+	def resubmit
+		# delete expires_at and send alerts to concierge for confirm booking
+		self.status = 'resubmit_date'
+		if save
+			customer_resubmits_date_request
+			true
+		else
+			false
+		end
 	end
 
 #   -------------
@@ -187,6 +198,8 @@ class Booking < ActiveRecord::Base
 		when 'no_date'
 			'request_date'
 		when 'request_date'
+			'accept_date'
+		when 'resubmit_date'
 			'accept_date'
 		when 'date_accepted'
 			'payment_request'

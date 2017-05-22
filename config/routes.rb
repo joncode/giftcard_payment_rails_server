@@ -138,6 +138,7 @@ Drinkboard::Application.routes.draw do
 				member do
 					post :inquiry
 					patch :accept
+					patch :resubmit
 				end
 			end
 			resources :cards, only: [:create, :index, :destroy]

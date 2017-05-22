@@ -19,6 +19,15 @@ module BookingLifecycle
         end
     end
 
+    def customer_resubmits_date_request
+        if Rails.env.development?
+            BookingEvent(self.id, 'customer_resubmits_date')
+        else
+            Resque.enqueue(BookingEvent, self.id, 'customer_resubmits_date')
+        end
+    end
+
+
     def booking_confirmed
         if Rails.env.development?
             BookingEvent(self.id, 'customer_purchase_complete')

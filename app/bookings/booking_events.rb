@@ -10,12 +10,19 @@ class BookingEvent
 
         when 'customer_inquiry'
             BookingNotifications.send_inquiry_confirmation_to_customer booking_id
+
         when 'merchant_confirms_date'
             BookingNotifications.send_purchase_link_to_customer booking_id
+
+        when 'customer_resubmits_date'
+            BookingNotifications.customer_resubmits_date booking_id
+
         when 'customer_purchase_complete'
             BookingNotifications.send_booking_confirmation_to_customer booking_id
+
         when 'send_reminder'
             BookingNotifications.send_email_reminder booking_id, data
+
         else
             puts "500 Internal - unknown event name #{event_name}"
             raise "Unknown BookingEvent #{event_name}"

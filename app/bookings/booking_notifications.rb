@@ -30,6 +30,13 @@ class BookingNotifications
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
 		end
 
+		def customer_resubmits_date booking_id
+			puts "BookingNotifications.customer_resubmits_date (34) - Booking #{booking_id}"
+			booking = Booking.find booking_id
+			Alert.perform "BOOKING_SYS", booking
+			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
+		end
+
 		def send_booking_confirmation_to_customer booking_id
 			puts "BookingNotifications.send_booking_confirmation_to_customer (20) - Booking #{booking_id}"
 

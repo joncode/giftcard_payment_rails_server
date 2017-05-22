@@ -11,6 +11,16 @@ class Web::V3::BookingsController < MetalCorsController
 		respond
     end
 
+    def resubmit
+    	bk = Booking.find_by(hex_id: params[:id])
+		if bk.resubmit
+			success bk.serialize
+		else
+			fail_web({ err: "NOT_FOUND" })
+		end
+		respond
+    end
+
 	def inquiry
 		h = parse_params_to_datetimes(create_params)
 		h[:book_id] = params[:id]
