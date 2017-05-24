@@ -2,7 +2,7 @@ module BookingChargeCard
 
 
 	def tokenize_card
-		o = OpsStripeToken.new h
+		o = OpsStripeToken.new ch
 		o.tokenize
 		o
 	end
