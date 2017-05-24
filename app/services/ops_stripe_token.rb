@@ -30,6 +30,10 @@ class OpsStripeToken
 		end
 	end
 
+	def success?
+		@success
+	end
+
 	def tokenize
 		return nil if @token.nil? || @customer_name.nil? || @email.nil?
 		@response = Stripe::Customer.create(
