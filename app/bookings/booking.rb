@@ -177,7 +177,7 @@ class Booking < ActiveRecord::Base
 			self.status = next_status
 			save
 		else
-			errors.add(card_token: "#{o.error_key} #{o.error_message}")
+			errors.add(:card_token, "#{o.error_key} #{o.error_message}")
 			false
 		end
 	end
