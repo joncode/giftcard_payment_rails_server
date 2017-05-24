@@ -1,5 +1,6 @@
 class Booking < ActiveRecord::Base
 	include BookingLifecycle
+	include BookingChargeCard
 	include MoneyHelper
 
 	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_desc
@@ -97,6 +98,7 @@ class Booking < ActiveRecord::Base
 	def price_total
 		self.price_unit.to_i * self.guests.to_i
 	end
+	alias_method :amount, :price_total
 
 	def expired?
 		self.expires_at && self.expires_at < DateTime.now.utc

@@ -26,6 +26,7 @@ OCA = OpsCloverApi
 OS = OpsStripe
 OSA = OpsStripeAccount
 OSC = OpsStripeCard
+OST = OpsStripeToken
 OZ = OpsZapper
 PL = Place
 PLG = PlaceGraph
