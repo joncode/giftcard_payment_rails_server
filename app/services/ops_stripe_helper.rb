@@ -66,7 +66,13 @@ module OpsStripeHelper
 			if e.respond_to?(:code)
 				@error_code = e.code
 			else
-				@error_code = 'invalid_request'
+				if e.message.match(/No such token/)
+					@error_message = 'Card Upload Token has expired.  Please re-upload card'
+					@error_code = 'card_upload_expired'
+					@resp_code = 2
+				else
+					@error_code = 'invalid_request'
+				end
 			end
 			@http_status = e.http_status
 			@error_key = @error_code

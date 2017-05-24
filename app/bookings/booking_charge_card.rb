@@ -26,6 +26,7 @@ module BookingChargeCard
 
 
 # b = BG.where.not(stripe_id: nil).last
+# b.accept_booking b.stripe_id, b.stripe_user_id
 # h = { 'stripe_id' => b.stripe_id, 'stripe_user_id' => b.stripe_user_id, 'amount' => b.price_total, 'ccy' => b.ccy, 'origin' => b.hex_id, 'email' => b.email }
 
 
