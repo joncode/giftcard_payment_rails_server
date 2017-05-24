@@ -4,7 +4,7 @@ class OpsStripeToken
 	include MoneyHelper
 	include OpsStripeHelper
 
-	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key, :h,
+	attr_accessor :response, :success, :request_id, :error, :error_message, :error_code, :error_key, :h,
 		:http_status, :customer_name, :token, :card_id, :ccy, :email, :card, :customer_id, :country, :brand
 
 	#  'stripe_id', 'stripe_user_id', 'id', 'amount', 'ccy', 'origin', 'nickname', 'email'

@@ -170,10 +170,16 @@ class Booking < ActiveRecord::Base
 	end
 
 	def accept_booking(stripe_id, stripe_user_id)
-		self.status = next_status
 		self.stripe_id = stripe_id
 		self.stripe_user_id = stripe_user_id
-		save
+		o = tokenize_card
+		if o.success?
+			self.status = next_status
+			save
+		else
+			errors.add(card_token: "#{o.error_key} #{o.error_message}")
+			false
+		end
 	end
 
 	def accept_date(num=nil)

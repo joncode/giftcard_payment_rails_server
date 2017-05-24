@@ -1,14 +1,17 @@
 module BookingChargeCard
 
 
+	def tokenize_card
+		o = OpsStripeToken.new h
+		o.tokenize
+		o
+	end
+
 	def charge_card
 
 		if self.stripe_id.blank? && self.stripe_user_id.blank?
 			return 'Card not present'
 		end
-
-
-
 
 	end
 
