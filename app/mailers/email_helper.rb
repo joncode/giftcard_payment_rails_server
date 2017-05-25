@@ -131,45 +131,6 @@ module EmailHelper
 </tr></tbody></table></td></tr></tbody></table>".html_safe
 	end
 
-	def text_for_invoice_giver_old gift
-		receiver_info = gift.receiver_name
-		if !gift.receiver_email.blank?
-			receiver_info += " <p>email: " + gift.receiver_email + '</p>'
-		elsif !gift.receiver_phone.blank?
-			receiver_info += " <p>phone: " + number_to_phone(gift.receiver_phone) + '</p>'
-		elsif !gift.facebook_id.blank?
-			receiver_info += " <p>via facebook</p>"
-		elsif !gift.twitter.blank?
-			receiver_info += " <p>via twitter</p>"
-		end
-		"<div style=#{default_style}><div style='width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
-			<div>Thanks for gifting local with ItsOnMe!</div></div></div>
-			<hr style='border-bottom:1px solid #C9C9C9;' />
-			<div style='padding: 0 40px 20px 40px;'>
-				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
-					Your gift is being delivered to #{receiver_info}
-				</div>
-				<table style='width: 100%;'>
-					<tr>
-						<td style='text-align:right; padding: 0 10px; width:50%;'>Location</td>
-					<td style='text-align:left; width:50%;'>#{gift.merchant.name}</td>
-					</tr>
-					<tr>
-						<td style='text-align:right; padding: 0 10px; width:50%;'>Gift value</td>
-					<td style='text-align:left; width:50%;'>#{gift.value_s}</td>
-					</tr>
-					<tr>
-						<td style='text-align:right; padding: 0 10px; width:50%;'>Processing fee</td>
-					<td style='text-align:left; width:50%;'>#{gift.service_s}</td>
-					</tr>
-					<tr style='font-weight:bold;'>
-						<td style='text-align:right; padding: 0 10px; width:50%;'>Total</td>
-					<td style='text-align:left; width:50%;'>#{gift.purchase_total}</td>
-					</tr>
-				</table></div>
-		</div>".html_safe
-	end
-
 	def text_for_notify_receiver_wo_redemption gift
 		image_url      = gift.merchant.image
 		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
