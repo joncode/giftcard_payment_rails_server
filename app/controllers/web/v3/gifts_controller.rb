@@ -9,14 +9,13 @@ class Web::V3::GiftsController < MetalCorsController
 
     def verify
         prms = gift_params
-        puts prms.inspect
-        num = rand(3)
-        if num == 0
-            success
-        elsif num == 1
-            fail_web({ err: "INVALID_INPUT", msg: 'You must verify your mobile phone number' })
+        puts "Web::V3::GiftsController " + prms.insp
+        vobj = VerifyGift.new(prms)
+        vobj.verify
+        if vobj.succces?
+            success(vobj.data)
         else
-            fail_web({ err: "SMS_ONE_TIME_VERIFY_REQUIRED", msg: 'You must one time verify your mobile phone number' })
+            fail_web({ err: vobj.err, msg: vobj.msg })
         end
         respond
     end
