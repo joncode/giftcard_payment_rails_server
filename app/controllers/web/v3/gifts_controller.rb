@@ -7,6 +7,20 @@ class Web::V3::GiftsController < MetalCorsController
     rescue_from Timeout::Error, :with => :rescue_from_timeout
     rescue_from Rack::Timeout::RequestTimeoutException, :with => :rescue_from_timeout
 
+    def verify
+        prms = gift_params
+        puts prms.inspect
+        num = rand(3)
+        if num == 0
+            success
+        elsif num == 1
+            fail_web({ err: "INVALID_INPUT", msg: 'You must verify your mobile phone number' })
+        else
+            fail_web({ err: "SMS_ONE_TIME_VERIFY_REQUIRED", msg: 'You must one time verify your mobile phone number' })
+        end
+        respond
+    end
+
     def list
         choice = nil
         choice = params[:scope] unless params[:scope].blank? # :used, :received, :sent
