@@ -115,6 +115,33 @@ module EmailHelper
 		elsif !gift.twitter.blank?
 			receiver_info += " <p>via twitter</p>"
 		end
+		"<table cellpadding='0' cellspacing='0' border='0' align='center' width='100%' class='devicewidth' style='width: 100%'>
+<tbody><tr><td align='center' style='font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;color:#404547;text-align:center;line-height: 150%;padding: 15px 10px;'>
+<h2 style='line-height:33px;'>Thanks for gifting local with ItsOnMe!</h2>
+<p>Your gift is being delivered to #{receiver_info}</p></td></tr><tr><td align='center'>
+<table cellpadding='0' cellspacing='0' border='0' align='center' width='400' class='devicewidth' style='width:100%;max-width: 400px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;color:#404547;line-height: 150%;border: 1px solid #efefef;border-radius:4px;margin:15px 0'>
+<tbody><tr><td style=' padding: 15px; border-bottom: 1px solid #efefef;'>Location</td>
+<td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.merchant.name}</td>
+</tr><tr><td style=' padding: 15px;border-bottom: 1px solid #efefef;'>Gift Value</td>
+<td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.value_s}</td>
+</tr><tr><td style=' padding: 15px;border-bottom: 1px solid #efefef;'>Processing Fee</td>
+<td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.service_s}</td>
+</tr><tr><td style=' padding: 15px;border-bottom: 1px solid #efefef;'><strong>Total</strong></td>
+<td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.purchase_total}</td>
+</tr></tbody></table></td></tr></tbody></table>".html_safe
+	end
+
+	def text_for_invoice_giver_old gift
+		receiver_info = gift.receiver_name
+		if !gift.receiver_email.blank?
+			receiver_info += " <p>email: " + gift.receiver_email + '</p>'
+		elsif !gift.receiver_phone.blank?
+			receiver_info += " <p>phone: " + number_to_phone(gift.receiver_phone) + '</p>'
+		elsif !gift.facebook_id.blank?
+			receiver_info += " <p>via facebook</p>"
+		elsif !gift.twitter.blank?
+			receiver_info += " <p>via twitter</p>"
+		end
 		"<div style=#{default_style}><div style='width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
 			<div>Thanks for gifting local with ItsOnMe!</div></div></div>
 			<hr style='border-bottom:1px solid #C9C9C9;' />
