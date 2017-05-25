@@ -143,6 +143,7 @@ class GiftTemplateMainMailer
 
     def blank_merge_var(str)
         if str.blank?
+            return nil
             "&nbsp;".html_safe
         else
             str
