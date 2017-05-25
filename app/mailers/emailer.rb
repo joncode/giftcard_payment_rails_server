@@ -246,6 +246,7 @@ private
     def blank_merge_var(str)
         if str.blank?
             "&nbsp;".html_safe
+            nil
         else
             str
         end
