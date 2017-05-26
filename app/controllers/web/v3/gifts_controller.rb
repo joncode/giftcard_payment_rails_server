@@ -180,7 +180,7 @@ class Web::V3::GiftsController < MetalCorsController
             gift_hsh["message"]       = gps[:msg]
             gift_hsh["scheduled_at"]  = gps[:scheduled_at]
 
-            puts "wEB/V3 GIFTS hash #{gift_hsh}"
+            puts "WEB/V3 GIFTS hash #{gift_hsh}"
 
             gift = GiftSale.create(gift_hsh)
             if gift.kind_of?(Gift) && !gift.id.nil?
