@@ -12,7 +12,7 @@ class VerifyGift
 		num = rand(3)
 		if num == 0
 			@success = 1
-			@data = data: "Gift verified"
+			@data = "Gift verified"
 		elsif num == 1
 			@success = 0
 			@err = "SMS_ONE_TIME_VEINVALID_INPUTRIFY_REQUIRED"
