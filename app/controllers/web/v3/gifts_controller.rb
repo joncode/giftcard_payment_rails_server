@@ -7,19 +7,6 @@ class Web::V3::GiftsController < MetalCorsController
     rescue_from Timeout::Error, :with => :rescue_from_timeout
     rescue_from Rack::Timeout::RequestTimeoutException, :with => :rescue_from_timeout
 
-    def verify
-        prms = gift_params
-        puts "Web::V3::GiftsController " + prms.insp
-        vobj = VerifyGift.new(prms)
-        vobj.verify
-        if vobj.succces?
-            success(vobj.data)
-        else
-            fail_web({ err: vobj.err, msg: vobj.msg })
-        end
-        respond
-    end
-
     def list
         choice = nil
         choice = params[:scope] unless params[:scope].blank? # :used, :received, :sent
@@ -160,32 +147,52 @@ class Web::V3::GiftsController < MetalCorsController
         respond(status)
     end
 
-    def create
-        gift_hsh = {}
-        gps = gift_params
-        set_receiver(gps, gift_hsh)
-        set_origin(gps, gift_hsh)
-        gift_hsh["shoppingCart"]  = gps[:items]
-        gift_hsh["giver"]         = @current_user
-        gift_hsh["credit_card"]   = gps[:pay_id]
 
-        gift_hsh["merchant_id"]   = gps[:loc_id]
-        gift_hsh["value"]         = gps[:value]
-        gift_hsh["message"]       = gps[:msg]
-        gift_hsh["scheduled_at"]  = gps[:scheduled_at]
-
-        puts "wEB/V3 GIFTS hash #{gift_hsh}"
-
-        gift = GiftSale.create(gift_hsh)
-        if gift.kind_of?(Gift) && !gift.id.nil?
-            # binding.pry
-            gift.fire_after_save_queue(@current_client)
-            success gift.web_serialize
+    def verify
+        prms = gift_params
+        puts "Web::V3::GiftsController " + prms.insp
+        vobj = VerifyGift.new(prms)
+        vobj.verify
+        if vobj.succces?
+            success(vobj.data)
         else
-            if gift.kind_of?(Gift) && gift.persisted?
-                fail_web fail_web_payload("not_created_gift", gift.errors)
+            fail_web({ err: vobj.err, msg: vobj.msg })
+        end
+        respond
+    end
+
+    def create
+        gps = gift_params
+        vobj = VerifyGift.new(prms)
+        vobj.verify
+        if false && !vobj.success?
+            # fail_web({ err: vobj.err, msg: vobj.msg })
+        else
+            gift_hsh = {}
+            set_receiver(gps, gift_hsh)
+            set_origin(gps, gift_hsh)
+            gift_hsh["shoppingCart"]  = gps[:items]
+            gift_hsh["giver"]         = @current_user
+            gift_hsh["credit_card"]   = gps[:pay_id]
+
+            gift_hsh["merchant_id"]   = gps[:loc_id]
+            gift_hsh["value"]         = gps[:value]
+            gift_hsh["message"]       = gps[:msg]
+            gift_hsh["scheduled_at"]  = gps[:scheduled_at]
+
+            puts "wEB/V3 GIFTS hash #{gift_hsh}"
+
+            gift = GiftSale.create(gift_hsh)
+            if gift.kind_of?(Gift) && !gift.id.nil?
+                # binding.pry
+                gift.fire_after_save_queue(@current_client)
+                success gift.web_serialize
             else
-                fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})
+                if gift.kind_of?(Gift) && gift.persisted?
+                    fail_web fail_web_payload("not_created_gift", gift.errors)
+                else
+                    fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})
+                end
             end
         end
         respond
