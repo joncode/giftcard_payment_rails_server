@@ -10,10 +10,6 @@ module BookingChargeCard
 		o
 	end
 
-	def charge_card
-
-	end
-
 	def ch
 		{ 'stripe_id' => self.stripe_id, 'stripe_user_id' => self.stripe_user_id,
 			'amount' => self.price_total, 'ccy' => self.ccy, 'origin' => self.hex_id,
