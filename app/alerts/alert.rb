@@ -95,7 +95,7 @@ class Alert < ActiveRecord::Base
 	end
 
 	def link_tag_text src, text
-		"<a href='#{src}'>#{text}</a>"
+		"\n#{text}\n#{src}\n"
 	end
 
 #   -------------
