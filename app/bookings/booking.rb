@@ -40,7 +40,7 @@ class Booking < ActiveRecord::Base
     		dt = DateTime.now.utc
     		[7,1].each do |d|
 
-    			if booking.event_at < d.days.ago && booking.event_at > (d +1).days.ago
+    			if booking.event_at < (d + 1).days.from_now && booking.event_at > d.days.from_now
 
     				puts "BookingLifecycle.reminder (11) - reminder for booking #{booking.id}"
     				if booking.merchant && booking.merchant.active_live?
