@@ -149,9 +149,9 @@ class Web::V3::GiftsController < MetalCorsController
 
 
     def verify
-        prms = gift_params
-        puts "Web::V3::GiftsController " + prms.insp
-        vobj = VerifyGift.new(prms)
+        gps = gift_params
+        puts "Web::V3::GiftsController " + gps.insp
+        vobj = VerifyGift.new(gps)
         vobj.verify
         if vobj.succces?
             success(vobj.data)
@@ -163,7 +163,7 @@ class Web::V3::GiftsController < MetalCorsController
 
     def create
         gps = gift_params
-        vobj = VerifyGift.new(prms)
+        vobj = VerifyGift.new(gps)
         vobj.verify
         if false && !vobj.success?
             # fail_web({ err: vobj.err, msg: vobj.msg })
