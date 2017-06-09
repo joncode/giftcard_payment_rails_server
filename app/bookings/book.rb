@@ -12,6 +12,7 @@ class Book < ActiveRecord::Base
 
 	def duration_desc
 		x = duration
+		return '' if x.to_s.blank?
 		if x < 91
 			"#{x} minute".pluralize(x)
 		else

@@ -219,7 +219,7 @@ class Gift < ActiveRecord::Base
     end
 
     def service_cents
-        currency_to_cents(self.service)
+        currency_to_cents self.service || '0'
     end
 
     def purchase_cents
