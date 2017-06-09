@@ -6,7 +6,6 @@ class Booking < ActiveRecord::Base
 	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_desc
 
 	EXPIRES_INTERVAL = 24
-	DURATION_MINUTES = 150
 
 #   -------------
 
@@ -82,8 +81,8 @@ class Booking < ActiveRecord::Base
 	end
 
 	def serialize
-		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone,
-			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin, :expires_at ]
+		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone, :expires_at,
+			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin]
 		h[:expires_interval] = EXPIRES_INTERVAL
  		h[:book] = self.book ? self.book.list_serialize : nil
 		h[:price_total] = price_total
@@ -93,20 +92,7 @@ class Booking < ActiveRecord::Base
 			h[:date1] = self.date1
 			h[:date2] = self.date2
 		end
-		h[:duration_minutes] = DURATION_MINUTES
-		h[:duration_desc] = duration_desc
 		h.stringify_keys
-	end
-
-	def duration_desc
-		x = DURATION_MINUTES
-		if x < 91
-			"#{x} minute".pluralize(x)
-		else
-			hours = (x / 60.0).round(1)
-			hours = hours.to_i if hours.to_i == hours
-			"#{hours} hour".pluralize(hours)
-		end
 	end
 
 	def price_total

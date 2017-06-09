@@ -2,6 +2,23 @@ class Book < ActiveRecord::Base
 	include MoneyHelper
     include Formatters
 
+	DURATION_MINUTES = 150
+
+	def duration
+		DURATION_MINUTES
+	end
+
+	def duration_desc
+		x = duration
+		if x < 91
+			"#{x} minute".pluralize(x)
+		else
+			hours = (x / 60.0).round(1)
+			hours = hours.to_i if hours.to_i == hours
+			"#{hours} hour".pluralize(hours)
+		end
+	end
+
     auto_strip_attributes :name, :zinger, :detail, :notes
 
 	validates_presence_of :name, :merchant_id, :advance_days
@@ -75,7 +92,8 @@ class Book < ActiveRecord::Base
 	        	# LIST PRESENTATION DATA
 	    	name: self.name, zinger: self.zinger, detail: self.detail, notes: self.notes,
 	        photo: self.get_photo, ccy: self.ccy, price: self.price, price_wine: self.price_wine,
-	        advance_days: self.advance_days, min_ppl: self.min_ppl, max_ppl: self.max_ppl
+	        advance_days: self.advance_days, min_ppl: self.min_ppl, max_ppl: self.max_ppl,
+			duration_minutes: duration, duration_desc: duration_desc
    		}
     end
 
