@@ -4,10 +4,10 @@ class Book < ActiveRecord::Base
 
     has_many :bookings
 
-	DURATION_MINUTES = 150
-
 	def duration
-		DURATION_MINUTES
+		# default is 120
+		# units is minutes
+		super
 	end
 
 	def duration_desc
