@@ -2,6 +2,8 @@ class Book < ActiveRecord::Base
 	include MoneyHelper
     include Formatters
 
+    has_many :bookings
+
 	DURATION_MINUTES = 150
 
 	def duration
