@@ -16,7 +16,7 @@ class EmailAbstract
 	end
 
 	def data= data
-        puts "EmailAbstrcat data= #{data.inspect}"
+        puts "EmailAbstract data= #{data.inspect}"
         @subject = data["subject"]
 
         @to_emails  = [{"email" => data['email'], "name" => data['name'] }]
