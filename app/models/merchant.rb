@@ -19,7 +19,7 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
-    validates :rate, numericality: { less_than: 100 }, allow_blank: true
+    validates :rate, numericality: { less_than: 100, greater_than_or_equal_to: 0 }, allow_blank: true
     validates_presence_of :name, :address, :state, :zip
     validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: true
     validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: true
