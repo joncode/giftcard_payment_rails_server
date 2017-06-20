@@ -19,10 +19,11 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    validates :rate, numericality: { less_than: 100 }, allow_blank: true
     validates_presence_of :name, :address, :state, :zip
-    validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
-    validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
-    validates :signup_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
+    validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: true
+    validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: true
+    validates :signup_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: true
     validates_length_of :zinger, :maximum => 90
     validates_length_of :description, :maximum => 500
     validates_length_of :ein, :within => 8..12, allow_blank: :true
