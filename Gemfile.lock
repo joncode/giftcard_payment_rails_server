@@ -332,7 +332,7 @@ DEPENDENCIES
   rspec-rails (~> 2.13.0)
   stripe!
   test-unit
-  therubyracer
+  therubyracer (~> 0.12.2)
   to_words
   turbolinks
   twilio-ruby
@@ -346,5 +346,8 @@ DEPENDENCIES
   yajl-ruby
   zip-codes
 
+RUBY VERSION
+   ruby 2.2.2p95
+
 BUNDLED WITH
-   1.10.6
+   1.15.1

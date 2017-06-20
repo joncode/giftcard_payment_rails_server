@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.4.1'
+ruby '2.2.2'
 
 # gem 'devise'
 
@@ -48,7 +48,8 @@ gem 'wkhtmltopdf-binary'
 gem 'to_words'
 
 gem "koala", "~> 2.2"
-gem 'therubyracer', platforms: :ruby
+gem "therubyracer", "~> 0.12.2"
+
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
