@@ -115,6 +115,15 @@ class Booking < ActiveRecord::Base
 		end
 	end
 
+	def timezone
+		self.merchant ? self.merchant.time_zone : "Pacific Time (US & Canada)"
+	end
+
+	def in_timezone datetime
+    	datetime.in_time_zone(timezone)
+	end
+
+
 #   -------------
 
     def time1
@@ -141,6 +150,19 @@ class Booking < ActiveRecord::Base
 
 
 #   -------------
+
+
+	def event_at
+		TimeGem.set_in_timezone(super, timezone)
+	end
+
+	def date1
+		TimeGem.set_in_timezone(super, timezone)
+	end
+
+	def date2
+		TimeGem.set_in_timezone(super, timezone)
+	end
 
 	def date1_to_s
 		s = self.date1

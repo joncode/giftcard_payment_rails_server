@@ -116,8 +116,20 @@ class Book < ActiveRecord::Base
     end
     alias_method :serialize, :list_serialize
 
-    def book_by
-    	DateTime.now.utc + (self.advance_days || 0).days
+	def timezone
+		self.merchant ? self.merchant.time_zone : "Pacific Time (US & Canada)"
+	end
+
+	def in_timezone datetime
+    	datetime.in_time_zone(timezone)
+	end
+
+    def earliest_booking_date
+    	# today in merchant timezone
+    	# plus advance days
+    	# that day is book by - event date
+    	today = in_timezone(DateTime.now)
+    	today + (self.advance_days || 0).days
     end
 
     def shop_url

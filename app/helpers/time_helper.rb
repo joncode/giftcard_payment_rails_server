@@ -14,9 +14,14 @@ module TimeHelper
         end
     end
 
-    def change_time_zone_only datetime_obj, time_zone_str
-        dt = DateTime.now.in_time_zone(time_zone_str)
-        dt.change(year: datetime_obj.year, month: datetime_obj.month, day: datetime_obj.day, hour: datetime_obj.hour)
+    def screentime datetime, timezone=nil
+        if datetime.blank?
+            return datetime
+        end
+        if timezone
+           datetime = datetime.in_time_zone(timezone)
+        end
+        datetime
     end
 
     def make_ordinalized_date_with_day date

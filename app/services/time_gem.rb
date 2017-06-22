@@ -60,7 +60,7 @@ class TimeGem
 
     def self.string_to_datetime datetime_obj, time_zone_str="UTC"
         if datetime_obj.kind_of?(String)
-            return nil if datetime_obj.blank?
+            return datetime_obj if datetime_obj.blank?
             begin
                 datetime_obj = datetime_obj.gsub('/', '-')
                 if datetime_obj.split('-')[2].length == 4
@@ -76,8 +76,12 @@ class TimeGem
     end
 
     def self.change_time_zone_only datetime_obj, time_zone_str
-        dt = TimeGem.change_time_to_zone DateTime.now.utc, time_zone_str
-        dt.change(year: datetime_obj.year, month: datetime_obj.month, day: datetime_obj.day, hour: datetime_obj.hour)
+        set_in_timezone(datetime_obj, time_zone_str)
+    end
+
+    def self.set_in_timezone(time, zone)
+        return time unless time.respond_to?(:to_datetime)
+        Time.use_zone(zone) { time.to_datetime.change(offset: Time.zone.now.strftime("%z")) }
     end
 
     def self.change_time_to_zone datetime_obj, time_zone_str
