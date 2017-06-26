@@ -38,6 +38,7 @@ class OpsClover
 		@amount = @args[:amount] || 0
 		@ccy = @args[:ccy]
 		@code = @args[:code]
+		@base_url = @args[:base_url]
 
 		get_client
 		get_merchant

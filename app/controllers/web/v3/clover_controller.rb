@@ -113,6 +113,7 @@ class Web::V3::CloverController < MetalCorsController
 		h[:amount] = redeem_params[:amount].to_i
 		h[:ccy] = redeem_params[:currency]
 		h[:auth_token] = redeem_params[:auth_token]
+		h[:base_url] = redeem_params[:base_url]
 
 		o = OpsClover.new(h)
 		puts o.inspect
