@@ -16,7 +16,7 @@ class Booking < ActiveRecord::Base
 #   -------------
 
 	validates_presence_of :book
-	validates_with BookingDateValidator
+	# validates_with BookingDateValidator
 
 #   -------------
 

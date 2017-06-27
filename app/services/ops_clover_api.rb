@@ -74,7 +74,7 @@ class OpsCloverApi
 						'note' => note
 					}
 			puts payment_body
-			return post ['orders', order_id, 'payments'], payment_body
+			return post_api ['orders', order_id, 'payments'], payment_body
 		else
 			raise 'OpsCloverApi: Missing Order Data'
 		end
@@ -87,7 +87,7 @@ class OpsCloverApi
 
 		if order_id && @h['line_item_id'] && @h['amount']
 			discount = { 'amount' => @h['amount'], "name" => @h['name'] }
-			return post ['orders', order_id, 'line_items', @h['line_item_id'], 'discounts' ], discount
+			return post_api ['orders', order_id, 'line_items', @h['line_item_id'], 'discounts' ], discount
 		end
 	end
 
@@ -109,10 +109,6 @@ class OpsCloverApi
 
 	def post_api terms, body
 		return post terms_to_resource(terms, {}), body
-	end
-
-	def header
-		{ content_type: :json, accept: :json, 'Authorization' => "Bearer #{@auth_token}" }
 	end
 
 	def terms_to_resource terms, query
@@ -170,4 +166,12 @@ class OpsCloverApi
             return { status: 0, data: e, error: e }
         end
     end
+
+
+private
+
+
+	def header
+		{ content_type: :json, accept: :json, 'Authorization' => "Bearer #{@auth_token}" }
+	end
 end
