@@ -12,6 +12,7 @@ class OpsStripe
 
 	def initialize cc_hsh={}
 		Stripe.api_key = STRIPE_SECRET
+        Stripe.api_version = "2017-06-05"
 		@customer_id = cc_hsh['stripe_user_id']
 		@card_id = cc_hsh['stripe_id']
 		@ccy = cc_hsh['ccy'].downcase if cc_hsh['ccy'].respond_to?(:downcase)

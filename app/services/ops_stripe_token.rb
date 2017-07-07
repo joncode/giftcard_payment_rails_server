@@ -11,6 +11,7 @@ class OpsStripeToken
 
 	def initialize args, user=nil
 		Stripe.api_key = STRIPE_SECRET
+		Stripe.api_version = "2017-06-05"
 		puts 'OpsStripeToken' + args.inspect
 
 		h = args.stringify_keys

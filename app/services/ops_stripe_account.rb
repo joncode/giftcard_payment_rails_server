@@ -9,6 +9,7 @@ class OpsStripeAccount
 
 	def initialize company, legal=nil
 		Stripe.api_key = STRIPE_SECRET
+		Stripe.api_version = "2017-06-05"
 		@company = company
 		@legal = legal
 		@ccy = @company.ccy || raise
@@ -103,7 +104,7 @@ class OpsStripeAccount
 	def create_account country=@country, c=@company
 		@account = Stripe::Account.create({
 			country: country,
-			managed: true,
+			type: 'custom',
 			decline_charge_on: { 'avs_failure' => true, 'cvc_failure' => true },
 			metadata: { 'company_id' => c.id}
 		})
