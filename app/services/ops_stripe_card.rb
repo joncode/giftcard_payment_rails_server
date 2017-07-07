@@ -12,6 +12,7 @@ class OpsStripeCard
 
 	def initialize customer_id=nil, card_init=nil
 		Stripe.api_key = STRIPE_SECRET
+		Stripe.api_version = "2017-06-05"
 		@success = false
 		@http_status = 100
 		@customer_id = customer_id

@@ -9,6 +9,7 @@ class OpsStripeAccount
 
 	def initialize company, legal=nil
 		Stripe.api_key = STRIPE_SECRET
+		Stripe.api_version = "2017-06-05"
 		@company = company
 		@legal = legal
 		@ccy = @company.ccy || raise
