@@ -90,6 +90,7 @@ private
         if usr_coupons.present?
             value = value_string.to_f * 0.9
             service = 0.0
+            puts "GiftSale(93) COUPON APPLIED #{value_string} -> #{value} | #{service_string} -> #{service}"
             value.round(2).to_s
         else
             (value_string.to_f + service_string.to_f).to_s
