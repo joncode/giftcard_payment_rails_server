@@ -66,10 +66,10 @@ private
         validateGift = Gift.new(args)
         if validateGift.valid?
 
-            charge_amount = (args["value"].to_f + args['service'].to_f).to_s
+            charge_amt = charge_amount(args['giver'], args["value"], args['service'])
             unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, args['card'].user_id)
             card_to_sale_hsh = args['card'].sale_hsh(
-                    charge_amount,
+                    charge_amt,
                     args['ccy'],
                     unique_charge_id,
                     args["giver"].cim_profile,
@@ -83,6 +83,17 @@ private
             validateGift
         end
 
+    end
+
+    def charge_amount giver, value_string, service_string
+        usr_coupons = giver.coupons
+        if usr_coupons.present?
+            value = value_string.to_f * 0.9
+            service = 0.0
+            value.round(2).to_s
+        else
+            (value_string.to_f + service_string.to_f).to_s
+        end
     end
 
     def unique_cc_id receiver_name, merchant_id, user_id
