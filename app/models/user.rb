@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
 #   -------------
 
 	def coupons
-		jguserid = Rails.staging? ? 328 : 8248
+		jguserid = Rails.env.staging? ? 328 : 8248
 		if self.id == jguserid
 			[ 'no service fee', '10% off value']
 		else
