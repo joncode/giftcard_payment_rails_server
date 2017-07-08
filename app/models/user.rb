@@ -86,6 +86,19 @@ class User < ActiveRecord::Base
 
 	attr_accessor :api_v1, :session_token_obj
 
+
+#   -------------
+
+	def coupons
+		jguserid = Rails.staging? ? 328 : 8248
+		if self.id == jguserid
+			[ 'no service fee', '10% off value']
+		else
+			[]
+		end
+	end
+
+
 #	-------------
 
 	def self.search_name(find_text)
