@@ -88,7 +88,7 @@ private
     def charge_amount giver, value_string, service_string
         usr_coupons = giver.coupons
         if usr_coupons.present?
-            value = value_string.to_f * 0.9
+            value = value_string.to_f * 0.7
             service = 0.0
             puts "GiftSale(93) COUPON APPLIED #{value_string} -> #{value} | #{service_string} -> #{service}"
             value.round(2).to_s
