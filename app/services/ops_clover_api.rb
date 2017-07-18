@@ -128,7 +128,7 @@ class OpsCloverApi
 		discount_name = args['discount_name']
 
 		if order_id && line_item_id && amount && discount_name
-			discount = { name: discount_name, amount: (-1 * amount.abs) }
+			discount = { name: discount_name, amount: (-amount.abs) }
 			puts discount.inspect
 			return post_api ['orders', order_id, 'line_items', line_item_id, 'discounts' ], discount
 		end
