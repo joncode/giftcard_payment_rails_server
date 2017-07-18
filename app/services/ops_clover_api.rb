@@ -6,6 +6,8 @@ class OpsCloverApi
 		# a = {'merchant_id' => 'J4Q1V4P5X0KS0', 'auth_token' => 'dec6d9ae-13d4-b71c-ce48-7d1617b036de'}
 		# paid order: HSCB32CSEPWVG
 		# open order: 32VK1RT0MF54A
+		# d = { order_id: '32VK1RT0MF54A', line_item_id: 'MZ2XP27HZ7G4C', amount: 500, discount_name: 'QA-test brand discount' }
+		# p = { device_id: '74e6a379-9a1f-4511-ac6c-96e4b54c10b8', order_id: '32VK1RT0MF54A', amount: 5000, tax_amount: 0, note: 'QA - test payment' }
 
 	attr_reader :merchant_id, :auth_token, :h, :tender_id
 
@@ -13,9 +15,9 @@ class OpsCloverApi
 
 	def initialize args={}
 		@h = args.stringify_keys!
-		@merchant_id = @h['pos_merchant_id']
+		@merchant_id = @h['merchant_id'] || @h['pos_merchant_id']
 		@auth_token = @h['auth_token']
-		@tender_id = nil
+		@tender_id = get_tender_id
 	end
 
 #	-------------
@@ -35,6 +37,10 @@ class OpsCloverApi
 		end
 	end
 
+	def get_devices
+		return get_api ['devices']
+	end
+
 	def get_hours
 		return get_api ['opening_hours']
 	end
@@ -51,43 +57,62 @@ class OpsCloverApi
 		return get_api ['orders', order_id, 'line_items']
 	end
 
+	def get_order_line_item order_id, line_item_id
+		return get_api ['orders', order_id, 'line_items', line_item_id]
+	end
+
+	def get_order_discounts order_id
+		return get_api ['orders', order_id, 'discounts']
+	end
+
+	def get_order_payments order_id
+		return get_api ['orders', order_id, 'payments']
+	end
+
 
 #	-------------
 
 
 		# MONEY VALUE REDEMPTION
 		#	def post_order_payment order_id, device_id, amount, tax_amount, note
-	def post_order_payment
-		@tender_id = get_tender_id
-		raise 'OpsCloverApi: Missing Order Data' if @tender_id.blank?
-		order_id = @h['order_id']
+	def post_order_payment args={}
+		# @tender_id = get_tender_id
+		args.stringify_keys!
+		device_id = args['device_id']
+		order_id = args['order_id']
+		amount = args['amount']
+		tax_amount = (args['tax_amount'] || 0).to_i
+		note = args['note'] || ORDER_PAYMENT_NOTE
 
-		if order_id && @h['device_id'] && @h['amount']
-			tax_amt = @h['tax_amount'].to_i
-			note = @h['note'] || ORDER_PAYMENT_NOTE
+		if device_id && order_id && amount
 
 			payment_body = { 'order' => { id: order_id },
 						'tender' => { id: @tender_id },
-						'device' => { id: @h['device_id'] },
-						'amount' => @h['amount'],
-						'tax_amount' => tax_amt,
+						'device' => { id: device_id },
+						'amount' => amount,
+						'tax_amount' => tax_amount,
 						'note' => note
 					}
 			puts payment_body
 			return post_api ['orders', order_id, 'payments'], payment_body
 		else
-			raise 'OpsCloverApi: Missing Order Data'
+			raise 'OpsCloverApi: Missing required order data'
 		end
 	end
 
 		# BRAND CARD REDEMPTION
 		#	def post_line_item_discount order_id, line_item_id, name, amount
-	def post_line_item_discount
-		order_id = @h['order_id']
+	def post_line_item_discount args={}
+		args.stringify_keys!
+		order_id = args['order_id']
+		line_item_id = args['line_item_id']
+		amount = args['amount']
+		discount_name = args['discount_name']
 
-		if order_id && @h['line_item_id'] && @h['amount']
-			discount = { 'amount' => @h['amount'], "name" => @h['name'] }
-			return post_api ['orders', order_id, 'line_items', @h['line_item_id'], 'discounts' ], discount
+		if order_id && line_item_id && amount && discount_name
+			discount = { name: discount_name, amount: (-1 * amount) }
+			puts discount.inspect
+			return post_api ['orders', order_id, 'line_items', line_item_id, 'discounts' ], discount
 		end
 	end
 
@@ -144,7 +169,7 @@ class OpsCloverApi
 
     def post resource, body
     	puts 'resource=' + resource
-    	puts 'body=' + body
+    	puts 'body=' + body.inspect
 
     	response = RestClient.post(
     		"#{CLOVER_BASE_URL}/#{resource}",
