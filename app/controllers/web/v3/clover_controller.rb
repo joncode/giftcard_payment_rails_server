@@ -103,7 +103,7 @@ class Web::V3::CloverController < MetalCorsController
 	# {"amount"=>"456", "service_charge"=>"null", "tax_amount"=>"0", "code"=>"4567", "merchant_id"=>"J4Q1V4P5X0KS0", "order_id"=>"4ASNH66VTXVRJ", "employee_id"=>"05NZK28JC398W", "note"=>nil, "tip_amount"=>"0", "currency"=>"USD"}
 
 	def redeem
-		puts redeem_params.inspect
+		puts "Web::V3::CloverController (106)" + redeem_params.inspect
 
 		h = {}
 		h[:pos_merchant_id] = redeem_params[:merchant_id]

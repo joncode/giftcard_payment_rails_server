@@ -17,7 +17,7 @@ class OpsCloverApi
 		@h = args.stringify_keys!
 		@merchant_id = @h['merchant_id'] || @h['pos_merchant_id']
 		@auth_token = @h['auth_token']
-		@tender_id = get_tender_id
+		@tender_id = nil
 	end
 
 #	-------------
@@ -76,7 +76,7 @@ class OpsCloverApi
 		# MONEY VALUE REDEMPTION
 		#	def post_order_payment order_id, device_id, amount, tax_amount, note
 	def post_order_payment args={}
-		# @tender_id = get_tender_id
+		@tender_id = get_tender_id
 		args.stringify_keys!
 		device_id = args['device_id']
 		order_id = args['order_id']
@@ -199,4 +199,5 @@ private
 	def header
 		{ content_type: :json, accept: :json, 'Authorization' => "Bearer #{@auth_token}" }
 	end
+
 end
