@@ -72,7 +72,25 @@ class OpsCloverApi
 
 #	-------------
 
+	def discount_via_brand_card brand_card_id, order_id, gift_hex_id, discount_name='ItsOnMe Promotion'
+		dname = discount_name + ' ' + gift_hex_id
+		a = { 'order_id' => order_id, 'line_item_id' => item_to_discount['id'], 'amount' => item_to_discount['price'], 'discount_name' => dname}
+		discounts = get_order_discounts(order_id)[:data]["elements"]
+		line_items = get_order_line_items(order_id)[:data]["elements"]
 
+		discounted_lines = discounts.map{ |d| d['lineItemRef']['id'] }
+
+		item_to_discount = line_items.select { |l| !discounted_lines.include?(l['id']) && l['item']['id'] == brand_card_id }.first
+
+		if item_to_discount
+			post_line_item_discount(a)
+		else
+			{ status: 0 , data: "nothing to discount" }
+		end
+	end
+
+
+#	-------------
 		# MONEY VALUE REDEMPTION
 		#	def post_order_payment order_id, device_id, amount, tax_amount, note
 	def post_order_payment args={}
@@ -110,7 +128,7 @@ class OpsCloverApi
 		discount_name = args['discount_name']
 
 		if order_id && line_item_id && amount && discount_name
-			discount = { name: discount_name, amount: (-1 * amount) }
+			discount = { name: discount_name, amount: (-1 * amount.abs) }
 			puts discount.inspect
 			return post_api ['orders', order_id, 'line_items', line_item_id, 'discounts' ], discount
 		end
@@ -201,3 +219,14 @@ private
 	end
 
 end
+
+
+
+
+
+
+
+
+
+
+
