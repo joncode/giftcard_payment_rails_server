@@ -6,7 +6,7 @@ ruby '2.2.2'
 gem 'rails'
 gem 'pg'
 
-gem 'excon', '~> 0.44.4'
+gem 'excon', '>= 0.44.4'
 
 #gem 'paypal-sdk-rest'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
@@ -17,7 +17,7 @@ gem 'tzinfo-data'
 gem 'zip-codes'
 
 #gem 'unicorn'
-gem 'puma', '~> 2.15.0'
+gem 'puma', '>= 2.15.0'
 gem "rack-timeout"
 
 gem 'httparty', '~> 0.9.0'
@@ -28,7 +28,7 @@ gem 'bcrypt', '~> 3.1'
 gem 'resque', :require => "resque/server"
 gem "resque-retry"
 #gem 'newrelic_rpm'
-gem 'authorize-net'
+# gem 'authorize-net'
 gem 'mandrill-api', "~> 1.0.35"
 gem 'mailchimp-api'
 gem 'twilio-ruby'
