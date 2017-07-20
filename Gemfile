@@ -47,7 +47,7 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 gem 'to_words'
 
-gem "koala", "~> 2.2"
+gem "koala", "~> 3.0"
 gem "therubyracer", "~> 0.12.2"
 
 gem 'uglifier', '>= 1.3.0'

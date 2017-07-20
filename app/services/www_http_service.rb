@@ -9,7 +9,7 @@ class WwwHttpService
 		if Rails.env.production? || Rails.env.staging?
 			begin
 				resp = RestClient.get(
-				    "#{CLEAR_CACHE}/shop/clearcache",
+				    "#{CLEAR_CACHE}/system/clearcache",
 				    {:content_type => :html }
 				)
 			rescue => e
