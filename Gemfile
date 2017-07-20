@@ -4,7 +4,7 @@ ruby '2.2.2'
 # gem 'devise'
 
 gem 'rails'
-gem 'pg'
+gem 'pg', '0.20'
 
 gem 'excon', '>= 0.44.4'
 
