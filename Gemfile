@@ -28,7 +28,7 @@ gem 'bcrypt', '~> 3.1'
 gem 'resque', :require => "resque/server"
 gem "resque-retry"
 #gem 'newrelic_rpm'
-# gem 'authorize-net'
+gem 'authorize-net'
 gem 'mandrill-api', "~> 1.0.35"
 gem 'mailchimp-api'
 gem 'twilio-ruby'
