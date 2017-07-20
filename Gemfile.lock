@@ -90,7 +90,7 @@ GEM
     execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
-    faraday (0.9.1)
+    faraday (0.12.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.10)
     gcm (0.1.1)
@@ -115,10 +115,10 @@ GEM
       railties (>= 3.2.16)
     json (1.8.3)
     jwt (1.5.4)
-    koala (2.2.0)
+    koala (3.0.0)
       addressable
       faraday
-      multi_json
+      json (>= 1.8)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.11)
@@ -137,7 +137,7 @@ GEM
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     mono_logger (1.1.0)
-    multi_json (1.11.2)
+    multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     namecase (2.0.0)
@@ -310,7 +310,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   jquery-ui-rails
-  koala (~> 2.2)
+  koala (~> 3.0)
   launchy
   mailchimp-api
   mandrill-api (~> 1.0.35)
@@ -350,4 +350,4 @@ RUBY VERSION
    ruby 2.2.2p95
 
 BUNDLED WITH
-   1.15.1
+   1.15.2
