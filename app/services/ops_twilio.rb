@@ -18,7 +18,7 @@ class OpsTwilio
 			to = '1' + to if to.length == 10
 			receiver_phone = "+" + to
 
-			# msg = Message.create(params)
+			# msg = ReceivedMessage.create(params)
 
 			begin
 			    client = Twilio::REST::Client.new account_sid, auth_token

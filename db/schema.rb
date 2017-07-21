@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170609023613) do
+ActiveRecord::Schema.define(version: 20170721200849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -427,6 +427,27 @@ ActiveRecord::Schema.define(version: 20170609023613) do
 
   add_index "clients", ["application_key", "active"], name: "index_clients_on_application_key_and_active", using: :btree
   add_index "clients", ["url_name", "active"], name: "index_clients_on_url_name_and_active", using: :btree
+
+  create_table "company_contacts", force: :cascade do |t|
+    t.string   "company_type"
+    t.integer  "company_id"
+    t.string   "type"
+    t.integer  "contact_id"
+    t.string   "status",       default: "live"
+    t.boolean  "active",       default: true
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "contact_messages", force: :cascade do |t|
+    t.string   "status",      default: "unsent"
+    t.integer  "contact_id"
+    t.integer  "message_id"
+    t.datetime "redeemed_at"
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
 
   create_table "contacts", force: :cascade do |t|
     t.integer  "brand_id"
@@ -882,6 +903,16 @@ ActiveRecord::Schema.define(version: 20170609023613) do
   end
 
   add_index "merchants_regions", ["region_id"], name: "index_merchants_regions_on_region_id", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.string   "status",       default: "live"
+    t.string   "message"
+    t.boolean  "active",       default: true
+    t.integer  "company_id"
+    t.string   "company_type"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
 
   create_table "mock_payables", force: :cascade do |t|
     t.decimal  "amount"

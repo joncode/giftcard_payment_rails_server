@@ -7,6 +7,7 @@ gem 'rails'
 gem 'pg', '0.20'
 
 gem 'excon', '>= 0.44.4'
+gem 'rake', '< 11'
 
 #gem 'paypal-sdk-rest'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'

@@ -11,7 +11,7 @@ class Events::CallbacksController < MetalCorsController
 		msg = params['Body']
 		from_number = params['From']
 
-		# msg = Message.create(params)
+		# msg = ReceivedMessage.create(params)
 
 		dispatch_message(from_number, params, msg, from_number)
 
@@ -49,7 +49,7 @@ class Events::CallbacksController < MetalCorsController
 # -----------   Twilio Service Methods
 
 	def dispatch_message from, req, msg, from_number
-		# if code = Message.merchant_redemption(msg)
+		# if code = ReceivedMessage.merchant_redemption(msg)
 		# 	redemption_msg from, code
 		# elsif msg.downcase == 'support'
 		# 	basic_support from
