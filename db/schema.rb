@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170721200849) do
+=======
+ActiveRecord::Schema.define(version: 20170724225208) do
+>>>>>>> master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -279,6 +283,26 @@ ActiveRecord::Schema.define(version: 20170721200849) do
     t.string   "status",       default: "coming_soon"
     t.integer  "merchant_id"
     t.integer  "duration",     default: 120
+    t.string   "photo1"
+    t.string   "photo1_name"
+    t.string   "photo2"
+    t.string   "photo2_name"
+    t.string   "photo3"
+    t.string   "photo3_name"
+    t.string   "photo4"
+    t.string   "photo4_name"
+    t.string   "member1"
+    t.string   "member1_name"
+    t.string   "member2"
+    t.string   "member2_name"
+    t.string   "member3"
+    t.string   "member3_name"
+    t.string   "member4"
+    t.string   "member4_name"
+    t.integer  "price1"
+    t.string   "price1_name"
+    t.integer  "price2"
+    t.string   "price2_name"
   end
 
   create_table "boomerangs", force: :cascade do |t|
