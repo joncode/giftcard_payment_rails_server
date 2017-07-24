@@ -30,7 +30,6 @@ class AddCaptionsForPricesMembersPhotosToBooks < ActiveRecord::Migration
 	  			b.price2 = b.price_wine
 	  			b.price2_name = "Price per person with Wine"
   			end
-  			index = 1
   			b.members.each_with_index do | ary, i|
   				k = ary[0]
   				v = ary[1]
