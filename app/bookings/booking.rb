@@ -101,12 +101,20 @@ class Booking < ActiveRecord::Base
 	alias_method :amount, :price_total
 
 	def expired?
-		self.expires_at && self.expires_at < DateTime.now.utc
+		bool = (self.expires_at && self.expires_at < DateTime.now.utc)
+		update_column(:status, 'expired') if bool
+		return bool
 	end
 
 	def resubmit
 		# delete expires_at and send alerts to concierge for confirm booking
 		self.status = 'resubmit_date'
+		self.event_at = nil
+		self.expires_at = nil
+		unless self.valid?
+			self.date1 = nil
+			self.date2 = nil
+		end
 		if save
 			customer_resubmits_date_request
 			true
