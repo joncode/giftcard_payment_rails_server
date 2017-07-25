@@ -32,7 +32,7 @@ class Booking < ActiveRecord::Base
     end
 
     def self.status_date
-    	[ :no_date, :request_date, :payment_request, :date_accepted, :complete ]
+    	[ :no_date, :request_date, :payment_request, :date_accepted, :complete, :expired ]
     end
 
     def self.reminders
@@ -57,12 +57,6 @@ class Booking < ActiveRecord::Base
 #   -------------
 #   -------------
 
-	# {"id"=>5, "active"=>true, "hex_id"=>"bk_3dbdc6a9", "name"=>"Kyle Hadley", "email"=>"klyemar@gmail.com",
-	# "phone"=>"3602244244", "guests"=>8, "dates"=>nil, "payments"=>nil, "book_id"=>1, "price_unit"=>12000,
-	# "note"=>"Test", "created_at"=>Wed, 03 May 2017 16:38:14 UTC +00:00,
-	# "updated_at"=>Wed, 03 May 2017 16:38:14 UTC +00:00, "link_id"=>nil,
-	# "status"=>"request_date", "origin"=>nil, "date1"=>Sun, 05 Mar 2017 00:00:00 UTC +00:00,
-	# "date2"=>Fri, 05 May 2017 00:00:00 UTC +00:00, "event_at"=>nil, "price_desc"=>nil}
 
 	def expires_interval
 		EXPIRES_INTERVAL
@@ -101,12 +95,20 @@ class Booking < ActiveRecord::Base
 	alias_method :amount, :price_total
 
 	def expired?
-		self.expires_at && self.expires_at < DateTime.now.utc
+		bool = self.expires_at && self.expires_at < DateTime.now.utc
+		update_column(:status, 'expired') if bool
+		return bool
 	end
 
 	def resubmit
 		# delete expires_at and send alerts to concierge for confirm booking
 		self.status = 'resubmit_date'
+		self.event_at = nil
+		self.expires_at = nil
+		unless self.valid?
+			self.date1 = nil
+			self.date2 = nil
+		end
 		if save
 			customer_resubmits_date_request
 			true
@@ -213,10 +215,10 @@ class Booking < ActiveRecord::Base
 
 	def accept_date(num=nil)
 		if num == 1
-			self.event_at = self.date1
+			self.event_at = self.read_attribute(:date1)
 			self.status = 'date_accepted'
 		elsif num == 2
-			self.event_at = self.date2
+			self.event_at = self.read_attribute(:date2)
 			self.status = 'date_accepted'
 		else
 			errors.add(:date_accepted, "is not a valid acceptance date")
