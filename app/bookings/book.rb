@@ -66,13 +66,6 @@ class Book < ActiveRecord::Base
     	super || 'USD'
     end
 
-	def price_desc cents
-		if self.price_wine == cents
-			"Price per person with Wine"
-		else
-			"Price per person w/o Wine"
-		end
-	end
 
 # ---------------
 
