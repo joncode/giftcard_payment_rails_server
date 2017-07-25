@@ -95,7 +95,7 @@ class Booking < ActiveRecord::Base
 	alias_method :amount, :price_total
 
 	def expired?
-		bool = self.expires_at && self.expires_at < DateTime.now.utc
+		bool = (self.expires_at && self.expires_at < DateTime.now.utc)
 		update_column(:status, 'expired') if bool
 		return bool
 	end
