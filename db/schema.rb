@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724225208) do
+ActiveRecord::Schema.define(version: 20170726225332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -869,7 +869,7 @@ ActiveRecord::Schema.define(version: 20170724225208) do
     t.string   "twitter",          limit: 255
     t.string   "photo",            limit: 255
     t.string   "photo_l",          limit: 255
-    t.decimal  "rate",                                                 default: 85.0
+    t.decimal  "rate",                                                 default: 95.0
     t.decimal  "sales_tax",                    precision: 8, scale: 3
     t.string   "setup",            limit: 255,                         default: "000010"
     t.string   "image",            limit: 255
