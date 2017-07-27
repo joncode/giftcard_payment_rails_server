@@ -13,6 +13,10 @@ class Reminder
 
                 if gift.created_at < d.days.ago && gift.created_at > (d + 1).days.ago
 
+                    if gift.pending_redemptions.where(type_of: 3).first
+                        next
+                    end
+
                     puts "reminder for gift ID = #{gift.id}"
                     if gift.merchant.active_live?
                         if gift.receiver
