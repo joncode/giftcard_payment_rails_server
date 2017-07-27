@@ -1,5 +1,7 @@
 class Gift < ActiveRecord::Base
     extend  GiftScopes
+    HEX_ID_PREFIX = 'gf_'
+    include HexIdMethods
     include GiftLifecycle
     include Formatter
     include MoneyHelper
@@ -31,12 +33,10 @@ class Gift < ActiveRecord::Base
     before_validation :format_cost
     before_validation :set_expires_at
     before_validation :set_scheduled_at
-    before_validation :set_unique_hex_id, on: :create
 
 #   -------------
 
     validates_presence_of :giver, :receiver_name, :merchant_id, :value, :shoppingCart, :cat
-    # validates_uniqueness_of :hex_id
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates :receiver_phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
     validates_with GiftReceiverInfoValidator
@@ -127,16 +127,6 @@ class Gift < ActiveRecord::Base
     def invite_link
         # "#{PUBLIC_URL}/signup/acceptgift?id=#{self.obscured_id}"
         "#{PUBLIC_URL}/hi/#{self.hex_id}"
-    end
-
-    def paper_id
-        @paper_id ||= set_paper_id
-    end
-
-    def set_paper_id
-        return '' if self.hex_id.nil?
-        hx = self.hex_id.to_s.gsub('_', '-').upcase
-        hx[0..6].to_s + '-' + hx[7..10].to_s
     end
 
     def obscured_id
@@ -629,10 +619,6 @@ class Gift < ActiveRecord::Base
 
     def fire_gift_create_event
         Resque.enqueue(GiftCreatedEvent, self.id)
-    end
-
-    def set_unique_hex_id
-        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, 'gf_')
     end
 
 

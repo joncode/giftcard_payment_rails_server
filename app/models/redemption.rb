@@ -1,4 +1,6 @@
 class Redemption < ActiveRecord::Base
+	HEX_ID_PREFIX = 'rd_'
+	include HexIdMethods
 	include RedeemHelper
 	include MoneyHelper
 
@@ -12,7 +14,6 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-    before_validation :set_unique_hex_id, on: :create
     before_validation :set_unique_token, on: :create
     before_validation :set_r_sys
 
@@ -185,27 +186,6 @@ class Redemption < ActiveRecord::Base
 			self.response['toggle_active'] = response
 		end
 	end
-
-#   -------------
-
-    def paper_id
-        @paper_id ||= set_paper_id
-    end
-
-    def set_paper_id
-        return '' if self.hex_id.nil?
-        hx = self.hex_id.to_s.gsub('_', '-').upcase
-        hx[0..6].to_s + '-' + hx[7..10].to_s
-    end
-
-    def self.paper_to_hex paper_id
-        hex_id = paper_id[0..6].to_s + paper_id[8..11].to_s
-        hex_id.gsub('-','_').downcase
-    end
-
-    def self.find_paper paper_id
-        where(hex_id: paper_to_hex(paper_id)).first
-    end
 
 #   -------------
 
@@ -510,10 +490,6 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 		self.token = UniqueIdMaker.four_digit_token(Redemption, :token, { status: 'pending', active: true })
 		self.new_token_at = DateTime.now.utc
 	end
-
-    def set_unique_hex_id
-        self.hex_id = UniqueIdMaker.eight_digit_hex(Redemption, :hex_id, 'rd_')
-    end
 
     def remove_token_from_gift
     	if self.status != 'pending' && self.r_sys == 2
