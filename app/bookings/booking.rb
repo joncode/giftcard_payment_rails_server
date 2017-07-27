@@ -200,7 +200,7 @@ class Booking < ActiveRecord::Base
 			if o.success?
 				o.charge_token
 				if o.success?
-					update(status: next_status, stripe_user_id: o.customer_id)
+					update(status: 'payment_received', stripe_user_id: o.customer_id)
 				else
 					errors.add(:charge, "#{o.error_key} #{o.error_message}")
 				end
