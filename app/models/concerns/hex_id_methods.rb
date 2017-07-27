@@ -32,6 +32,17 @@ module HexIdMethods
 
 	module ClassMethods
 
+		def where_with _id
+			if _id.match('-')
+				_id = paper_to_hex(_id)
+			end
+			if _id.to_s == _id.to_i.to_s
+				where(id: _id)
+			else
+				where(hex_id: _id)
+			end
+		end
+
 	    def find_with _id
 				# integer check for integers or integers as strings
 			if _id.match('-')
