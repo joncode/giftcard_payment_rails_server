@@ -36,7 +36,7 @@ class BookingMtAlert < Alert
 	def get_data
 		@data = { customer_name: booking.name,
 				book_name: booking.book_name,
-				hex_id: booking.hex_id,
+				hex_id: booking.paper_id,
 				status: booking.status.titleize
 			}
 	end

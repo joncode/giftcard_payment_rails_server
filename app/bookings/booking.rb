@@ -79,6 +79,7 @@ class Booking < ActiveRecord::Base
 	def serialize
 		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone, :expires_at,
 			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin]
+		h[:paper_id] = self.paper_id
 		h[:expires_interval] = EXPIRES_INTERVAL
  		h[:book] = self.book ? self.book.list_serialize : nil
 		h[:price_total] = price_total
