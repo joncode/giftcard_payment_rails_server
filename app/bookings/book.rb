@@ -4,24 +4,6 @@ class Book < ActiveRecord::Base
 
     has_many :bookings
 
-	def duration
-		# default is 120
-		# units is minutes
-		super
-	end
-
-	def duration_desc
-		x = duration
-		return '' if x.to_s.blank?
-		if x < 91
-			"#{x} minute".pluralize(x)
-		else
-			hours = (x / 60.0).round(1)
-			hours = hours.to_i if hours.to_i == hours
-			"#{hours} hour".pluralize(hours)
-		end
-	end
-
     auto_strip_attributes :name, :zinger, :detail, :notes,
 	    :member1, :member2, :member3, :member4,
 		:member1_name, :member2_name, :member3_name, :member4_name,
@@ -33,6 +15,14 @@ class Book < ActiveRecord::Base
 
 	belongs_to :merchant
 
+
+	def price_desc price_unit
+		if price_unit.to_i == self.price1
+			self.price1_name
+		else
+			self.price2_name
+		end
+	end
 
 # ---------------
 
@@ -137,12 +127,22 @@ class Book < ActiveRecord::Base
 
 # ---------------
 
-	def timezone
-		self.merchant ? self.merchant.time_zone : "Pacific Time (US & Canada)"
+	def duration
+		# default is 120
+		# units is minutes
+		super
 	end
 
-	def in_timezone datetime
-    	datetime.in_time_zone(timezone)
+	def duration_desc
+		x = duration
+		return '' if x.to_s.blank?
+		if x < 91
+			"#{x} minute".pluralize(x)
+		else
+			hours = (x / 60.0).round(1)
+			hours = hours.to_i if hours.to_i == hours
+			"#{hours} hour".pluralize(hours)
+		end
 	end
 
     def earliest_booking_date
@@ -152,6 +152,18 @@ class Book < ActiveRecord::Base
     	today = in_timezone(DateTime.now)
     	today + (self.advance_days || 0).days
     end
+
+	def timezone
+		self.merchant ? self.merchant.time_zone : "Pacific Time (US & Canada)"
+	end
+
+	def in_timezone datetime
+    	datetime.in_time_zone(timezone)
+	end
+
+
+# ---------------
+
 
     def shop_url
         itsonme_url
