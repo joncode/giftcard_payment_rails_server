@@ -55,7 +55,6 @@ class Booking < ActiveRecord::Base
 
 
 #   -------------
-#   -------------
 
 
 	def expires_interval
@@ -89,6 +88,8 @@ class Booking < ActiveRecord::Base
 		h.stringify_keys
 	end
 
+#   -------------
+
 	def price_total
 		self.price_unit.to_i * self.guests.to_i
 	end
@@ -117,6 +118,8 @@ class Booking < ActiveRecord::Base
 		end
 	end
 
+#   -------------
+
 	def timezone
 		self.merchant ? self.merchant.time_zone : "Pacific Time (US & Canada)"
 	end
@@ -124,9 +127,6 @@ class Booking < ActiveRecord::Base
 	def in_timezone datetime
     	datetime.in_time_zone(timezone)
 	end
-
-
-#   -------------
 
     def time1
 		s = self.date1
@@ -281,9 +281,11 @@ class Booking < ActiveRecord::Base
 	end
 
 	def merchant_name
-		b = self.merchant
-		if b.respond_to?(:name)
-			b.name
+		m = self.merchant
+		if m.respond_to?(:name)
+			m.name
+		else
+			"Top100"
 		end
 	end
 

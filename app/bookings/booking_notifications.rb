@@ -11,8 +11,9 @@ class BookingNotifications
 				# Send Alert to IOM team that inquiry has occurred
 				# Send Alert to the Merchant that inquiry has occurred ?
 			booking = Booking.find booking_id
+			merchant_name = booking.merchant_name
 			template = 'booking-inquiry-receipt'
-			e = EmailBooking.new(booking, template, 'Top100 Booking Inquiry')
+			e = EmailBooking.new(booking, template, "#{merchant_name} Booking Inquiry")
 			e.send_email
 			Alert.perform "BOOKING_SYS", booking
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
@@ -23,8 +24,9 @@ class BookingNotifications
 
 				# send the purchase link to the accept and purchase booking page
 			booking = Booking.find booking_id
+			merchant_name = booking.merchant_name
 			template = 'booking-confirmation-request'
-			e = EmailBooking.new(booking, template, 'Top100 Booking Confirm Booking')
+			e = EmailBooking.new(booking, template, "#{merchant_name} Booking Confirm Booking")
 			e.send_email
 			Alert.perform "BOOKING_SYS", booking
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
@@ -33,6 +35,7 @@ class BookingNotifications
 		def customer_resubmits_date booking_id
 			puts "BookingNotifications.customer_resubmits_date (34) - Booking #{booking_id}"
 			booking = Booking.find booking_id
+			merchant_name = booking.merchant_name
 			Alert.perform "BOOKING_SYS", booking
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
 		end
@@ -44,8 +47,9 @@ class BookingNotifications
 				# Send Alert to IOM team that inquiry has occurred
 				# Send Alert to the Merchant that inquiry has occurred ?
 			booking = Booking.find booking_id
+			merchant_name = booking.merchant_name
 			template = 'booking-confirmation-receipt'
-			e = EmailBooking.new(booking, template, 'Top100 Booking Purchase Complete')
+			e = EmailBooking.new(booking, template, "#{merchant_name} Booking Purchase Complete")
 			e.send_email
 			Alert.perform "BOOKING_SYS", booking
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
@@ -56,12 +60,13 @@ class BookingNotifications
 
 			# send email to customer with reminder of the upcoming event
 			booking = Booking.find booking_id
+			merchant_name = booking.merchant_name
 			if days_till > 6
 				template = 'booking-reminder-week-prior'
 			else
 				template = 'booking-reminder-day-prior'
 			end
-			e = EmailBooking.new(booking, template, 'Top100 Booking Reminder')
+			e = EmailBooking.new(booking, template, "#{merchant_name} Booking Reminder")
 			e.send_email
 			Alert.perform "BOOKING_SYS", booking
 			Alert.perform("BOOKING_MT", booking) unless Rails.env.production?
