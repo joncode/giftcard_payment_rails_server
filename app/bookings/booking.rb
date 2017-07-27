@@ -1,4 +1,8 @@
 class Booking < ActiveRecord::Base
+
+	HEX_ID_PREFIX = 'bk_'
+
+	include HexIdMethods
 	include BookingLifecycle
 	include BookingChargeCard
 	include MoneyHelper
@@ -20,7 +24,6 @@ class Booking < ActiveRecord::Base
 
 #   -------------
 
-    before_save :set_unique_hex_id, on: :create
     before_save :set_status
     before_save :set_expires_at
 
@@ -310,11 +313,6 @@ private
 		end
 	end
 
-    def set_unique_hex_id
-    	if self.hex_id.blank?
-	        self.hex_id = UniqueIdMaker.eight_digit_hex(Booking, :hex_id, 'bk_')
-	    end
-    end
 
 end
 
