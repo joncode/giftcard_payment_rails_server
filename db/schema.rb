@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170726225332) do
-
+ActiveRecord::Schema.define(version: 20170727235730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,24 +261,20 @@ ActiveRecord::Schema.define(version: 20170726225332) do
   add_index "bookings", ["hex_id"], name: "index_bookings_on_hex_id", using: :btree
 
   create_table "books", force: :cascade do |t|
-    t.boolean  "active",       default: true
+    t.boolean  "active",           default: true
     t.string   "name"
     t.string   "zinger"
     t.text     "detail"
     t.text     "notes"
-    t.json     "members"
-    t.json     "photos"
     t.integer  "advance_days"
     t.integer  "min_ppl"
     t.integer  "max_ppl"
     t.string   "ccy"
-    t.integer  "price"
-    t.integer  "price_wine"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.string   "status",       default: "coming_soon"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.string   "status",           default: "coming_soon"
     t.integer  "merchant_id"
-    t.integer  "duration",     default: 120
+    t.integer  "duration",         default: 120
     t.string   "photo1"
     t.string   "photo1_name"
     t.string   "photo2"
@@ -300,6 +295,11 @@ ActiveRecord::Schema.define(version: 20170726225332) do
     t.string   "price1_name"
     t.integer  "price2"
     t.string   "price2_name"
+    t.boolean  "tax_tip_included", default: true
+    t.decimal  "tax_rate",         default: 0.0
+    t.string   "tax_name",         default: "Tax"
+    t.decimal  "tip_rate",         default: 0.18
+    t.string   "tip_name",         default: "Gratuity"
   end
 
   create_table "boomerangs", force: :cascade do |t|
@@ -935,24 +935,6 @@ ActiveRecord::Schema.define(version: 20170726225332) do
     t.datetime "updated_at",                    null: false
   end
 
-  create_table "mock_payables", force: :cascade do |t|
-    t.decimal  "amount"
-    t.integer  "status",                        default: 0
-    t.integer  "merchant_id"
-    t.integer  "provider_id"
-    t.string   "name",              limit: 255
-    t.string   "address",           limit: 255
-    t.integer  "user_id"
-    t.string   "last_payment",      limit: 255
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.text     "json_ary_gift_ids"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mock_payables", ["merchant_id"], name: "index_mock_payables_on_merchant_id", using: :btree
-
   create_table "mt_users", force: :cascade do |t|
     t.string   "first_name",             limit: 255
     t.string   "last_name",              limit: 255
@@ -1023,23 +1005,6 @@ ActiveRecord::Schema.define(version: 20170726225332) do
 
   add_index "operations", ["obj_id"], name: "index_operations_on_obj_id", using: :btree
   add_index "operations", ["user_id"], name: "index_operations_on_user_id", using: :btree
-
-  create_table "orders", force: :cascade do |t|
-    t.integer  "redeem_id"
-    t.integer  "gift_id"
-    t.string   "redeem_code",     limit: 255
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.string   "server_code",     limit: 255
-    t.integer  "server_id"
-    t.integer  "provider_id"
-    t.integer  "employee_id"
-    t.integer  "pos_merchant_id"
-    t.string   "ticket_value",    limit: 255
-    t.string   "ticket_item_ids", limit: 255
-  end
-
-  add_index "orders", ["gift_id"], name: "index_orders_on_gift_id", using: :btree
 
   create_table "payables", force: :cascade do |t|
     t.decimal  "amount"
@@ -1225,82 +1190,10 @@ ActiveRecord::Schema.define(version: 20170726225332) do
   add_index "protos", ["active"], name: "index_protos_on_active", using: :btree
   add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree
 
-  create_table "providers", force: :cascade do |t|
-    t.string   "name",            limit: 255,                 null: false
-    t.string   "zinger",          limit: 255
-    t.text     "description"
-    t.string   "address",         limit: 255
-    t.string   "city_name",       limit: 32
-    t.string   "state",           limit: 2
-    t.string   "zip",             limit: 16
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.string   "phone",           limit: 255
-    t.string   "sales_tax",       limit: 255
-    t.boolean  "active",                      default: true
-    t.float    "latitude"
-    t.float    "longitude"
-    t.decimal  "rate",                        default: 85.0
-    t.boolean  "menu_is_live",                default: false
-    t.integer  "brand_id"
-    t.integer  "building_id"
-    t.string   "token",           limit: 255
-    t.boolean  "tools",                       default: false
-    t.string   "image",           limit: 255
-    t.integer  "merchant_id"
-    t.boolean  "live",                        default: false
-    t.boolean  "paused",                      default: true
-    t.string   "pos_merchant_id", limit: 255
-    t.integer  "region_id"
-    t.integer  "r_sys",                       default: 2
-    t.string   "photo_l",         limit: 255
-    t.integer  "payment_plan",                default: 0
-    t.integer  "payment_event",               default: 0
-    t.string   "tender_type_id",  limit: 255
-    t.string   "website",         limit: 255
-    t.integer  "city_id"
-    t.string   "region_name",     limit: 255
-  end
-
-  add_index "providers", ["active", "paused", "city_name"], name: "index_providers_on_active_and_paused_and_city_name", using: :btree
-  add_index "providers", ["city_name"], name: "index_providers_on_city_name", using: :btree
-  add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
-  add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
-  add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
-  add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
-
-  create_table "providers_socials", id: false, force: :cascade do |t|
-    t.integer "provider_id"
-    t.integer "social_id",   null: false
-    t.integer "merchant_id"
-  end
-
-  add_index "providers_socials", ["merchant_id", "social_id"], name: "index_providers_socials_on_merchant_id_and_social_id", unique: true, using: :btree
-  add_index "providers_socials", ["merchant_id"], name: "index_providers_socials_on_merchant_id", using: :btree
-  add_index "providers_socials", ["provider_id"], name: "index_providers_socials_on_provider_id", using: :btree
-
-  create_table "providers_tags", id: false, force: :cascade do |t|
-    t.integer "provider_id"
-    t.integer "tag_id"
-  end
-
-  add_index "providers_tags", ["provider_id"], name: "index_providers_tags_on_provider_id", using: :btree
-  add_index "providers_tags", ["tag_id"], name: "index_providers_tags_on_tag_id", using: :btree
-
   create_table "questions", force: :cascade do |t|
     t.string "left",  limit: 255
     t.string "right", limit: 255
   end
-
-  create_table "redeems", force: :cascade do |t|
-    t.integer  "gift_id"
-    t.string   "redeem_code",     limit: 255
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "pos_merchant_id"
-  end
-
-  add_index "redeems", ["gift_id"], name: "index_redeems_on_gift_id", using: :btree
 
   create_table "redemptions", force: :cascade do |t|
     t.integer  "gift_id"
