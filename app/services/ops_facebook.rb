@@ -312,6 +312,7 @@ class OpsFacebook
 		if user.iphone_photo.nil?
 			user.iphone_photo = "http://graph.facebook.com/#{facebook_profile['id']}/picture"
 		end
+
 		if !user.persisted?
 			user.first_name = facebook_profile['first_name'] || facebook_profile['name'].split(' ')[0]
 			user.last_name = facebook_profile['last_name'] || facebook_profile['name'].split(' ')[1]
