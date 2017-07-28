@@ -61,6 +61,20 @@ class OpsFacebook
 
 #   -------------  Basic Graph Queries
 
+	def self.get_facebook_profile oauth_access_token
+        begin
+            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
+            graph.get_object("me")
+        rescue
+            begin
+                graph = Koala::Facebook::API.new(oauth_access_token)
+                graph.get_object("me")
+            rescue
+                nil
+            end
+        end
+	end
+
 	def self.profile user, facebook_id=nil
 		graph = self.get_graph(nil, user)
 		return graph if graph.kind_of?(Hash)

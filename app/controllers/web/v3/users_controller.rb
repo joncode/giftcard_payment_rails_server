@@ -72,21 +72,11 @@ class Web::V3::UsersController < MetalCorsController
 
     def attach_facebook
         oauth_access_token = params["data"]['accessToken'] || params["data"]['authResponse']['accessToken']
-        begin
-            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
-            profile = graph.get_object("me")
-        rescue
-            begin
-                graph = Koala::Facebook::API.new(oauth_access_token)
-                profile = graph.get_object("me")
-            rescue
-                no_authorized_facebook = true
-            end
-        end
-        if no_authorized_facebook
+        facebook_profile = OpsFacebook.get_facebook_profile oauth_access_token
+        if facebook_profile.nil?
             fail_web fail_web_payload("authorize_app_with_facebook", "Error validating access token: The user has not authorized application")
         else
-            resp = OpsFacebook.attach_account(oauth_access_token, profile, @current_user)
+            resp = OpsFacebook.attach_account(oauth_access_token, facebook_profile, @current_user)
 
             puts "FACEBOOK #{resp.inspect}"
 
@@ -105,22 +95,11 @@ class Web::V3::UsersController < MetalCorsController
     #####   CREATE ACCOUNT WITH FACEBOOK
     def facebook
         oauth_access_token = params["data"]['accessToken'] || params["data"]['authResponse']['accessToken']
-        no_authorized_facebook = false
-        begin
-            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
-            profile = graph.get_object("me")
-        rescue
-            begin
-                graph = Koala::Facebook::API.new(oauth_access_token)
-                profile = graph.get_object("me")
-            rescue
-                no_authorized_facebook = true
-            end
-        end
-        if no_authorized_facebook
+        facebook_profile = OpsFacebook.get_facebook_profile oauth_access_token
+        if facebook_profile.nil?
             fail_web fail_web_payload("authorize_app_with_facebook", "Error validating access token: The user has not authorized application")
         else
-            resp = OpsFacebook.create_account(oauth_access_token, profile, @current_client, @current_partner)
+            resp = OpsFacebook.create_account(oauth_access_token, facebook_profile, @current_client, @current_partner)
             if resp['success']
                 user = resp['user']
                 user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner)
