@@ -299,8 +299,8 @@ class OpsFacebook
 			user.iphone_photo = "http://graph.facebook.com/#{facebook_profile['id']}/picture"
 		end
 		if !user.persisted?
-			user.first_name = facebook_profile['first_name']
-			user.last_name = facebook_profile['last_name']
+			user.first_name = facebook_profile['first_name'] || facebook_profile['name'].split(' ')[0]
+			user.last_name = facebook_profile['last_name'] || facebook_profile['name'].split(' ')[1]
 			temp_password = SecureRandom.urlsafe_base64
 			user.password = temp_password
 			user.password_confirmation = temp_password

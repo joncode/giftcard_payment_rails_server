@@ -105,6 +105,7 @@ class Web::V3::UsersController < MetalCorsController
     #####   CREATE ACCOUNT WITH FACEBOOK
     def facebook
         oauth_access_token = params["data"]['accessToken'] || params["data"]['authResponse']['accessToken']
+        no_authorized_facebook = false
         begin
             graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
             profile = graph.get_object("me")
