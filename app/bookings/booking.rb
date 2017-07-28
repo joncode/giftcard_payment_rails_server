@@ -99,7 +99,7 @@ class Booking < ActiveRecord::Base
 	end
 	alias_method :amount, :price_total
 
-	delegate :tax_tip_included, :tax_rate_display, :tip_rate_display, :ccy, to: :book
+	delegate :tax_tip_included, :tax_rate_display, :tip_rate_display, :tax_name, :tip_name, :ccy, :min_ppl, :max_ppl, to: :book
 
 	def expired?
 		bool = (self.expires_at && self.expires_at < DateTime.now.utc)
