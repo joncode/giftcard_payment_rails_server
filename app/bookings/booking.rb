@@ -94,8 +94,13 @@ class Booking < ActiveRecord::Base
 
 #   -------------
 
-	def price_total
+	def price_subtotal
 		self.price_unit.to_i * self.guests.to_i
+	end
+
+	def price_total
+		price_subtotal
+		# add ons
 	end
 	alias_method :amount, :price_total
 
@@ -104,6 +109,8 @@ class Booking < ActiveRecord::Base
 		update_column(:status, 'expired') if bool
 		return bool
 	end
+
+#   -------------
 
 	def resubmit
 		# delete expires_at and send alerts to concierge for confirm booking

@@ -12,9 +12,35 @@ class Book < ActiveRecord::Base
 		:price1_name, :price2_name
 
 	validates_presence_of :name, :merchant_id, :advance_days, :min_ppl, :max_ppl, :price1
+	validates_inclusion_of :tax_rate, in: 0..1
+	validates_inclusion_of :tip_rate, in: 0..1
 
 	belongs_to :merchant
 
+
+	def tip_rate_display
+		(self.tip_rate * 100).round(3)
+	end
+
+	def tax_rate_display= value
+		self.tax_rate = (value).round(4)
+	end
+
+	def after_tax(price)
+		if tax_tip_included
+			return price
+		else
+			price + tax_amount(price) + tip_amount(price)
+		end
+	end
+
+	def tax_amount(amt)
+		amt * ( 1 + tax_rate)
+	end
+
+	def tip_amount(amt)
+		amt * ( 1 + tip_rate)
+	end
 
 	def price_desc price_unit
 		if price_unit.to_i == self.price1
@@ -120,12 +146,14 @@ class Book < ActiveRecord::Base
 
     def prices_serialize
     	ary = []
-    	ary << { price: self.price1, ccy: self.ccy, title: self.price1_name } if self.price1
-    	ary << { price: self.price2, ccy: self.ccy, title: self.price2_name } if self.price2
+    	ary << { price_total: after_tax(self.price1), price: self.price1, ccy: self.ccy, title: self.price1_name } if self.price1
+    	ary << { price_total: after_tax(self.price2), price: self.price2, ccy: self.ccy, title: self.price2_name } if self.price2
     	ary
     end
 
+
 # ---------------
+
 
 	def duration
 		# default is 120
