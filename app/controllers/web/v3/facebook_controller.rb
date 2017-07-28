@@ -78,7 +78,7 @@ class Web::V3::FacebookController < MetalCorsController
     def create
         oauth_obj = @current_user.current_oauth
         if oauth_obj.kind_of?(Oauth)
-            graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+            graph = OpsFacebook.get_facebook_graph oauth_obj.token
             post_id_hsh = graph.put_wall_post( "You've Received a Gift!", { :link => "#{PUBLIC_URL}/hi/#{gift_obscured_id}" })
                 # WTF IS THIS ^^^^^^  WHATS :gift_obscured_id ???????????
             success 'Facebook Post Successful'
@@ -128,13 +128,7 @@ class Web::V3::FacebookController < MetalCorsController
                 full_response_url = return_params['return_url'].to_s + error_param
                 redirect_to full_response_url
             end
-            begin
-                graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
-                profile = graph.get_object("me")
-            rescue
-                graph = Koala::Facebook::API.new(oauth_access_token)
-                profile = graph.get_object("me")
-            end
+            profile = OpsFacebook.get_facebook_profile oauth_access_token
             puts profile.inspect
 
             return_params = decrypt_token(url_safe_token)

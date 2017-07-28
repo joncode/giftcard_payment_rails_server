@@ -6,6 +6,10 @@ class OpsFacebook
 		 ['user_posts','public_profile', 'user_friends', 'email', 'user_birthday', 'publish_actions', 'user_location']
 	end
 
+	def self.profile_query_string
+		"me?fields=first_name,last_name,email,birthday,gender,picture"
+	end
+
 	def self.parse_error err
 		print "500 Internal (self.parse_error) " + err.class.to_s  + err.inspect
 
@@ -31,18 +35,6 @@ class OpsFacebook
 		error_message
 	end
 
-	def self.get_graph gift=nil, user=nil
-		if gift
-			user = gift.giver
-		end
-		oauth_obj = user.current_oauth
-		if oauth_obj.kind_of?(Oauth)
-	        Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
-	    else
-	    	return { 'success' => false, 'error' => "Facebook profile token expired. Please re-authenticate Facebook. (If you continue to see this message, upgrade your app)" }
-	    end
-	end
-
 	def self.reset_token
 		facebook_oauth ||= Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
 
@@ -61,25 +53,61 @@ class OpsFacebook
 
 #   -------------  Basic Graph Queries
 
-	def self.get_facebook_profile oauth_access_token
+	def self.get_facebook_graph oauth_access_token
         begin
             graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
-            graph.get_object("me")
+            graph.get_object(profile_query_string)
         rescue
             begin
                 graph = Koala::Facebook::API.new(oauth_access_token)
-                graph.get_object("me")
+                graph.get_object(profile_query_string)
+            rescue
+                nil
+            end
+        end
+        graph
+	end
+
+	def self.get_facebook_profile oauth_access_token
+        begin
+            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
+            graph.get_object(profile_query_string)
+        rescue
+            begin
+                graph = Koala::Facebook::API.new(oauth_access_token)
+                graph.get_object(profile_query_string)
             rescue
                 nil
             end
         end
 	end
 
+	def self.get_graph gift=nil, user=nil
+		token = get_token(gift,user)
+		if token
+	        get_facebook_graph(token)
+	    else
+	    	return { 'success' => false, 'error' => "Facebook profile token expired. Please re-authenticate Facebook. (If you continue to see this message, upgrade your app)" }
+	    end
+	end
+
+	def self.get_token gift=nil, user=nil
+		if gift
+			user = gift.giver
+		end
+		oauth_obj = user.current_oauth
+		if oauth_obj.kind_of?(Oauth)
+			oauth_obj.token
+		else
+			nil
+		end
+	end
+
 	def self.profile user, facebook_id=nil
 		graph = self.get_graph(nil, user)
 		return graph if graph.kind_of?(Hash)
 		begin
-			query_str = facebook_id || 'me'
+			query_str = profile_query_string
 			profile = graph.get_object(query_str)
 		rescue => e
 			return { 'success' => false, 'error' => self.parse_error(e) }
@@ -257,6 +285,7 @@ class OpsFacebook
 			if user.save
 				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 			else
+				puts "500 Internal - facebook account creation FAIL - OpsFacebook :create_account"
 				return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
 			end
 		end
@@ -279,6 +308,7 @@ class OpsFacebook
 			if user.save
 				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 			else
+				puts "500 Internal - facebook account creation FAIL - OpsFacebook :attach"
 				return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
 			end
 
@@ -300,16 +330,16 @@ class OpsFacebook
 		#  "timezone"=>-7, "updated_time"=>"2015-08-06T08:41:18+0000",
 		#  "verified"=>true}
 		user.facebook_id = facebook_profile['id']
-		if user.email.nil? && facebook_profile['email'].present?
+		if user.email.blank? && facebook_profile['email'].present?
 			user.email = facebook_profile['email']
 		end
-		if user.birthday.nil? && facebook_profile['birthday'].present?
+		if user.birthday.blank? && facebook_profile['birthday'].present?
 			user.birthday = facebook_profile['birthday']
 		end
-		if user.sex.nil? && facebook_profile['gender'].present?
+		if user.sex.blank? && facebook_profile['gender'].present?
 			user.sex = facebook_profile['gender']
 		end
-		if user.iphone_photo.nil?
+		if user.iphone_photo.blank?
 			user.iphone_photo = "http://graph.facebook.com/#{facebook_profile['id']}/picture"
 		end
 

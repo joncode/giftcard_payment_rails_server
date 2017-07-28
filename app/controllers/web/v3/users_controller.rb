@@ -74,6 +74,7 @@ class Web::V3::UsersController < MetalCorsController
         oauth_access_token = params["data"]['accessToken'] || params["data"]['authResponse']['accessToken']
         facebook_profile = OpsFacebook.get_facebook_profile oauth_access_token
         if facebook_profile.nil?
+            puts "500 Internal - FACEBOOK LOGIN ERROR - Web::V3::UsersController :attach"
             fail_web fail_web_payload("authorize_app_with_facebook", "Error validating access token: The user has not authorized application")
         else
             resp = OpsFacebook.attach_account(oauth_access_token, facebook_profile, @current_user)
@@ -97,6 +98,7 @@ class Web::V3::UsersController < MetalCorsController
         oauth_access_token = params["data"]['accessToken'] || params["data"]['authResponse']['accessToken']
         facebook_profile = OpsFacebook.get_facebook_profile oauth_access_token
         if facebook_profile.nil?
+            puts "500 Internal - FACEBOOK LOGIN ERROR - Web::V3::UsersController :facebook"
             fail_web fail_web_payload("authorize_app_with_facebook", "Error validating access token: The user has not authorized application")
         else
             resp = OpsFacebook.create_account(oauth_access_token, facebook_profile, @current_client, @current_partner)
