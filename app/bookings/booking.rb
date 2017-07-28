@@ -78,17 +78,13 @@ class Booking < ActiveRecord::Base
 
 	def serialize
 		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone, :expires_at,
-			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin]
+			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin,
+			 :event_at, :date1, :date2]
 		h[:paper_id] = self.paper_id
 		h[:expires_interval] = EXPIRES_INTERVAL
  		h[:book] = self.book ? self.book.list_serialize : nil
+ 		h[:price] = price_subtotal
 		h[:price_total] = price_total
-		if self.event_at.present?
-			h[:event_at] = self.event_at
-		else
-			h[:date1] = self.date1
-			h[:date2] = self.date2
-		end
 		h.stringify_keys
 	end
 
@@ -99,10 +95,11 @@ class Booking < ActiveRecord::Base
 	end
 
 	def price_total
-		price_subtotal
-		# add ons
+		book.price_total(price_subtotal)
 	end
 	alias_method :amount, :price_total
+
+	delegate :tax_tip_included, :tax_rate_display, :tip_rate_display, :ccy, to: :book
 
 	def expired?
 		bool = (self.expires_at && self.expires_at < DateTime.now.utc)

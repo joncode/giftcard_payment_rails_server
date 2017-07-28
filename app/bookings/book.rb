@@ -17,30 +17,24 @@ class Book < ActiveRecord::Base
 
 	belongs_to :merchant
 
+# ---------------
 
-	def tip_rate_display
-		(self.tip_rate * 100).round(3)
-	end
 
-	def tax_rate_display= value
-		self.tax_rate = (value).round(4)
-	end
+    def price1_dollars
+        display_money(cents: self.price1)
+    end
 
-	def after_tax(price)
-		if tax_tip_included
-			return price
-		else
-			price + tax_amount(price) + tip_amount(price)
-		end
-	end
+    def price1_dollars= val
+        self.price1 = currency_to_cents(val)
+    end
 
-	def tax_amount(amt)
-		amt * ( 1 + tax_rate)
-	end
+    def price2_dollars
+        display_money(cents: self.price2)
+    end
 
-	def tip_amount(amt)
-		amt * ( 1 + tip_rate)
-	end
+    def price2_dollars= val
+        self.price2 = currency_to_cents(val)
+    end
 
 	def price_desc price_unit
 		if price_unit.to_i == self.price1
@@ -49,6 +43,40 @@ class Book < ActiveRecord::Base
 			self.price2_name
 		end
 	end
+
+	def price_total(price=self.price1)
+		if tax_tip_included
+			return price
+		else
+			price + tax_amount(price) + tip_amount(price)
+		end
+	end
+
+	def tax_amount(amt=self.price1)
+		(amt * tax_rate).round
+	end
+
+	def tip_amount(amt=self.price1)
+		(amt * tip_rate).round
+	end
+
+	def tax_rate_display
+		(self.tax_rate * 100).round(3)
+	end
+
+	def tax_rate_display= value
+		self.tax_rate = (value.to_f / 100).round(4)
+	end
+
+	def tip_rate_display
+		(self.tip_rate * 100).round(3)
+	end
+
+	def tip_rate_display= value
+		self.tip_rate = (value.to_f / 100).round(4)
+	end
+
+
 
 # ---------------
 
@@ -146,8 +174,8 @@ class Book < ActiveRecord::Base
 
     def prices_serialize
     	ary = []
-    	ary << { price_total: after_tax(self.price1), price: self.price1, ccy: self.ccy, title: self.price1_name } if self.price1
-    	ary << { price_total: after_tax(self.price2), price: self.price2, ccy: self.ccy, title: self.price2_name } if self.price2
+    	ary << { price_total: price_total(self.price1), price: self.price1, ccy: self.ccy, title: self.price1_name } if self.price1
+    	ary << { price_total: price_total(self.price2), price: self.price2, ccy: self.ccy, title: self.price2_name } if self.price2
     	ary
     end
 
