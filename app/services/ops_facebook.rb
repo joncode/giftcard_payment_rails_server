@@ -243,6 +243,7 @@ class OpsFacebook
 			if user.save
 				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 			else
+				puts "500 Internal - facebook account creation FAIL - OpsFacebook :create_account"
 				return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
 			end
 		end
@@ -265,6 +266,7 @@ class OpsFacebook
 			if user.save
 				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 			else
+				puts "500 Internal - facebook account creation FAIL - OpsFacebook :attach"
 				return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
 			end
 
