@@ -20,6 +20,9 @@ class Object
         (self.methods - Object.methods).sort_by { |m| m }
     end
 
+    def ih(hash)
+        hash.with_indifferent_access
+    end
 
     def stoplight meta=nil
         if meta == :help
