@@ -66,7 +66,8 @@ class UserSocial < ActiveRecord::Base
 
     def set_reauth(msg: "Please Reauthorize your Facebook account")
         puts "Reauth #{self.id} " + msg.inspect
-        update(status: 'reauth', msg: msg)
+        update_column(:status, 'reauth')
+        update_column(:msg, msg)
     end
 
     def set_user_auth_required

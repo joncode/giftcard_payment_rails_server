@@ -14,7 +14,15 @@ class Booking < ActiveRecord::Base
 #   -------------
 
 	belongs_to :book
-	delegate :merchant, :tax_tip_included, :tax_rate, :tax_rate_display, :tip_rate, :tip_rate_display, :tax_name, :tip_name, :ccy, :min_ppl, :max_ppl, to: :book
+
+	delegate :merchant, :tax_tip_included, :tax_rate, :tax_rate_display, :tip_rate,
+		:tip_rate_display, :tax_name, :tip_name, :ccy, :min_ppl, :max_ppl,
+		 to: :book
+	delegate :name, prefix: :book, to: :book, allow_nil: true
+
+	delegate :name, prefix: :merchant, to: :merchant, allow_nil: true
+	delegate :timezone, to: :merchant, allow_nil: true
+
 	attr_writer :time1, :time2
 	attr_accessor :price_id
 
@@ -141,13 +149,6 @@ class Booking < ActiveRecord::Base
 
 #   -------------
 
-	def timezone
-		self.merchant ? self.merchant.time_zone : "Pacific Time (US & Canada)"
-	end
-
-	def in_timezone datetime
-    	TimeGem.change_time_to_zone datetime, timezone
-	end
 
     def time1
     	TimeGem.time_from_timestamp(self.date1)
@@ -156,10 +157,6 @@ class Booking < ActiveRecord::Base
     def time2
     	TimeGem.time_from_timestamp(self.date2)
     end
-
-
-#   -------------
-
 
 	def event_at
 		TimeGem.set_in_timezone(super, timezone)
@@ -184,6 +181,8 @@ class Booking < ActiveRecord::Base
 	def event_at_to_s
 		TimeGem.timestamp_to_s(self.event_at)
 	end
+
+#   -------------
 
 	def accept_booking(stripe_id, stripe_user_id)
 		self.stripe_id = stripe_id
@@ -252,19 +251,6 @@ class Booking < ActiveRecord::Base
 			return 'request_date'
 		end
 		s
-	end
-
-#   -------------
-
-
-	def book_name
-		book.name
-	end
-
-	def merchant_name
-		merchant.name
-	rescue
-		"Top100"
 	end
 
 

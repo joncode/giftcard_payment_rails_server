@@ -3,6 +3,7 @@ class Book < ActiveRecord::Base
     include Formatters
 
     has_many :bookings
+	belongs_to :merchant
 
     auto_strip_attributes :name, :zinger, :detail, :notes,
 	    :member1, :member2, :member3, :member4,
@@ -11,11 +12,13 @@ class Book < ActiveRecord::Base
 		:photo1_name, :photo2_name, :photo3_name, :photo4_name,
 		:price1_name, :price2_name
 
-	validates_presence_of :name, :merchant_id, :advance_days, :min_ppl, :max_ppl, :price1
+	validates_presence_of :name, :merchant, :advance_days, :min_ppl, :max_ppl, :price1
 	validates_inclusion_of :tax_rate, in: 0..1
 	validates_inclusion_of :tip_rate, in: 0..1
 
-	belongs_to :merchant
+	delegate :name, prefix: :merchant, to: :merchant, allow_nil: true
+	delegate :list_serialize, prefix: :merchant, to: :merchant, allow_nil: true
+	delegate :timezone, to: :merchant, allow_nil: true
 
 	PRICE1_ID = 'pr_f1ab5595'
 	PRICE2_ID = 'pr_d301c9bf'
@@ -93,11 +96,12 @@ class Book < ActiveRecord::Base
 		raise ActiveRecord::RecordNotFound
 	end
 
+# ---------------
+
 	def self.statuses
 		['live', 'coming_soon']
 	end
 
-# ---------------
 
 	def status= str
 		str = str.to_s
@@ -115,15 +119,6 @@ class Book < ActiveRecord::Base
 
 # ---------------
 
-	def merchant_name
-		return self.merchant ? self.merchant.name : 'No Merchant'
-	end
-
-	def merchant_list_serialize
-		m = self.merchant
-		return { name: 'Merchant' } if m.nil?
-		m
-	end
 
     def get_photo
     	self.photo1 || self.photo2 || self.photo3 || self.photo4
@@ -134,7 +129,7 @@ class Book < ActiveRecord::Base
 	    		# LIST OWNER DATA
 	    	owner_type: 'Merchant',
 	    	owner_id: self.merchant_id,
-	        owner: merchant_list_serialize,
+	        owner: merchant_list_serialize || { name: 'Merchant' },
 	     		# LIST META DATA
 	    	type: 'book', id: self.id, token: token,
 	    	active: self.active, status: self.status,
@@ -211,17 +206,9 @@ class Book < ActiveRecord::Base
     	# today in merchant timezone
     	# plus advance days
     	# that day is book by - event date
-    	today = in_timezone(DateTime.now)
+    	today = TimeGem.change_time_to_zone(DateTime.now, timezone)
     	today + (self.advance_days || 0).days
     end
-
-	def timezone
-		self.merchant ? self.merchant.time_zone : "Pacific Time (US & Canada)"
-	end
-
-	def in_timezone datetime
-    	datetime.in_time_zone(timezone)
-	end
 
 
 # ---------------
