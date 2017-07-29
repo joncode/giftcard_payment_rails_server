@@ -49,13 +49,23 @@ class TimeGem
         dt.to_formatted_s(:human)
     end
 
+    def self.timestamp_to_s datetime
+        return datetime unless datetime.respond_to?(:to_formatted_s)
+        datetime.to_formatted_s(:custom_long_ordinal)
+    end
+
+    def self.time_from_timestamp(timestamp)
+        return timestamp unless timestamp.respond_to?(:to_formatted_s)
+        timestamp.to_formatted_s(:only_time).gsub(':00','').strip
+    end
+
     def self.datetime_to_string dt
         dt.strftime("#{OUTPUT_FORMAT}")
     end
 
     def self.string_stamp_to_datetime string_stamp
-        string_stamp = DateTime.parse(string_stamp) if string_stamp.kind_of?(String)
-        string_stamp
+        return string_stamp unless string_stamp.kind_of?(String)
+        DateTime.parse(string_stamp)
     end
 
     def self.string_to_datetime datetime_obj, time_zone_str="UTC"
@@ -85,11 +95,19 @@ class TimeGem
     end
 
     def self.change_time_to_zone datetime_obj, time_zone_str
-    	if time_zone_str.blank?
-    		datetime_obj
-    	else
-	        datetime_obj.in_time_zone(time_zone_str)
-	    end
+    	return datetime_obj if time_zone_str.blank?
+        datetime_obj.in_time_zone(time_zone_str)
+    end
+
+    def self.add_time_to_date time, datetime_obj
+        return if time.blank? || time.to_i == 0 || !datetime_obj.respond_to?(:ago)
+        mins = 0
+        mins = 30 if time.match(/:30/)      # use 30 minute intervals
+        tt = time.to_i
+        tt = 0 if tt == 12                  # set hour range from 0-11
+        tt += 12 if time.match(/PM/i)       # add 12 if PM
+            # set the datetime_obj
+        datetime_obj = datetime_obj.beginning_of_day + tt.hours + mins.minutes
     end
 
 #   -------------    INSTANCE METHODS

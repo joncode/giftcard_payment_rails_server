@@ -17,6 +17,9 @@ class Book < ActiveRecord::Base
 
 	belongs_to :merchant
 
+	PRICE1_ID = 'pr_f1ab5595'
+	PRICE2_ID = 'pr_d301c9bf'
+
 # ---------------
 
 
@@ -36,13 +39,13 @@ class Book < ActiveRecord::Base
         self.price2 = currency_to_cents(val)
     end
 
-	def price_desc price_unit
-		if price_unit.to_i == self.price1
-			self.price1_name
-		else
-			self.price2_name
-		end
-	end
+   	def choose_price pid
+		if pid == PRICE1_ID || pid == self.price1_name || pid.to_i == self.price1 || pid.to_i == 1
+    		{ price: self.price1, title: self.price1_name, id: PRICE1_ID }.with_indifferent_access
+    	elsif pid == PRICE2_ID || pid == self.price2_name || pid.to_i == self.price2 || pid.to_i == 2
+    		{ price: self.price2, title: self.price2_name, id: PRICE1_ID }.with_indifferent_access
+    	end
+    end
 
 	def price_total(price=self.price1)
 		if tax_tip_included
@@ -61,7 +64,7 @@ class Book < ActiveRecord::Base
 	end
 
 	def tax_rate_display
-		(self.tax_rate * 100).round(3)
+		(self.tax_rate.to_f * 100).round(3)
 	end
 
 	def tax_rate_display= value
@@ -69,13 +72,12 @@ class Book < ActiveRecord::Base
 	end
 
 	def tip_rate_display
-		(self.tip_rate * 100).round(3)
+		(self.tip_rate.to_f * 100).round(3)
 	end
 
 	def tip_rate_display= value
 		self.tip_rate = (value.to_f / 100).round(4)
 	end
-
 
 
 # ---------------
@@ -141,7 +143,8 @@ class Book < ActiveRecord::Base
 	    	name: self.name, zinger: self.zinger, detail: self.detail, notes: self.notes,
 	        photo: self.get_photo, ccy: self.ccy,
 	        advance_days: self.advance_days, min_ppl: self.min_ppl, max_ppl: self.max_ppl,
-			duration_minutes: duration, duration_desc: duration_desc
+			duration_minutes: duration, duration_desc: duration_desc,
+			tax_tip_included: self.tax_tip_included
    		}
     end
 
@@ -150,6 +153,9 @@ class Book < ActiveRecord::Base
     	h[:photos] = photos_serialize
     	h[:members] = members_serialize
     	h[:prices] = prices_serialize
+    	unless tax_tip_included
+	    	h.merge!({ tax_name: self.tax_name, tax_rate: tax_rate_display, tip_name: self.tip_name, tip_rate: tip_rate_display })
+		end
     	h
     end
     alias_method :serialize, :list_serialize
@@ -174,8 +180,8 @@ class Book < ActiveRecord::Base
 
     def prices_serialize
     	ary = []
-    	ary << { price_total: price_total(self.price1), price: self.price1, ccy: self.ccy, title: self.price1_name } if self.price1
-    	ary << { price_total: price_total(self.price2), price: self.price2, ccy: self.ccy, title: self.price2_name } if self.price2
+    	ary << { price_total: price_total(self.price1), price: self.price1, ccy: self.ccy, title: self.price1_name, id: PRICE1_ID } if self.price1
+    	ary << { price_total: price_total(self.price2), price: self.price2, ccy: self.ccy, title: self.price2_name, id: PRICE2_ID } if self.price2
     	ary
     end
 

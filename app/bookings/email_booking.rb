@@ -8,11 +8,14 @@ class EmailBooking < EmailAbstract
 	def initialize booking, template, subject
 		super()
 		@booking = booking
-		@book = booking.book
 		@merchant = @booking.merchant
 		@template = template
 		@subject = subject
 		@body = "<div><p>#{booking.name}</p></div>".html_safe
+		if booking.email.blank?
+			puts "500 Internal - no email on #{booking.id}"
+			raise "Cannot Email for booking #{booking.id}"
+		end
 		@to_emails  = [{"email" => booking.email, "name" => booking.name }]
 		set_bcc
 		set_email_message_data
@@ -27,10 +30,10 @@ class EmailBooking < EmailAbstract
 				'merchant_address' => @merchant.address,
 				'merchant_city_state_zip' => @merchant.city_state_zip,
 				'merchant_phone' => number_to_phone(@merchant.phone),
-				'book_price_desc' => (@booking.price_desc || 'Booking Price'),
-				'book_price' => display_money(ccy: @book.ccy, cents: @booking.price_unit),
+				'book_price_desc' => (@booking.price_name || 'Booking Price'),
+				'book_price' => display_money(ccy: @booking.ccy, cents: @booking.price_unit),
 				'guests' => @booking.guests,
-				'booking_price_total' => display_money(ccy: @book.ccy, cents: @booking.price_total),
+				'booking_price_total' => display_money(ccy: @booking.ccy, cents: @booking.price_total),
 				'important' => (@booking.note || ''),
 				'support_phone' => TWILIO_QUICK_NUM,
 				'booking_date' => '',

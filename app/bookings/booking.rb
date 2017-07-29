@@ -7,15 +7,16 @@ class Booking < ActiveRecord::Base
 	include BookingChargeCard
 	include MoneyHelper
 
-	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_desc
+	auto_strip_attributes :name, :email, :phone, :note, :origin, :price_name
 
 	EXPIRES_INTERVAL = 24
 
 #   -------------
 
 	belongs_to :book
-
-	attr_accessor :time1, :time2
+	delegate :merchant, :tax_tip_included, :tax_rate, :tax_rate_display, :tip_rate, :tip_rate_display, :tax_name, :tip_name, :ccy, :min_ppl, :max_ppl, to: :book
+	attr_writer :time1, :time2
+	attr_accessor :price_id
 
 #   -------------
 
@@ -39,7 +40,7 @@ class Booking < ActiveRecord::Base
     end
 
     def self.reminders
-    	where(active: true).where.not(event_at: nil, stripe_id: nil).find_each do |booking|
+    	where(active: true).where.not(event_at: nil, status: 'payment_received').find_each do |booking|
     		dt = DateTime.now.utc
     		[7,1].each do |d|
 
@@ -65,21 +66,21 @@ class Booking < ActiveRecord::Base
 	end
 
 	def customer_link
-		CLEAR_CACHE + "/bookings/" + self.hex_id
+		CLEAR_CACHE + "/bookings/" + self.paper_id
 	end
 
 	def admin_link
-		PUBLIC_URL_AT + "/bookings/" + self.hex_id
+		PUBLIC_URL_AT + "/bookings/" + self.paper_id
 	end
 
 	def to_text
-		"#{self.name} has booked the #{self.book_name} top100 experience. Status has changed to '#{self.status.titleize}'. Booking ID = #{self.hex_id}"
+		"#{self.name} has booked the #{self.book_name} top100 experience. Status has changed to '#{self.status.titleize}'. Booking ID = #{self.paper_id}"
 	end
 
 	def serialize
 		h = self.serializable_hash only: [ :id, :active, :hex_id, :name, :email, :phone, :expires_at,
-			 :guests, :book_id, :price_unit, :ccy, :price_desc, :status, :note, :created_at, :origin,
-			 :event_at, :date1, :date2]
+			 :guests, :book_id, :price_unit, :ccy, :price_name, :status, :note, :created_at, :origin,
+			 :event_at, :date1, :date2 ]
 		h[:paper_id] = self.paper_id
 		h[:expires_interval] = EXPIRES_INTERVAL
  		h[:book] = self.book ? self.book.list_serialize : nil
@@ -88,7 +89,21 @@ class Booking < ActiveRecord::Base
 		h.stringify_keys
 	end
 
+
 #   -------------
+
+	def price_id= price_id
+		@price_id = price_id
+    	return "Book Not Found" unless book
+    	price_hsh = book.choose_price(price_id)
+    	if price_hsh.nil?
+	    	errors.add(:price, "#{price_id} is not found on booking")
+	    else
+	    	self.price_unit = price_hsh[:price]
+	    	self.price_name = price_hsh[:title]
+	    end
+    	price_hsh
+	end
 
 	def price_subtotal
 		self.price_unit.to_i * self.guests.to_i
@@ -98,8 +113,6 @@ class Booking < ActiveRecord::Base
 		book.price_total(price_subtotal)
 	end
 	alias_method :amount, :price_total
-
-	delegate :tax_tip_included, :tax_rate_display, :tip_rate_display, :tax_name, :tip_name, :ccy, :min_ppl, :max_ppl, to: :book
 
 	def expired?
 		bool = (self.expires_at && self.expires_at < DateTime.now.utc)
@@ -133,29 +146,15 @@ class Booking < ActiveRecord::Base
 	end
 
 	def in_timezone datetime
-    	datetime.in_time_zone(timezone)
+    	TimeGem.change_time_to_zone datetime, timezone
 	end
 
     def time1
-		s = self.date1
-		if s.respond_to?(:to_formatted_s)
-			x = s.to_formatted_s(:only_time)
-			x.gsub!(':00','')
-			x.strip
-		else
-			s
-		end
+    	TimeGem.time_from_timestamp(self.date1)
     end
 
     def time2
-		s = self.date2
-		if s.respond_to?(:to_formatted_s)
-			x = s.to_formatted_s(:only_time)
-			x.gsub!(':00','')
-			x.strip
-		else
-			s
-		end
+    	TimeGem.time_from_timestamp(self.date2)
     end
 
 
@@ -175,30 +174,15 @@ class Booking < ActiveRecord::Base
 	end
 
 	def date1_to_s
-		s = self.date1
-		if s.respond_to?(:to_formatted_s)
-			s.to_formatted_s(:custom_long_ordinal)
-		else
-			s
-		end
+		TimeGem.timestamp_to_s(self.date1)
 	end
 
 	def date2_to_s
-		s = self.date2
-		if s.respond_to?(:to_formatted_s)
-			s.to_formatted_s(:custom_long_ordinal)
-		else
-			s
-		end
+		TimeGem.timestamp_to_s(self.date2)
 	end
 
 	def event_at_to_s
-		s = self.event_at
-		if s.respond_to?(:to_formatted_s)
-			s.to_formatted_s(:custom_long_ordinal)
-		else
-			s
-		end
+		TimeGem.timestamp_to_s(self.event_at)
 	end
 
 	def accept_booking(stripe_id, stripe_user_id)
@@ -274,27 +258,13 @@ class Booking < ActiveRecord::Base
 
 
 	def book_name
-		b = self.book
-		if b.respond_to?(:name)
-			b.name
-		end
-	end
-
-	def merchant
-		if b = self.book
-			b.merchant
-		else
-			nil
-		end
+		book.name
 	end
 
 	def merchant_name
-		m = self.merchant
-		if m.respond_to?(:name)
-			m.name
-		else
-			"Top100"
-		end
+		merchant.name
+	rescue
+		"Top100"
 	end
 
 

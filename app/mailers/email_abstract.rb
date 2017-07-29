@@ -58,10 +58,7 @@ class EmailAbstract
     end
 
     def format_date dt
-        if dt.respond_to?(:to_formatted_s)
-            dt = dt.to_formatted_s(:custom_long_ordinal)
-        end
-        dt
+        TimeGem.timestamp_to_s(dt)
     end
 
 #   -------------

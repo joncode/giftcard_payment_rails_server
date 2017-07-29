@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170727235730) do
+ActiveRecord::Schema.define(version: 20170729001427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -251,7 +251,7 @@ ActiveRecord::Schema.define(version: 20170727235730) do
     t.datetime "date1"
     t.datetime "date2"
     t.datetime "event_at"
-    t.string   "price_desc"
+    t.string   "price_name"
     t.string   "ccy",            default: "USD"
     t.string   "stripe_id"
     t.string   "stripe_user_id"
