@@ -114,7 +114,7 @@ class Booking < ActiveRecord::Base
 	end
 
 	def price_subtotal
-		if guests.to_i == 0
+		if guests.to_i > 0
 			self.price_unit * guests.to_i
 		else
 			self.price_unit
