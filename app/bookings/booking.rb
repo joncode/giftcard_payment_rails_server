@@ -28,7 +28,7 @@ class Booking < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :book
+	validates_presence_of :book, :price_unit, :guests
 	# validates_with BookingDateValidator
 
 #   -------------
@@ -102,6 +102,7 @@ class Booking < ActiveRecord::Base
 #   -------------
 
 	def price_id= price_id
+		puts "IN PRICE ID setter"
 		@price_id = price_id
     	return "Book Not Found" unless book
     	price_hsh = book.choose_price(price_id)
