@@ -114,11 +114,15 @@ class Booking < ActiveRecord::Base
 	end
 
 	def price_subtotal
-		self.price_unit.to_i * self.guests.to_i
+		if guests.to_i == 0
+			self.price_unit * guests.to_i
+		else
+			self.price_unit
+		end
 	end
 
-	def price_total
-		book.price_total(price_subtotal)
+	def price_total(price_cents=price_subtotal)
+		book.price_total(price_cents)
 	end
 	alias_method :amount, :price_total
 
