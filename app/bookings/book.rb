@@ -8,8 +8,8 @@ class Book < ActiveRecord::Base
     auto_strip_attributes :name, :zinger, :detail, :notes,
 	    :member1, :member2, :member3, :member4,
 		:member1_name, :member2_name, :member3_name, :member4_name,
-    	:photo1, :photo2, :photo3, :photo4,
-		:photo1_name, :photo2_name, :photo3_name, :photo4_name,
+    	:photo1, :photo2, :photo3, :photo4, :photo_banner, :photo_logo,
+		:photo1_name, :photo2_name, :photo3_name, :photo4_name, :photo_banner_name, :photo_logo_name,
 		:price1_name, :price2_name
 
 	validates_presence_of :merchant, :name, :advance_days, :min_ppl, :max_ppl, :price1
@@ -121,7 +121,7 @@ class Book < ActiveRecord::Base
 
 
     def get_photo
-    	self.photo1 || self.photo2 || self.photo3 || self.photo4
+    	self.photo_banner || self.photo1 || self.photo2 || self.photo3 || self.photo4
     end
 
     def basic_serialize
@@ -166,10 +166,12 @@ class Book < ActiveRecord::Base
 
 	def photos_serialize
 		ary = []
-		ary << { url: self.photo1, detail: self.photo1_name } if self.photo1
-		ary << { url: self.photo2, detail: self.photo2_name } if self.photo2
-		ary << { url: self.photo3, detail: self.photo3_name } if self.photo3
-		ary << { url: self.photo4, detail: self.photo4_name } if self.photo4
+		ary << { url: self.photo_banner, detail: self.photo_banner_name, type: 'banner' } if self.photo_banner
+		ary << { url: self.photo_logo, detail: self.photo_logo_name, type: 'logo' } if self.photo_logo
+		ary << { url: self.photo1, detail: self.photo1_name, type: 'carousel' } if self.photo1
+		ary << { url: self.photo2, detail: self.photo2_name, type: 'carousel' } if self.photo2
+		ary << { url: self.photo3, detail: self.photo3_name, type: 'carousel' } if self.photo3
+		ary << { url: self.photo4, detail: self.photo4_name, type: 'carousel' } if self.photo4
 		ary
 	end
 
