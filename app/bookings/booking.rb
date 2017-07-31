@@ -16,7 +16,7 @@ class Booking < ActiveRecord::Base
 	belongs_to :book
 
 	delegate :merchant, :tax_tip_included, :tax_rate, :tax_rate_display, :tip_rate,
-		:tip_rate_display, :tax_name, :tip_name, :ccy, :min_ppl, :max_ppl,
+		:tip_rate_display, :tax_name, :tip_name, :ccy, :min_ppl, :max_ppl, :tax_amount_display, :tip_amount_display,
 		 to: :book
 	delegate :name, prefix: :book, to: :book, allow_nil: true
 
@@ -94,9 +94,10 @@ class Booking < ActiveRecord::Base
  		h[:book] = self.book ? self.book.list_serialize : nil
  		h[:price] = price_subtotal
 		h[:price_total] = price_total
+		h[:tax_amount] = tax_amount_display(price_subtotal)
+		h[:tip_amount] = tip_amount_display(price_subtotal)
 		h.stringify_keys
 	end
-
 
 #   -------------
 

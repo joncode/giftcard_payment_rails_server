@@ -62,8 +62,16 @@ class Book < ActiveRecord::Base
 		(amt * tax_rate).round
 	end
 
+	def tax_amount_display(amt=self.price1)
+		tax_tip_included ? 0 : tax_amount(amt)
+	end
+
 	def tip_amount(amt=self.price1)
 		(amt * tip_rate).round
+	end
+
+	def tip_amount_display(amt=self.price1)
+		tax_tip_included ? 0 : tip_amount(amt)
 	end
 
 	def tax_rate_display
