@@ -94,9 +94,17 @@ class Booking < ActiveRecord::Base
  		h[:book] = self.book ? self.book.list_serialize : nil
  		h[:price] = price_subtotal
 		h[:price_total] = price_total
-		h[:tax_amount] = tax_amount_display(price_subtotal)
-		h[:tip_amount] = tip_amount_display(price_subtotal)
+		h[:tax_amount] = tax_amount
+		h[:tip_amount] = tip_amount
 		h.stringify_keys
+	end
+
+	def tax_amount
+		tax_amount_display(price_subtotal)
+	end
+
+	def tip_amount
+		tip_amount_display(price_subtotal)
 	end
 
 #   -------------
