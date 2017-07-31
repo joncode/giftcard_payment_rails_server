@@ -12,9 +12,9 @@ class Book < ActiveRecord::Base
 		:photo1_name, :photo2_name, :photo3_name, :photo4_name,
 		:price1_name, :price2_name
 
-	validates_presence_of :name, :merchant, :advance_days, :min_ppl, :max_ppl, :price1
-	validates_inclusion_of :tax_rate, in: 0..1
-	validates_inclusion_of :tip_rate, in: 0..1
+	validates_presence_of :merchant, :name, :advance_days, :min_ppl, :max_ppl, :price1
+	validates_numericality_of :tax_rate, greater_than_or_equal_to: 0, less_than_or_equal_to: 1, message: 'must be between 0 & 100'
+	validates_numericality_of :tip_rate, greater_than_or_equal_to: 0, less_than_or_equal_to: 1, message: 'must be between 0 & 100'
 
 	delegate :name, prefix: :merchant, to: :merchant, allow_nil: true
 	delegate :list_serialize, prefix: :merchant, to: :merchant, allow_nil: true
