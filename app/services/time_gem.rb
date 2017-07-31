@@ -70,7 +70,7 @@ class TimeGem
 
     def self.string_to_datetime datetime_obj, time_zone_str="UTC"
         if datetime_obj.kind_of?(String)
-            return datetime_obj if datetime_obj.blank?
+            return nil if datetime_obj.blank?
             begin
                 datetime_obj = datetime_obj.gsub('/', '-')
                 if datetime_obj.split('-')[2].length == 4
