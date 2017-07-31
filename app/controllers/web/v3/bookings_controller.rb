@@ -24,11 +24,11 @@ class Web::V3::BookingsController < MetalCorsController
 	def inquiry
 		h = parse_params_to_datetimes(create_params)
 		puts h.inspect
-		h[:book_id] = params[:id]
 		h[:date1] = TimeGem.add_time_to_date(h[:time1], h[:date1])
 		h[:date2] = TimeGem.add_time_to_date(h[:time2], h[:date2])
 		book = Book.find(h[:book_id])
 		bk = Booking.new(h)
+		bk.price_id = h[:price_id]
 		puts bk.inspect
 		if h[:price_id].present?
 			if bk.save

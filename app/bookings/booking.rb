@@ -106,7 +106,7 @@ class Booking < ActiveRecord::Base
 		@price_id = price_id
     	return "Book Not Found" unless book
     	price_hsh = book.choose_price(price_id)
-    	if price_hsh.nil?
+    	if price_hsh.blank?
 	    	errors.add(:price, "#{price_id} is not found on booking")
 	    else
 	    	self.price_unit = price_hsh[:price]
