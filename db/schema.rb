@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170729001427) do
+ActiveRecord::Schema.define(version: 20170731212353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,20 +261,20 @@ ActiveRecord::Schema.define(version: 20170729001427) do
   add_index "bookings", ["hex_id"], name: "index_bookings_on_hex_id", using: :btree
 
   create_table "books", force: :cascade do |t|
-    t.boolean  "active",           default: true
+    t.boolean  "active",            default: true
     t.string   "name"
     t.string   "zinger"
     t.text     "detail"
     t.text     "notes"
-    t.integer  "advance_days"
-    t.integer  "min_ppl"
-    t.integer  "max_ppl"
+    t.integer  "advance_days",      default: 3
+    t.integer  "min_ppl",           default: 1
+    t.integer  "max_ppl",           default: 20
     t.string   "ccy"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.string   "status",           default: "coming_soon"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "status",            default: "coming_soon"
     t.integer  "merchant_id"
-    t.integer  "duration",         default: 120
+    t.integer  "duration",          default: 120
     t.string   "photo1"
     t.string   "photo1_name"
     t.string   "photo2"
@@ -295,11 +295,15 @@ ActiveRecord::Schema.define(version: 20170729001427) do
     t.string   "price1_name"
     t.integer  "price2"
     t.string   "price2_name"
-    t.boolean  "tax_tip_included", default: true
-    t.decimal  "tax_rate",         default: 0.0
-    t.string   "tax_name",         default: "Tax"
-    t.decimal  "tip_rate",         default: 0.18
-    t.string   "tip_name",         default: "Gratuity"
+    t.boolean  "tax_tip_included",  default: true
+    t.decimal  "tax_rate",          default: 0.0
+    t.string   "tax_name",          default: "Tax"
+    t.decimal  "tip_rate",          default: 0.2
+    t.string   "tip_name",          default: "Gratuity"
+    t.string   "photo_banner"
+    t.string   "photo_banner_name"
+    t.string   "photo_logo"
+    t.string   "photo_logo_name"
   end
 
   create_table "boomerangs", force: :cascade do |t|
