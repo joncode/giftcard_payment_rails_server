@@ -8,8 +8,8 @@ class Book < ActiveRecord::Base
     auto_strip_attributes :name, :zinger, :detail, :notes,
 	    :member1, :member2, :member3, :member4,
 		:member1_name, :member2_name, :member3_name, :member4_name,
-    	:photo1, :photo2, :photo3, :photo4, :photo_banner, :photo_logo,
-		:photo1_name, :photo2_name, :photo3_name, :photo4_name, :photo_banner_name, :photo_logo_name,
+    	:photo1, :photo2, :photo3, :photo4, :photo5, :photo_banner, :photo_logo,
+		:photo1_name, :photo2_name, :photo3_name, :photo4_name, :photo5_name, :photo_banner_name, :photo_logo_name,
 		:price1_name, :price2_name
 
 	validates_presence_of :merchant, :name, :advance_days, :min_ppl, :max_ppl, :price1
@@ -180,6 +180,7 @@ class Book < ActiveRecord::Base
 		ary << { url: self.photo2, detail: self.photo2_name, type: 'carousel' } if self.photo2
 		ary << { url: self.photo3, detail: self.photo3_name, type: 'carousel' } if self.photo3
 		ary << { url: self.photo4, detail: self.photo4_name, type: 'carousel' } if self.photo4
+		ary << { url: self.photo5, detail: self.photo5_name, type: 'carousel' } if self.photo5
 		ary
 	end
 
