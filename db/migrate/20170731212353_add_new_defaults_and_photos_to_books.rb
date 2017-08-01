@@ -9,6 +9,8 @@ class AddNewDefaultsAndPhotosToBooks < ActiveRecord::Migration
 		add_column :books, :photo_banner_name, :string
 		add_column :books, :photo_logo, :string
 		add_column :books, :photo_logo_name, :string
+		add_column :books, :photo5, :string
+		add_column :books, :photo5_name, :string
 		add_photos_to_banner_and_logo
 	end
 

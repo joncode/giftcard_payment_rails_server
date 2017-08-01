@@ -46,7 +46,7 @@ class Book < ActiveRecord::Base
 		if pid == PRICE1_ID || pid == self.price1_name || pid.to_i == self.price1 || pid.to_i == 1
     		{ price: self.price1, title: self.price1_name, id: PRICE1_ID }.with_indifferent_access
     	elsif pid == PRICE2_ID || pid == self.price2_name || pid.to_i == self.price2 || pid.to_i == 2
-    		{ price: self.price2, title: self.price2_name, id: PRICE1_ID }.with_indifferent_access
+    		{ price: self.price2, title: self.price2_name, id: PRICE2_ID }.with_indifferent_access
     	end
     end
 
