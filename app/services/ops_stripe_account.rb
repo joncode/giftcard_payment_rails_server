@@ -15,6 +15,9 @@ class OpsStripeAccount
 		@ccy = company.ccy || raise
 		@country = company.country
 		@acct_id = legal.stripe_account_id
+		if @acct_id
+			account
+		end
 	end
 
 	def self.init legal
@@ -33,9 +36,9 @@ class OpsStripeAccount
 	def add_bank
 		bank_account = @company.bank
 		return "NO BANK" if bank_account.blank?
-		if @account.blank? && @acct_id.blank?
-			return "No Data"
-		else @account.blank?
+		return "No Data" if @account.blank? && @acct_id.blank?
+
+		if @account.blank?
 			retrieve_account
 		end
 
@@ -85,8 +88,13 @@ class OpsStripeAccount
 	end
 
 	def verify
-		return "NO ACCOUNT" unless @account.present?
+		return nil unless @account.present?
 		@account.verification
+	end
+
+	def verified?
+		return nil unless verify.respond_to?(:fields_needed)
+		verify.fields_needed.length == 0
 	end
 
 #	-------------

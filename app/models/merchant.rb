@@ -5,6 +5,7 @@ class Merchant < ActiveRecord::Base
     include Utility
     include MerchantSerializers
     include RedeemHelper
+    include MoneyHelper
 
     # default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
@@ -66,6 +67,13 @@ class Merchant < ActiveRecord::Base
     enum payment_event: [ :creation, :redemption ]
     enum payment_plan: [ :no_plan, :choice, :prime ]
 
+    def as_json
+        super(except: [:id, :region_id, :pos_merchant_id, :client_id, :building_id, :brand_id, :rate, :account_admin_id, :ein,
+                :token, :tender_type_id, :facebook, :twitter, :bank_id, :promo_menu_id, :setup, :tou, :ftmeta, :affiliate_id,
+                :prime_date, :prime_amount, :payment_event, :payment_plan, :tools, :created_at, :updated_at, :signup_email, :signup_name, :contract_date,
+                :menu_is_live, :pos_direct, :pos_sys, :active])
+    end
+
     def biz_user
         BizUser.find(self.id)
     end
@@ -76,6 +84,16 @@ class Merchant < ActiveRecord::Base
 
     def self.index
         live_scope
+    end
+
+    def destination_hsh float_string=''
+        if legal && legal.verified? && !float_string.blank?
+            puts "Stripe Managed Account for #{self.id}"
+            { destination: { amount: currency_to_cents(float_string), account: legal.stripe_account_id }}
+        else
+            puts "No Stripe Managed Account for #{self.id}"
+            {}
+        end
     end
 
 #   -------------

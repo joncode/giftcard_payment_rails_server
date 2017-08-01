@@ -132,12 +132,17 @@ class Book < ActiveRecord::Base
     	self.photo_banner || self.photo1 || self.photo2 || self.photo3 || self.photo4
     end
 
+    def merchant_book_serialize
+		return merchant.as_json if merchant
+		{ name: "Merchant" }
+    end
+
     def basic_serialize
 		{
 	    		# LIST OWNER DATA
 	    	owner_type: 'Merchant',
 	    	owner_id: self.merchant_id,
-	        owner: merchant_list_serialize || { name: 'Merchant' },
+	        owner: merchant_book_serialize,
 	     		# LIST META DATA
 	    	type: 'book', id: self.id, token: token,
 	    	active: self.active, status: self.status,

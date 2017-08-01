@@ -37,7 +37,7 @@ class OpsStripe
 
 #	-------------
 
-	def purchase
+	def purchase destination_hsh={}
 		@request = {
 			amount: @amount,
 			currency: @ccy,
@@ -53,6 +53,7 @@ class OpsStripe
                 currency: @ccy
             }
 		}
+        @request.merge!(destination_hsh)
 		@response = Stripe::Charge.create(@request)
 		process_charge_success @response.source
 		@response
