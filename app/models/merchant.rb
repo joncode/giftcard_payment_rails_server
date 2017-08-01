@@ -44,6 +44,7 @@ class Merchant < ActiveRecord::Base
     has_one :affiliation, as: :target
     has_one :provider
     has_one :merchant_signup
+    has_one :legal, as: :company
 
     has_many :books
     has_many :campaign_items

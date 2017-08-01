@@ -11,11 +11,14 @@ class OpsStripeAccount
 		Stripe.api_key = STRIPE_SECRET
 		Stripe.api_version = "2017-06-05"
 		@company = company
-		@legal = legal
-		@ccy = @company.ccy || raise
+		@legal = legal || company.legal
+		@ccy = company.ccy || raise
 		@country = company.country
-	# where is account_id stored ?
-		# @acct_id = "acct_1AHjDxGlvoo2SeX5"
+		@acct_id = legal.stripe_account_id
+	end
+
+	def self.init legal
+		new(legal.company, legal)
 	end
 
 	def save_account
@@ -114,7 +117,49 @@ class OpsStripeAccount
 			save_account
 		end
 		@acct_id = @account.id
+		if @legal
+			@legal.stripe_account_id = @account.id
+			@legal.update_column(:stripe_account_id, @account.id)
+		end
 		@account
 	end
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
