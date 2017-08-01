@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731212353) do
+ActiveRecord::Schema.define(version: 20170801000356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,6 +304,8 @@ ActiveRecord::Schema.define(version: 20170731212353) do
     t.string   "photo_banner_name"
     t.string   "photo_logo"
     t.string   "photo_logo_name"
+    t.string   "photo5"
+    t.string   "photo5_name"
   end
 
   create_table "boomerangs", force: :cascade do |t|
