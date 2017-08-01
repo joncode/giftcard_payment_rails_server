@@ -95,7 +95,9 @@ class Booking < ActiveRecord::Base
  		h[:price] = price_subtotal
 		h[:price_total] = price_total
 		h[:tax_amount] = tax_amount
+		h[:tax_name] = tax_name
 		h[:tip_amount] = tip_amount
+		h[:tip_name] = tip_name
 		h.stringify_keys
 	end
 
