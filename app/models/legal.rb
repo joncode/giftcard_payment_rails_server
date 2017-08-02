@@ -36,6 +36,7 @@ class Legal < ActiveRecord::Base
 	def send_to_stripe
 		return true unless non_us?
 		account.account
+		self.stripe_account_id = account.acct_id if self.stripe_account_id.blank?
 
 		if bank.nil?
 			errors.add(:bank, "Please add your bank account on the sidebar")
@@ -46,16 +47,16 @@ class Legal < ActiveRecord::Base
 			return true
 		else
 			if stripe_errors.include?("external_account")
-				if bank
+				if bank.nil?
+					errors.add(:bank, "- Please add your bank account on the sidebar")
+					return false
+				else
 					account.add_bank
 					if account.error_message
 						errors.add(:stripe, account.error_message)
 						puts account.inspect
 						return false
 					end
-				else
-					errors.add(:bank, "- Please add your bank account on the sidebar")
-					return false
 				end
 			end
 			if verified?
@@ -85,7 +86,7 @@ class Legal < ActiveRecord::Base
 	end
 
 	def account
-		@account ||= OpsStripeAccount.init(self)
+		@account = OpsStripeAccount.init(self)
 	end
 
 	def verified?

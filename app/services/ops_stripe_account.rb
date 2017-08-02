@@ -110,7 +110,7 @@ class OpsStripeAccount
 
 	def verified?
 		return nil if fields_needed.nil?
-		fields_needed.length == 0
+		fields_needed.length == 0 || fields_needed == ["legal_entity.verification.document"]
 	end
 
 #	-------------
@@ -136,15 +136,13 @@ class OpsStripeAccount
 			metadata: { 'company_id' => c.id}
 		})
 		if @legal
+			@legal.stripe_account_id = @account.id
+			@legal.update_column(:stripe_account_id, @account.id) if @legal.persisted?
 			add_tos
 			add_entity
 			save_account
 		end
 		@acct_id = @account.id
-		if @legal
-			@legal.stripe_account_id = @account.id
-			# @legal.update_column(:stripe_account_id, @account.id) if @legal.persisted?
-		end
 		@account
 	end
 
