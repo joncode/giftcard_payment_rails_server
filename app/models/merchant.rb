@@ -87,6 +87,7 @@ class Merchant < ActiveRecord::Base
     end
 
     def destination_hsh float_string=''
+        return {} if country == 'US'
         if legal && legal.verified? && !float_string.blank?
             puts "Stripe Managed Account for #{self.id}"
             { destination: { amount: currency_to_cents(float_string), account: legal.stripe_account_id }}
