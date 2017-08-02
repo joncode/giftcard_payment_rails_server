@@ -5,7 +5,7 @@ class OpsStripeAccount
 	include OpsStripeHelper
 
 	attr_reader :ccy, :country, :company, :acct_id, :legal
-	attr_accessor :acct_id
+	attr_accessor :acct_id, :error_code, :error_message, :error
 
 	def initialize company, legal=nil
 		Stripe.api_key = STRIPE_SECRET
@@ -29,6 +29,10 @@ class OpsStripeAccount
 	rescue => e
 		puts e.inspect
 		process_error(e)
+	end
+
+	def success?
+		@success
 	end
 
 #	-------------
@@ -65,10 +69,18 @@ class OpsStripeAccount
 	    if legal.first_name.present?
 	    	@account.legal_entity.first_name = legal.first_name
 	    	@account.legal_entity.last_name = legal.last_name
-	    	@account.legal_entity.personal_id_number = legal.personal_id
+	    	if Rails.env.production?
+		    	@account.legal_entity.personal_id_number = legal.personal_id
+		    else
+		    	@account.legal_entity.personal_id_number = '000000000'
+		    end
 	    end
 
-    	@account.legal_entity.business_tax_id = legal.business_tax_id
+	    if Rails.env.production?
+	    	@account.legal_entity.business_tax_id = legal.business_tax_id
+	    else
+	    	@account.legal_entity.business_tax_id = '000000000'
+	    end
     	@account.business_name = c.name
     	@account.business_url = c.website
 
@@ -92,9 +104,13 @@ class OpsStripeAccount
 		@account.verification
 	end
 
+	def fields_needed
+		verify.try(:fields_needed) || []
+	end
+
 	def verified?
-		return nil unless verify.respond_to?(:fields_needed)
-		verify.fields_needed.length == 0
+		return nil if fields_needed.nil?
+		fields_needed.length == 0
 	end
 
 #	-------------
@@ -127,7 +143,7 @@ class OpsStripeAccount
 		@acct_id = @account.id
 		if @legal
 			@legal.stripe_account_id = @account.id
-			@legal.update_column(:stripe_account_id, @account.id)
+			# @legal.update_column(:stripe_account_id, @account.id) if @legal.persisted?
 		end
 		@account
 	end

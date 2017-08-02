@@ -7,35 +7,81 @@ class Legal < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :business_tax_id, :company_id, :company_type
-	validates_presence_of :date_of_birth, :first_name, :last_name, :personal_id, if: :non_us?
+
+#   -------------
+
+	validates_presence_of :company_id, :company_type
+	validates_presence_of :business_tax_id, message: "Tax ID can't be blank"
+	validates_presence_of :date_of_birth, :first_name, :last_name, if: :non_us?
+	validates_presence_of :personal_id, if: :non_us?, message: "Tax ID Number can't be blank"
 	validates_uniqueness_of :company_id, scope: :company_type
+	validates_inclusion_of :tos, :in => [true], message: " - You must agree to the Terms of Service"
 
 #   -------------
 
 	before_save { |legal| legal.first_name = first_name.titleize if first_name }
 	before_save { |legal| legal.last_name  = NameCase(last_name) if last_name  }
+	# before_save :send_to_stripe
 
 #   -------------
-
-	attr_reader :account
 
 	belongs_to :company, polymorphic: true
 	delegate :bank, to: :company
 	delegate :name, prefix: :company, to: :company
+	delegate :country, :ccy, to: :company
+
 
 #   -------------
+
+	def send_to_stripe
+		return true unless non_us?
+		account.account
+
+		if bank.nil?
+			errors.add(:bank, "Please add your bank account on the sidebar")
+			return false
+		end
+
+		if verified?
+			return true
+		else
+			if stripe_errors.include?("external_account")
+				if bank
+					account.add_bank
+					if account.error_message
+						errors.add(:stripe, account.error_message)
+						puts account.inspect
+						return false
+					end
+				else
+					errors.add(:bank, "- Please add your bank account on the sidebar")
+					return false
+				end
+			end
+			if verified?
+				return true
+			else
+				errors.add(:verification, stripe_errors.join(' - '))
+				puts account.inspect
+				return false
+			end
+		end
+	end
 
 	def personal_id
 		super || self.business_tax_id
 	end
 
+	def business_tax_id
+		super
+	end
+
 	def first_name
-		super || company_name
+		super
 	end
 
 	def last_name
-		super || company_name
+		super
 	end
 
 	def account
@@ -43,7 +89,11 @@ class Legal < ActiveRecord::Base
 	end
 
 	def verified?
-		account.verified?
+		account.verified? || false
+	end
+
+	def stripe_errors
+		account.fields_needed
 	end
 
 	def dob_obj
@@ -65,10 +115,8 @@ class Legal < ActiveRecord::Base
 	end
 
 
-private
-
 	def non_us?
-		self.company.ccy != 'USD' if self.company
+		country != 'US'
 	end
 
 

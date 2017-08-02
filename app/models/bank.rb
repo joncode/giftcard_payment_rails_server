@@ -76,7 +76,7 @@ class Bank < ActiveRecord::Base
             if Rails.env.production?
                 Bank.decrypt self.aba
             else
-                '11000-000'
+                '110000000'
             end
         else
             self.public_aba
