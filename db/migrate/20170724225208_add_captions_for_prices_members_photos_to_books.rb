@@ -20,6 +20,7 @@ class AddCaptionsForPricesMembersPhotosToBooks < ActiveRecord::Migration
 		add_column :books, :price1_name, :string#, default: "Price per person with Wine"
 		add_column :books, :price2, :integer
 		add_column :books, :price2_name, :string#, default: "Price per person w/o Wine"
+    move_legacy_data
   	end
 
   	def move_legacy_data

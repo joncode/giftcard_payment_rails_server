@@ -87,6 +87,7 @@ class Merchant < ActiveRecord::Base
     end
 
     def destination_hsh float_string=''
+        return {} if Rails.env.production? # not ready for production yet
         return {} if country == 'US'
         if legal && legal.verified? && !float_string.blank?
             puts "Stripe Managed Account for #{self.id}"
