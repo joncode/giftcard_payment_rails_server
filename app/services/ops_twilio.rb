@@ -22,7 +22,7 @@ class OpsTwilio
 
 			begin
 			    client = Twilio::REST::Client.new account_sid, auth_token
-			    message = client.account.messages.create(
+			    message = client.messages.create(
 			    	:body => msg,
 			        :to => receiver_phone,
 			        :from => twilio_number)
