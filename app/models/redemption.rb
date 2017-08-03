@@ -19,7 +19,7 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :gift_id, :r_sys, :amount, :token, :hex_id, :merchant_id
+	validates_presence_of :gift_id, :r_sys, :amount, :token, :merchant_id
 
 #   -------------
 

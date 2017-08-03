@@ -5,7 +5,7 @@ module HexIdMethods
 		klass.extend         HexIdMethods::ClassMethods
 	    klass.send :include, HexIdMethods::InstanceMethods
 			#   -------------   HEX ID model callback
-        before_save :set_unique_hex_id, on: :create
+        before_save :set_unique_hex_id
     end
 
 #   -------------
