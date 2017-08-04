@@ -90,7 +90,7 @@ class Legal < ActiveRecord::Base
 	end
 
 	def verified?
-		account.verified? || false
+		self.verified
 	end
 
 	def stripe_errors
