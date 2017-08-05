@@ -34,6 +34,7 @@ class Legal < ActiveRecord::Base
 #   -------------
 
 	def send_to_stripe
+		return true if verified?
 		return true unless non_us?
 		account.account
 		self.stripe_account_id = account.acct_id if self.stripe_account_id.blank?
@@ -43,7 +44,7 @@ class Legal < ActiveRecord::Base
 			return false
 		end
 
-		if verified?
+		if stripe_verify_check?
 			return true
 		else
 			if stripe_errors.include?("external_account")
@@ -59,7 +60,7 @@ class Legal < ActiveRecord::Base
 					end
 				end
 			end
-			if verified?
+			if stripe_verify_check?
 				return true
 			else
 				errors.add(:verification, stripe_errors.join(' - '))
@@ -93,6 +94,12 @@ class Legal < ActiveRecord::Base
 		self.verified
 	end
 
+	def stripe_verify_check?
+		bool = account.verified? || false
+		self.verified = bool
+		bool
+	end
+
 	def stripe_errors
 		account.fields_needed
 	end
@@ -119,6 +126,8 @@ class Legal < ActiveRecord::Base
 	def non_us?
 		country != 'US'
 	end
+
+private
 
 
 end

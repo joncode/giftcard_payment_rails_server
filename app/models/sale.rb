@@ -21,16 +21,16 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
-    def self.charge_card cc_hsh, giver=nil, destination_hsh={}
+    def self.charge_card cc_hsh, giver=nil
         puts "\n Sale.charge_card #{cc_hsh.inspect}\n"
 
         # {"amount"=>"27.3", "unique_id"=>"r-David_Leibner+m-590+u-45",
         #    "card_id"=>980193262, "giver_id"=>45, "merchant_id"=>"590",
-        #    "cim_profile"=>"123944998", "cim_token"=>"283107841", 'ccy'=>'USD'}
+        #    "cim_profile"=>"123944998", "cim_token"=>"283107841", 'ccy'=>'USD', 'destination_hsh' => {:destination=>{:amount=>9300, :account=>"acct_1AnB7eHDT7GLsx2n"}}}
 
          # {"amount"=>"0.0", "ccy"=>"USD", "unique_id"=>"r-David|m-10|u-7689", "card_id"=>980191948,
          #    "giver_id"=>7689, "merchant_id"=>10, "stripe_id"=>"card_18yDTbHMscfhJNrcYaJvkx6a",
-         #  "stripe_user_id"=>"cus_9GkzzcqBi0Z9Q7"}
+         #  "stripe_user_id"=>"cus_9GkzzcqBi0Z9Q7", 'destination_hsh' => {:destination=>{:amount=>9300, :account=>"acct_1AnB7eHDT7GLsx2n"}}}
 
 
         cc_hsh.stringify_keys!
@@ -38,7 +38,7 @@ class Sale < ActiveRecord::Base
         if cc_hsh['amount'].to_f == 0
             self.charge_zero_amount cc_hsh
         elsif cc_hsh['stripe_id'].present?
-            self.charge_stripe cc_hsh, giver, destination_hsh
+            self.charge_stripe cc_hsh, giver
         elsif cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
             cc_hsh.delete('ccy')
             self.charge_cim_token cc_hsh
@@ -68,10 +68,10 @@ class Sale < ActiveRecord::Base
         s
     end
 
-    def self.charge_stripe cc_hsh, giver=nil, destination_hsh
+    def self.charge_stripe cc_hsh, giver=nil
         o = OpsStripe.new cc_hsh
         o.add_customer = giver if giver
-        o.purchase(destination_hsh)
+        o.purchase
 
         puts o.inspect
 
@@ -166,19 +166,46 @@ class Sale < ActiveRecord::Base
         BigDecimal.new(cents_to_currency(self.revenue_cents))
     end
 
-    def usd_cents= amt
-        amt = - amt if amt < 0
-        super(amt)
+    def usd_cents= cents
+        super(cents.abs)
+    end
+    alias_attribute :usd, :usd_cents
+
+    def convert cents
+        (cents * exchange_rate).to_i
+    end
+
+    def exchange_rate
+            # USD / other currency
+        return 1 unless converted?
+        (self.usd_cents.to_f / self.revenue_cents).round(5)
+    end
+
+    def converted?
+            # sale is settle in USD then true otherwise false
+            # make sure we have checked for usd_cents on stripe
+        set_and_save_usd_cents if self.usd_cents.nil?
+            # if nil then no usd_cents
+        return false if self.usd_cents.nil?
+            # if usd_cents has a value different that revenue its been converted
+        self.usd_cents != self.revenue_cents
+    end
+
+    def set_and_save_usd_cents
+        return true unless self.usd_cents.nil?
+        set_usd_cents
+        save
     end
 
     def set_usd_cents
         # return true unless self.usd_cents.nil?
-        self.usd_cents = self.revenue_cents
+
+        self.usd_cents = self.revenue_cents if self.ccy == 'USD'
 
         if self.resp_code == 1 && self.gateway == 'stripe' && self.ccy != 'USD'
             o = OpsStripe.new
             bt = o.retrieve(self.transaction_id)
-            self.usd_cents = bt.balance_transaction.amount
+            self.usd_cents = bt.balance_transaction.amount if bt.destination.nil?
         end
 
     rescue => e

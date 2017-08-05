@@ -86,14 +86,16 @@ class Merchant < ActiveRecord::Base
         live_scope
     end
 
-    def destination_hsh float_string=''
+    delegate :verified?, to: :legal, allow_nil: true
+
+    def destination_hsh float_or_string='0'
         return {} if Rails.env.production? # not ready for production yet
         return {} if country == 'US'
-        if legal && legal.verified? && !float_string.blank?
-            puts "Stripe Managed Account for #{self.id}"
-            { destination: { amount: currency_to_cents(float_string), account: legal.stripe_account_id }}
+        if verified?
+            puts "Stripe Connect Account for Merchant #{self.id}"
+            { destination: { amount: currency_to_cents(float_or_string.to_s), account: legal.stripe_account_id }}
         else
-            puts "No Stripe Managed Account for #{self.id}"
+            puts "NO Stripe Connect Account for Merchant #{self.id}"
             {}
         end
     end

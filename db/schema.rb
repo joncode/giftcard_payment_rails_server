@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170801170852) do
+ActiveRecord::Schema.define(version: 20170804183445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -700,6 +700,7 @@ ActiveRecord::Schema.define(version: 20170801170852) do
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.string   "stripe_account_id"
+    t.boolean  "verified",          default: false
   end
 
   create_table "licenses", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

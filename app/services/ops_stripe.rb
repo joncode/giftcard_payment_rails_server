@@ -9,6 +9,7 @@ class OpsStripe
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
 		:http_status, :customer_id, :card_id, :ccy, :amount, :unique_id, :resp_code, :ccy
 
+    attr_accessor :destination_hsh
 
 	def initialize cc_hsh={}
 		Stripe.api_key = STRIPE_SECRET
@@ -22,6 +23,7 @@ class OpsStripe
 		@success = false
 		@http_status = 100
 		@resp_code = 0
+        @destination_hsh = cc_hsh['destination_hsh'] || {}
 	end
 
     def add_customer= user
@@ -37,7 +39,7 @@ class OpsStripe
 
 #	-------------
 
-	def purchase destination_hsh={}
+	def purchase
 		@request = {
 			amount: @amount,
 			currency: @ccy,
@@ -53,7 +55,7 @@ class OpsStripe
                 currency: @ccy
             }
 		}
-        @request.merge!(destination_hsh)
+        @request.merge!(@destination_hsh)
 		@response = Stripe::Charge.create(@request)
 		process_charge_success @response.source
 		@response

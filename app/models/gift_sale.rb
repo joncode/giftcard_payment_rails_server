@@ -76,7 +76,8 @@ private
                     merchant_id
                 )
             args.delete('card')
-            args["payable"] = Sale.charge_card(card_to_sale_hsh, args["giver"], merchant.destination_hsh(args["cost"]))
+            card_to_sale_hsh['destination_hsh'] = merchant.destination_hsh(args["cost"])
+            args["payable"] = Sale.charge_card(card_to_sale_hsh, args["giver"])
 
         else
             puts "\n  GIFT INVALID SUBMITTED 500 Internal \n #{args.inspect} \n"

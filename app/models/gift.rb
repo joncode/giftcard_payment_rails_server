@@ -271,8 +271,13 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def sale
+        return nil unless self.payable_type == 'Sale'
+        payable
+    end
+
     def converted_ccy
-        if self.ccy != 'USD' && self.payable_type == 'Sale' && (self.payable.usd_cents != self.payable.revenue_cents)
+        if self.payable_type == 'Sale' && self.payable.converted?
             'USD'
         else
             self.ccy
@@ -282,13 +287,8 @@ class Gift < ActiveRecord::Base
     def converted_value_cents
         amt = original_value
 
-        if self.ccy != 'USD' && self.payable_type == 'Sale'
-            sale = self.payable
-            if sale.usd_cents.nil?
-                sale.set_usd_cents
-                sale.save
-            end
-            amt = original_value * sale.usd_cents / sale.revenue_cents
+        if self.payable_type == 'Sale'
+            amt = self.payable.convert(amt)
         end
         amt
     end
