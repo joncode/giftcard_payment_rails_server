@@ -329,7 +329,7 @@ class User < ActiveRecord::Base
     end
 
     def is_facebook_or_perm_deactive
-    	is_perm_deactive? || self.facebook_id.present?
+    	is_perm_deactive? || (self.email.blank? && self.facebook_id.present?)
     end
 
 	def is_perm_deactive?
