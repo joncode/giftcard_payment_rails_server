@@ -86,8 +86,7 @@ class Register < ActiveRecord::Base
 			partner_obj = gift_obj.merchant
 		end
 		reg = new
-		reg.partner_type = partner_obj.class.to_s
-		reg.partner_id = partner_obj.id
+		reg.partner = partner_obj
 		reg.type_of = credit_debt
 		reg.origin = origin_type
 		reg.amount = pay_amount

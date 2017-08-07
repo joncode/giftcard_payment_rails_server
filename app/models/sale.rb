@@ -167,6 +167,7 @@ class Sale < ActiveRecord::Base
     end
 
     def usd_cents= cents
+        super(nil) if cents.nil?
         super(cents.abs)
     end
     alias_attribute :usd, :usd_cents
