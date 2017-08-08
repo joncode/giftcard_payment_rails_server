@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
 	validates :first_name, 	presence: true, length: {  maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, allow_blank: true
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, allow_blank: true
-	validates :email , 		format: { with: VALID_EMAIL_REGEX }, unless: :is_facebook_or_perm_deactive?
+	validates :email , 		format: { with: VALID_EMAIL_REGEX }, unless: :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
 	validates :password_confirmation, presence: true,   on: :create
 	# validates :facebook_id, uniqueness: true, 			if: :facebook_id_exists?
@@ -326,10 +326,6 @@ class User < ActiveRecord::Base
 		else
 			self.activate_all_socials
 		end
-    end
-
-    def is_facebook_or_perm_deactive
-    	is_perm_deactive? || (self.email.blank? && self.facebook_id.present?)
     end
 
 	def is_perm_deactive?
