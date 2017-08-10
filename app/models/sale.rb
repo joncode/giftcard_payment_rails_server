@@ -166,6 +166,10 @@ class Sale < ActiveRecord::Base
         BigDecimal.new(cents_to_currency(self.revenue_cents))
     end
 
+    def destination_account
+        self.response['destination']
+    end
+
     def usd_cents= cents
         super(nil) if cents.nil?
         super(cents.abs)
@@ -200,13 +204,14 @@ class Sale < ActiveRecord::Base
 
     def set_usd_cents
         # return true unless self.usd_cents.nil?
-
-        self.usd_cents = self.revenue_cents if self.ccy == 'USD'
-
-        if self.resp_code == 1 && self.gateway == 'stripe' && self.ccy != 'USD'
-            o = OpsStripe.new
-            bt = o.retrieve(self.transaction_id)
-            self.usd_cents = bt.balance_transaction.amount if bt.destination.nil?
+        if self.ccy == 'USD'
+            self.usd_cents = self.revenue_cents
+        else
+            if self.resp_code == 1 && self.gateway == 'stripe' && stripe_account_id.nil?
+                o = OpsStripe.new
+                bt = o.retrieve(self.transaction_id)
+                self.usd_cents = bt.balance_transaction.amount if bt.destination.nil?
+            end
         end
 
     rescue => e

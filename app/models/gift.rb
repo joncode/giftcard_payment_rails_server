@@ -271,6 +271,15 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def do_not_pay?
+        self.pay_stat == 'settled' || !self.active || self.status == 'cancel' || self.pay_stat == 'payment_error'
+    end
+
+    def revenue_already_transfered?
+        return true if sale.try(:stripe_account_id).present?
+        false
+    end
+
     def sale
         return nil unless self.payable_type == 'Sale'
         payable

@@ -73,17 +73,13 @@ class AccountsPayableCronJob
         if reg.credit?
             return false
         end
-        if reg.gift.nil? || self.gift_not_payable?(reg.gift)
+        if reg.gift.nil? || reg.gift.do_not_pay? || reg.gift.revenue_already_transfered?
             return true
         end
         if reg.gift.status == 'regifted'
             return self.gift_already_paid_via_child?(reg.gift)
         end
         return false
-    end
-
-    def self.gift_not_payable? gift
-        gift.pay_stat == 'settled' || !gift.active || gift.status == 'cancel' || gift.pay_stat == 'payment_error'
     end
 
     def self.gift_already_paid_via_child? parent
@@ -94,7 +90,7 @@ class AccountsPayableCronJob
         if gift.status == 'regifted'
             self.gift_already_paid_via_child? gift
         else
-            self.gift_not_payable? gift
+            gift.do_not_pay? || gift.revenue_already_transfered?
         end
     end
 
