@@ -253,10 +253,10 @@ class Book < ActiveRecord::Base
 		Client.booking(self.id)
 	end
 
-	def token
+	def string_token
 		"#{BOOKING_ID}-#{self.id}-#{make_slug(self.name)}"
 	end
-
+	alias_method :token, :string_token
 
 # ---------------
 

@@ -30,7 +30,7 @@ class Client < ActiveRecord::Base
 
 	enum ecosystem: [ :full, :client, :partner ]
 	enum platform: [ :ios, :android, :menu_widget, :kiosk, :landing_page, :menu_facebook, :redemption, :clover ]
-	enum data_type: [ :merchant, :region, :overview, :menu, :promo, :unknown, :list, :merchant_signup, :book ]
+	enum data_type: [ :merchant, :region, :overview, :menu, :promo, :unknown, :list, :merchant_signup, :book, :books ]
 
 # return Merchant.find_by_sql("SELECT merchants.* FROM contents , merchants WHERE contents.client_id IS NULL AND contents.partner_type = 'Affiliate' AND contents.partner_id = 29
 	# AND contents.content_type = 'Merchant' AND merchants.id = contents.content_id")

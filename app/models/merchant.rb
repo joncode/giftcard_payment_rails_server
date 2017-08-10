@@ -319,6 +319,10 @@ class Merchant < ActiveRecord::Base
         "#{APIURL}/merchants/#{self.id}"
     end
 
+    def string_token
+        "#{MERCHANT_ID}-#{self.id}-#{make_slug(self.name)}"
+    end
+
 private
 
     def add_region_name

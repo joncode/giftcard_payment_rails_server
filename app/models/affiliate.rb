@@ -96,6 +96,10 @@ class Affiliate < ActiveRecord::Base
 		end
 	end
 
+    def string_token
+        "#{AFFILIATE_ID}-#{self.id}-#{make_slug(self.name)}"
+    end
+
 	def list_serialize
 		hsh = web_serialize
 		hsh['type'] = 'super_merchant'

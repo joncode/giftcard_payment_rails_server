@@ -12,7 +12,7 @@ class ClientUrlMatcher
 			ary = slug.split('-')
 			return nil if ary.length < 3
 
-			if [SINGLEPLATFORM_ID, GOLFNOW_COM, GOLFADVISOR_COM, GOLFCOURSE_WEBSITE, GOLFFACEBOOK_TAB].include?(ary[0].to_i)
+			if [BOOKING_ID, MERCHANT_ID, AFFILIATE_ID, SINGLEPLATFORM_ID, GOLFNOW_COM, GOLFADVISOR_COM, GOLFCOURSE_WEBSITE, GOLFFACEBOOK_TAB].include?(ary[0].to_i)
 					# matched client to channel ID
 				Client.where("url_name like '#{ary[0]}-#{ary[1]}-%'").first
 			end
@@ -38,6 +38,12 @@ class ClientUrlMatcher
 					type = :fb_tab
 				when SINGLEPLATFORM_ID.to_s[0..1]
 					type = :single_platform
+				when BOOKING_ID.to_s[0..1]
+					type = :book
+				when MERCHANT_ID.to_s[0..1]
+					type = :merchant_experiences
+				when AFFILIATE_ID.to_s[0..1]
+					type = :partner_experiences
 				end
 			end
 			if type.nil?
