@@ -285,8 +285,12 @@ class OpsFacebook
 			if user.save
 				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 			else
-				puts "500 Internal - facebook account creation FAIL - OpsFacebook :create_account"
-				return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
+				if user.email.blank?
+					return { 'success' => false, 'error' => 'Facebook has not provided an email with your profile. Please create an account with our email / password inputs.'}
+				else
+					puts "500 Internal - facebook account creation FAIL - OpsFacebook :create_account"
+					return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
+				end
 			end
 		end
 	end
