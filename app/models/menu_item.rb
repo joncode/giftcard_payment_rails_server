@@ -11,6 +11,7 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
+    before_save :set_position
     before_save :set_cents
 
 	after_save :set_token
@@ -156,6 +157,12 @@ class MenuItem < ActiveRecord::Base
     end
 
 #   -------------
+
+    def set_position
+        if self.position.nil?
+            self.position = MenuItem.where(section_id: self.section_id).count + 1
+        end
+    end
 
     def set_token
         if self.token.nil? || (self.token != make_slug("#{self.id}-#{self.name}"))
