@@ -16,9 +16,9 @@ Drinkboard::Application.routes.draw do
 			collection do
 				post :receive_sms
 				post :zappernotify
-				post :espon_check
-				post :espon_status
-				post :espon_data
+				post :epson_check
+				post :epson_status
+				post :epson_data
 			end
 		end
 	end

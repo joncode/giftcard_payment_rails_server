@@ -7,7 +7,7 @@ class Events::CallbacksController < MetalCorsController
 		self.content_type = "text/plain; charset=utf-8"
 	end
 
-	def espon_status
+	def epson_status
 		puts "EPSON MESSAGE RECEIVED VIA STATUS #{params.inspect}"
 		head :ok
 	end
