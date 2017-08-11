@@ -28,7 +28,7 @@ class Events::CallbacksController < MetalCorsController
 		else
 			# do nothing until
 		end
-		head :ok
+		# head :ok
 		render xml: '<?xml version="1.0" encoding="utf-8"?>
 <PrintRequestInfo Version="2.00">
 
