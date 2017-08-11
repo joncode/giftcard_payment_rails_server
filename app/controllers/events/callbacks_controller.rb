@@ -12,7 +12,7 @@ class Events::CallbacksController < MetalCorsController
 		@client = ClientUrlMatcher.get_app_key(params['ID'])
 		if @client
 			partner = @client.partner
-			puts "Partner - #{partner.string_token}"
+			puts "Partner - #{partner.inspect}"
 		else
 			# do nothing until
 		end
@@ -24,7 +24,7 @@ class Events::CallbacksController < MetalCorsController
 		@client = Client.find_by(application_key: params['ID'])
 		if @client
 			partner = @client.partner
-			puts "Partner - #{partner.string_token}"
+			puts "Partner - #{partner.inspect}"
 		else
 			# do nothing until
 		end
@@ -36,7 +36,7 @@ class Events::CallbacksController < MetalCorsController
 		@client = Client.find_by(application_key: params['ID'])
 		if @client
 			partner = @client.partner
-			puts "Partner - #{partner.string_token}"
+			puts "Partner - #{partner.inspect}"
 		else
 			# do nothing until
 		end
