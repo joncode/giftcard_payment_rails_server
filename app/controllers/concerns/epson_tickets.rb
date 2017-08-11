@@ -1,5 +1,5 @@
 module EpsonTickets
-
+    extend ActiveSupport::Concern
 
 	def delivery_ticket
 		'<?xml version="1.0" encoding="utf-8"?>
