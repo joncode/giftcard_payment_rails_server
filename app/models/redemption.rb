@@ -3,9 +3,10 @@ class Redemption < ActiveRecord::Base
 	include HexIdMethods
 	include RedeemHelper
 	include MoneyHelper
+	include EpsonXmlHelper
 
 	# STATUS ENUM : 'pending', 'done', 'expired'
-	enum type_of: [ :omnivore, :v2, :v1, :paper, :zapper, :admin, :clover ]
+	enum type_of: [ :omnivore, :v2, :v1, :paper, :zapper, :admin, :clover, :epson ]
 
     default_scope -> { where(active: true) } # indexed - # do NOT remove !@
     scope :live_scope, -> (gift) { where(gift_id: gift.id, status: ['done', 'pending']).order(created_at: :desc) }
@@ -90,6 +91,9 @@ class Redemption < ActiveRecord::Base
 			when 7 		# Clover POS
 						# token lasts for 4 hours
 				boolean = self.new_token_at < 4.hours.ago
+			when 8		# Epson Printer
+						# token last for 2 minutes - time for printer poll to be processed
+				boolean = self.new_token_at < 2.minutes.ago
 			else
 						# ERROR !
 				OpsTwilio.text_devs msg: "Redemption #{self.id} has unknown R-sys = |#{self.r_sys}|"
@@ -127,6 +131,9 @@ class Redemption < ActiveRecord::Base
 		when 7 		# Clover POS
 					# token lasts for 4 hours
 			self.new_token_at + 4.hours
+		when 8		# Epson Printer
+					# token last for 2 minutes - time for printer poll to be processed
+			self.new_token_at + 2.minutes
 		else
 					# ERROR !
 			nil
@@ -369,6 +376,10 @@ class Redemption < ActiveRecord::Base
 		return redemption
 	end
 
+	def self.get_epson_printable_redemption merchant
+		where(merchant_id: merchant.id, status: 'pending').epson.first
+	end
+
 	def self.get_for_partner partner, start_datetime=nil, end_datetime=nil
 		return [] if !partner.respond_to?(:id)
 		end_datetime = DateTime.now.utc if end_datetime.nil?
@@ -445,6 +456,8 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 			6
 		when 'clover'
 			7
+		when 'epson'
+			8
 		end
 	end
 
@@ -465,6 +478,8 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 			:admin
 		when 7
 			:clover
+		when 8
+			:epson
 		end
 	end
 

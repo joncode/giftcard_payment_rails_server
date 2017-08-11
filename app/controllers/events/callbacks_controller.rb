@@ -8,126 +8,47 @@ class Events::CallbacksController < MetalCorsController
 	end
 
 	def epson_status
-		puts "EPSON MESSAGE RECEIVED VIA STATUS  ^^^^^ #{params.inspect}"
+		puts "EPSON RECEIVED ^^^^^  STATUS  ^^^^^ #{params.inspect}"
 		@client = ClientUrlMatcher.get_app_key(params['ID'])
 		if @client
 			partner = @client.partner
 			puts "Partner - #{partner.inspect}"
 		else
-			# do nothing until
+			# do nothing until error state handled
 		end
 		head :ok
 	end
 
 	def epson_check
-		puts "EPSON MESSAGE RECEIVED VIA CHECK !!!!!!!! #{params.inspect}"
+		puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
 		@client = Client.find_by(application_key: params['ID'])
 		if @client
 			partner = @client.partner
 			puts "Partner - #{partner.inspect}"
+				# find the correct redemptionthe
+				# get last pending epson redemption at location
+			@redemption = Redemption.get_epson_printable_redemption(partner)
 		else
-			# do nothing until
+			# do nothing until error state handled
 		end
-		# head :ok
-		render xml: '<?xml version="1.0" encoding="utf-8"?>
-<PrintRequestInfo Version="2.00">
 
-  <ePOSPrint>
-    <Parameter>
-      <devid>kitchen_printer</devid>
-      <timeout>10000</timeout>
-      <printjobid>ABC123</printjobid>
-    </Parameter>
-    <PrintData>
-      <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-        <text lang="en"/>
-        <text smooth="true"/>
-        <text align="center"/>
-        <text font="font_b"/>
-        <text width="2" height="2"/>
-        <text reverse="false" ul="false" em="true" color="color_1"/>
-        <text>DELIVERY TICKET&#10;</text>
-        <feed unit="12"/>
-        <text>&#10;</text>
-        <text align="left"/>
-        <text font="font_a"/>
-        <text width="1" height="1"/>
-        <text reverse="false" ul="false" em="false" color="color_1"/>
-        <text>Order&#9;0001&#10;</text>
-        <text width="1" height="1"/>
-        <text reverse="false" ul="false" em="false" color="color_1"/>
-        <text>Time&#9;Mar 19 2013 13:53:15&#10;</text>
-        <text>Seat&#9;A-3&#10;</text>
-        <text>&#10;</text>
-        <text width="1" height="1"/>
-        <text reverse="false" ul="false" em="false" color="color_1"/>
-        <text>Alt Beer&#10;</text>
-        <text>&#9;$6.00  x  2</text>
-        <text x="384"/>
-        <text>    $12.00&#10;</text>
-        <text>&#10;</text>
-        <text reverse="false" ul="false" em="true"/>
-        <text width="2" height="1"/>
-        <text>TOTAL</text>
-        <text x="264"/>
-        <text>    $12.00&#10;</text>
-        <text reverse="false" ul="false" em="false"/>
-        <text width="1" height="1"/>
-        <feed unit="12"/>
-        <text align="center"/>
-        <barcode type="code39" hri="none" font="font_a" width="2" height="60">0001</barcode>
-        <feed line="3"/>
-        <cut type="feed"/>
-      </epos-print>
-    </PrintData>
-  </ePOSPrint>
-
-  <ePOSPrint>
-    <Parameter>
-      <devid>local_printer</devid>
-      <timeout>10000</timeout>
-      <printjobid>ABC124</printjobid>
-    </Parameter>
-    <PrintData>
-      <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-        <text lang="en"/>
-        <text smooth="true"/>
-        <text rotate="true"/>
-        <text align="center"/>
-        <barcode type="code39" hri="none" font="font_a" width="2" height="60">0001</barcode>
-        <feed unit="30"/>
-        <text align="left"/>
-        <text>0001</text>
-        <text>    03-19-2013 13:53:15&#10;</text>
-        <text reverse="true"/>
-        <text> Kitchen </text>
-        <text reverse="false"/>
-        <text>    </text>
-        <text>[New Order] </text>
-        <text>&#10;</text>
-        <text width="1" height="2"/>
-        <text>Seat: </text>
-        <text width="2" height="2"/>
-        <text>A-3</text>
-        <text width="1" height="1"/>
-        <text>&#10;</text>
-        <text width="2" height="2"/>
-        <text>2</text>
-        <text width="1" height="2"/>
-        <text>&#9;Alt Beer</text>
-        <text width="1" height="1"/>
-        <text>&#10;</text>
-        <cut type="feed"/>
-        <text rotate="false"/>
-      </epos-print>
-    </PrintData>
-  </ePOSPrint>
-
-</PrintRequestInfo>'
+		if @redemption
+				# format to XML
+				# call :to_epson_xml on redemption
+				# send the XML to printer for printing
+			render xml: @redemption.to_epson_xml
+		else
+			head :ok
+		end
 	end
 
+			# # receive confirmation of the printing
+			# put up API to receive this message
+			# # update and redeem the gift
+			# call Redeem.apply_and_complete with this response
+
 	def epson_data
-		puts "EPSON MESSAGE RECEIVED VIA DATA #{params.inspect}"
+		puts "EPSON RECEIVED ----------------------- DATA ------------------ #{params.inspect}"
 		@client = Client.find_by(application_key: params['ID'])
 		if @client
 			partner = @client.partner
@@ -162,8 +83,7 @@ class Events::CallbacksController < MetalCorsController
 					success({ ref: ref, status: r.status })
 				else
 					puts "found redemption #{r.id}"
-					ra = Redeem.apply(redemption: r, callback_params: params)
-					rc = Redeem.complete(redemption: ra['redemption'], pos_obj: ra['pos_obj'], gift: ra['gift'])
+					rc = Redeem.apply_and_complete(redemption: r, callback_params: params)
 				   	if rc['success']
 						success({ ref: ref, status: rc['redemption'].status  })
 					else

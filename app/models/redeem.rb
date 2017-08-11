@@ -166,6 +166,8 @@ class Redeem
 			pos_obj, resp = internal_redemption( redemption, gift, server )
 		when 7  # Clover
 			pos_obj, resp = internal_redemption( redemption, gift, "#{ticket_num}-#{server}" )
+		when 8  # Epson
+			pos_obj, resp = internal_redemption( redemption, gift, "Epson-#{redemption.paper_id}" )
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
