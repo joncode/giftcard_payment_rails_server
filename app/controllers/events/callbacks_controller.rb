@@ -9,7 +9,7 @@ class Events::CallbacksController < MetalCorsController
 
 	def epson_status
 		puts "EPSON MESSAGE RECEIVED VIA STATUS  ^^^^^ #{params.inspect}"
-		@client = Client.find_by(application_key: params['ID'])
+		@client = ClientUrlMatcher.get_app_key(params['ID'])
 		if @client
 			partner = @client.partner
 			puts "Partner - #{partner.name}"

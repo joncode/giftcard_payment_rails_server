@@ -18,6 +18,10 @@ class ClientUrlMatcher
 			end
 		end
 
+		def get_app_key app_key
+			Client.where("application_key like '#{app_key}%'")
+		end
+
 		def gen_type client_url_name
 			type = specific_type(client_url_name)
 			type.to_s.gsub('_legacy', '').to_sym
