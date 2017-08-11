@@ -8,17 +8,38 @@ class Events::CallbacksController < MetalCorsController
 	end
 
 	def epson_status
-		puts "EPSON MESSAGE RECEIVED VIA STATUS #{params.inspect}"
+		puts "EPSON MESSAGE RECEIVED VIA STATUS  ^^^^^ #{params.inspect}"
+		@client = Client.find_by(application_key: params['ID'])
+		if @client
+			partner = @client.partner
+			puts "Partner - #{partner.name}"
+		else
+			# do nothing until
+		end
 		head :ok
 	end
 
 	def epson_check
-		puts "EPSON MESSAGE RECEIVED VIA CHECK!!! #{params.inspect}"
+		puts "EPSON MESSAGE RECEIVED VIA CHECK !!!!!!!! #{params.inspect}"
+		@client = Client.find_by(application_key: params['ID'])
+		if @client
+			partner = @client.partner
+			puts "Partner - #{partner.name}"
+		else
+			# do nothing until
+		end
 		head :ok
 	end
 
 	def epson_data
 		puts "EPSON MESSAGE RECEIVED VIA DATA #{params.inspect}"
+		@client = Client.find_by(application_key: params['ID'])
+		if @client
+			partner = @client.partner
+			puts "Partner - #{partner.name}"
+		else
+			# do nothing until
+		end
 		head :ok
 	end
 
