@@ -228,6 +228,10 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def current_time
+        TimeGem.timestamp_to_s(TimeGem.set_in_timezone(DateTime.now, timezone))
+    end
+
     def city
         self.city_name
     end

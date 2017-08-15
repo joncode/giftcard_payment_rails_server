@@ -13,6 +13,9 @@ class Redemption < ActiveRecord::Base
     scope :pending_scope, -> (gift) { where(gift_id: gift.id, status: 'pending').order(created_at: :desc) }
     scope :get_live_scope, -> { where(status: ['done', 'pending']).order(created_at: :desc) }
 
+    delegate :receiver_name, to: :gift
+	delegate :timezone, :current_time, to: :merchant, allow_nil: true
+
 #   -------------
 
     before_validation :set_unique_token, on: :create
