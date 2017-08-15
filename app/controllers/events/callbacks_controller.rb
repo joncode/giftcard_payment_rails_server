@@ -24,10 +24,11 @@ class Events::CallbacksController < MetalCorsController
 		@client = Client.find_by(application_key: params['ID'])
 		if @client
 			partner = @client.partner
-			puts "Partner - #{partner.inspect}"
+			# puts "Partner - #{partner.inspect}"
 				# find the correct redemptionthe
 				# get last pending epson redemption at location
 			@redemption = Redemption.get_epson_printable_redemption(partner)
+			puts "Redemption - #{@redemption.inspect}" if @redemption
 		else
 			# do nothing until error state handled
 		end
