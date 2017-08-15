@@ -44,6 +44,9 @@ module EpsonXmlHelper
 <feed unit="12"/>
 <text align="center"/>
 <barcode type="code39" hri="none" font="font_a" width="2" height="60">#{self.paper_id}</barcode>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
 <feed line="3"/>
 <cut type="feed"/>
 </epos-print>
