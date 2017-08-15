@@ -22,9 +22,10 @@ class Events::CallbacksController < MetalCorsController
 	def epson_check
 		puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
 		@client = Client.find_by(application_key: params['ID'])
+		puts "Client #{@client.try(:id)}"
 		if @client
 			partner = @client.partner
-			# puts "Partner - #{partner.inspect}"
+			puts "Partner - #{partner.name}"
 				# find the correct redemptionthe
 				# get last pending epson redemption at location
 			@redemption = Redemption.get_epson_printable_redemption(partner)
