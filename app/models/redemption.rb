@@ -93,7 +93,7 @@ class Redemption < ActiveRecord::Base
 				boolean = self.new_token_at < 4.hours.ago
 			when 8		# Epson Printer
 						# token last for 2 minutes - time for printer poll to be processed
-				boolean = self.new_token_at < 2.minutes.ago
+				boolean = self.new_token_at < 200.minutes.ago
 			else
 						# ERROR !
 				OpsTwilio.text_devs msg: "Redemption #{self.id} has unknown R-sys = |#{self.r_sys}|"
@@ -133,7 +133,7 @@ class Redemption < ActiveRecord::Base
 			self.new_token_at + 4.hours
 		when 8		# Epson Printer
 					# token last for 2 minutes - time for printer poll to be processed
-			self.new_token_at + 2.minutes
+			self.new_token_at + 200.minutes
 		else
 					# ERROR !
 			nil
@@ -377,7 +377,7 @@ class Redemption < ActiveRecord::Base
 	end
 
 	def self.get_epson_printable_redemption merchant
-		where(merchant_id: merchant.id, status: 'pending').epson.first
+		where(r_sys: 8, merchant_id: merchant.id, status: 'pending').first
 	end
 
 	def self.get_for_partner partner, start_datetime=nil, end_datetime=nil
