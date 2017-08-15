@@ -10,9 +10,10 @@ class Events::CallbacksController < MetalCorsController
 	def epson_status
 		puts "EPSON RECEIVED ^^^^^  STATUS  ^^^^^ #{params.inspect}"
 		@client = ClientUrlMatcher.get_app_key(params['ID'])
+		puts "Status: Client #{@client.try(:id)}"
 		if @client
 			partner = @client.partner
-			puts "Partner - #{partner.inspect}"
+			puts "Status: Partner - #{partner.name}"
 		else
 			# do nothing until error state handled
 		end
@@ -21,15 +22,15 @@ class Events::CallbacksController < MetalCorsController
 
 	def epson_check
 		puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
-		@client = Client.find_by(application_key: params['ID'])
-		puts "Client #{@client.try(:id)}"
+		@client = ClientUrlMatcher.get_app_key(params['ID'])
+		puts "Check: Client #{@client.try(:id)}"
 		if @client
 			partner = @client.partner
-			puts "Partner - #{partner.name}"
+			puts "Check: Partner - #{partner.name}"
 				# find the correct redemptionthe
 				# get last pending epson redemption at location
 			@redemption = Redemption.get_epson_printable_redemption(partner)
-			puts "Redemption - #{@redemption.inspect}" if @redemption
+			puts "Check: Redemption - #{@redemption.inspect}" if @redemption
 		else
 			# do nothing until error state handled
 		end
@@ -51,10 +52,10 @@ class Events::CallbacksController < MetalCorsController
 
 	def epson_data
 		puts "EPSON RECEIVED ----------------------- DATA ------------------ #{params.inspect}"
-		@client = Client.find_by(application_key: params['ID'])
+		@client = ClientUrlMatcher.get_app_key(params['ID'])
 		if @client
 			partner = @client.partner
-			puts "Partner - #{partner.inspect}"
+			puts "Data: Partner - #{partner.inspect}"
 		else
 			# do nothing until
 		end
