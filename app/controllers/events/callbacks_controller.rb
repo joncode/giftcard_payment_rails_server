@@ -39,7 +39,9 @@ class Events::CallbacksController < MetalCorsController
 				# format to XML
 				# call :to_epson_xml on redemption
 				# send the XML to printer for printing
-			render xml: @redemption.to_epson_xml
+			str = @redemption.to_epson_xml
+			puts str.inspect
+			render xml: str
 		else
 			head :ok
 		end
