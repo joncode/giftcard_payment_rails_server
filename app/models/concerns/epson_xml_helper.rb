@@ -2,57 +2,56 @@ module EpsonXmlHelper
     extend ActiveSupport::Concern
 
 	def to_epson_xml
-%{<?xml version="1.0" encoding="utf-8"?>
-<PrintRequestInfo Version="2.00">
+%{
 <ePOSPrint>
 <Parameter>
-<devid>local_printer</devid>
-<timeout>20000</timeout>
-<printjobid>ABC123</printjobid>
+	<devid>local_printer</devid>
+	<timeout>20000</timeout>
+	<printjobid>#{self.paper_id}</printjobid>
 </Parameter>
 <PrintData>
-<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-<text lang="en"/>
-<text smooth="true"/>
-<text align="center"/>
-<text font="font_b"/>
-<text width="2" height="2"/>
-<text reverse="false" ul="false" em="true" color="color_1"/>
-<text>ItsOnMe GIFT CARD&#10;</text>
-<feed unit="12"/>
-<text>&#10;</text>
-<text align="left"/>
-<text font="font_a"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>Order&#9;#{self.paper_id}&#10;</text>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>#{current_time}</text>
-<text>Receiver&#9;#{self.receiver_name}&#10;</text>
-<text>&#10;</text>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>&#10;</text>
-<text reverse="false" ul="false" em="true"/>
-<text width="2" height="1"/>
-<text>TOTAL</text>
-<text x="264"/>
-<text>   #{display_money(cents: self.amount, ccy: self.ccy)}&#10;</text>
-<text reverse="false" ul="false" em="false"/>
-<text width="1" height="1"/>
-<feed unit="12"/>
-<text align="center"/>
-<barcode type="code39" hri="none" font="font_a" width="2" height="60">#{self.paper_id}</barcode>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
-<feed line="3"/>
-<cut type="feed"/>
-</epos-print>
+	<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+		<text lang="en"/>
+		<text smooth="true"/>
+		<text align="center"/>
+		<text font="font_b"/>
+		<text width="2" height="2"/>
+		<text reverse="false" ul="false" em="true" color="color_1"/>
+		<text>ItsOnMe GIFT CARD&#10;</text>
+		<feed unit="12"/>
+		<text>&#10;</text>
+		<text align="left"/>
+		<text font="font_a"/>
+		<text width="1" height="1"/>
+		<text reverse="false" ul="false" em="false" color="color_1"/>
+		<text>Order&#9;#{self.paper_id}&#10;</text>
+		<text width="1" height="1"/>
+		<text reverse="false" ul="false" em="false" color="color_1"/>
+		<text>#{current_time}</text>
+		<text>Receiver&#9;#{self.receiver_name}&#10;</text>
+		<text>&#10;</text>
+		<text width="1" height="1"/>
+		<text reverse="false" ul="false" em="false" color="color_1"/>
+		<text>&#10;</text>
+		<text reverse="false" ul="false" em="true"/>
+		<text width="2" height="1"/>
+		<text>TOTAL</text>
+		<text x="264"/>
+		<text>   #{display_money(cents: self.amount, ccy: self.ccy)}&#10;</text>
+		<text reverse="false" ul="false" em="false"/>
+		<text width="1" height="1"/>
+		<feed unit="12"/>
+		<text align="center"/>
+		<barcode type="code39" hri="none" font="font_a" width="2" height="60">#{self.paper_id}</barcode>
+		<text width="1" height="1"/>
+		<text reverse="false" ul="false" em="false" color="color_1"/>
+		<text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
+		<feed line="3"/>
+		<cut type="feed"/>
+	</epos-print>
 </PrintData>
 </ePOSPrint>
-</PrintRequestInfo>}
+}
 	end
 
 
@@ -62,95 +61,96 @@ end
 
 __END__
 
-%{<?xml version="1.0" encoding="utf-8"?>
+
+<?xml version="1.0" encoding="utf-8"?>
 <PrintRequestInfo Version="2.00">
-<ePOSPrint>
-<Parameter>
-<devid>local_printer</devid>
-<timeout>10000</timeout>
-<printjobid>ABC123</printjobid>
-</Parameter>
-<PrintData>
-<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-<text lang="en"/>
-<text smooth="true"/>
-<text align="center"/>
-<text font="font_b"/>
-<text width="2" height="2"/>
-<text reverse="false" ul="false" em="true" color="color_1"/>
-<text>DELIVERY TICKET&#10;</text>
-<feed unit="12"/>
-<text>&#10;</text>
-<text align="left"/>
-<text font="font_a"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>Order&#9;#{self.paper_id}&#10;</text>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>#{TimeGem.datetime_to_string(DateTime.now)}</text>
-<text>Seat&#9;A-3&#10;</text>
-<text>&#10;</text>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>Alt Beer&#10;</text>
-<text>&#9;$6.00  x  2</text>
-<text x="384"/>
-<text>    $12.00&#10;</text>
-<text>&#10;</text>
-<text reverse="false" ul="false" em="true"/>
-<text width="2" height="1"/>
-<text>TOTAL</text>
-<text x="264"/>
-<text>   #{display_money(cents: self.amount, ccy: self.ccy)}&#10;</text>
-<text reverse="false" ul="false" em="false"/>
-<text width="1" height="1"/>
-<feed unit="12"/>
-<text align="center"/>
-<barcode type="code39" hri="none" font="font_a" width="2" height="60">0001</barcode>
-<feed line="3"/>
-<cut type="feed"/>
-</epos-print>
-</PrintData>
-</ePOSPrint>
-<ePOSPrint>
-<Parameter>
-<devid>kitchen_printer</devid>
-<timeout>10000</timeout>
-<printjobid>ABC124</printjobid>
-</Parameter>
-<PrintData>
-<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-<text lang="en"/>
-<text smooth="true"/>
-<text rotate="true"/>
-<text align="center"/>
-<barcode type="code39" hri="none" font="font_a" width="2" height="60">0001</barcode>
-<feed unit="30"/>
-<text align="left"/>
-<text>0001</text>
-<text>    03-19-2013 13:53:15&#10;</text>
-<text reverse="true"/>
-<text> Kitchen </text>
-<text reverse="false"/>
-<text>    </text>
-<text>[New Order] </text>
-<text>&#10;</text>
-<text width="1" height="2"/>
-<text>Seat: </text>
-<text width="2" height="2"/>
-<text>A-3</text>
-<text width="1" height="1"/>
-<text>&#10;</text>
-<text width="2" height="2"/>
-<text>2</text>
-<text width="1" height="2"/>
-<text>&#9;Alt Beer</text>
-<text width="1" height="1"/>
-<text>&#10;</text>
-<cut type="feed"/>
-<text rotate="false"/>
-</epos-print>
-</PrintData>
-</ePOSPrint>
+	<ePOSPrint>
+		<Parameter>
+			<devid>local_printer</devid>
+			<timeout>10000</timeout>
+			<printjobid>#{self.paper_id}</printjobid>
+		</Parameter>
+		<PrintData>
+			<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+				<text lang="en"/>
+				<text smooth="true"/>
+				<text align="center"/>
+				<text font="font_b"/>
+				<text width="2" height="2"/>
+				<text reverse="false" ul="false" em="true" color="color_1"/>
+				<text>DELIVERY TICKET&#10;</text>
+				<feed unit="12"/>
+				<text>&#10;</text>
+				<text align="left"/>
+				<text font="font_a"/>
+				<text width="1" height="1"/>
+				<text reverse="false" ul="false" em="false" color="color_1"/>
+				<text>Order&#9;#{self.paper_id}&#10;</text>
+				<text width="1" height="1"/>
+				<text reverse="false" ul="false" em="false" color="color_1"/>
+				<text>#{TimeGem.datetime_to_string(DateTime.now)}</text>
+				<text>Seat&#9;A-3&#10;</text>
+				<text>&#10;</text>
+				<text width="1" height="1"/>
+				<text reverse="false" ul="false" em="false" color="color_1"/>
+				<text>Alt Beer&#10;</text>
+				<text>&#9;$6.00  x  2</text>
+				<text x="384"/>
+				<text>    $12.00&#10;</text>
+				<text>&#10;</text>
+				<text reverse="false" ul="false" em="true"/>
+				<text width="2" height="1"/>
+				<text>TOTAL</text>
+				<text x="264"/>
+				<text>   #{display_money(cents: self.amount, ccy: self.ccy)}&#10;</text>
+				<text reverse="false" ul="false" em="false"/>
+				<text width="1" height="1"/>
+				<feed unit="12"/>
+				<text align="center"/>
+				<barcode type="code39" hri="none" font="font_a" width="2" height="60">0001</barcode>
+				<feed line="3"/>
+				<cut type="feed"/>
+			</epos-print>
+		</PrintData>
+	</ePOSPrint>
+	<ePOSPrint>
+		<Parameter>
+			<devid>kitchen_printer</devid>
+			<timeout>10000</timeout>
+			<printjobid>#{self.paper_id}</printjobid>
+		</Parameter>
+		<PrintData>
+			<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+				<text lang="en"/>
+				<text smooth="true"/>
+				<text rotate="true"/>
+				<text align="center"/>
+				<barcode type="code39" hri="none" font="font_a" width="2" height="60">0001</barcode>
+				<feed unit="30"/>
+				<text align="left"/>
+				<text>0001</text>
+				<text>    03-19-2013 13:53:15&#10;</text>
+				<text reverse="true"/>
+				<text> Kitchen </text>
+				<text reverse="false"/>
+				<text>    </text>
+				<text>[New Order] </text>
+				<text>&#10;</text>
+				<text width="1" height="2"/>
+				<text>Seat: </text>
+				<text width="2" height="2"/>
+				<text>A-3</text>
+				<text width="1" height="1"/>
+				<text>&#10;</text>
+				<text width="2" height="2"/>
+				<text>2</text>
+				<text width="1" height="2"/>
+				<text>&#9;Alt Beer</text>
+				<text width="1" height="1"/>
+				<text>&#10;</text>
+				<cut type="feed"/>
+				<text rotate="false"/>
+			</epos-print>
+		</PrintData>
+	</ePOSPrint>
 </PrintRequestInfo>
