@@ -207,7 +207,7 @@ class Sale < ActiveRecord::Base
         if self.ccy == 'USD'
             self.usd_cents = self.revenue_cents
         else
-            if self.resp_code == 1 && self.gateway == 'stripe' && stripe_account_id.nil?
+            if self.resp_code == 1 && self.gateway == 'stripe' #&& stripe_account_id.nil?
                 o = OpsStripe.new
                 bt = o.retrieve(self.transaction_id)
                 self.usd_cents = bt.balance_transaction.amount if bt.destination.nil?
