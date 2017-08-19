@@ -210,7 +210,7 @@ class Sale < ActiveRecord::Base
             if self.resp_code == 1 && self.gateway == 'stripe' #&& stripe_account_id.nil?
                 o = OpsStripe.new
                 bt = o.retrieve(self.transaction_id)
-                self.usd_cents = bt.balance_transaction.amount if bt.destination.nil?
+                self.usd_cents = bt.balance_transaction.amount unless bt.try(:destination)
             end
         end
 
