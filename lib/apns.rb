@@ -8,11 +8,11 @@ module APNS
 	if Rails.env.production?
 		@host 			= 'gateway.push.apple.com'
 		@feedback_host 	= 'feedback.push.apple.com'
-		@pem 			= "#{Rails.root}/config/certs/PRODpushcert.pem"
+		@pem 			= "#{Rails.root}/config/certs/aps-8-28-2017.pem"
 	elsif Rails.env.staging?
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
-		@pem 			= "#{Rails.root}/config/certs/DEVpushcert.pem"
+		@pem 			= "#{Rails.root}/config/certs/aps-8-28-2017-QA.pem"
 	else
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
