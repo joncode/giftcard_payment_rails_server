@@ -89,6 +89,12 @@ class User < ActiveRecord::Base
 
 #   -------------
 
+	def test_push
+		pnts = self.pn_tokens
+		pn_token_obj = pnts.first
+		OpsPushApple.send_push(pn_token_obj, "Test Push") unless pn_token_obj.nil?
+	end
+
 	def coupons
 		jguserid = Rails.env.staging? ? 328 : 8248
 		if self.id == jguserid
