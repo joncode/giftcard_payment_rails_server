@@ -33,6 +33,9 @@ class OpsGolfnowRevenue
         @gifts.each do |gift|
         	merchant = gift.merchant
             fid = merchant && merchant.building_id
+            if fid.nil?
+            	puts "\n\n500 Internal - Incorrect setup golfcourse #{merchant.try(:id)}"
+            end
             client = gift.client
             if client.nil? && fid.nil?
             	url_name = 'no_client'

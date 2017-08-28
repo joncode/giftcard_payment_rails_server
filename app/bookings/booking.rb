@@ -54,11 +54,11 @@ class Booking < ActiveRecord::Base
 
     			if booking.event_at < (d + 1).days.from_now && booking.event_at > d.days.from_now
 
-    				puts "BookingLifecycle.reminder (11) - reminder for booking #{booking.id}"
+    				puts "Booking.reminders (57) - reminder for booking #{booking.id}"
     				if booking.merchant && booking.merchant.active_live?
     					booking.send_reminder(d)
     				else
-    					puts "500 Internal - booking #{booking.id} Reminder at inactive merchant"
+    					# puts "500 Internal - booking #{booking.id} Reminder at inactive merchant"
     				end
     			end
     		end

@@ -5,7 +5,7 @@ class Reminder
         puts "----------------------Reminder Cron --------------------------"
 
         Gift.where(status: ["incomplete", "open", "notified"]).where('cat >= 300').find_each do |gift|
-            [3,7,12,21,30,60,90,120,150,180,210,240,270,300,330,360].each do |d|
+            [3,12,30,90,180,300].each do |d|
 
                 if d < 30 && gift.status != 'incomplete'
                     next
