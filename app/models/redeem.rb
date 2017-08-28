@@ -167,7 +167,7 @@ class Redeem
 		when 7  # Clover
 			pos_obj, resp = internal_redemption( redemption, gift, "#{ticket_num}-#{server}" )
 		when 8  # Epson
-			pos_obj, resp = internal_redemption( redemption, gift, "Epson-#{redemption.paper_id}" )
+			pos_obj, resp = epson_redemption( redemption, gift )
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
@@ -190,6 +190,14 @@ class Redeem
 
 #   -------------
 
+	def self.epson_redemption(redemption, gift)
+		# is there already a print queue item - pending or printed ? for the redemption
+		print_queue = PrintQueue.new(redemption)
+		redemption.print_queues << print_queue
+		redemption.request = print_queue.make_request_hsh
+		redemption.save
+		return [ print_queue, print_queue.response ]
+	end
 
 	def self.internal_redemption(redemption, gift, server)
 			# OpsIomApiPos is defined at bottom of this file
