@@ -75,7 +75,7 @@ class Register < ActiveRecord::Base
 
 
 	def self.init_debt gift_obj, partner_obj, pay_amount, origin_type
-		return nil if gift_and_parents_paid_already?(gift_obj, origin_type)
+		return nil if gift_and_parents_paid_already?(gift_obj, origin_type, pay_amount)
 		make gift_obj, pay_amount, 'debt', partner_obj, origin_type
 	end
 
@@ -98,21 +98,21 @@ class Register < ActiveRecord::Base
 		reg
 	end
 
-	def self.paid_already? gift_obj, origin_type
+	def self.paid_already? gift_obj, origin_type, pay_amount
 		if origins[origin_type].nil?
 			puts "500 Internal - WRONG ORIGIN TYPE Register[29] #{origin_type} - #{gift_obj.id}"
 			return true
 		end
-		exists?(gift_id: gift_obj.id, origin: origins[origin_type])
+		exists?(gift_id: gift_obj.id, origin: origins[origin_type], amount: pay_amount)
 	end
 
-	def self.gift_and_parents_paid_already?(gift_obj, origin_type)
-		if paid_already?(gift_obj, origin_type)
+	def self.gift_and_parents_paid_already?(gift_obj, origin_type, pay_amount)
+		if paid_already?(gift_obj, origin_type, pay_amount)
 			return true
 		else
 			parent = gift_obj.parent
 			if parent.kind_of?(Gift)
-				gift_and_parents_paid_already?(parent, origin_type)
+				gift_and_parents_paid_already?(parent, origin_type, pay_amount)
 			else
 				return false
 			end
