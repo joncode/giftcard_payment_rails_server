@@ -89,10 +89,10 @@ class User < ActiveRecord::Base
 
 #   -------------
 
-	def test_push
+	def test_push alert_str=nil
 		pnts = self.pn_tokens
-		pn_token_obj = pnts.first
-		OpsPushApple.send_push(pn_token_obj, "Test Push") unless pn_token_obj.nil?
+		alert = alert_str || "Testing Push"
+		pnts.each { |pn| OpsPushApple.send_push(pn, alert)  }
 	end
 
 	def coupons
