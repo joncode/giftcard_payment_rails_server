@@ -5,6 +5,10 @@ class GiftRefundedEvent
     	puts "\n gift #{gift_id} is in GiftRefundedEvent.job\n"
     	gift = Gift.unscoped.find gift_id
 
+        if rf = gift.refund
+            rf.set_and_save_usd_cents
+        end
+
         rds = gift.redemptions.where(status: 'pending')
         rds.each do |r|
             r.run_operation 'cancel'
