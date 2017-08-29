@@ -17,6 +17,7 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
+    after_commit :fire_sale_after_save_event, on: :create
     after_commit :notify_developers_for_missing_data
 
 #   -------------
@@ -218,8 +219,13 @@ class Sale < ActiveRecord::Base
         puts "500 Internal - Sale  #{self.id} :usd_cents ERROR fail #{e.inspect} #{self.revenue_cents} #{self.transaction_id} "
     end
 
+    def fire_sale_after_save_event
+        Resque.enqueue(SaleAfterSaveJob, self.id)
+    end
+
 
 private
+
 
     def self.charge_number_then_tokenize cc_hsh
         payment_hsh = {}

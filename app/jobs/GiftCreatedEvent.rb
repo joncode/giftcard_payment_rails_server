@@ -6,10 +6,6 @@ class GiftCreatedEvent
     	puts "\n gift #{gift_id} is being GiftCreatedEvent.job\n"
     	gift = Gift.find gift_id
 
-        if gift.payable_type == 'Sale'
-            gift.payable.set_and_save_usd_cents
-        end
-
         if gift.pay_stat != "payment_error"
             Accountant.gift_created_event(gift)
 
