@@ -1,11 +1,11 @@
 
 if Rails.env.production? || Rails.env.development?
 	APNS.host = "gateway.push.apple.com"
-	APNS.pem = File.join(Rails.root, "config/certs/com.drinkboard.DrinkboardProd.pem")
+	APNS.pem = File.join(Rails.root, "config/certs/aps-8-28-2017-PROD.pem")
 end
 if Rails.env.staging?
 	APNS.host = "gateway.push.apple.com"
-	APNS.pem = File.join(Rails.root, "config/certs/com.drinkboard.DrinkboardQA.pem")
+	APNS.pem = File.join(Rails.root, "config/certs/aps-8-28-2017-QA.pem")
 end
 # if Rails.env.development?
 # 	APNS.host = "gateway.sandbox.push.apple.com"
