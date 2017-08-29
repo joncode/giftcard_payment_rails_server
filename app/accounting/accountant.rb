@@ -9,6 +9,18 @@ class Accountant
 
 #-------     EVENTED API METHODS
 
+		def gift_partial_refund_event gift
+			return nil unless gift.class.to_s.match /Gift/
+			return nil if gift.cat != 300
+			return nil unless gift.partial_refund?
+
+			convert_to_ccy = gift.sale.convert(gift.redeemed_value)
+			return nil if convert_to_ccy.to_i == 0
+
+			puts merchant(gift, convert_to_ccy)
+    		puts affiliate_location(gift, convert_to_ccy)
+		end
+
 		def gift_created_event gift
 			return nil unless gift.class.to_s.match /Gift/
 			return nil if gift.cat != 300
@@ -48,12 +60,12 @@ class Accountant
 
 #-------      BEHAVIOR METHODS
 
-		def merchant gift
-
+		def merchant gift, adjusted_value=nil
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
 			return "Not redemption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
 
-			register = Register.init_debt(gift, gift.merchant, gift.location_fee, "loc")
+			adjusted_value ||= gift.location_fee
+			register = Register.init_debt(gift, gift.merchant, adjusted_value, "loc")
 			return "Register exists" if register.nil?
 
 			if register.save
@@ -63,15 +75,16 @@ class Accountant
 			end
 		end
 
-		def affiliate_location gift
-
+		def affiliate_location gift, adjusted_value=nil
 			return "Gift is not a purchase" if gift.cat != 300
 			merchant = gift.merchant
+
 			affiliate = Affiliate.where(id: merchant.affiliate_id).first
 			# nil or not found
 			return "No Location Affiliation" if affiliate.nil?
 
-			register = Register.init_debt(gift, affiliate, gift.override_fee, "aff_loc")
+			adjusted_value ||= gift.override_fee
+			register = Register.init_debt(gift, affiliate, adjusted_value, "aff_loc")
 			return "Register exists" if register.nil?
 
 			if register.save

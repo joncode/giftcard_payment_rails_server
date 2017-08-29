@@ -219,6 +219,7 @@ class Gift < ActiveRecord::Base
     def purchase_total
         display_money cents: purchase_cents, ccy: self.ccy
     end
+    alias_method :charge_amount, :purchase_cents
 
     def original_value
         return @original_value if @original_value.present?
@@ -302,9 +303,13 @@ class Gift < ActiveRecord::Base
         amt
     end
 
-    def location_fee
+    def redeemed_value
+        original_value - self.balance
+    end
+
+    def location_fee convert_amount=nil
         if self.cat >= 300
-            return merchant.location_fee(converted_value_cents)
+            return merchant.location_fee(convert_amount || converted_value_cents)
         elsif self.cat < 200
             return cost_cents
         else
@@ -312,9 +317,9 @@ class Gift < ActiveRecord::Base
         end
     end
 
-    def override_fee override_obj=nil
+    def override_fee convert_amount=nil
         if self.cat >= 300
-            return merchant.override_fee(converted_value_cents)
+            return merchant.override_fee(convert_amount || converted_value_cents)
         elsif self.cat < 200
             return 0
         else
@@ -385,9 +390,21 @@ class Gift < ActiveRecord::Base
 
 #/----------------------------------payable ducktype refund -----------------------------/
 
+    def partial_refund?
+        return false if self.refund.nil?
+        return false if sale.nil?
+        return true if sale.revenue_cents > self.refund.revenue_cents
+        return false
+    end
+
+
     def void_refund cancel=true, partial_amt=nil
         if !self.payable.respond_to?(:void_refund)
             return { 'status' => 0 , 'msg' => "You cannot refund a gift made with a #{self.payable_type}"}
+        end
+
+        if self.balance < original_value
+            partial_amt = self.balance
         end
 
         refund = self.payable.void_refund(partial_amt)
