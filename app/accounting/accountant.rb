@@ -64,7 +64,7 @@ class Accountant
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
 			return "Not redemption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
 
-			adjusted_value ||= gift.location_fee
+			adjusted_value = gift.location_fee(adjusted_value)
 			register = Register.init_debt(gift, gift.merchant, adjusted_value, "loc")
 			return "Register exists" if register.nil?
 
@@ -83,7 +83,7 @@ class Accountant
 			# nil or not found
 			return "No Location Affiliation" if affiliate.nil?
 
-			adjusted_value ||= gift.override_fee
+			adjusted_value = gift.override_fee(adjusted_value)
 			register = Register.init_debt(gift, affiliate, adjusted_value, "aff_loc")
 			return "Register exists" if register.nil?
 
