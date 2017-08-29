@@ -89,6 +89,12 @@ class User < ActiveRecord::Base
 
 #   -------------
 
+	def test_push alert_str=nil
+		pnts = self.pn_tokens
+		alert = alert_str || "Testing Push"
+		pnts.each { |pn| OpsPushApple.send_push(pn, alert)  }
+	end
+
 	def coupons
 		jguserid = Rails.env.staging? ? 328 : 8248
 		if self.id == jguserid
