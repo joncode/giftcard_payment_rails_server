@@ -34,9 +34,12 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+
 	belongs_to :client
 	belongs_to :gift, autosave: true
 	belongs_to :merchant
+
+	has_many :print_queues
 
 	def gift
  		@gift ||= Gift.unscoped.where(id: self.gift_id).first

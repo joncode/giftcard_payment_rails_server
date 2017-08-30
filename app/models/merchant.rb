@@ -52,11 +52,10 @@ class Merchant < ActiveRecord::Base
     has_many :gifts
     has_many :licenses, as: :partner
     has_many :payments,     as: :partner
+    has_many :print_queues
     has_many :protos
-    has_many :providers_socials
     has_many :registers,    as: :partner
     has_many :sales
-    has_many :socials, through: :providers_socials
 
     belongs_to :brand
     belongs_to :client

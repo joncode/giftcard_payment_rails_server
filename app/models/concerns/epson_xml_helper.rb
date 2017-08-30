@@ -17,7 +17,7 @@ module EpsonXmlHelper
 		<text font="font_b"/>
 		<text width="2" height="2"/>
 		<text reverse="false" ul="false" em="true" color="color_1"/>
-		<text>ItsOnMe GIFT CARD&#10;</text>
+		<text>ItsOnMe Gift Card&#10;</text>
 		<feed unit="12"/>
 		<text>&#10;</text>
 		<text align="left"/>
