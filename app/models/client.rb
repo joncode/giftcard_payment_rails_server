@@ -145,7 +145,7 @@ private
 	end
 
 	def create_unique_application_key
-		length = self.epson? 23 : 42
+		length = self.epson? ? 23 : 42
 		self.application_key = UniqueIdMaker.secure_url_safe(self.class, :application_key, 'cl_', length)
 	end
 
