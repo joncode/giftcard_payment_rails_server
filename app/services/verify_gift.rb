@@ -15,7 +15,7 @@ class VerifyGift
 			@data = "Gift verified"
 		elsif num == 1
 			@success = 0
-			@err = "SMS_ONE_TIME_VEINVALID_INPUTRIFY_REQUIRED"
+			@err = "SMS_ONE_TIME_VERIFY_REQUIRED"
 			@msg = 'You must verify your mobile phone number'
 		else
 			@success = 0

@@ -3,6 +3,20 @@ class UniqueIdMaker
 
 	class << self
 
+		def secure_url_safe klass, column_name, prefix='', length=44
+			klass = klass.to_s.titleize.constantize unless klass.kind_of?(Class)
+			column_name = column_name.to_sym
+	        unique_key = prefix + rando_safe(length)
+	        until klass.unscoped.where(column_name => unique_key).count == 0
+	            unique_key = prefix + rando_safe(length)
+	        end
+	        return unique_key
+		end
+
+		def rando_safe length=44
+			SecureRandom.urlsafe_base64(length, false).gsub('-','').gsub('_','')
+		end
+
 		def eight_digit_hex klass, column_name, prefix=''
 			klass = klass.to_s.titleize.constantize unless klass.kind_of?(Class)
 			column_name = column_name.to_sym

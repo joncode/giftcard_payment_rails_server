@@ -67,6 +67,22 @@ class PrintQueue < ActiveRecord::Base
 		end
 	end
 
+	def set_redeem
+		redeemeable? ? update(status: 'done') : false
+	end
+
+	def set_cancel
+		cancellable? ? update(status: 'cancel') : false
+	end
+
+	def redeemeable?
+		['queue', 'delivered'].include?(self.status)
+	end
+
+	def cancellable?
+		['queue', 'delivered'].include?(self.status)
+	end
+
 #   -------------
 
 	def self.print_request printer_id
