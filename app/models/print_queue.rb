@@ -33,9 +33,9 @@ class PrintQueue < ActiveRecord::Base
 
 	# :success?, :ticket_id, :response, :make_request_hsh, :applied_value
 
-	def inspect
-		{ 'response' => response, 'request' => make_request_hsh }.to_s
-	end
+	# def inspect
+	# 	{ 'response' => response, 'request' => make_request_hsh }.to_s
+	# end
 
 	def make_request_hsh
 		{
