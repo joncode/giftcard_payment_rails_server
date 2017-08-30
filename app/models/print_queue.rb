@@ -3,12 +3,18 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
+	validates_presence_of :merchant_id
+
+#   -------------
+
 	belongs_to :merchant
 	belongs_to :redemption
 	has_one :gift , through: :redemption
 
-	delegate :ccy, :amount, to: :redemption
+	delegate :ccy, :amount, to: :redemption, allow_nil: true
 	alias_method :applied_value, :amount
+
+	delegate :timezone, :current_time, to: :merchant
 
 #   -------------
 
@@ -66,11 +72,11 @@ class PrintQueue < ActiveRecord::Base
 	def self.print_request printer_id
 		return nil if !printer_id.kind_of?(String) || printer_id.blank?
 		client = ClientUrlMatcher.get_app_key(printer_id)
-		if client
+		if client && client.partner_type == 'Merchant'
 			partner = client.partner
-			items = where(partner: partner, status: 'queue')
-			return nil if items.empty?
-			return items
+			print_queues = where(merchant_id: partner.id, status: 'queue')
+			return nil if print_queues.empty?
+			return print_queues
 		else
 			# client is not registered with system
 			# alert devs
@@ -78,17 +84,17 @@ class PrintQueue < ActiveRecord::Base
 		end
 	end
 
-	def self.deliver items
-		items = [items] unless items.kind_of?(Array)
-		where(id: items.map(&:id)).update_all(status: 'delivered', group: get_unique_group_id)
-		to_epson_xml(items)
+	def self.deliver print_queues
+		print_queues = [print_queues] unless print_queues.kind_of?(Array)
+		where(id: print_queues.map(&:id)).update_all(status: 'delivered', group: get_unique_group_id)
+		to_epson_xml(print_queues)
 	end
 
-	def self.to_epson_xml items
+	def self.to_epson_xml print_queues
 		xml = '<?xml version="1.0" encoding="utf-8"?><PrintRequestInfo Version="2.00">'
 
-		items.each do |item|
-			xml += item.to_epson_xml
+		print_queues.each do |que|
+			xml += que.to_epson_xml
 		end
 		xml += '</PrintRequestInfo>'
 
@@ -99,6 +105,10 @@ class PrintQueue < ActiveRecord::Base
 
 	def self.queue_redemption(redemption)
 		create(status: 'queue', merchant_id: redemption.merchant_id, type_of: 'redeem', redemption_id: redemption.id )
+	end
+
+	def self.queue_test_redemption(merchant)
+		create(status: 'queue', merchant_id: merchant.id, type_of: 'test_redeem' )
 	end
 
 	def self.queue_shift(merchant)
@@ -115,12 +125,31 @@ class PrintQueue < ActiveRecord::Base
 		UniqueIdMaker.eight_digit_hex(self.class, :group, self.class.const_get(:HEX_ID_PREFIX))
 	end
 
+	def get_group
+		self.group || self.id
+	end
+
+	def to_epson_xml
+		case self.type_of
+		when 'redeem'
+				# how to get the group into this  ??
+			redemption.to_epson.xml
+		when 'test_redeem'
+			PrintTestRedemption.new(get_group, merchant).to_epson_xml
+		when 'shift_report'
+			PrintShiftReport.new(get_group, merchant).to_epson_xml
+		else # help
+			PrintHelp.new(get_group, merchant).to_epson_xml
+		end
+	end
+
+#   -------------
+
 	def set_group
 		if self.status == 'delivered' && self.group.nil?
 			self.group = get_unique_group_id
 		end
 	end
-
 
 end
 

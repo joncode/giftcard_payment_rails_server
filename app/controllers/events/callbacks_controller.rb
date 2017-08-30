@@ -22,26 +22,9 @@ class Events::CallbacksController < MetalCorsController
 
 	def epson_check
 		puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
-		@client = ClientUrlMatcher.get_app_key(params['ID'])
-		puts "Check: Client #{@client.try(:id)}"
-		if @client
-			partner = @client.partner
-			puts "Check: Partner - #{partner.name}"
-				# find the correct redemptionthe
-				# get last pending epson redemption at location
-			@redemption = Redemption.get_epson_printable_redemption(partner)
-			puts "Check: Redemption - #{@redemption.inspect}" if @redemption
-		else
-			# do nothing until error state handled
-		end
-
-		if @redemption
-				# format to XML
-				# call :to_epson_xml on redemption
-				# send the XML to printer for printing
-			str = @redemption.to_epson_xml
-			puts str.inspect
-			render xml: str
+		if items = PrintQueue.print_request(params['ID'])
+			xml_str = PrintQueue.deliver(items)
+			render xml: xml_str
 		else
 			head :ok
 		end
