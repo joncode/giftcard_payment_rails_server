@@ -7,7 +7,8 @@ class PrintQueue < ActiveRecord::Base
 	belongs_to :redemption
 	has_one :gift , through: :redemption
 
-
+	delegate :ccy, :amount, to: :redemption
+	alias_method :applied_value, :amount
 
 #   -------------
 
@@ -46,10 +47,6 @@ class PrintQueue < ActiveRecord::Base
 
 	def ticket_id
 		self.id
-	end
-
-	def applied_value
-		redemption.amount
 	end
 
 	def response
