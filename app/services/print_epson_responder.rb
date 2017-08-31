@@ -6,9 +6,10 @@ class PrintEpsonResponder
 
 	def initialize args
 		@data = clean_hash(args.dup)
-		@client_id = @data.delete["ID"]
-		@connection_type =  @data.delete["ConnectionType"]
-		@name =  @data.delete["Name"]
+		puts @data.inspect
+		@client_id = @data.delete("ID")
+		@connection_type =  @data.delete("ConnectionType")
+		@name =  @data.delete("Name")
 		@response = false
 		@xml = ''
 	end
