@@ -25,7 +25,7 @@ class Events::CallbacksController < MetalCorsController
 		if items = PrintQueue.print_request(params['ID'])
 			xml_str = PrintQueue.deliver(items)
 			puts xml_str.inspect
-			render xml: xml_str
+			render text: xml_str
 		else
 			head :ok
 		end
