@@ -101,7 +101,7 @@ class PrintQueue < ActiveRecord::Base
 	end
 
 	def self.deliver print_queues
-		print_queues = [print_queues] unless print_queues.kind_of?(Array)
+		print_queues = [print_queues] unless (print_queues.is_a?(Array) || print_queues.is_a?(ActiveRecord::Relation))
 		where(id: print_queues.map(&:id)).update_all(status: 'delivered', group: get_unique_group_id)
 		to_epson_xml(print_queues)
 	end
