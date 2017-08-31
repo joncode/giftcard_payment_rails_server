@@ -35,7 +35,7 @@ class PrintEpsonResponder
 	def run_check_print_queue
 		if print_queues = PrintQueue.print_request(client_id)
 			xml = PrintQueue.deliver(print_queues)
-			@reponse = true
+			@response = true
 		end
 	end
 
