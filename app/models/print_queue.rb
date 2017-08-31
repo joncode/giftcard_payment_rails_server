@@ -137,7 +137,7 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
-	def get_unique_group_id
+	def self.get_unique_group_id
 		UniqueIdMaker.eight_digit_hex(self.class, :group, self.class.const_get(:HEX_ID_PREFIX))
 	end
 
@@ -163,7 +163,7 @@ class PrintQueue < ActiveRecord::Base
 
 	def set_group
 		if self.status == 'delivered' && self.group.nil?
-			self.group = get_unique_group_id
+			self.group = PrintQueue.get_unique_group_id
 		end
 	end
 
