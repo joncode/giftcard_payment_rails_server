@@ -24,6 +24,7 @@ class Events::CallbacksController < MetalCorsController
 		puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
 		if items = PrintQueue.print_request(params['ID'])
 			xml_str = PrintQueue.deliver(items)
+			puts xml_str.inspect
 			render xml: xml_str
 		else
 			head :ok
