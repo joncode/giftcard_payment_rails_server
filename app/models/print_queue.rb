@@ -111,6 +111,7 @@ class PrintQueue < ActiveRecord::Base
 
 	def self.deliver print_queues
 		print_queues = [print_queues] unless (print_queues.is_a?(Array) || print_queues.is_a?(ActiveRecord::Relation))
+			# the redemption ID is not the same as this print job ID
 		where(id: print_queues.map(&:id)).update_all(status: 'delivered', group: get_unique_group_id)
 		to_epson_xml(print_queues)
 	end
@@ -120,6 +121,7 @@ class PrintQueue < ActiveRecord::Base
 		if merchant = get_merchant_for_client_id(client_id)
 			if group.match(/XX-/)
 				# test redemptions
+				where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: 'done')
 			else
 				where(group: group, merchant_id: merchant.id).update_all(status: 'done')
 			end
