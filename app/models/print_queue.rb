@@ -123,7 +123,7 @@ class PrintQueue < ActiveRecord::Base
 				# test redemptions
 				where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: 'done')
 			else
-				where(job: job).or.where(id: job).where(merchant_id: merchant.id).update_all(status: 'done')
+				where("job = :pjob OR id = :pjob", pjob: job).where(merchant_id: merchant.id).update_all(status: 'done')
 			end
 		else
 			return nil
