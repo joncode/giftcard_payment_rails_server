@@ -116,7 +116,7 @@ class PrintQueue < ActiveRecord::Base
 		to_epson_xml(print_queues)
 	end
 
-	def mark_group_as_printed client_id, group
+	def self.mark_group_as_printed client_id, group
 			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
 		if merchant = get_merchant_for_client_id(client_id)
 			if group.match(/XX-/)
