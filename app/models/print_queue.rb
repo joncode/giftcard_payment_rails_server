@@ -18,7 +18,7 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
-	before_save :set_group
+	before_save :set_job
 	before_save :set_redemption
 
 #   -------------
@@ -112,18 +112,18 @@ class PrintQueue < ActiveRecord::Base
 	def self.deliver print_queues
 		print_queues = [print_queues] unless (print_queues.is_a?(Array) || print_queues.is_a?(ActiveRecord::Relation))
 			# the redemption ID is not the same as this print job ID
-		where(id: print_queues.map(&:id)).update_all(status: 'delivered', group: get_unique_group_id)
+		where(id: print_queues.map(&:id)).update_all(status: 'delivered', job: get_unique_job_id)
 		to_epson_xml(print_queues)
 	end
 
-	def self.mark_group_as_printed client_id, group
+	def self.mark_job_as_printed client_id, job
 			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
 		if merchant = get_merchant_for_client_id(client_id)
-			if group.match(/XX-/)
+			if job.match(/XX-/)
 				# test redemptions
 				where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: 'done')
 			else
-				where(group: group, merchant_id: merchant.id).update_all(status: 'done')
+				where(job: job).or.where(id: job).where(merchant_id: merchant.id).update_all(status: 'done')
 			end
 		else
 			return nil
@@ -161,33 +161,33 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
-	def self.get_unique_group_id
-		UniqueIdMaker.eight_digit_hex(self, :group, HEX_ID_PREFIX)
+	def self.get_unique_job_id
+		UniqueIdMaker.eight_digit_hex(self, :job, HEX_ID_PREFIX)
 	end
 
-	def get_group
-		self.group || self.id
+	def get_job
+		self.job || self.id
 	end
 
 	def to_epson_xml
 		case self.type_of
 		when 'redeem'
-				# how to get the group into this  ??
+				# how to get the job into this  ??
 			redemption.to_epson.xml
 		when 'test_redeem'
-			PrintTestRedemption.new(get_group, merchant).to_epson_xml
+			PrintTestRedemption.new(get_job, merchant).to_epson_xml
 		when 'shift_report'
-			PrintShiftReport.new(get_group, merchant).to_epson_xml
+			PrintShiftReport.new(get_job, merchant).to_epson_xml
 		else # help
-			PrintHelp.new(get_group, merchant).to_epson_xml
+			PrintHelp.new(get_job, merchant).to_epson_xml
 		end
 	end
 
 #   -------------
 
-	def set_group
-		if self.status == 'delivered' && self.group.nil?
-			self.group = PrintQueue.get_unique_group_id
+	def set_job
+		if self.status == 'delivered' && self.job.nil?
+			self.job = PrintQueue.get_unique_job_id
 		end
 	end
 

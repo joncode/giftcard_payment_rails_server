@@ -1,6 +1,6 @@
 class PrintEpsonResponder
 
-	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :group, :success
+	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :job, :success
 
 	CONNECTION_TYPES = ["GetRequest", "SetResponse", "SetStatus"]
 
@@ -46,10 +46,10 @@ class PrintEpsonResponder
 
 	def run_process_print_receipt
 		@success = make_boolean(data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]["PrintResponse"]["response"]["success"])
-		@group = data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]["Parameter"]["printjobid"]
+		@job = data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]["Parameter"]["printjobid"]
 		if @success
 			puts "PrintEpsonResponder (47) " + self.inspect
-			PrintQueue.mark_group_as_printed(client_id, group)
+			PrintQueue.mark_job_as_printed(client_id, job)
 		else
 			# Print did not happen , set for re-print based on error
 			puts "500 Internal - EPSON PRINT ERROR #{data.inspect}"

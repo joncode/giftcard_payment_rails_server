@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829231404) do
+ActiveRecord::Schema.define(version: 20170831215123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1133,12 +1133,12 @@ ActiveRecord::Schema.define(version: 20170829231404) do
     t.string   "type_of"
     t.string   "printer_type",  default: "epson"
     t.string   "status",        default: "queue"
-    t.string   "group"
+    t.string   "job"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
 
-  add_index "print_queues", ["group"], name: "index_print_queues_on_group", using: :btree
+  add_index "print_queues", ["job"], name: "index_print_queues_on_job", using: :btree
   add_index "print_queues", ["merchant_id", "status"], name: "index_print_queues_on_merchant_id_and_status", using: :btree
   add_index "print_queues", ["redemption_id"], name: "index_print_queues_on_redemption_id", using: :btree
 
