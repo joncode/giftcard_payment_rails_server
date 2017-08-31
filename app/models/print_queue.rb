@@ -19,6 +19,7 @@ class PrintQueue < ActiveRecord::Base
 #   -------------
 
 	before_save :set_group
+	before_save :set_redemption
 
 #   -------------
 
@@ -85,12 +86,20 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
-	def self.print_request printer_id
+	def self.get_merchant_for_client_id printer_id
 		return nil if !printer_id.kind_of?(String) || printer_id.blank?
 		client = ClientUrlMatcher.get_app_key(printer_id)
 		if client && client.partner_type == 'Merchant'
-			partner = client.partner
-			print_queues = where(merchant_id: partner.id, status: 'queue')
+			return client.partner
+		else
+			puts "500 Internal - Epson Client is matched with nothing OR affiliate - client_id = #{printer_id}"
+			return nil
+		end
+	end
+
+	def self.print_request printer_id
+		if merchant = get_merchant_for_client_id(printer_id)
+			print_queues = where(merchant_id: merchant.id, status: 'queue')
 			return nil if print_queues.empty?
 			return print_queues
 		else
@@ -104,6 +113,19 @@ class PrintQueue < ActiveRecord::Base
 		print_queues = [print_queues] unless (print_queues.is_a?(Array) || print_queues.is_a?(ActiveRecord::Relation))
 		where(id: print_queues.map(&:id)).update_all(status: 'delivered', group: get_unique_group_id)
 		to_epson_xml(print_queues)
+	end
+
+	def mark_group_as_printed client_id, group
+			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
+		if merchant = get_merchant_for_client_id(client_id)
+			if group.match(/XX-/)
+				# test redemptions
+			else
+				where(group: group, merchant_id: merchant.id).update_all(status: 'done')
+			end
+		else
+			return nil
+		end
 	end
 
 	def self.to_epson_xml print_queues
@@ -165,6 +187,12 @@ class PrintQueue < ActiveRecord::Base
 		if self.status == 'delivered' && self.group.nil?
 			self.group = PrintQueue.get_unique_group_id
 		end
+	end
+
+	def set_redemption
+		# redemption must be set to complete when print_queue is set to done
+		# redemption must be cancelled if print queue is cancelled
+		# redemption must be expired when print queue is expired , should this be reversed ?
 	end
 
 end

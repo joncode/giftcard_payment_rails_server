@@ -9,23 +9,21 @@ class Events::CallbacksController < MetalCorsController
 
 	def epson_status
 		puts "EPSON RECEIVED ^^^^^  STATUS  ^^^^^ #{params.inspect}"
-		@client = ClientUrlMatcher.get_app_key(params['ID'])
-		puts "Status: Client #{@client.try(:id)}"
-		if @client
-			partner = @client.partner
-			puts "Status: Partner - #{partner.name}"
+		per = PrintEpsonResponder.new(params)
+		per.perform
+		if per.response
+			render xml: per.xml
 		else
-			# do nothing until error state handled
+			head :ok
 		end
-		head :ok
 	end
 
 	def epson_check
 		puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
-		if items = PrintQueue.print_request(params['ID'])
-			xml_str = PrintQueue.deliver(items)
-			puts xml_str.inspect
-			render xml: xml_str
+		per = PrintEpsonResponder.new(params)
+		per.perform
+		if per.response
+			render xml: per.xml
 		else
 			head :ok
 		end
@@ -38,14 +36,13 @@ class Events::CallbacksController < MetalCorsController
 
 	def epson_data
 		puts "EPSON RECEIVED ----------------------- DATA ------------------ #{params.inspect}"
-		@client = ClientUrlMatcher.get_app_key(params['ID'])
-		if @client
-			partner = @client.partner
-			puts "Data: Partner - #{partner.inspect}"
+		per = PrintEpsonResponder.new(params)
+		per.perform
+		if per.response
+			render xml: per.xml
 		else
-			# do nothing until
+			head :ok
 		end
-		head :ok
 	end
 
 
