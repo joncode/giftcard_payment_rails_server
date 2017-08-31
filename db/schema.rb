@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170831215123) do
+ActiveRecord::Schema.define(version: 20170831232323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1136,6 +1136,7 @@ ActiveRecord::Schema.define(version: 20170831215123) do
     t.string   "job"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+    t.json     "reason"
   end
 
   add_index "print_queues", ["job"], name: "index_print_queues_on_job", using: :btree

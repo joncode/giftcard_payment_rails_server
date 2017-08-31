@@ -116,32 +116,26 @@ class PrintQueue < ActiveRecord::Base
 		to_epson_xml(print_queues)
 	end
 
-	def self.mark_job_as_error client_id, job, msg=nil
+	def self.mark_job status_str, client_id, job, msg=nil
 			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
 		if merchant = get_merchant_for_client_id(client_id)
 			if job.match(/XX-/)
 				# test redemptions
-				where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: 'error', error_msg: msg)
+				where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: status_str, reason: msg)
 			else
-				where("job = :pjob OR id = :pjob", pjob: job).where(merchant_id: merchant.id).update_all(status: 'error', error_msg: msg)
+				where("job = :pjob OR id = :pjob", pjob: job).where(merchant_id: merchant.id).update_all(status: status_str, reason: msg)
 			end
 		else
 			return nil
 		end
 	end
 
+	def self.mark_job_as_error client_id, job, msg=nil
+		mark_job 'cancel', client_id, job, msg
+	end
+
 	def self.mark_job_as_printed client_id, job
-			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
-		if merchant = get_merchant_for_client_id(client_id)
-			if job.match(/XX-/)
-				# test redemptions
-				where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: 'done')
-			else
-				where("job = :pjob OR id = :pjob", pjob: job).where(merchant_id: merchant.id).update_all(status: 'done')
-			end
-		else
-			return nil
-		end
+		mark_job 'done', client_id, job
 	end
 
 	def self.to_epson_xml print_queues

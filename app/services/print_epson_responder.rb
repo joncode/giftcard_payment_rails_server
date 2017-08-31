@@ -1,6 +1,6 @@
 class PrintEpsonResponder
 
-	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :job, :success, :code
+	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :job, :success, :error
 
 	CONNECTION_TYPES = ["GetRequest", "SetResponse", "SetStatus"]
 
@@ -59,10 +59,9 @@ class PrintEpsonResponder
 			puts "PrintEpsonResponder (47) " + self.inspect
 			PrintQueue.mark_job_as_printed(client_id, job)
 		else
-			@code = printjob["PrintResponse"]["response"]["code"]
+			@error = printjob["PrintResponse"]["response"]
 			puts "500 Internal - EPSON PRINT ERROR #{data.inspect}"
-			# Print did not happen , set for re-print based on error
-			# PrintQueue.mark_job_as_error(client_id, job, @code)
+			PrintQueue.mark_job_as_error(client_id, job, @error)
 		end
 	rescue
 		puts "500 Internal - EPSON XML SCHEMA ERROR #{data.inspect}"
