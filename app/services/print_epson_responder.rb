@@ -28,6 +28,7 @@ class PrintEpsonResponder
 				# Alert devs
 			puts "500 Internal NEW EPSON CONNECTION TYPE #{connection_type}"
 		end
+		puts self.inspect
 	end
 
 #	------------- 	GetRequest
@@ -39,8 +40,8 @@ class PrintEpsonResponder
 
 	def run_check_print_queue
 		if print_queues = PrintQueue.print_request(client_id)
-			xml = PrintQueue.deliver(print_queues)
 			@response = true
+			xml = PrintQueue.deliver(print_queues)
 		end
 	end
 
