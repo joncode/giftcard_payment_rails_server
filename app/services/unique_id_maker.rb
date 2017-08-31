@@ -6,6 +6,7 @@ class UniqueIdMaker
 		def secure_url_safe klass, column_name, prefix='', length=44
 			klass = klass.to_s.titleize.constantize unless klass.kind_of?(Class)
 			column_name = column_name.to_sym
+			length = length - prefix.length
 	        unique_key = prefix + rando_safe(length)
 	        until klass.unscoped.where(column_name => unique_key).count == 0
 	            unique_key = prefix + rando_safe(length)
@@ -13,8 +14,9 @@ class UniqueIdMaker
 	        return unique_key
 		end
 
-		def rando_safe length=44
-			SecureRandom.urlsafe_base64(length, false).gsub('-','').gsub('_','')
+		def rando_safe len=44
+			str = SecureRandom.urlsafe_base64(len + 10, false).gsub('-','').gsub('_','')
+			str[0...len]
 		end
 
 		def eight_digit_hex klass, column_name, prefix=''
@@ -36,6 +38,8 @@ class UniqueIdMaker
 	        end
 	        return unique_value
 		end
+
+
 	end
 
 

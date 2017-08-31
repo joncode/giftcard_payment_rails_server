@@ -139,13 +139,13 @@ private
 
 
 	def set_application_key_for_epson
-		if self.epson? && (self.application_key.nil? || self.application_key.length > 28)
+		if self.epson? && (self.application_key.nil? || self.application_key.length > 29)
 			create_unique_application_key
 		end
 	end
 
 	def create_unique_application_key
-		length = self.epson? ? 23 : 42
+		length = self.epson? ? 25 : 44
 		self.application_key = UniqueIdMaker.secure_url_safe(self.class, :application_key, 'cl_', length)
 	end
 
