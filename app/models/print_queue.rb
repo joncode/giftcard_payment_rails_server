@@ -138,7 +138,7 @@ class PrintQueue < ActiveRecord::Base
 #   -------------
 
 	def self.get_unique_group_id
-		UniqueIdMaker.eight_digit_hex(self.class, :group, self.class.const_get(:HEX_ID_PREFIX))
+		UniqueIdMaker.eight_digit_hex(self.class, :group, HEX_ID_PREFIX)
 	end
 
 	def get_group
