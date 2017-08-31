@@ -32,6 +32,11 @@ class PrintEpsonResponder
 
 #	------------- 	GetRequest
 
+	def xml= xml_str
+		puts "PrintEpsonResponder(44) " + xml_str.inspect
+		@xml = xml_str
+	end
+
 	def run_check_print_queue
 		if print_queues = PrintQueue.print_request(client_id)
 			xml = PrintQueue.deliver(print_queues)
@@ -65,11 +70,6 @@ class PrintEpsonResponder
 
 	def make_boolean thing
 		ActiveRecord::Type::Boolean.new.type_cast_from_user(thing)
-	end
-
-	def xml= xml_str
-		puts "PrintEpsonResponder(44) " + xml_str.inspect
-		@xml = xml_str
 	end
 
 	def convert_xml xml_str
