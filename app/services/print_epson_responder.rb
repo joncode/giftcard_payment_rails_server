@@ -1,6 +1,6 @@
 class PrintEpsonResponder
 
-	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :job, :success
+	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :job, :success, :code
 
 	CONNECTION_TYPES = ["GetRequest", "SetResponse", "SetStatus"]
 
@@ -45,14 +45,24 @@ class PrintEpsonResponder
 #	------------- 	SetResponse
 
 	def run_process_print_receipt
-		@success = make_boolean(data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]["PrintResponse"]["response"]["success"])
-		@job = data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]["Parameter"]["printjobid"]
+		header = data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]
+		header = [header] unless header.kind_of?(Array)
+		header.each do |printjob|
+			parse_print_receipts(printjob)
+		end
+	end
+
+	def parse_print_receipts printjob
+		@success = make_boolean(printjob["PrintResponse"]["response"]["success"])
+		@job = printjob["Parameter"]["printjobid"]
 		if @success
 			puts "PrintEpsonResponder (47) " + self.inspect
 			PrintQueue.mark_job_as_printed(client_id, job)
 		else
-			# Print did not happen , set for re-print based on error
+			@code = printjob["PrintResponse"]["response"]["code"]
 			puts "500 Internal - EPSON PRINT ERROR #{data.inspect}"
+			# Print did not happen , set for re-print based on error
+			# PrintQueue.mark_job_as_error(client_id, job, @code)
 		end
 	rescue
 		puts "500 Internal - EPSON XML SCHEMA ERROR #{data.inspect}"
