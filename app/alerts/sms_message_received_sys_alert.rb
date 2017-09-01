@@ -11,12 +11,12 @@ class SmsMessageReceivedSysAlert < Alert
 
 	def text_msg
 		get_data
-		"SMS Received Alert\n#{@data}"
+		"#{name_string}\n#{@data}"
 	end
 
 	def email_msg
 		get_data
-		"<div><h2>SMS Received Alert</h2><p>#{@data}</p></div>".html_safe
+		"<div><h2>#{name_string}</h2><p>#{@data}</p></div>".html_safe
 	end
 
 	def msg

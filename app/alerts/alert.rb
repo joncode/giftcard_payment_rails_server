@@ -167,10 +167,14 @@ class Alert < ActiveRecord::Base
 		a.join(' ').titleize
 	end
 
+	def name_string
+		self.class.to_s.underscore.titleize.gsub('Sys', 'Admin').gsub('Mt', 'Merchant')
+	end
+
 end
 
 
-# contacts = []
+# contacts = []a
 # merchant = self.note
 # merchant_mtus = merchant.mt_users.to_a
 # affiliate_mtus = []

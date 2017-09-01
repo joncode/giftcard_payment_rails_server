@@ -6,22 +6,22 @@ module EmailerInternal
         puts "MerchantSignup Email #{merchant_submit_obj.inspect}"
         subject = "#{merchant_submit_obj['venue_name']} has requested to join"
         signup_obj = nil
-        text = "Please login to Admin Tools create account for:\n#{merchant_submit_obj}"
+        # text = "Please login to Admin Tools create account for:\n#{merchant_submit_obj}"
 
-        if merchant_submit_obj["id"].present? && merchant_submit_obj["id"].to_i > 0
-            signup_obj = MerchantSignup.find(merchant_submit_obj["id"])
-            if signup_obj
-                text = "Please login to Admin Tools create account for:\n#{signup_obj.email_body}"
-            end
-        end
-
-        message = { :subject=> subject_creator(subject),
-                    :from_name=> "Merchant Tools",
-                    :text => text,
-                    :to=> HELP_CONTACT_ARY,
-                    :from_email => NO_REPLY_EMAIL
-        }
-        request_mandrill_with_message(message).first
+        # if merchant_submit_obj["id"].present? && merchant_submit_obj["id"].to_i > 0
+        #     signup_obj = MerchantSignup.find(merchant_submit_obj["id"])
+        #     if signup_obj
+        #         text = "Please login to Admin Tools create account for:\n#{signup_obj.email_body}"
+        #     end
+        # end
+        Alert.perform("MERCHANT_SUBMMITTED_SYS", merchant_submit_obj)
+        # message = { :subject=> subject_creator(subject),
+        #             :from_name=> "Merchant Tools",
+        #             :text => text,
+        #             :to=> HELP_CONTACT_ARY,
+        #             :from_email => NO_REPLY_EMAIL
+        # }
+        # request_mandrill_with_message(message).first
     end
 
     def mail_notice_merchant_setup merchant_name
