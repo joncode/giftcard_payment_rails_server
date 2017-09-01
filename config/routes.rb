@@ -206,6 +206,7 @@ Drinkboard::Application.routes.draw do
 					get :menu
 					get :receipt_photo_url
 					get :redeem_locations
+					get :books
 				end
 				collection do
 					post :signup
