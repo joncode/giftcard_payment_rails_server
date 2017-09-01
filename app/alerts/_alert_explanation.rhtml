@@ -20,6 +20,10 @@ To creae an alert class , you make an alert that inherits from < Alert
 	in :get_data , in the alert , you set a var called @data with the calculations with or without @target
 
 
+The Alert Enum will need to be called once to initialize the alert process, this will happen automatically
+	feel free to call once in the console to initialise
+
+
 Alerts are not threaded, they are called on direct thread.  To thread an alert, make a job and then call the alert in the job.
 
 Alerts are ENV-aware
