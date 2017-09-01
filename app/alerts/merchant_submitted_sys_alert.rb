@@ -26,8 +26,7 @@ class MerchantSubmittedSysAlert < Alert
 		else
 			@data = "Please login to Admin Tools create account for:\n#{merchant_submit_obj}"
 	        if merchant_submit_obj["id"].to_i > 0
-	            signup_obj = MerchantSignup.where(id: merchant_submit_obj["id"]).first
-	            if signup_obj
+	            if signup_obj = MerchantSignup.where(id: merchant_submit_obj["id"]).first
 	                @data = "Please login to Admin Tools create account for:\n#{signup_obj.email_body}"
 	            end
 	        end
