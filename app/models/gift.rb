@@ -618,6 +618,7 @@ class Gift < ActiveRecord::Base
 
         # 4. stringify - pre-compile shoppingCart and save on attibute
         self.shoppingCart = new_cart.to_json
+        self.gift_items << gift_item_ary
     end
 
 

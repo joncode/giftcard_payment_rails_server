@@ -4,7 +4,7 @@ class GiftItem < ActiveRecord::Base
 
 
 	validates_presence_of :price, :price_cents, :quantity, :menu_item_id
-
+	# validates_uniqueness_of :menu_item, scope: [:gift_id, :quantity, :price_cents]
 
 #   -------------
 

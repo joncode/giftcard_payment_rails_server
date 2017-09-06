@@ -30,6 +30,8 @@ module ShoppingCartHelper
             []
         end
     end
+    alias_method :cart, :cart_ary
+    alias_method :sc, :cart_ary
 
     def stringify_shopping_cart_if_array shoppingCart
         if shoppingCart.kind_of?(Array)
