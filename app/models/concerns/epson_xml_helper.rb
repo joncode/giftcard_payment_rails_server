@@ -3,6 +3,7 @@ module EpsonXmlHelper
 
 	def to_epson_xml
 %{
+<ePOSPrint>
 <Parameter>
 <devid>local_printer</devid>
 <timeout>20000</timeout>
