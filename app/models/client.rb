@@ -150,9 +150,13 @@ private
 	end
 
     def clear_cache
-        unless Rails.env.test? || Rails.env.development?
-            RedisWrap.clear_client_cache(self.id)
-            # WwwHttpService.clear_merchant_cache
-        end
+    	begin
+	        unless Rails.env.test? || Rails.env.development?
+	            RedisWrap.clear_client_cache(self.id)
+	            # WwwHttpService.clear_merchant_cache
+	        end
+	    rescue => e
+	    	puts e.inspect
+	    end
     end
 end

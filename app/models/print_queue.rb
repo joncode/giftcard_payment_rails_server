@@ -139,6 +139,7 @@ class PrintQueue < ActiveRecord::Base
 	end
 
 	def self.to_epson_xml print_queues
+		print_queues = [print_queues] unless print_queues.respond_to?(:each)
 		xml = '<?xml version="1.0" encoding="utf-8"?><PrintRequestInfo Version="2.00">'
 
 		print_queues.each do |que|

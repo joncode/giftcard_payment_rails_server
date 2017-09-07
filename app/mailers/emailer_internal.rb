@@ -14,7 +14,7 @@ module EmailerInternal
         #         text = "Please login to Admin Tools create account for:\n#{signup_obj.email_body}"
         #     end
         # end
-        Alert.perform("MERCHANT_SUBMMITTED_SYS", merchant_submit_obj)
+        Alert.perform("MERCHANT_SUBMITTED_SYS", merchant_submit_obj)
         # message = { :subject=> subject_creator(subject),
         #             :from_name=> "Merchant Tools",
         #             :text => text,
