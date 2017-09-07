@@ -3,52 +3,69 @@ module EpsonXmlHelper
 
 	def to_epson_xml
 %{
-<ePOSPrint>
 <Parameter>
-	<devid>local_printer</devid>
-	<timeout>20000</timeout>
-	<printjobid>#{self.paper_id}</printjobid>
+<devid>local_printer</devid>
+<timeout>20000</timeout>
+<printjobid>#{self.paper_id}</printjobid>
 </Parameter>
 <PrintData>
-	<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-		<text lang="en"/>
-		<text smooth="true"/>
-		<text align="center"/>
-		<text font="font_b"/>
-		<text width="2" height="2"/>
-		<text reverse="false" ul="false" em="true" color="color_1"/>
-		<text>ItsOnMe Gift Card&#10;</text>
-		<feed unit="12"/>
-		<text>&#10;</text>
-		<text align="left"/>
-		<text font="font_a"/>
-		<text width="1" height="1"/>
-		<text reverse="false" ul="false" em="false" color="color_1"/>
-		<text>Order&#9;#{self.paper_id}&#10;</text>
-		<text width="1" height="1"/>
-		<text reverse="false" ul="false" em="false" color="color_1"/>
-		<text>#{current_time}</text>
-		<text>Receiver&#9;#{self.receiver_name}&#10;</text>
-		<text>&#10;</text>
-		<text width="1" height="1"/>
-		<text reverse="false" ul="false" em="false" color="color_1"/>
-		<text>&#10;</text>
-		<text reverse="false" ul="false" em="true"/>
-		<text width="2" height="1"/>
-		<text>TOTAL</text>
-		<text x="264"/>
-		<text>   #{display_money(cents: self.amount, ccy: self.ccy)}&#10;</text>
-		<text reverse="false" ul="false" em="false"/>
-		<text width="1" height="1"/>
-		<feed unit="12"/>
-		<text align="center"/>
-		<barcode type="code39" hri="none" font="font_a" width="2" height="60">#{self.paper_id}</barcode>
-		<text width="1" height="1"/>
-		<text reverse="false" ul="false" em="false" color="color_1"/>
-		<text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
-		<feed line="3"/>
-		<cut type="feed"/>
-	</epos-print>
+<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+<text lang="en"/>
+<text smooth="true"/>
+<text align="center"/>
+<text font="font_b"/>
+<text width="3" height="3"/>
+<text reverse="false" ul="false" em="true" color="color_1"/>
+<text>ItsOnMe Gift Card</text>
+<feed unit="12"/>
+<feed line="2"/>
+<text width="1" height="2"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>#{current_time}</text>
+<feed line="2"/>
+<text align="left"/>
+<text font="font_a"/>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>Gift Giver</text>
+<text>&#9;&#9;</text>
+<text>#{self.giver_name}</text>
+<feed line="1"/>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>Gift Receiver</text>
+<text>&#9;&#9;</text>
+<text>#{self.receiver_name}</text>
+<feed line="2"/>
+<text width="1" height="2"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>Voucher ID</text>
+<text>&#9;&#9;</text>
+<text>#{self.paper_id}</text>
+<feed line="1"/>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed line="2"/>
+<text align="center"/>
+<text reverse="false" ul="false" em="true"/>
+<text width="2" height="1"/>
+<text>Good For</text>
+<feed line="2"/>
+<text align="center"/>
+<text reverse="false" ul="false" em="true"/>
+<text width="3" height="3"/>
+<text>#{display_money(cents: self.amount, ccy: self.ccy)}</text>
+<text reverse="false" ul="false" em="false"/>
+<text width="1" height="1"/>
+<feed unit="12"/>
+<feed line="2"/>
+<text align="center"/>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
+<feed line="3"/>
+<cut type="feed"/>
+</epos-print>
 </PrintData>
 </ePOSPrint>
 }
