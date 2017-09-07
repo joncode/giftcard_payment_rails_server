@@ -20,6 +20,17 @@ module EpsonXmlHelper
 <text>ItsOnMe Gift Card</text>
 <feed unit="12"/>
 <feed line="2"/>
+<text font="font_a"/>
+<text width="2" height="2"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>#{self.merchant_name}</text>
+<feed line="2"/>
+<text font="font_c"/>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>#{self.merchant_address}</text>
+<feed line="2"/>
+<text font="font_b"/>
 <text width="1" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>#{current_time}</text>
@@ -43,10 +54,7 @@ module EpsonXmlHelper
 <text>Voucher ID</text>
 <text>&#9;&#9;</text>
 <text>#{self.paper_id}</text>
-<feed line="1"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<feed line="2"/>
+<feed line="3"/>
 <text align="center"/>
 <text reverse="false" ul="false" em="true"/>
 <text width="2" height="1"/>

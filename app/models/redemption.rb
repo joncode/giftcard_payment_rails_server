@@ -15,6 +15,7 @@ class Redemption < ActiveRecord::Base
 
     delegate :giver_name, :receiver_name, to: :gift
 	delegate :timezone, :current_time, to: :merchant, allow_nil: true
+	delegate :name,:address, prefix: :merchant, to: :merchant, allow_nil: true
 
 #   -------------
 
