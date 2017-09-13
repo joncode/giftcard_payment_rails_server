@@ -349,7 +349,7 @@ DEPENDENCIES
   zip-codes
 
 RUBY VERSION
-   ruby 2.2.2p95
+   ruby 2.3.1p112
 
 BUNDLED WITH
-   1.15.3
+   1.15.4

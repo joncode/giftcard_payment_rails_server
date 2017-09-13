@@ -1,4 +1,4 @@
-require 'rest_client'
+# require 'rest_client'
 require "base64"
 
 # Questions :

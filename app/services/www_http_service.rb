@@ -1,4 +1,4 @@
-require 'rest_client'
+# require 'rest_client'
 
 #  WwwHttpService.clear_merchant_cache
 
