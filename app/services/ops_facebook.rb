@@ -10,8 +10,14 @@ class OpsFacebook
 		"me?fields=first_name,last_name,email,birthday,gender,picture"
 	end
 
+ # 500 Internal (self.parse_error) Koala::Facebook::AuthenticationError
+ # #<Koala::Facebook::AuthenticationError: type: OAuthException, code: 190,
+ # error_subcode: 458, message: Error validating access token: The user has not
+ # authorized application 1010660852318410., x-fb-trace-id: C9/Y4cR2PmD [HTTP 400]>
+ # nil OpsFacebook.parse_error
+
 	def self.parse_error err
-		print "500 Internal (self.parse_error) " + err.class.to_s  + err.inspect
+		print "OpsFacebook (20) 500 Internal (self.parse_error) " + err.class.to_s  + err.inspect
 
 		error_message = if err.respond_to?(:fb_error_user_msg)
 			err.fb_error_user_msg
@@ -28,7 +34,7 @@ class OpsFacebook
 		else
 			err
 		end
-		puts error_message.inspect + " OpsFacebook.parse_error"
+		puts error_message.inspect + " OpsFacebook.parse_error (37)"
 		if error_message.nil? || error_message.match(/access token/)
 			return "Looks like we have a problem with facebook authorization, please re-connect to facebook. (If you continue to see this message, upgrade your app)"
 		end
