@@ -58,7 +58,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def associate
-        gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
+        gift = Gift.includes(:merchant).find_with( params[:id])
         raise ActiveRecord::RecordNotFound if gift.nil?
 
         if gift.receiver_id == @current_user.id
@@ -88,7 +88,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def hex
-        if gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
+        if gift = Gift.includes(:merchant).find_with( params[:id])
             success gift.refresh_serialize
         else
             fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })

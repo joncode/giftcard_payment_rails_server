@@ -3,7 +3,7 @@ class MetalCorsController < MetalController
 	# before_action :print_params
     # after_action :cross_origin_allow_header
 
-    PUBLIC_TOKENS = [WWW_TOKEN, GOLFNOW_TOKEN, CLOVER_TOKEN]
+    PUBLIC_TOKENS = [WWW_TOKEN, GOLFNOW_TOKEN, CLOVER_TOKEN, ONBOARDING_TOKEN]
 
 protected
 
@@ -15,7 +15,7 @@ protected
 
     def authentication_token_required
         successful = authenticate_client
-        successful = authenticate_user  if successful
+        successful = authenticate_user if successful
         confirm_client_owns_token if successful
     end
 
