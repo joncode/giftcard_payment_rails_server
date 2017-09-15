@@ -20,7 +20,10 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def signup
-        submit_obj = MerchantSignup.new(merchant_signup_params)
+        extra_data = params.delete(:data)
+        hsh = merchant_signup_params
+        hsh[:data] = extra_data
+        submit_obj = MerchantSignup.new(hsh)
 
         if submit_obj.save
             mail_notice_submit_merchant_setup(submit_obj)
