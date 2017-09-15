@@ -122,7 +122,7 @@ private
     end
 
     def merchant_signup_params
-        properties_keys = params[:data].try(:fetch, 'data', {}).keys.map(&:to_sym)
+        # properties_keys = params[:data].try(:fetch, 'data', {}).keys.map(&:to_sym)
         params.require(:data).permit(:address, :venue_name, :venue_url,
              :point_of_sale_system, :name, :email, :phone, :position, :message, data: properties_keys )
 
