@@ -20,7 +20,7 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def signup
-        extra_data = params.delete(:data)
+        extra_data = params[:data].delete(:data)
         hsh = merchant_signup_params
         hsh[:data] = extra_data
         submit_obj = MerchantSignup.new(hsh)
