@@ -120,7 +120,7 @@ private
 
     def merchant_signup_params
         params.require(:data).permit(:address, :venue_name, :venue_url,
-             :point_of_sale_system, :name, :email, :phone, :position, :message, data: {} )
+             :point_of_sale_system, :name, :email, :phone, :position, :message, data: [] )
     end
 
 end
