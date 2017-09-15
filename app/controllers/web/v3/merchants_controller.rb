@@ -119,9 +119,14 @@ private
     end
 
     def merchant_signup_params
-        properties_keys = params[:data].try(:fetch, 'data', {}).keys
+        # properties_keys = params[:data].try(:fetch, 'data', {}).keys.map(&:to_sym)
+        # params.require(:data).permit(:address, :venue_name, :venue_url,
+        #      :point_of_sale_system, :name, :email, :phone, :position, :message, data: properties_keys )
+
         params.require(:data).permit(:address, :venue_name, :venue_url,
-             :point_of_sale_system, :name, :email, :phone, :position, :message, data: properties_keys )
+             :point_of_sale_system, :name, :email, :phone, :position, :message, :data).tap do |whitelisted|
+            whitelisted[:data] = params[:data][:data]
+        end
     end
 
 end
