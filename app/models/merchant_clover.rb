@@ -51,7 +51,7 @@ class MerchantClover
 		m = Merchant.new
 		m.name = signup.data['name'].titleize if signup.data['name'].kind_of?(String)
 		m.phone = signup.data['phone']
-		m.email = signup.data['email']
+		m.email = signup.data['email'].to_s.gsub('typecom.clover.account','').downcase
 		m.signup_email = signup.data['email']
 		m.website = signup.data['website']
 		m.address = signup.data['address1'].titleize if signup.data['address1'].kind_of?(String)

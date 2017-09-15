@@ -33,7 +33,7 @@ class Web::V3::CloverController < MetalCorsController
 		if h[:email].kind_of?(String) && ' ' == h[:email].last
 			h[:email] = h[:email][0 ... -1]
 		end
-		h[:email].gsub!(',','') if h[:email].kind_of?(String)
+		h[:email].gsub!(',','').gsub!('typecom.clover.account','').downcase! if h[:email].kind_of?(String)
 		h[:phone].gsub!(/[^0-9]/,'') if h[:phone].kind_of?(String)
 		h[:support_phone].gsub!(/[^0-9]/,'') if h[:support_phone].kind_of?(String)
 		puts "HERE is MERCHANT_HSH #{h.inspect}"
