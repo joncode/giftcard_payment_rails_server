@@ -162,7 +162,7 @@ end
 ONBOARDING_TOKEN = if local_env
     'vm5HgXSW1OsrQjGlUbh9Qw'
 else
-    ENV['OMNIVORE_API_KEY']
+    ENV['ONBOARDING_TOKEN']
 end
 
 POSITRONICS_API_KEY = if local_env
