@@ -184,11 +184,11 @@ class PrintQueue < ActiveRecord::Base
 				# how to get the job into this  ??
 			redemption.to_epson.xml
 		when 'test_redeem'
-			PrintTestRedemption.new(get_job, merchant).to_epson_xml
+			PrintTestRedemption.new(merchant, get_job).to_epson_xml
 		when 'shift_report'
-			PrintShiftReport.new(get_job, merchant).to_epson_xml
+			PrintShiftReport.new(merchant, get_job).to_epson_xml
 		else # help
-			PrintHelp.new(get_job, merchant).to_epson_xml
+			PrintHelp.new(merchant, get_job).to_epson_xml
 		end
 	end
 

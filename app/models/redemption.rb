@@ -13,8 +13,14 @@ class Redemption < ActiveRecord::Base
     scope :pending_scope, -> (gift) { where(gift_id: gift.id, status: 'pending').order(created_at: :desc) }
     scope :get_live_scope, -> { where(status: ['done', 'pending']).order(created_at: :desc) }
 
+    scope :done_for_merchant_in_range, -> (merchant, range) { where(merchant_id: merchant.id, created_at: range, status: 'done') }
+
+
     delegate :giver_name, :receiver_name, to: :gift
 	delegate :timezone, :current_time, to: :merchant, allow_nil: true
+	def redemption_time
+		 self.current_time(self.response_at).to_datetime.to_formatted_s(:time)
+	end
 	delegate :name,:address, prefix: :merchant, to: :merchant, allow_nil: true
 
 #   -------------

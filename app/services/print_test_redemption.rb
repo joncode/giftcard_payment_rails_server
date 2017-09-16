@@ -2,7 +2,7 @@ class PrintTestRedemption
 
 	attr_reader :job, :merchant
 
-	def initialize job, merchant
+	def initialize merchant, job=nil
 		@job = job
 		@merchant = merchant
 	end

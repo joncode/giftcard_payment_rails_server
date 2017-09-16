@@ -237,8 +237,8 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def start_redemption
-        gift = Gift.includes(:merchant).find params[:id]
         puts "\n IN start_redemption - #{params.inspect}"
+        gift = Gift.includes(:merchant).find params[:id]
         if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]

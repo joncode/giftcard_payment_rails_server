@@ -227,8 +227,21 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
-    def current_time
-        TimeGem.timestamp_to_s(TimeGem.set_in_timezone(DateTime.now, timezone))
+    def now
+        TimeGem.set_in_timezone(DateTime.now, timezone)
+    end
+
+    def shift_start
+        x = now
+        x -= 1.day if x.hour < 8
+        x = x.beginning_of_day.change(hour: 8)
+        x
+    end
+
+
+    def current_time time_stamp=nil
+        time_stamp ||= DateTime.now
+        TimeGem.timestamp_to_s(TimeGem.set_in_timezone(time_stamp, timezone))
     end
 
     def city
