@@ -130,7 +130,7 @@ class PrintQueue < ActiveRecord::Base
 			end
 			pqs.map do |pq|
 				pq.status = status_str
-				pq.reason = msq
+				pq.reason = msg
 				pq.save
 				pq
 			end
