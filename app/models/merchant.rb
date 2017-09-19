@@ -240,7 +240,7 @@ class Merchant < ActiveRecord::Base
 
 
     def current_time time_stamp=nil
-        time_stamp ||= DateTime.now
+        time_stamp ||= now
         TimeGem.timestamp_to_s(TimeGem.set_in_timezone(time_stamp, timezone))
     end
 
