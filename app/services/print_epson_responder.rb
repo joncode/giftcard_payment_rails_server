@@ -63,8 +63,8 @@ class PrintEpsonResponder
 			puts "\n\nPrintEpsonResponder (63) 500 Internal - EPSON PRINT ERROR #{printjob.inspect}"
 			PrintQueue.mark_job_as_error(client_id, job, @error)
 		end
-	rescue
-		puts "500 Internal - EPSON XML SCHEMA ERROR #{printjob.inspect}"
+	# rescue
+	# 	puts "500 Internal - EPSON XML SCHEMA ERROR #{printjob.inspect}"
 	end
 
 #	------------- 	SetStatus
