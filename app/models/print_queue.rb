@@ -112,7 +112,7 @@ class PrintQueue < ActiveRecord::Base
 	def self.deliver print_queues
 		print_queues = [print_queues] unless (print_queues.is_a?(Array) || print_queues.is_a?(ActiveRecord::Relation))
 			# the redemption ID is not the same as this print job ID
-		where(id: print_queues.map(&:id)).update_all(status: 'delivered', job: get_unique_job_id)
+		where(id: print_queues.map(&:id)).update_all(status: 'delivered')
 		to_epson_xml(print_queues)
 	end
 

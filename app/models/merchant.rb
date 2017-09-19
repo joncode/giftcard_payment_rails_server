@@ -228,7 +228,7 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     def now
-        TimeGem.set_in_timezone(DateTime.now, timezone)
+        TimeGem.change_time_to_zone(DateTime.now.utc, timezone)
     end
 
     def shift_start
@@ -241,7 +241,7 @@ class Merchant < ActiveRecord::Base
 
     def current_time time_stamp=nil
         time_stamp ||= now
-        TimeGem.timestamp_to_s(TimeGem.set_in_timezone(time_stamp, timezone))
+        TimeGem.timestamp_to_s(TimeGem.change_time_to_zone(time_stamp, timezone))
     end
 
     def city
