@@ -56,11 +56,11 @@ class PrintEpsonResponder
 		@success = make_boolean(printjob["PrintResponse"]["response"]["success"])
 		@job = printjob["Parameter"]["printjobid"]
 		if @success
-			puts "PrintEpsonResponder (47) " + self.inspect
+			puts "\n\nPrintEpsonResponder (47) " + self.inspect
 			PrintQueue.mark_job_as_printed(client_id, job)
 		else
 			@error = printjob["PrintResponse"]["response"]
-			puts "PrintEpsonResponder (63) 500 Internal - EPSON PRINT ERROR #{printjob.inspect}"
+			puts "\n\nPrintEpsonResponder (63) 500 Internal - EPSON PRINT ERROR #{printjob.inspect}"
 			PrintQueue.mark_job_as_error(client_id, job, @error)
 		end
 	rescue

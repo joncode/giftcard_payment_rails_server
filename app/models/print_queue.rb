@@ -124,9 +124,9 @@ class PrintQueue < ActiveRecord::Base
 		if merchant = get_merchant_for_client_id(client_id)
 			if job.match(/XX-/)
 				# test redemptions
-				pqs = where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: status_str, reason: msg)
+				pqs = where(merchant_id: merchant.id, type_of: 'test_redeem')
 			else
-				pqs = where(job: job, merchant_id: merchant.id).update_all(status: status_str, reason: msg)
+				pqs = where(job: job, merchant_id: merchant.id)
 			end
 			pqs.map do |pq|
 				pq.status = status_str
@@ -140,10 +140,12 @@ class PrintQueue < ActiveRecord::Base
 	end
 
 	def self.mark_job_as_error client_id, job, msg=nil
+		puts "PrintQueue (143) #{client_id} #{job} #{msg}"
 		mark_job 'cancel', client_id, job, msg
 	end
 
 	def self.mark_job_as_printed client_id, job
+		puts "PrintQueue (147) #{client_id} #{job}"
 		pqs = mark_job('done', client_id, job)
 		pqs.each do |pq|
 			if pq.type_of == 'redeem' && pq.status == 'done'
