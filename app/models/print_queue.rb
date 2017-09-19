@@ -112,7 +112,10 @@ class PrintQueue < ActiveRecord::Base
 	def self.deliver print_queues
 		print_queues = [print_queues] unless (print_queues.is_a?(Array) || print_queues.is_a?(ActiveRecord::Relation))
 			# the redemption ID is not the same as this print job ID
-		where(id: print_queues.map(&:id)).update_all(status: 'delivered')
+		print_queues.each do |pq|
+			pq.status = 'delivered'
+			pq.save
+		end
 		to_epson_xml(print_queues)
 	end
 
@@ -125,6 +128,7 @@ class PrintQueue < ActiveRecord::Base
 			else
 				where(job: job, merchant_id: merchant.id).update_all(status: status_str, reason: msg)
 			end
+
 		else
 			return nil
 		end
@@ -135,7 +139,16 @@ class PrintQueue < ActiveRecord::Base
 	end
 
 	def self.mark_job_as_printed client_id, job
-		mark_job 'done', client_id, job
+		pqs = mark_job('done', client_id, job)
+		pqs.each do |pq|
+			if pq.type_of == 'redeem' && pq.status == 'done'
+				if pq.redemption.status == 'pending'
+					resp = Redeem.complete_redeem(redemption: pq.redemption, client_id: client_id)
+				else
+					puts "PrintQueue (147) - 500 Internal - redemption sync issues #{pq.id}"
+				end
+			end
+		end
 	end
 
 	def self.to_epson_xml print_queues
@@ -218,7 +231,7 @@ class PrintQueue < ActiveRecord::Base
 #   -------------
 
 	def set_job
-		if self.status == 'delivered' && self.job.nil?
+		if self.status == 'delivered' && self.job.blank?
 			self.job = PrintQueue.get_unique_job_id
 		end
 	end
