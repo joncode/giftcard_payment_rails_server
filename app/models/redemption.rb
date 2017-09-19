@@ -209,8 +209,6 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-	attr_accessor :ccy
-
 	def amount_words(currency=nil)
 		currency = ccy if currency.nil?
 		cents_to_words(self.amount, currency)
