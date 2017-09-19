@@ -222,7 +222,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift = Gift.includes(:merchant).find params[:id]
         if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
-            resp = Redeem.start(gift: gift, loc_id: loc_id, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/notify")
+            resp = Redeem.start_redeem(gift: gift, loc_id: loc_id, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/notify")
             if resp['success']
                 gift = resp['gift']
                 gift.fire_after_save_queue(@current_client)
@@ -242,8 +242,7 @@ class Web::V3::GiftsController < MetalCorsController
         if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]
-            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id,
-                api: "web/v3/gifts/#{gift.id}/start_redemption")
+            resp = Redeem.start_redeem(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/start_redemption")
             if resp['success']
                 gift = resp['gift']
                 gift.fire_after_save_queue(@current_client)
@@ -272,7 +271,7 @@ class Web::V3::GiftsController < MetalCorsController
             end
 
             puts "gifts controller getting current_redemption"
-            resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
+            resp = Redeem.start_redeem(sync: true, gift: gift, amount: amount, loc_id: loc_id,
                 client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
             if resp['success']
                 @current_redemption = resp['redemption']
@@ -345,9 +344,7 @@ class Web::V3::GiftsController < MetalCorsController
             if (gift.receiver_id == @current_user.id) && (gift.status != 'redeemed')
                 if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id
 
-                    resp = Redeem.apply_and_complete(gift: gift, redemption: @current_redemption, qr_code: qrcode,
-                        ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
-
+                    resp = Redeem.complete_redeem(gift: gift, redemption: @current_redemption, qr_code: qrcode, ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
                     if !resp.kind_of?(Hash)
                         status = :bad_request
                         fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})

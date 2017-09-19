@@ -48,6 +48,41 @@ class Redeem
 
 #   -------------
 
+	def self.start_redeem(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: nil, sync: nil)
+		if gift.r_sys == 8
+			api = api.gsub('start_redemption', 'start_apply_redemption')
+			start_apply(gift: gift, loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of, sync: sync)
+		else
+			start(gift: gift, loc_id: loc_id, amount: amount, client_id: client_id, api: api)
+		end
+	end
+
+	def self.complete_redeem(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
+		gift = gift || redemption.gift
+        if gift.r_sys == 8
+        	if pos_obj = redemption.print_queues.where(status: 'done').last
+            	complete(redemption: redemption, gift: gift, pos_obj: pos_obj, client_id: client_id)
+            elsif pos_obj = redemption.print_queues.where(status: ['delivered', 'queue']).last
+            	# do nothing just wait
+            else # expired or cancel
+            	# should we make another queue ?
+            end
+        else
+            apply_and_complete(gift: gift, redemption: redemption, qr_code: qrcode, ticket_num: ticket_num, server: server, client_id: client_id, callback_params: callback_params)
+        end
+	end
+
+#   -------------
+
+	def self.start_apply(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant, sync: false)
+		rs = start(gift: gift, loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of, sync: sync)
+	    if rs['success']
+	        apply(gift: rs['gift'], redemption: rs['redemption'], client_id: client_id)
+	    else
+	    	rs
+	    end
+	end
+
 	def self.apply_and_complete(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
 		ra = apply(gift: gift, redemption: redemption, qr_code: qr_code, ticket_num: ticket_num, server: server, client_id: client_id, callback_params: callback_params)
 
@@ -85,9 +120,7 @@ class Redeem
 			end
 		end
 
-		if client_id.kind_of?(Client)
-			client_id = client_id.id
-		end
+		client_id = client_id.id if client_id.kind_of?(Client)
 
 		request_hsh = { gift_id: gift.id, redemption_id: redemption.id, qr_code: qr_code,
 			ticket_num: ticket_num, server: server, client_id: client_id, callback: callback_params }

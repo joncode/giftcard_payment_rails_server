@@ -152,8 +152,31 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
+	def self.new_redemption(redemption)
+		create(status: 'queue', job: redemption.paper_id, merchant_id: redemption.merchant_id,
+				type_of: 'redeem', redemption_id: redemption.id )
+	end
+
 	def self.queue_redemption(redemption)
-		create(status: 'queue', merchant_id: redemption.merchant_id, type_of: 'redeem', redemption_id: redemption.id )
+		# check for previous print queue and re-print if cancel
+		pq = first_or_create(job: redemption.paper_id, merchant_id: redemption.merchant_id,
+			type_of: 'redeem', redemption_id: redemption.id )
+		case pq.status
+		when 'queue'
+			return pq
+		when 'delivered'
+			# less then 10 minutes
+			return pq if pq.created_at > 10.minutes.ago
+			# more then 10 minutes
+			# cancel print job and queue one
+			pq.update(status: 'cancel')
+			return new_redemption(redemption)
+		when 'done'
+			return pq
+		else # cancel / expired
+			# make a new print queue
+			return new_redemption(redemption)
+		end
 	end
 
 	def self.queue_test_redemption(merchant)

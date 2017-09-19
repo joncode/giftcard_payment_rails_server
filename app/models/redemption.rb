@@ -16,7 +16,7 @@ class Redemption < ActiveRecord::Base
     scope :done_for_merchant_in_range, -> (merchant, range) { where(merchant_id: merchant.id, created_at: range, status: 'done') }
 
 
-    delegate :giver_name, :receiver_name, to: :gift
+    delegate :ccy, :giver_name, :receiver_name, to: :gift
 	delegate :timezone, :current_time, to: :merchant, allow_nil: true
 	def redemption_time
 		 self.current_time(self.response_at).to_datetime.to_formatted_s(:time)
@@ -210,15 +210,15 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
 	attr_accessor :ccy
-	def ccy
-		@ccy || gift.ccy
-	end
 
 	def amount_words(currency=nil)
-		if currency.nil?
-			currency = ccy
-		end
+		currency = ccy if currency.nil?
 		cents_to_words(self.amount, currency)
+	end
+
+	def destroy
+			# DO NOT DELETE RECORDS
+		update_column(:active, false)
 	end
 
 #   -------------

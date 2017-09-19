@@ -116,7 +116,7 @@ class Card < ActiveRecord::Base
 #	-------------
 
 	def destroy
-			# DO NOT DELETE CARD RECORDS
+			# DO NOT DELETE RECORDS
 		update_column(:active, false)
 	end
 
