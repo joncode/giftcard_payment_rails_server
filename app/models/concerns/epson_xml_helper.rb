@@ -81,7 +81,6 @@ module EpsonXmlHelper
 	end
 
 
-
 end
 
 

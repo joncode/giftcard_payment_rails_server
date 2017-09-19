@@ -205,7 +205,7 @@ class PrintQueue < ActiveRecord::Base
 		case self.type_of
 		when 'redeem'
 				# how to get the job into this  ??
-			redemption.to_epson.xml
+			redemption.to_epson_xml
 		when 'test_redeem'
 			PrintTestRedemption.new(merchant, get_job).to_epson_xml
 		when 'shift_report'
