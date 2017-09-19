@@ -123,7 +123,7 @@ class PrintQueue < ActiveRecord::Base
 				# test redemptions
 				where(merchant_id: merchant.id, type_of: 'test_redeem').update_all(status: status_str, reason: msg)
 			else
-				where("job = :pjob OR id = :pjob", pjob: job).where(merchant_id: merchant.id).update_all(status: status_str, reason: msg)
+				where(job: job, merchant_id: merchant.id).update_all(status: status_str, reason: msg)
 			end
 		else
 			return nil
@@ -198,7 +198,7 @@ class PrintQueue < ActiveRecord::Base
 	end
 
 	def get_job
-		self.job || self.id
+		self.job
 	end
 
 	def to_epson_xml
