@@ -48,7 +48,7 @@ class Redeem
 
 #   -------------
 
-	def self.start_redeem(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: nil, sync: nil)
+	def self.start_redeem(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant, sync: false)
 		if gift.r_sys == 8
 			api = api.gsub('start_redemption', 'start_apply_redemption')
 			start_apply(gift: gift, loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of, sync: sync)

@@ -243,6 +243,7 @@ class Web::V3::GiftsController < MetalCorsController
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]
             resp = Redeem.start_redeem(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/start_redemption")
+            # resp = Redeem.start_redeem(gift: g, client_id: 1, api: "test_epson")
             if resp['success']
                 gift = resp['gift']
                 gift.fire_after_save_queue(@current_client)
