@@ -33,24 +33,20 @@ module HexIdMethods
 	module ClassMethods
 
 		def where_with _id
-			if _id.match('-')
-				_id = paper_to_hex(_id)
-			end
 			if _id.to_s == _id.to_i.to_s
 				where(id: _id)
 			else
+				_id = paper_to_hex(_id)
 				where(hex_id: _id)
 			end
 		end
 
 	    def find_with _id
 				# integer check for integers or integers as strings
-			if _id.match('-')
-				_id = paper_to_hex(_id)
-			end
 			if _id.to_s == _id.to_i.to_s
 				find(_id)
 			else
+				_id = paper_to_hex(_id)
 				r = find_by(hex_id: _id)
 				raise ActiveRecord::RecordNotFound if r.nil?
 				r
@@ -62,12 +58,13 @@ module HexIdMethods
 
 
 	    def paper_to_hex paper_id
+	    	return paper_id unless paper_id.try(:match,'-')
 	        hex_id = paper_id[0..6].to_s + paper_id[8..11].to_s
 	        hex_id.gsub('-','_').downcase
 	    end
 
 	    def hex_to_paper hex_id
-	        return '' if hex_id.nil?
+	    	return hex_id unless hex_id.try(:match,'_')
 	        hx = hex_id.to_s.gsub('_', '-').upcase
 	        hx[0..6].to_s + '-' + hx[7..10].to_s
 	    end

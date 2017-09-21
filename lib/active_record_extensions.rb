@@ -30,8 +30,8 @@ module ActiveRecordExtension
   	# add your static(class) methods here
   	module ClassMethods
 
-  		def l
-  			last
+  		def l(val=1)
+  			last(val)
   		end
 
   		def fi
