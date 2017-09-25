@@ -179,8 +179,7 @@ class PrintQueue < ActiveRecord::Base
 
 	def self.queue_redemption(redemption)
 		# check for previous print queue and re-print if cancel
-		pq = first_or_create(job: redemption.paper_id, merchant_id: redemption.merchant_id,
-			type_of: 'redeem', redemption_id: redemption.id )
+		pq = where(job: redemption.paper_id, merchant_id: redemption.merchant_id, type_of: 'redeem', redemption_id: redemption.id ).first_or_create
 		case pq.status
 		when 'queue'
 			return pq

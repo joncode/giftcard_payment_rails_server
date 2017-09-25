@@ -226,14 +226,7 @@ class Redeem
 	def self.epson_redemption(redemption, gift)
 		# is there already a print queue item - pending or printed ? for the redemption
 		print_queue = PrintQueue.queue_redemption(redemption)
-		# redemption.request = print_queue.make_request_hsh
-		redemption.request = {
-			"print_queue_id" => print_queue.id,
-            "gift_card_id" => gift.hex_id,
-            "value" => redemption.amount,
-            "ccy" => redemption.ccy,
-            'redemption_id' => redemption.hex_id
-        }
+		redemption.request = print_queue.make_request_hsh
 		redemption.save
 		return [ print_queue, print_queue.response ]
 	end
