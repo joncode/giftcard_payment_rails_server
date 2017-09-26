@@ -68,7 +68,7 @@ class Redeem
             	# should we make another queue ?
             end
         else
-            apply_and_complete(gift: gift, redemption: redemption, qr_code: qrcode, ticket_num: ticket_num, server: server, client_id: client_id, callback_params: callback_params)
+            apply_and_complete(gift: gift, redemption: redemption, qr_code: qr_code, ticket_num: ticket_num, server: server, client_id: client_id, callback_params: callback_params)
         end
 	end
 
