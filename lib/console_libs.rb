@@ -14,7 +14,6 @@ require 'legacy_points'
 include Legacy
 include LegacyUser
 include LegacyGift
-include LegacyProvider
 include Cron
 include Dbcall
 include LegacyPoints
