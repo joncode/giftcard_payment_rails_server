@@ -5,12 +5,14 @@ class Omnivore
 	include ActionView::Helpers::NumberHelper
 	include MoneyHelper
 
-	attr_accessor :response, :code, :pos_merchant_id, :applied_value, :ticket_num,
+	attr_reader :ticket_num
+
+	attr_accessor :response, :code, :pos_merchant_id, :applied_value,
 	 :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id,
 	 :direct_redeem, :ccy, :request, :original_gift_value
 
 	def initialize args
-		@request = args
+		@request = args.stringify_keys!
 		puts "Omnivore.initialize args = #{args.inspect}"
 
 		if args['brand_card_ids_ary'].blank?
@@ -21,7 +23,7 @@ class Omnivore
 			@brand_card_ids = args['brand_card_ids_ary']
 		end
 
-		@ticket_num      = strip_leading_zeros args["ticket_num"].to_s
+		@ticket_num 	 = strip_leading_zeros(args["ticket_num"].to_s)
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
@@ -39,6 +41,10 @@ class Omnivore
 		@brand_card_applied = false
 		@direct_redeem = args["direct_redeem"] || false
 		@ccy = args["ccy"] || 'USD'
+	end
+
+	def ticket_num= ticket_number
+		@ticket_num = strip_leading_zeros(ticket_number.to_s)
 	end
 
 	def r_sys
@@ -437,7 +443,7 @@ class Omnivore
 
     def get_ticket(ticked_id_added=nil)
     	ticket_uniq = ticked_id_added || @ticked_id || @ticket_num
-    	get('locations',@pos_merchant_id, "tickets/#{ticket_uniq}" )
+    	get('locations', @pos_merchant_id, "tickets/#{ticket_uniq}" )
     end
 
     def brand_card_good(raw_ticket)
