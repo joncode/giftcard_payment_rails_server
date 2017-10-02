@@ -31,6 +31,7 @@ module ActiveRecordExtension
   	module ClassMethods
 
   		def l(val=1)
+  			return last if val == 1
   			last(val)
   		end
 
