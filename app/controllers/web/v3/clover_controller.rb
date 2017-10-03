@@ -42,7 +42,7 @@ class Web::V3::CloverController < MetalCorsController
 		end
 
 		if h[:support_phone].kind_of?(String)
-			h[:support_phone].gsub!(/[^0-9]/,'')
+			h[:support_phone].to_s.gsub!(/[^0-9]/,'')
 		end
 
 		puts "HERE is MERCHANT_HSH #{h.inspect}"
