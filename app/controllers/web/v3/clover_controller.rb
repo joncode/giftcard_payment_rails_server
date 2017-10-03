@@ -23,19 +23,28 @@ class Web::V3::CloverController < MetalCorsController
 	def init
 		h = {}
 		h = init_params[:merchant]
-		h = h.symbolize_keys
+		h = h.deep_symbolize_keys
 		h[:app_key] = request.headers['HTTP_X_APPLICATION_KEY']
 		h[:serial_number] = init_params[:serial_number]
 		h[:pos_merchant_id] = h[:id]
 		mid = h[:id]
 		h[:ccy] = h[:currency]
 
-		if h[:email].kind_of?(String) && ' ' == h[:email].last
-			h[:email] = h[:email][0 ... -1]
+		if h[:email].kind_of?(String)
+			if ' ' == h[:email].last
+				h[:email] = h[:email][0 ... -1]
+			end
+			h[:email].to_s.gsub!(',','').gsub!('typecom.clover.account','').downcase!
 		end
-		h[:email].gsub!(',','').gsub!('typecom.clover.account','').downcase! if h[:email].kind_of?(String)
-		h[:phone].gsub!(/[^0-9]/,'') if h[:phone].kind_of?(String)
-		h[:support_phone].gsub!(/[^0-9]/,'') if h[:support_phone].kind_of?(String)
+
+		if h[:phone].kind_of?(String)
+			h[:phone].to_s.gsub!(/[^0-9]/,'')
+		end
+
+		if h[:support_phone].kind_of?(String)
+			h[:support_phone].gsub!(/[^0-9]/,'')
+		end
+
 		puts "HERE is MERCHANT_HSH #{h.inspect}"
 
 		o = OpsClover.new(h)
