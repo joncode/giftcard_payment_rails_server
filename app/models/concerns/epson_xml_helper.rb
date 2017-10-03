@@ -2,6 +2,9 @@ module EpsonXmlHelper
     extend ActiveSupport::Concern
 
 	def to_epson_xml
+		max_for_tab = 18
+		tab = "&#9;&#9;"
+		tab = "&#9;" if self.giver_name.length > max_for_tab || self.receiver_name.length > max_for_tab
 %{
 <ePOSPrint>
 <Parameter>
@@ -35,24 +38,30 @@ module EpsonXmlHelper
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>#{current_time}</text>
 <feed line="2"/>
+<text width="1" height="2"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>4-digit Code</text>
+<text>#{tab}</text>
+<text>#{self.token}</text>
+<feed line="2"/>
 <text align="left"/>
 <text font="font_a"/>
 <text width="1" height="1"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>Gift Giver</text>
-<text>&#9;&#9;</text>
+<text>#{tab}</text>
 <text>#{self.giver_name}</text>
 <feed line="1"/>
 <text width="1" height="1"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>Gift Receiver</text>
-<text>&#9;&#9;</text>
+<text>#{tab}</text>
 <text>#{self.receiver_name}</text>
 <feed line="2"/>
 <text width="1" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>Voucher ID</text>
-<text>&#9;&#9;</text>
+<text>#{tab}</text>
 <text>#{self.paper_id}</text>
 <feed line="3"/>
 <text align="center"/>
