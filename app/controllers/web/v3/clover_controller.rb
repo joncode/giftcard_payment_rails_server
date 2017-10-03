@@ -30,6 +30,8 @@ class Web::V3::CloverController < MetalCorsController
 		mid = h[:id]
 		h[:ccy] = h[:currency]
 
+		puts "HERE is PRE_PARSE  #{h.inspect}"
+
 		if h[:email].kind_of?(String)
 			if ' ' == h[:email].last
 				h[:email] = h[:email][0 ... -1]
