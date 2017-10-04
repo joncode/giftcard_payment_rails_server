@@ -51,7 +51,7 @@ class PrintShiftReport
 <text font="font_b"/>
 <text width="3" height="3"/>
 <text reverse="false" ul="false" em="true" color="color_1"/>
-<text>ItsOnMe Shift Report</text>
+<text>ItsOnMe Report</text>
 <feed unit="12"/>
 <feed line="2"/>
 <text font="font_a"/>

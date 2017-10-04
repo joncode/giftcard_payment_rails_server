@@ -6,7 +6,7 @@ module EpsonXmlHelper
 		tab = "&#9;&#9;"
 		tab = "&#9;" if self.giver_name.length > max_for_tab || self.receiver_name.length > max_for_tab
 		name_width = 2
-		name_width = 1 if self.merchant_name > 21
+		name_width = 1 if self.merchant_name.length > 21
 %{
 <ePOSPrint>
 <Parameter>
