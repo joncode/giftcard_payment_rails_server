@@ -9,8 +9,9 @@ class OpsPushApple
 	        puts "SEND APNS push |#{pnt.id}| - #{payload} - ALERT= #{alert}"
             return if Rails.env.development? || Rails.env.test?
 	        n = APNS::Notification.new(pnt.pn_token, payload)
-	        APNS.send_notifications([n])
-
+	        r = APNS.send_notifications([n])
+	        puts "\nOpsPushApple - #{r.inspect}\n"
+	        r
 		end
 
 		def format_payload alert, data=nil
