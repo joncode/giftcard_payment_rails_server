@@ -5,6 +5,8 @@ module EpsonXmlHelper
 		max_for_tab = 18
 		tab = "&#9;&#9;"
 		tab = "&#9;" if self.giver_name.length > max_for_tab || self.receiver_name.length > max_for_tab
+		name_width = 2
+		name_width = 1 if self.merchant_name > 21
 %{
 <ePOSPrint>
 <Parameter>
@@ -24,7 +26,7 @@ module EpsonXmlHelper
 <feed unit="12"/>
 <feed line="2"/>
 <text font="font_a"/>
-<text width="2" height="2"/>
+<text width="#{name_width}" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>#{self.merchant_name}</text>
 <feed line="2"/>

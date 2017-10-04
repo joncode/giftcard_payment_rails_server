@@ -10,13 +10,15 @@ class PrintShiftReport
 		@range = [@merchant.shift_start .. @merchant.now]
 		@redemptions = Redemption.done_for_merchant_in_range(@merchant, @range)
 		@columns = ""
+		@name_width = 2
+		@name_width = 1 if @merchant.name.length > 21
 	end
 
 	def perform
-		@total = 0
+		@total_cents = 0
 		@quantity = @redemptions.length
 		@ary = @redemptions.map do |r|
-			@total += r.amount
+			@total_cents += r.amount
 			[display_money(cents: r.amount, ccy: r.ccy) , r.paper_id ,  r.redemption_time]
 		end
 		cols = @ary.map do |data_ary|
@@ -30,7 +32,7 @@ class PrintShiftReport
 <text>#{data_ary[0]}</text>"
 		end
 		@columns = cols.join('')
-		@total = display_money(cents: @total, ccy: @merchant.try(:ccy))
+		@total = display_money(cents: @total_cents, ccy: @merchant.try(:ccy))
 	end
 
 	def to_epson_xml
@@ -53,7 +55,7 @@ class PrintShiftReport
 <feed unit="12"/>
 <feed line="2"/>
 <text font="font_a"/>
-<text width="2" height="2"/>
+<text width="#{@name_width}" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>#{@merchant.name}</text>
 <feed line="2"/>
@@ -72,7 +74,7 @@ class PrintShiftReport
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>Total</text>
 <text>&#9;&#9;</text>
-<text>#{total}</text>
+<text>#{@total}</text>
 <text reverse="false" ul="false" em="false"/>
 <text width="1" height="1"/>
 <feed unit="12"/>
@@ -100,6 +102,10 @@ __END__
 
 SHIFT REDEMPTION
 
+m = G.l.merchant
+p =  PrintShiftReport.new m
+p.perform
+p.to_epson_xml
 
 get the printe queues OR redemptions for the day that were successfull
 
