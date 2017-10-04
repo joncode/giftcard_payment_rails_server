@@ -1,5 +1,6 @@
 class PrintShiftReport
 	include MoneyHelper
+	include PrintXmlWrap
     include PrintXmlHeader
     include PrintXmlTitle
     include PrintXmlFooter
