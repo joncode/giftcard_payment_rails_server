@@ -1,8 +1,9 @@
 class PrintShiftReport
+	include ActionView::Helpers::TextHelper
 	include MoneyHelper
 
 
-	attr_reader :job, :merchant, :redemptions, :range, :total, :quantity, :columns
+	attr_reader :job, :merchant, :redemptions, :range, :total, :quantity, :columns, :new_street_addresses
 
 	def initialize merchant, job=nil
 		@job = job
@@ -14,6 +15,19 @@ class PrintShiftReport
 		@name_width = 2
 		@name_width = 1 if @merchant.name.length > 21
 		perform
+	end
+
+	def responsive_street_address
+		width = 42
+		sa = merchant.street_address.gsub("\n",'')
+		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
+		@new_street_addresses = address_ary.map do |addy|
+"<feed line='2'/>
+<text font='font_c'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
+<text>#{addy}</text>"
+		end
 	end
 
 	def perform
@@ -50,19 +64,18 @@ class PrintShiftReport
 <text font="font_b"/>
 <text width="3" height="3"/>
 <text reverse="false" ul="false" em="true" color="color_1"/>
-<text>ItsOnMe Report</text>
+<text>ItsOnMe</text>
+<text width="3" height="3"/>
+<text reverse="false" ul="false" em="true" color="color_1"/>
+<text>Shift #Report</text>
 <feed unit="12"/>
 <feed line="2"/>
 <text font="font_a"/>
 <text width="#{@name_width}" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>#{@merchant.name}</text>
-<feed line="2"/>
-<text font="font_c"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>#{@merchant.street_address}</text>
-<feed line="2"/>
+#{responsive_street_address.join('')}
+<feed line="1"/>
 <text font="font_c"/>
 <text width="1" height="1"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
@@ -77,7 +90,7 @@ class PrintShiftReport
 <text width="1" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>Total</text>
-<text>&#9;&#9;</text>
+<text>&#9;&#9;&#9;</text>
 <text>#{@total}</text>
 <text reverse="false" ul="false" em="false"/>
 <text width="1" height="1"/>
@@ -107,7 +120,7 @@ __END__
 SHIFT REDEMPTION
 
 m = G.l.merchant
-p = PrintShiftReport.new(M.l)
+p = PrintShiftReport.new(M.l).to_epson_xml
 
 
 
@@ -147,3 +160,10 @@ total_amount = rs.inject(0) { |sum, p| sum + p.amount }
 display_money(cents: total_amount, ccy: rs[0].ccy)
 
 rs.length
+
+
+
+x = "The Linq, Suite 22, 3545 Las Vegas Boulevard South"
+m = M.l
+m.address = x
+p =  PrintShiftReport.new m
