@@ -15,6 +15,7 @@ class PrintTestRedemption
 		redemption.gift = Gift.where(cat: 300, receiver_name: "David Leibner", giver_name: 'David Leibner').first
 		# get xml from calling :to_epson_xml on the fake redemption
 		# insert test xml in between the actual xml
+		redemption.token = redemption.gift.token
 		xml = redemption.to_epson_xml
 
 		make_test(xml)
