@@ -33,7 +33,12 @@ module EpsonXmlHelper
 <text font="font_c"/>
 <text width="1" height="1"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
-<text>#{self.merchant_address}</text>
+<text>#{self.merchant.street_address}</text>
+<feed line="2"/>
+<text font="font_c"/>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>#{self.merchant.city_state_zip}</text>
 <feed line="2"/>
 <text font="font_b"/>
 <text width="1" height="2"/>

@@ -62,13 +62,18 @@ class PrintShiftReport
 <text font="font_c"/>
 <text width="1" height="1"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
-<text>#{@merchant.address}</text>
+<text>#{@merchant.street_address}</text>
+<feed line="2"/>
+<text font="font_c"/>
+<text width="1" height="1"/>
+<text reverse="false" ul="false" em="false" color="color_1"/>
+<text>#{@merchant.city_state_zip}</text>
 <feed line="2"/>
 <text font="font_b"/>
 <text width="1" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>#{@merchant.current_time}</text>
-#{columns}
+#{@columns}
 <feed line="2"/>
 <text width="1" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>

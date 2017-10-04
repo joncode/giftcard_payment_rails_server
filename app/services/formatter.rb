@@ -28,6 +28,11 @@ module Formatter
         "#{self.address}, #{self.city_state_zip}"
     end
 
+    def street_address
+        x = "#{self.address} #{self.address_2}"
+        x.strip
+    end
+
     def city_state_zip
         "#{self.city}, #{self.state} #{self.zip}"
     end
