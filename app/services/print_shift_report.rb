@@ -2,34 +2,33 @@ class PrintShiftReport
 	include MoneyHelper
 
 
-	attr_reader :job, :merchant, :redemptions, :range, :ary, :total, :quantity, :columns
+	attr_reader :job, :merchant, :redemptions, :range, :total, :quantity, :columns
 
 	def initialize merchant, job=nil
 		@job = job
 		@merchant = merchant
 		@range = [@merchant.shift_start .. @merchant.now]
-		@redemptions = Redemption.done_for_merchant_in_range(@merchant, @range)
+		# @redemptions = Redemption.done_for_merchant_in_range(@merchant, @range)
+		@redemptions = Redemption.last(10)
 		@columns = ""
 		@name_width = 2
 		@name_width = 1 if @merchant.name.length > 21
+		perform
 	end
 
 	def perform
 		@total_cents = 0
 		@quantity = @redemptions.length
-		@ary = @redemptions.map do |r|
+		cols = @redemptions.map do |r|
 			@total_cents += r.amount
-			[display_money(cents: r.amount, ccy: r.ccy) , r.paper_id ,  r.redemption_time]
-		end
-		cols = @ary.map do |data_ary|
 "<feed line='2'/>
 <text align='left'/>
 <text font='font_a'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{data_ary[1]}</text>
+<text>#{r.paper_id}</text>
 <text>&#9;&#9;</text>
-<text>#{data_ary[0]}</text>"
+<text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
 		end
 		@columns = cols.join('')
 		@total = display_money(cents: @total_cents, ccy: @merchant.try(:ccy))
@@ -106,6 +105,13 @@ __END__
 
 
 SHIFT REDEMPTION
+
+m = G.l.merchant
+p = PrintShiftReport.new(M.l)
+
+
+
+
 
 m = G.l.merchant
 p =  PrintShiftReport.new m
