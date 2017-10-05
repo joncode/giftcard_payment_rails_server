@@ -52,7 +52,7 @@ class PrintShiftReport
 	<text>&#9;</text>
 	<text>    #{r.redemption_time}</text>
 	<text>&#9;</text>
-	<text>   #{display_money(cents: r.amount, ccy: r.ccy)}</text>"
+	<text>   #{display_money(cents: r.amount, ccy: r.ccy, zeros: true)}</text>"
 			end
 			@columns = cols.join('')
 			@total = display_money(cents: @total_cents, ccy: @merchant.try(:ccy), zeros: true)
