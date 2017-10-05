@@ -50,9 +50,9 @@ class PrintShiftReport
 	<text reverse='false' ul='false' em='false' color='color_1'/>
 	<text>#{r.paper_id}</text>
 	<text>&#9;</text>
-	<text>    #{r.redemption_time}</text>
+	<text>     #{r.redemption_time}</text>
 	<text>&#9;</text>
-	<text>   #{display_money(cents: r.amount, ccy: r.ccy, zeros: true)}</text>"
+	<text>  #{display_money(cents: r.amount, ccy: r.ccy, zeros: true)}</text>"
 			end
 			@columns = cols.join('')
 			@total = display_money(cents: @total_cents, ccy: @merchant.try(:ccy), zeros: true)
@@ -101,9 +101,10 @@ class PrintShiftReport
 #{@columns}
 <feed />
 <text align='center'/>
+<text font='font_a'/>
 <text width='2' height='1'/>
 <text reverse='false' ul='true' em='true' color='color_1'/>
-<text>                      </text>
+<text>                   </text>
 <feed line='2'/>
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
