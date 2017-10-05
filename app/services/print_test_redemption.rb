@@ -22,11 +22,11 @@ class PrintTestRedemption
 	end
 
 	def make_test(xml)
-		xml.gsub('<feed line="', '<feed line="2"/>
+		xml.gsub('<feed line="2', '<feed line="2"/>
 <text align="center"/>
 <text reverse="false" ul="false" em="true"/>
 <text width="2" height="1"/>
-<text>TEST VOID TEST VOID</text><feed line="')
+<text>TEST VOID TEST VOID</text><feed line="2')
 	end
 
 end
