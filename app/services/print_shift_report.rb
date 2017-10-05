@@ -22,32 +22,41 @@ class PrintShiftReport
 		sa = merchant.street_address.gsub("\n",'')
 		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
 		@new_street_addresses = address_ary.map do |addy|
+			single_line(addy)
+		end
+	end
+
+	def singe_line str=
 "<feed line='1'/>
 <text font='font_c'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{addy}</text>"
-		end
 	end
 
 	def perform
 		@total_cents = 0
 		@quantity = @redemptions.length
-		cols = @redemptions.map do |r|
-			@total_cents += r.amount
-"<feed line='1'/>
-<text align='left'/>
-<text font='font_a'/>
-<text width='1' height='1'/>
-<text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{r.paper_id}</text>
-<text>&#9;</text>
-<text>#{r.redemption_time}</text>
-<text>&#9;&#9;</text>
-<text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
+		if @quantity == 0
+			@total = display_money(cents: 0, ccy: @merchant.try(:ccy))
+			@columns = singe_line("No Redemptions Today")
+		else
+			cols = @redemptions.map do |r|
+				@total_cents += r.amount
+	"<feed line='1'/>
+	<text align='left'/>
+	<text font='font_a'/>
+	<text width='1' height='1'/>
+	<text reverse='false' ul='false' em='false' color='color_1'/>
+	<text>#{r.paper_id}</text>
+	<text>&#9;</text>
+	<text>#{r.redemption_time}</text>
+	<text>&#9;&#9;</text>
+	<text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
+			end
+			@columns = cols.join('')
+			@total = display_money(cents: @total_cents, ccy: @merchant.try(:ccy), zeros: true)
 		end
-		@columns = cols.join('')
-		@total = display_money(cents: @total_cents, ccy: @merchant.try(:ccy))
 	end
 
 	def to_epson_xml
@@ -91,12 +100,14 @@ class PrintShiftReport
 <feed line='1'/>
 #{@columns}
 <feed />
+<text align='center'/>
 <text width='2' height='1'/>
-<text reverse='false' ul='true' em='false' color='color_1'/>
-<text>                        </text>
+<text reverse='false' ul='true' em='true' color='color_1'/>
+<text>                      </text>
 <feed line='2'/>
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
+<text>&#9;</text>
 <text>Total</text>
 <text>&#9;&#9;&#9;</text>
 <text>#{@total}</text>
