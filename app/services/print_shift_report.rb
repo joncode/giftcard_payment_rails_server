@@ -26,7 +26,7 @@ class PrintShiftReport
 		end
 	end
 
-	def singe_line str
+	def single_line str
 "<feed line='1'/>
 <text font='font_c'/>
 <text width='1' height='1'/>
@@ -39,7 +39,7 @@ class PrintShiftReport
 		@quantity = @redemptions.length
 		if @quantity == 0
 			@total = display_money(cents: 0, ccy: @merchant.try(:ccy))
-			@columns = singe_line("No Redemptions Today")
+			@columns = single_line("No Redemptions Today")
 		else
 			cols = @redemptions.map do |r|
 				@total_cents += r.amount
