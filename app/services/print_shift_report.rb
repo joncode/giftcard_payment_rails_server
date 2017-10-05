@@ -9,8 +9,8 @@ class PrintShiftReport
 		@job = job
 		@merchant = merchant
 		@range = [@merchant.shift_start .. @merchant.now]
-		# @redemptions = Redemption.done_for_merchant_in_range(@merchant, @range)
-		@redemptions = Redemption.last(10).order(response_at: :asc)
+		# @redemptions = Redemption.done_for_merchant_in_range(@merchant, @range).order(response_at: :asc)
+		@redemptions = Redemption.last(10)
 		@columns = ""
 		@name_width = 2
 		@name_width = 1 if @merchant.name.length > 21
@@ -42,7 +42,7 @@ class PrintShiftReport
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{r.paper_id}</text>
 <text>&#9;&#9;</text>
-<text>#{r.redemption_time}</text>
+<text>#{r.paper_id}</text>
 <text>&#9;&#9;</text>
 <text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
 		end
@@ -59,52 +59,56 @@ class PrintShiftReport
 <printjobid>#{job}</printjobid>
 </Parameter>
 <PrintData>
-<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-<text lang="en"/>
-<text smooth="true"/>
-<text align="center"/>
-<text font="font_b"/>
-<text width="3" height="3"/>
-<text reverse="false" ul="false" em="true" color="color_1"/>
+<epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
+<text lang='en'/>
+<text smooth='true'/>
+<text align='center'/>
+<text font='font_b'/>
+<text width='3' height='3'/>
+<text reverse='false' ul='false' em='true' color='color_1'/>
 <text>ItsOnMe</text>
-<feed line="3"/>
-<text width="3" height="3"/>
-<text reverse="false" ul="false" em="true" color="color_1"/>
+<feed line='3'/>
+<text width='3' height='3'/>
+<text reverse='false' ul='false' em='true' color='color_1'/>
 <text>Shift #Report</text>
-<feed unit="12"/>
-<feed line="3"/>
-<text font="font_a"/>
-<text width="#{@name_width}" height="2"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed unit='12'/>
+<feed line='3'/>
+<text font='font_a'/>
+<text width='#{@name_width}' height='2'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{@merchant.name}</text>
 #{responsive_street_address.join('')}
-<feed line="1"/>
-<text font="font_c"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed line='1'/>
+<text font='font_c'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{@merchant.city_state_zip}</text>
-<feed line="2"/>
-<text font="font_b"/>
-<text width="1" height="2"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed line='2'/>
+<text font='font_b'/>
+<text width='1' height='2'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{@merchant.current_time}</text>
 #{@columns}
-<feed line="2"/>
-<text width="1" height="2"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed />
+<text width='2' height='1'/>
+<text reverse='false' ul='true' em='false' color='color_1'/>
+<text>                            </text>
+<feed line='2'/>
+<text width='1' height='2'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Total</text>
 <text>&#9;&#9;&#9;&#9;&#9;</text>
 <text>#{@total}</text>
-<text reverse="false" ul="false" em="false"/>
-<text width="1" height="1"/>
-<feed unit="12"/>
-<feed line="2"/>
-<text align="center"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<text reverse='false' ul='false' em='false'/>
+<text width='1' height='1'/>
+<feed unit='12'/>
+<feed line='2'/>
+<text align='center'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
-<feed line="3"/>
-<cut type="feed"/>
+<feed line='3'/>
+<cut type='feed'/>
 </epos-print>
 </PrintData>
 </ePOSPrint>
