@@ -26,7 +26,7 @@ class PrintShiftReport
 		end
 	end
 
-	def singe_line str=
+	def singe_line str
 "<feed line='1'/>
 <text font='font_c'/>
 <text width='1' height='1'/>
