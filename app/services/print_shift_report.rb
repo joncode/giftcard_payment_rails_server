@@ -38,7 +38,7 @@ class PrintShiftReport
 		@total_cents = 0
 		@quantity = @redemptions.length
 		if @quantity == 0
-			@total = display_money(cents: 0, ccy: @merchant.try(:ccy))
+			@total = display_money(cents: 0, ccy: @merchant.try(:ccy), zeros: true)
 			@columns = single_line("No Redemptions Today")
 		else
 			cols = @redemptions.map do |r|
@@ -50,7 +50,7 @@ class PrintShiftReport
 	<text reverse='false' ul='false' em='false' color='color_1'/>
 	<text>#{r.paper_id}</text>
 	<text>&#9;</text>
-	<text>#{r.redemption_time}</text>
+	<text>    #{r.redemption_time}</text>
 	<text>&#9;&#9;</text>
 	<text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
 			end
