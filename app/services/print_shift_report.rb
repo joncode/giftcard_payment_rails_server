@@ -31,7 +31,7 @@ class PrintShiftReport
 <text font='font_c'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{addy}</text>"
+<text>#{str}</text>"
 	end
 
 	def perform
@@ -49,7 +49,7 @@ class PrintShiftReport
 	<text width='1' height='1'/>
 	<text reverse='false' ul='false' em='false' color='color_1'/>
 	<text>#{r.paper_id}</text>
-	<text>&#9;</text>
+	<text>&#9;&#9;</text>
 	<text>#{r.redemption_time}</text>
 	<text>&#9;&#9;</text>
 	<text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
