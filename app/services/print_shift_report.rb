@@ -70,7 +70,7 @@ class PrintShiftReport
 <feed line='3'/>
 <text width='3' height='3'/>
 <text reverse='false' ul='false' em='true' color='color_1'/>
-<text>Shift #Report</text>
+<text>#shift Report</text>
 <feed line='3'/>
 <text font='font_a'/>
 <text width='#{@name_width}' height='2'/>
