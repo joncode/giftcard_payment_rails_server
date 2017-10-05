@@ -9,8 +9,11 @@ class PrintShiftReport
 		@job = job
 		@merchant = merchant
 		@range = [@merchant.shift_start .. @merchant.now]
-		# @redemptions = Redemption.done_for_merchant_in_range(@merchant, @range).order(response_at: :asc)
-		@redemptions = Redemption.last(10)
+		if Rails.env.production?
+			@redemptions = Redemption.done_for_merchant_in_range(@merchant, @range).order(response_at: :asc)
+		else
+			@redemptions = Redemption.last(10)
+		end
 		@columns = ""
 		@name_width = 2
 		@name_width = 1 if @merchant.name.length > 21
