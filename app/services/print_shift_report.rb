@@ -10,7 +10,7 @@ class PrintShiftReport
 		@merchant = merchant
 		@range = [@merchant.shift_start .. @merchant.now]
 		# @redemptions = Redemption.done_for_merchant_in_range(@merchant, @range)
-		@redemptions = Redemption.last(10)
+		@redemptions = Redemption.last(10).order(response_at: :asc)
 		@columns = ""
 		@name_width = 2
 		@name_width = 1 if @merchant.name.length > 21
@@ -22,7 +22,7 @@ class PrintShiftReport
 		sa = merchant.street_address.gsub("\n",'')
 		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
 		@new_street_addresses = address_ary.map do |addy|
-"<feed line='2'/>
+"<feed line='1'/>
 <text font='font_c'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
@@ -35,12 +35,14 @@ class PrintShiftReport
 		@quantity = @redemptions.length
 		cols = @redemptions.map do |r|
 			@total_cents += r.amount
-"<feed line='2'/>
+"<feed line='1'/>
 <text align='left'/>
 <text font='font_a'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{r.paper_id}</text>
+<text>&#9;&#9;</text>
+<text>#{r.redemption_time}</text>
 <text>&#9;&#9;</text>
 <text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
 		end
@@ -65,11 +67,12 @@ class PrintShiftReport
 <text width="3" height="3"/>
 <text reverse="false" ul="false" em="true" color="color_1"/>
 <text>ItsOnMe</text>
+<feed line="3"/>
 <text width="3" height="3"/>
 <text reverse="false" ul="false" em="true" color="color_1"/>
 <text>Shift #Report</text>
 <feed unit="12"/>
-<feed line="2"/>
+<feed line="3"/>
 <text font="font_a"/>
 <text width="#{@name_width}" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
@@ -90,7 +93,7 @@ class PrintShiftReport
 <text width="1" height="2"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
 <text>Total</text>
-<text>&#9;&#9;&#9;</text>
+<text>&#9;&#9;&#9;&#9;&#9;</text>
 <text>#{@total}</text>
 <text reverse="false" ul="false" em="false"/>
 <text width="1" height="1"/>
@@ -167,3 +170,4 @@ x = "The Linq, Suite 22, 3545 Las Vegas Boulevard South"
 m = M.l
 m.address = x
 p =  PrintShiftReport.new m
+xml = p.to_epson_xml
