@@ -41,8 +41,8 @@ class PrintShiftReport
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{r.paper_id}</text>
-<text>&#9;&#9;</text>
-<text>#{r.paper_id}</text>
+<text>;&#9;</text>
+<text>#{r.redemption_time}</text>
 <text>&#9;&#9;</text>
 <text>#{display_money(cents: r.amount, ccy: r.ccy)}</text>"
 		end
@@ -71,12 +71,13 @@ class PrintShiftReport
 <text width='3' height='3'/>
 <text reverse='false' ul='false' em='true' color='color_1'/>
 <text>Shift #Report</text>
-<feed unit='12'/>
+<feed unit='4'/>
 <feed line='3'/>
 <text font='font_a'/>
 <text width='#{@name_width}' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{@merchant.name}</text>
+<feed line='1'/>
 #{responsive_street_address.join('')}
 <feed line='1'/>
 <text font='font_c'/>
@@ -88,16 +89,17 @@ class PrintShiftReport
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>#{@merchant.current_time}</text>
+<feed line='1'/>
 #{@columns}
 <feed />
-<text width='2' height='1'/>
-<text reverse='false' ul='true' em='false' color='color_1'/>
-<text>                            </text>
+<page>
+<line x1='0' y1='50' x2='745' y2='50' style='thick'/>
+</page>
 <feed line='2'/>
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Total</text>
-<text>&#9;&#9;&#9;&#9;&#9;</text>
+<text>&#9;&#9;&#9;&#9;</text>
 <text>#{@total}</text>
 <text reverse='false' ul='false' em='false'/>
 <text width='1' height='1'/>
