@@ -330,7 +330,7 @@ module EmailHelper
 		</div>
 				<br />
 		<div style='padding-bottom:20px;'>
-					On 	<a href='https://www.dropbox.com/s/jtte99kryt2z03c/One%20Sheet%20%2B%20Contract%202017.pdf?dl=0' target='_blank'
+					On 	<a href=#{ONE_SHEET_URL} target='_blank'
 							style='color:#4C37FA;'>
 							this one sheet
 						</a>

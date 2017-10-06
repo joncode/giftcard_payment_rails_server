@@ -80,6 +80,9 @@ QRURL = "https://2.zap.pe"
 DEVELOPER_TEXT = '2152000475'
 HELP_DESK_URL = 'https://itsonmeapp.zendesk.com/hc/en-us/categories/200160205-App-Users'
 
+ONE_SHEET_URL = "https://www.dropbox.com/s/mh00rxv0wmq2xgi/2017%20One%20Sheet%20FAQ%20.pdf?dl=0"
+
+
 if Rails.env.production?
     FB_NAMESPACE = 'itsonme'
 else
