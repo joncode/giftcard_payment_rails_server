@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
 	end
 
 	def coupons
-		admin_user_ary = [ 8248, 30003, 7689, 27891, 19192, 378 ]
+		admin_user_ary = [ 8248, 30003, 7689, 27891, 19192, 378, 11168 ]
 		admin_user_ary = [ 328 ] if Rails.env.staging?
 		if admin_user_ary.include?(self.id)
 			[ 'no service fee', '10% off value']
