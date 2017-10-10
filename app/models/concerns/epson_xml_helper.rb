@@ -1,7 +1,12 @@
 module EpsonXmlHelper
     extend ActiveSupport::Concern
 
-	def to_epson_xml
+    def to_epson_xml
+    	return PrintRedemption.new(self).to_epson_xml # unless Rails.env.production?
+    	# to_epson_xml_old
+    end
+
+	def to_epson_xml_old
 		max_for_tab = 18
 		tab = "&#9;&#9;"
 		tab = "&#9;" if self.giver_name.length > max_for_tab || self.receiver_name.length > max_for_tab

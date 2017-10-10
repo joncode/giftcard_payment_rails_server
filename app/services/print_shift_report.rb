@@ -16,9 +16,8 @@ class PrintShiftReport
 			@redemptions = Redemption.last(10)
 		end
 		@columns = ""
-		@name_width = 2
+		@name_width = 1
 		responsive_merchant_name
-		# @name_width = 1 if @merchant.name.length > 21
 		perform
 	end
 

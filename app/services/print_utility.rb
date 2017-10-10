@@ -1,12 +1,16 @@
 module PrintUtility
 
+	def max_length(str='')
+		str[0..42]
+	end
+
 	def responsive_merchant_name
 		@name_width = 1 if merchant.name.length > 21
-		merchant.name[0..42]
+		max_length(merchant.name)
 	end
 
 	def responsive_city_state_zip
-		merchant.city_state_zip[0..42]
+		max_length(merchant.city_state_zip)
 	end
 
 	def responsive_street_address
