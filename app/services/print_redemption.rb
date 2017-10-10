@@ -28,7 +28,7 @@ class PrintRedemption
 	def to_epson_xml
 %{
 #{pre_header_xml}
-#{header_xml('#gift Card')}
+#{header_xml('#Gift Card')}
 #{line_xml}
 #{merchant_header_xml}
 #{line_xml}

@@ -49,7 +49,7 @@ class PrintShiftReport
 	def to_epson_xml
 %{
 #{pre_header_xml}
-#{header_xml('#shift Report')}
+#{header_xml('#Shift Report')}
 #{line_xml}
 #{merchant_header_xml}
 #{line_xml}
