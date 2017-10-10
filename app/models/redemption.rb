@@ -41,6 +41,9 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+	def text_brand_card
+		"1 Heineken Beer 16 oz."
+	end
 
 	belongs_to :client
 	belongs_to :gift, autosave: true

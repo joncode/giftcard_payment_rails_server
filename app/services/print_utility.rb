@@ -124,4 +124,19 @@ module PrintUtility
 	end
 
 
+	def brand_value_xml redemption
+"<feed line='3'/>
+<text align='center'/>
+<text reverse='false' ul='false' em='true'/>
+<text width='2' height='1'/>
+<text>Good For</text>
+<feed line='2'/>
+<text align='center'/>
+<text reverse='false' ul='false' em='true'/>
+<text width='3' height='3'/>
+<text>#{redemption.text_brand_card}</text>
+#{single_line(display_money(cents: redemption.amount, ccy: redemption.ccy))}
+<feed line='1'/>"
+	end
+
 end
