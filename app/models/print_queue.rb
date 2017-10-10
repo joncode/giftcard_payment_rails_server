@@ -122,7 +122,7 @@ class PrintQueue < ActiveRecord::Base
 	def self.mark_job status_str, client_id, job, msg=nil
 			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
 		if merchant = get_merchant_for_client_id(client_id)
-			if job.match(/XX-/)
+			if job.to_s.match(/XX-/)
 				# test redemptions
 				pqs = where(merchant_id: merchant.id, type_of: 'test_redeem')
 			else
