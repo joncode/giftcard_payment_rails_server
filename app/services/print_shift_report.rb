@@ -1,6 +1,7 @@
 class PrintShiftReport
 	include ActionView::Helpers::TextHelper
 	include MoneyHelper
+	include PrintUtility
 
 
 	attr_reader :job, :merchant, :redemptions, :range, :total, :quantity, :columns, :new_street_addresses
@@ -16,26 +17,27 @@ class PrintShiftReport
 		end
 		@columns = ""
 		@name_width = 2
-		@name_width = 1 if @merchant.name.length > 21
+		responsive_merchant_name
+		# @name_width = 1 if @merchant.name.length > 21
 		perform
 	end
 
-	def responsive_street_address
-		width = 42
-		sa = merchant.street_address.gsub("\n",'')
-		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
-		@new_street_addresses = address_ary.map do |addy|
-			single_line(addy)
-		end
-	end
+# 	def responsive_street_address
+# 		width = 42
+# 		sa = merchant.street_address.gsub("\n",'')
+# 		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
+# 		@new_street_addresses = address_ary.map do |addy|
+# 			single_line(addy)
+# 		end
+# 	end
 
-	def single_line str
-"<feed line='1'/>
-<text font='font_c'/>
-<text width='1' height='1'/>
-<text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{str}</text>"
-	end
+# 	def single_line str
+# "<feed line='1'/>
+# <text font='font_c'/>
+# <text width='1' height='1'/>
+# <text reverse='false' ul='false' em='false' color='color_1'/>
+# <text>#{str}</text>"
+# 	end
 
 	def perform
 		@total_cents = 0
@@ -87,7 +89,7 @@ class PrintShiftReport
 <text font='font_a'/>
 <text width='#{@name_width}' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{@merchant.name}</text>
+<text>#{responsive_merchant_name}</text>
 <feed line='1'/>
 #{responsive_street_address.join('')}
 <feed line='1'/>
