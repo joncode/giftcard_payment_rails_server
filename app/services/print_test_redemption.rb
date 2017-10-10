@@ -21,7 +21,7 @@ class PrintTestRedemption
 	end
 
 	def make_test(xml)
-		return xml unless Rail.env.production?
+		return xml unless Rails.env.production?
 		xml.gsub('<feed line="1', '<feed line="3"/>
 <text align="center"/><text reverse="false" ul="true" em="true"/>
 <text width="2" height="2"/><text>TEST VOID TEST VOID</text><feed line="1')
