@@ -5,7 +5,7 @@ class PrintRedemption
 
 	attr_reader :job, :merchant, :redemption, :new_street_addresses, :tab
 
-	def initialize redemption=nil, job=nil
+	def initialize redemption=nil, job="xx_1234abcd"
 		if redemption.nil?
 			redemption = Redemption.new(merchant: merchant)
 			# add a fake hex_id  xx_7234_h23i
