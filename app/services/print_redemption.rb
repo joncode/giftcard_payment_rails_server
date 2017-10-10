@@ -33,42 +33,41 @@ class PrintRedemption
 #{merchant_header_xml}
 #{line_xml}
 #{current_time_xml}
-<feed line='1'/>
-<feed line="2"/>
-<text width="1" height="2"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
-<text>4-digit Code</text>
-<text>#{tab}</text>
-<text>#{redemption.token}</text>
-<feed line="2"/>
-<text align="left"/>
-<text font="font_a"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed line='2'/>
+<text align='left'/>
+<text font='font_a'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Gift Giver</text>
 <text>#{tab}</text>
 <text>#{redemption.giver_name}</text>
-<feed line="1"/>
-<text width="1" height="1"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed line='1'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Gift Receiver</text>
 <text>#{tab}</text>
 <text>#{redemption.receiver_name}</text>
-<feed line="2"/>
-<text width="1" height="2"/>
-<text reverse="false" ul="false" em="false" color="color_1"/>
+<feed line='1'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
+<text>4-digit Code</text>
+<text>#{tab}</text>
+<text>#{redemption.token}</text>
+<feed line='2'/>
+<text width='1' height='2'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Voucher ID</text>
 <text>#{tab}</text>
 <text>#{redemption.paper_id}</text>
-<feed line="3"/>
-<text align="center"/>
-<text reverse="false" ul="false" em="true"/>
-<text width="2" height="1"/>
+<feed line='3'/>
+<text align='center'/>
+<text reverse='false' ul='false' em='true'/>
+<text width='2' height='1'/>
 <text>Good For</text>
-<feed line="2"/>
-<text align="center"/>
-<text reverse="false" ul="false" em="true"/>
-<text width="3" height="3"/>
+<feed line='2'/>
+<text align='center'/>
+<text reverse='false' ul='false' em='true'/>
+<text width='3' height='3'/>
 <text>#{display_money(cents: redemption.amount, ccy: redemption.ccy)}</text>
 <feed line='1'/>
 #{support_footer_xml}
