@@ -17,11 +17,11 @@ class PrintTestRedemption
 		# insert test xml in between the actual xml
 		redemption.token = redemption.gift.token
 		xml = redemption.to_epson_xml
-
 		make_test(xml)
 	end
 
 	def make_test(xml)
+		return xml unless Rail.env.production?
 		xml.gsub('<feed line="1', '<feed line="3"/>
 <text align="center"/><text reverse="false" ul="true" em="true"/>
 <text width="2" height="2"/><text>TEST VOID TEST VOID</text><feed line="1')
