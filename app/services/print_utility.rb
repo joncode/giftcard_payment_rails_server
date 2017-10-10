@@ -5,6 +5,10 @@ module PrintUtility
 		merchant.name[0..42]
 	end
 
+	def responsive_city_state_zip
+		merchant.city_state_zip[0..42]
+	end
+
 	def responsive_street_address
 		width = 42
 
@@ -25,7 +29,7 @@ module PrintUtility
 
 
 
-	def header text=''
+	def header_xml text=''
 "<text align='center'/>
 <text font='font_b'/>
 <text width='3' height='3'/>
@@ -34,16 +38,42 @@ module PrintUtility
 <feed line='3'/>
 <text width='3' height='3'/>
 <text reverse='false' ul='false' em='true' color='color_1'/>
-<text>#{text}</text>"
+<text>#{text}</text><feed line='2'/>"
+	end
+
+	def merchant_header_xml
+"<feed line='1'/>
+<text font='font_a'/>
+<text width='#{@name_width}' height='2'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
+<text>#{responsive_merchant_name}</text>
+<feed line='1'/>
+#{responsive_street_address.join('')}
+<feed line='1'/>
+<text font='font_c'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
+<text>#{responsive_city_state_zip}</text>"
 	end
 
 
+	def current_time_xml
+"<feed line='2'/>
+<text font='font_b'/>
+<text width='1' height='2'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
+<text>#{merchant.current_time}</text>"
+	end
 
 
-
-
-
-
+	def line_xml
+"<feed />
+<text align='center'/>
+<text font='font_a'/>
+<text width='2' height='1'/>
+<text reverse='false' ul='true' em='true' color='color_1'/>
+<text>                   </text>"
+	end
 
 
 

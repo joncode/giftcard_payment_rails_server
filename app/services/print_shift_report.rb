@@ -76,32 +76,13 @@ class PrintShiftReport
 <epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
 <text lang='en'/>
 <text smooth='true'/>
-#{header('#shift Report')}
-<feed line='3'/>
-<text font='font_a'/>
-<text width='#{@name_width}' height='2'/>
-<text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{responsive_merchant_name}</text>
-<feed line='1'/>
-#{responsive_street_address.join('')}
-<feed line='1'/>
-<text font='font_c'/>
-<text width='1' height='1'/>
-<text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{@merchant.city_state_zip}</text>
+#{header_xml('#shift Report')}
 <feed line='2'/>
-<text font='font_b'/>
-<text width='1' height='2'/>
-<text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{@merchant.current_time}</text>
+#{merchant_header_xml}
+#{current_time_xml}
 <feed line='1'/>
 #{@columns}
-<feed />
-<text align='center'/>
-<text font='font_a'/>
-<text width='2' height='1'/>
-<text reverse='false' ul='true' em='true' color='color_1'/>
-<text>                   </text>
+#{line_xml}
 <feed line='2'/>
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
