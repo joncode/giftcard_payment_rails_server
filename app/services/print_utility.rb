@@ -133,9 +133,9 @@ module PrintUtility
 <feed line='2'/>
 <text align='center'/>
 <text reverse='false' ul='false' em='true'/>
-<text width='3' height='3'/>
+<text width='1' height='2'/>
 <text>#{redemption.text_brand_card}</text>
-#{single_line(display_money(cents: redemption.amount, ccy: redemption.ccy))}
+#{single_line('retail value: ' + display_money(cents: redemption.amount, ccy: redemption.ccy))}
 <feed line='1'/>"
 	end
 
