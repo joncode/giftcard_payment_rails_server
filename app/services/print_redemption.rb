@@ -59,7 +59,9 @@ class PrintRedemption
 <text>Voucher ID</text>
 <text>#{tab}</text>
 <text>#{redemption.paper_id}</text>
+#{line_xml}
 #{value_xml}
+#{line_xml}
 #{support_footer_xml}
 #{cut_and_post_xml}
 }
