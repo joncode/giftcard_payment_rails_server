@@ -56,7 +56,7 @@ module PrintUtility
 
 
 	def current_time_xml
-"<feed line='2'/>
+"<feed line='1'/>
 <text font='font_b'/>
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
@@ -77,7 +77,7 @@ module PrintUtility
 "<text reverse='false' ul='false' em='false'/>
 <text width='1' height='1'/>
 <feed unit='12'/>
-<feed line='2'/>
+<feed line='1'/>
 <text align='center'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
@@ -85,5 +85,24 @@ module PrintUtility
 <feed line='5'/>"
 	end
 
+	def pre_header_xml
+"<ePOSPrint>
+<Parameter>
+<devid>local_printer</devid>
+<timeout>20000</timeout>
+<printjobid>#{job}</printjobid>
+</Parameter>
+<PrintData>
+<epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
+<text lang='en'/>
+<text smooth='true'/>"
+	end
+
+	def cut_and_post_xml
+"<cut type='feed'/>
+</epos-print>
+</PrintData>
+</ePOSPrint>"
+	end
 
 end

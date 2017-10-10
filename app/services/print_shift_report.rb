@@ -22,23 +22,6 @@ class PrintShiftReport
 		perform
 	end
 
-# 	def responsive_street_address
-# 		width = 42
-# 		sa = merchant.street_address.gsub("\n",'')
-# 		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
-# 		@new_street_addresses = address_ary.map do |addy|
-# 			single_line(addy)
-# 		end
-# 	end
-
-# 	def single_line str
-# "<feed line='1'/>
-# <text font='font_c'/>
-# <text width='1' height='1'/>
-# <text reverse='false' ul='false' em='false' color='color_1'/>
-# <text>#{str}</text>"
-# 	end
-
 	def perform
 		@total_cents = 0
 		@quantity = @redemptions.length
@@ -66,16 +49,7 @@ class PrintShiftReport
 
 	def to_epson_xml
 %{
-<ePOSPrint>
-<Parameter>
-<devid>local_printer</devid>
-<timeout>20000</timeout>
-<printjobid>#{job}</printjobid>
-</Parameter>
-<PrintData>
-<epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
-<text lang='en'/>
-<text smooth='true'/>
+#{pre_header_xml}
 #{header_xml('#shift Report')}
 #{line_xml}
 #{merchant_header_xml}
@@ -84,18 +58,16 @@ class PrintShiftReport
 <feed line='1'/>
 #{@columns}
 #{line_xml}
-<feed line='2'/>
+<feed line='1'/>
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>&#9;</text>
 <text>Total</text>
 <text>&#9;&#9;&#9;</text>
 <text>#{@total}</text>
+<feed line='1'/>
 #{support_footer_xml}
-<cut type='feed'/>
-</epos-print>
-</PrintData>
-</ePOSPrint>
+#{cut_and_post_xml}
 }
 	end
 
