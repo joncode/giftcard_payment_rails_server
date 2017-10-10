@@ -36,7 +36,7 @@ module PrintUtility
 <feed line='3'/>
 <text width='3' height='3'/>
 <text reverse='false' ul='false' em='true' color='color_1'/>
-<text>#{text}</text><feed line='2'/>"
+<text>#{text}</text><feed line='1'/>"
 	end
 
 	def merchant_header_xml
@@ -70,7 +70,7 @@ module PrintUtility
 <text font='font_a'/>
 <text width='2' height='1'/>
 <text reverse='false' ul='true' em='true' color='color_1'/>
-<text>                   </text>"
+<text>                   </text><feed />"
 	end
 
 	def support_footer_xml
