@@ -25,7 +25,17 @@ module PrintUtility
 
 
 
-
+	def header text=''
+"<text align='center'/>
+<text font='font_b'/>
+<text width='3' height='3'/>
+<text reverse='false' ul='false' em='true' color='color_1'/>
+<text>#{SERVICE_NAME}</text>
+<feed line='3'/>
+<text width='3' height='3'/>
+<text reverse='false' ul='false' em='true' color='color_1'/>
+<text>#{text}</text>"
+	end
 
 
 

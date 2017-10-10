@@ -76,15 +76,7 @@ class PrintShiftReport
 <epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
 <text lang='en'/>
 <text smooth='true'/>
-<text align='center'/>
-<text font='font_b'/>
-<text width='3' height='3'/>
-<text reverse='false' ul='false' em='true' color='color_1'/>
-<text>ItsOnMe</text>
-<feed line='3'/>
-<text width='3' height='3'/>
-<text reverse='false' ul='false' em='true' color='color_1'/>
-<text>#shift Report</text>
+#{header('#shift Report')}
 <feed line='3'/>
 <text font='font_a'/>
 <text width='#{@name_width}' height='2'/>
