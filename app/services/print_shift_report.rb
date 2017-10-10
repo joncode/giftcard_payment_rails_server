@@ -77,8 +77,9 @@ class PrintShiftReport
 <text lang='en'/>
 <text smooth='true'/>
 #{header_xml('#shift Report')}
-<feed line='2'/>
+#{line_xml}
 #{merchant_header_xml}
+#{line_xml}
 #{current_time_xml}
 <feed line='1'/>
 #{@columns}
@@ -90,15 +91,7 @@ class PrintShiftReport
 <text>Total</text>
 <text>&#9;&#9;&#9;</text>
 <text>#{@total}</text>
-<text reverse='false' ul='false' em='false'/>
-<text width='1' height='1'/>
-<feed unit='12'/>
-<feed line='2'/>
-<text align='center'/>
-<text width='1' height='1'/>
-<text reverse='false' ul='false' em='false' color='color_1'/>
-<text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
-<feed line='3'/>
+#{support_footer_xml}
 <cut type='feed'/>
 </epos-print>
 </PrintData>

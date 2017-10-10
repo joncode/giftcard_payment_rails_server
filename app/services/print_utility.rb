@@ -27,8 +27,6 @@ module PrintUtility
 <text>#{str}</text>"
 	end
 
-
-
 	def header_xml text=''
 "<text align='center'/>
 <text font='font_b'/>
@@ -75,7 +73,17 @@ module PrintUtility
 <text>                   </text>"
 	end
 
-
+	def support_footer_xml
+"<text reverse='false' ul='false' em='false'/>
+<text width='1' height='1'/>
+<feed unit='12'/>
+<feed line='2'/>
+<text align='center'/>
+<text width='1' height='1'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
+<text>Text Support for any reason #{TWILIO_QUICK_NUM}</text>
+<feed line='5'/>"
+	end
 
 
 end
