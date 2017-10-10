@@ -109,7 +109,7 @@ module PrintUtility
 </ePOSPrint>"
 	end
 
-	def value_xml redemption
+	def value_xml
 "<feed line='3'/>
 <text align='center'/>
 <text reverse='false' ul='false' em='true'/>
@@ -124,7 +124,7 @@ module PrintUtility
 	end
 
 
-	def brand_value_xml redemption
+	def brand_value_xml
 "<feed line='3'/>
 <text align='center'/>
 <text reverse='false' ul='false' em='true'/>
