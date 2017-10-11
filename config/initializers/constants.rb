@@ -67,6 +67,8 @@ end
 
 GOLFNOW_ID = Rails.env.staging? ? 28 : 31
 
+GOLDEN_GAMING_ID = Rails.env.staging? ? 20 : 29
+
 GOLFNOW_COM = 331
 GOLFADVISOR_COM = 13326
 GOLFCOURSE_WEBSITE = 74
