@@ -14,14 +14,12 @@ module PrintUtility
 	end
 
 	def responsive_brand_card_text
-		width = 21
-		word_wrap(redemption.text_brand_card, line_width: width).strip.split("\n")
+		word_wrap(redemption.text_brand_card, line_width: 21)
 	end
 
 
 	def responsive_street_address
 		width = 42
-
 		sa = merchant.street_address.gsub("\n",'')
 		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
 		@new_street_addresses = address_ary.map do |addy|
