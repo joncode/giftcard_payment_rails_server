@@ -2,8 +2,7 @@ module EpsonXmlHelper
     extend ActiveSupport::Concern
 
     def to_epson_xml
-    	return PrintRedemption.new(self).to_epson_xml # unless Rails.env.production?
-    	# to_epson_xml_old
+    	return PrintRedemption.new(self, self.hex_id, self.merchant).to_epson_xml
     end
 
 	def to_epson_xml_old

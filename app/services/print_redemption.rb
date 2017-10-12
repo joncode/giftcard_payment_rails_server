@@ -6,13 +6,6 @@ class PrintRedemption
 	attr_reader :job, :merchant, :redemption, :new_street_addresses, :tab
 
 	def initialize redemption=nil, job="xx_1234abcd", merchant=nil
-		if redemption.nil?
-			# redemption.gift = Gift.where(cat: 300, receiver_name: "David Leibner", giver_name: 'David Leibner').first
-			redemption.gift = Gift.where(brand_card: true, status: 'redeemed').first
-			redemption = Redemption.new(merchant: gift.erchant)
-			redemption.hex_id = job
-			redemption.token = redemption.gift.token
-		end
 		@job = job
 		@redemption = redemption
 		@merchant = redemption.merchant
@@ -37,13 +30,13 @@ class PrintRedemption
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Gift Giver</text>
 <text>#{tab}</text>
-<text>1234567890-123456789</text>
+<text>#{redemption.giver_name[0..18]}</text>
 <feed line='1'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Gift Receiver</text>
 <text>#{tab}</text>
-<text>#{redemption.receiver_name}</text>
+<text>#{redemption.receiver_name[0..18]}</text>
 <feed line='1'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
