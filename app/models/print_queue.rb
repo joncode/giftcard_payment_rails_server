@@ -21,7 +21,7 @@ class PrintQueue < ActiveRecord::Base
 	before_save :set_job
 	before_save :set_redemption
 
-#   -------------
+#   -------------   POS API SURFACE METHODS
 
 	# {
 	# 	id: _id,
@@ -172,7 +172,7 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
-	def self.new_redemption(redemption)
+	def self.new_print_queue(redemption)
 		create(status: 'queue', job: redemption.paper_id, merchant_id: redemption.merchant_id,
 				type_of: 'redeem', redemption_id: redemption.id )
 	end
@@ -189,12 +189,12 @@ class PrintQueue < ActiveRecord::Base
 			# more then 10 minutes
 			# cancel print job and queue one
 			pq.update(status: 'cancel')
-			return new_redemption(redemption)
+			return new_print_queue(redemption)
 		when 'done'
 			return pq
 		else # cancel / expired
 			# make a new print queue
-			return new_redemption(redemption)
+			return new_print_queue(redemption)
 		end
 	end
 

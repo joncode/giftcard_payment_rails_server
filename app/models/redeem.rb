@@ -46,7 +46,7 @@ class Redeem
 	end
 
 
-#   -------------
+#   -------------   API SURFACE METHODS
 
 	def self.start_redeem(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant, sync: false)
 		if gift.r_sys == 8
@@ -72,8 +72,6 @@ class Redeem
         end
 	end
 
-#   -------------
-
 	def self.start_apply(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant, sync: false)
 		rs = start(gift: gift, loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of, sync: sync)
 	    if rs['success']
@@ -92,6 +90,8 @@ class Redeem
 	    	ra
 	    end
 	end
+
+#   -------------
 
 	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
 		puts "REDEEM.apply RequestHsh\n"
@@ -404,6 +404,8 @@ class Redeem
 		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
 		puts request_hsh.inspect
 
+		  # -------------  SAFE DATA
+
 			# set data and reject invalid submissions
 		if !gift.kind_of?(Gift)
 			return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'}
@@ -421,7 +423,7 @@ class Redeem
 			client_id = client_id.id
 		end
 
-		  # -------------
+		  # -------------  MULTI-REDEMPTION
 
 			# set the redemption location - and adjust the gift.merchant_id
 		loc_id = loc_id.to_i
@@ -563,8 +565,8 @@ class Redeem
 
 	def self.response redemption, gift
 		gift.status = 'notified'
-		gift.token = redemption.token if gift.token != redemption.token
-		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
+		gift.token = redemption.token
+		gift.new_token_at = redemption.new_token_at
 		gift.rec_client_id = redemption.client_id if gift.rec_client_id.nil?
 		set_gift_current_balance_and_status(gift)
 		redemption.start_res = { 'response_code' => "PENDING", "response_text" => redemption.success_hsh }

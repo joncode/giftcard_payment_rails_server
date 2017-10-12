@@ -4,13 +4,12 @@ module GiftLifecycle
 
     def read(client_id)
         if notifiable?
-            send_open_push = (self.status == 'open')
             self.rec_client_id = client_id if self.rec_client_id.nil?
             if self.status == 'open' || self.notified_at.nil?
                 self.status = 'notified'
             end
             if save
-                Relay.send_push_thank_you(self) if send_open_push
+                Relay.send_push_thank_you(self)
                 true
             else
                 false
