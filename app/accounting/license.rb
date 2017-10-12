@@ -12,6 +12,7 @@ class License < ActiveRecord::Base
 	# ENUM :amount_action  'single', 'multiple' , 'variable_merchant', 'variable_redemption'
 	# ENUM :charge_type 'card', 'ach', 'wire', 'check', '3rd_party'
 
+	default_scope -> { order(:created_at) }
 
 #   -------------
 

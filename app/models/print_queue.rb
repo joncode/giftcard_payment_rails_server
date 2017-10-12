@@ -121,6 +121,38 @@ class PrintQueue < ActiveRecord::Base
 		to_epson_xml(print_queues)
 	end
 
+	def self.to_epson_xml print_queues
+		print_queues = [print_queues] unless print_queues.respond_to?(:each)
+		xml = '<?xml version="1.0" encoding="utf-8"?><PrintRequestInfo Version="2.00">'
+
+		print_queues.each do |que|
+			xml += que.to_epson_xml
+		end
+		xml += '</PrintRequestInfo>'
+
+		return xml
+	end
+
+	def to_epson_xml
+		case self.type_of
+		when 'redeem'
+				# how to get the job into this  ??
+			redemption.to_epson_xml
+		when 'test_redeem'
+			PrintTestRedemption.new(merchant, nil, redemption).to_epson_xml
+		when 'shift_report'
+			PrintShiftReport.new(merchant, get_job).to_epson_xml
+		else # help
+			PrintHelp.new(merchant, get_job).to_epson_xml
+		end
+	end
+
+	def get_job
+		self.job
+	end
+
+#   -------------
+
 	def self.mark_job status_str, client_id, job, msg=nil
 			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
 		if merchant = get_merchant_for_client_id(client_id)
@@ -158,18 +190,6 @@ class PrintQueue < ActiveRecord::Base
 				end
 			end
 		end
-	end
-
-	def self.to_epson_xml print_queues
-		print_queues = [print_queues] unless print_queues.respond_to?(:each)
-		xml = '<?xml version="1.0" encoding="utf-8"?><PrintRequestInfo Version="2.00">'
-
-		print_queues.each do |que|
-			xml += que.to_epson_xml
-		end
-		xml += '</PrintRequestInfo>'
-
-		return xml
 	end
 
 #   -------------
@@ -217,26 +237,6 @@ class PrintQueue < ActiveRecord::Base
 	def self.get_unique_job_id
 		UniqueIdMaker.eight_digit_hex(self, :job, HEX_ID_PREFIX)
 	end
-
-	def get_job
-		self.job
-	end
-
-	def to_epson_xml
-		case self.type_of
-		when 'redeem'
-				# how to get the job into this  ??
-			redemption.to_epson_xml
-		when 'test_redeem'
-			PrintTestRedemption.new(merchant, get_job).to_epson_xml
-		when 'shift_report'
-			PrintShiftReport.new(merchant, get_job).to_epson_xml
-		else # help
-			PrintHelp.new(merchant, get_job).to_epson_xml
-		end
-	end
-
-#   -------------
 
 	def set_job
 		if self.status == 'delivered' && self.job.blank?

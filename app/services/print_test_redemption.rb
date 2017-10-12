@@ -2,21 +2,14 @@ class PrintTestRedemption
 
 	attr_reader :job, :merchant
 
-	def initialize merchant, job="xx_1234abcd"
+	def initialize merchant, job="xx_1234abcd", redemption
 		@job = job
 		@merchant = merchant
+		@redemption = redemption
 	end
 
 	def to_epson_xml redemption=nil
-		# make a fake redemption at location
-		redemption ||= Redemption.new(merchant: merchant)
-		redemption.gift = Gift.where(brand_card: true, status: 'redeemed').first
-		# add a fake hex_id  xx_7234_h23i
-		redemption.hex_id = job
-		# get xml from calling :to_epson_xml on the fake redemption
-		# insert test xml in between the actual xml
-		redemption.token = redemption.gift.token
-		xml = redemption.to_epson_xml
+		xml = @redemption.to_epson_xml
 		make_test(xml)
 	end
 
