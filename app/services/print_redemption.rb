@@ -19,7 +19,7 @@ class PrintRedemption
 	def to_epson_xml
 %{
 #{pre_header_xml}
-#{header_xml(redemption.brand_card ? '#Promo Gift Card' : '#Gift Card')}
+#{header_xml(redemption.promo? ? '#Promo Gift Card' : '#Gift Card')}
 #{merchant_header_xml}
 #{line_xml}
 #{current_time_xml}

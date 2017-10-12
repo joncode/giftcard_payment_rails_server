@@ -53,6 +53,10 @@ class Redemption < ActiveRecord::Base
 		# to_epson_xml_old
     end
 
+    def promo?
+    	gift.cat < 300
+    end
+
 	def gift
  		@gift ||= Gift.unscoped.where(id: self.gift_id).first
 	end
