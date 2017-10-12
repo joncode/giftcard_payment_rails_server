@@ -9,8 +9,8 @@ class PrintTestRedemption
 
 	def to_epson_xml redemption=nil
 		# make a fake redemption at location
+		redemption ||= Redemption.new(merchant: merchant)
 		redemption.gift = Gift.where(brand_card: true, status: 'redeemed').first
-		redemption = redemption || Redemption.new(merchant: (merchant || gift.merchant))
 		# add a fake hex_id  xx_7234_h23i
 		redemption.hex_id = job
 		# get xml from calling :to_epson_xml on the fake redemption
