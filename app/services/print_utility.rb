@@ -132,7 +132,7 @@ module PrintUtility
 <feed line='2'/>
 <text align='center'/>
 <text reverse='false' ul='false' em='true'/>
-<text width='1' height='2'/>
+<text width='2' height='2'/>
 <text>#{redemption.text_brand_card}</text>
 <feed line='1'/>
 #{single_line('retail value: ' + display_money(cents: redemption.amount, ccy: redemption.ccy))}"
