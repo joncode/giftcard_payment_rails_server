@@ -5,14 +5,12 @@ class PrintRedemption
 
 	attr_reader :job, :merchant, :redemption, :new_street_addresses, :tab
 
-	def initialize redemption=nil, job="xx_1234abcd"
+	def initialize redemption=nil, job="xx_1234abcd", merchant=nil
 		if redemption.nil?
-			redemption = Redemption.new(merchant: merchant)
-			# add a fake hex_id  xx_7234_h23i
+			# redemption.gift = Gift.where(cat: 300, receiver_name: "David Leibner", giver_name: 'David Leibner').first
+			redemption.gift = Gift.where(brand_card: true, status: 'redeemed').first
+			redemption = Redemption.new(merchant: gift.erchant)
 			redemption.hex_id = job
-			redemption.gift = Gift.where(cat: 300, receiver_name: "David Leibner", giver_name: 'David Leibner').first
-			# get xml from calling :to_epson_xml on the fake redemption
-			# insert test xml in between the actual xml
 			redemption.token = redemption.gift.token
 		end
 		@job = job
