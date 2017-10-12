@@ -1,7 +1,7 @@
 module PrintUtility
 
-	def max_length(str='')
-		str[0..42]
+	def max_length(str='', width=42)
+		str[0..width]
 	end
 
 	def responsive_merchant_name
@@ -13,15 +13,14 @@ module PrintUtility
 		max_length(merchant.city_state_zip)
 	end
 
-	def responsive_brand_card_text
-		word_wrap(redemption.text_brand_card, line_width: 21)
+	def responsive_text str, width=21
+		word_wrap(str, line_width: width)
 	end
 
 
 	def responsive_street_address
-		width = 42
 		sa = merchant.street_address.gsub("\n",'')
-		address_ary = word_wrap(sa, line_width: width).strip.split("\n")
+		address_ary = responsive_text(sa, 42).strip.split("\n")
 		@new_street_addresses = address_ary.map do |addy|
 			single_line(addy)
 		end
@@ -137,13 +136,13 @@ module PrintUtility
 <text align='center'/>
 <text reverse='false' ul='false' em='true'/>
 <text width='2' height='2'/>
-<text>#{responsive_brand_card_text}</text>
+<text>#{responsive_text(redemption.text_brand_card)}</text>
 <feed line='1'/>
 #{single_line('retail value: ' + display_money(cents: redemption.amount, ccy: redemption.ccy))}"
 	end
 
 	def instructions_xml
-		single_line(redemption.detail)
+		single_line responsive_text(redemption.detail, 42)
 	end
 
 

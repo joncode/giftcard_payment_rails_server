@@ -30,13 +30,13 @@ class PrintRedemption
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Gift Giver</text>
 <text>#{tab}</text>
-<text>#{redemption.giver_name[0..18]}</text>
+<text>#{max_length(redemption.giver_name, 18)}</text>
 <feed line='1'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Gift Receiver</text>
 <text>#{tab}</text>
-<text>#{redemption.receiver_name[0..18]}</text>
+<text>#{max_length(redemption.receiver_name, 18)}</text>
 <feed line='1'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>

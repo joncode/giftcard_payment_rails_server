@@ -1,6 +1,8 @@
 class PrintQueue < ActiveRecord::Base
 	HEX_ID_PREFIX = 'pt_'
 
+	default_scope -> { order(:created_at) }
+
 #   -------------
 
 	validates_presence_of :merchant_id
