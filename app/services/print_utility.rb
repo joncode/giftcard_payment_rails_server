@@ -138,4 +138,10 @@ module PrintUtility
 #{single_line('retail value: ' + display_money(cents: redemption.amount, ccy: redemption.ccy))}"
 	end
 
+	def instructions_xml
+		single_line(redemption.detail)
+	end
+
+
+
 end

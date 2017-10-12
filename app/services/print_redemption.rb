@@ -28,7 +28,7 @@ class PrintRedemption
 	def to_epson_xml
 %{
 #{pre_header_xml}
-#{header_xml('#Gift Card')}
+#{header_xml(redemption.brand_card ? '#Promo Gift Card' : '#Gift Card')}
 #{line_xml}
 #{merchant_header_xml}
 #{line_xml}
@@ -61,6 +61,8 @@ class PrintRedemption
 <text>#{redemption.paper_id}</text>
 #{line_xml}
 #{redemption.brand_card ? brand_value_xml : value_xml}
+#{line_xml}
+#{instructions_xml}
 #{line_xml}
 #{support_footer_xml}
 #{cut_and_post_xml}
