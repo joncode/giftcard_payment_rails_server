@@ -23,6 +23,7 @@ class PrintRedemption
 		@tab = "&#9;" if redemption.giver_name.length > max_for_tab || redemption.receiver_name.length > max_for_tab
 		@name_width = 1
 		responsive_merchant_name
+		value_box_xml = redemption.brand_card ? brand_value_xml : value_xml
 	end
 
 	def to_epson_xml
@@ -60,7 +61,7 @@ class PrintRedemption
 <text>#{tab}</text>
 <text>#{redemption.paper_id}</text>
 #{line_xml}
-#{brand_value_xml}
+#{value_box_xml}
 #{line_xml}
 #{support_footer_xml}
 #{cut_and_post_xml}

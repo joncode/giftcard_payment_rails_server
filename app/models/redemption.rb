@@ -15,7 +15,7 @@ class Redemption < ActiveRecord::Base
     scope :done_for_merchant_in_range, -> (merchant, range) { where(merchant_id: merchant.id, created_at: range, status: 'done') }
 
 
-    delegate :ccy, :giver_name, :receiver_name, :brand_card, :brand_card_ids,  to: :gift
+    delegate :ccy, :giver_name, :receiver_name, :brand_card, :brand_card_ids, :text_brand_card,  to: :gift
 	delegate :timezone, :current_time, to: :merchant, allow_nil: true
 	def redemption_time
 		self.current_time(self.response_at).to_datetime.to_formatted_s(:time)
@@ -52,10 +52,6 @@ class Redemption < ActiveRecord::Base
 		return PrintRedemption.new(self).to_epson_xml # unless Rails.env.production?
 		# to_epson_xml_old
     end
-
-	def text_brand_card
-		"1 Heineken Beer 16 oz."
-	end
 
 	def gift
  		@gift ||= Gift.unscoped.where(id: self.gift_id).first

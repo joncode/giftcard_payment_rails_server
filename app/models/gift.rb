@@ -143,6 +143,9 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
+    def text_brand_card
+        "1 Heineken Beer 16 oz."
+    end
 
     def display_photo
         self.merchant.get_photo
