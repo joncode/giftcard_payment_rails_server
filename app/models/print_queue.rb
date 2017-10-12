@@ -1,5 +1,5 @@
 class PrintQueue < ActiveRecord::Base
-	HEX_ID_PREFIX = 'prnt_'
+	HEX_ID_PREFIX = 'pt_'
 
 #   -------------
 

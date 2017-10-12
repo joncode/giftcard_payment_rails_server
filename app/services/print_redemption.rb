@@ -27,7 +27,6 @@ class PrintRedemption
 %{
 #{pre_header_xml}
 #{header_xml(redemption.brand_card ? '#Promo Gift Card' : '#Gift Card')}
-#{line_xml}
 #{merchant_header_xml}
 #{line_xml}
 #{current_time_xml}
@@ -38,7 +37,7 @@ class PrintRedemption
 <text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Gift Giver</text>
 <text>#{tab}</text>
-<text>#{redemption.giver_name}</text>
+<text>1234567890-123456789</text>
 <feed line='1'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
@@ -59,7 +58,6 @@ class PrintRedemption
 <text>#{redemption.paper_id}</text>
 #{line_xml}
 #{redemption.brand_card ? brand_value_xml : value_xml}
-#{line_xml}
 #{instructions_xml}
 #{line_xml}
 #{support_footer_xml}

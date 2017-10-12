@@ -144,7 +144,7 @@ class Gift < ActiveRecord::Base
 #   -------------
 
     def text_brand_card
-        "1234567890-1234567890-1234567890-1234567890-1234567890-"
+        cart_ary.first['item_name']
     end
 
     def display_photo

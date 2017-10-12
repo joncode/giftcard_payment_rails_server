@@ -13,6 +13,12 @@ module PrintUtility
 		max_length(merchant.city_state_zip)
 	end
 
+	def responsive_brand_card_text
+		width = 21
+		word_wrap(redemption.text_brand_card, line_width: width).strip.split("\n")
+	end
+
+
 	def responsive_street_address
 		width = 42
 
@@ -133,7 +139,7 @@ module PrintUtility
 <text align='center'/>
 <text reverse='false' ul='false' em='true'/>
 <text width='2' height='2'/>
-<text>#{redemption.text_brand_card}</text>
+<text>#{responsive_brand_card_text}</text>
 <feed line='1'/>
 #{single_line('retail value: ' + display_money(cents: redemption.amount, ccy: redemption.ccy))}"
 	end
