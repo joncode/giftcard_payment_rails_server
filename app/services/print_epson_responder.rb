@@ -45,7 +45,7 @@ class PrintEpsonResponder
 #	------------- 	SetResponse
 
 	def run_process_print_receipt
-		header = per.data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]
+		header = data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]
 		header = [header] unless header.kind_of?(Array)
 		header.each do |printjob|
 			parse_print_receipts(printjob)
