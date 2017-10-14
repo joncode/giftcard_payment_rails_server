@@ -67,7 +67,7 @@ class PrintEpsonResponder
 			PrintQueue.mark_job_as_printed(client_id, job)
 		else
 			@error = 'Espon Connection Formatting Error'
-			if printjob["PrintResponse"] && printjob["PrintResponse"]["response"]
+			if printjob && printjob["PrintResponse"] && printjob["PrintResponse"]["response"]
 				@error = printjob["PrintResponse"]["response"]
 			end
 			puts "\n\nPrintEpsonResponder (63) 500 Internal - EPSON PRINT ERROR #{printjob.inspect}"
