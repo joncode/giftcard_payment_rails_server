@@ -54,7 +54,7 @@ class PrintEpsonResponder
 
 	def parse_print_receipts printjob
 		@success = false
-		if printjob.blank?
+		unless printjob.blank?
 			begin
 				@success = make_boolean(printjob["PrintResponse"]["response"]["success"])
 				@job = printjob["Parameter"]["printjobid"]
