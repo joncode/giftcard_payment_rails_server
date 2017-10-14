@@ -239,8 +239,12 @@ class PrintQueue < ActiveRecord::Base
 	end
 
 	def set_job
-		if self.status == 'delivered' && self.job.blank?
-			self.job = PrintQueue.get_unique_job_id
+		if self.job.blank?
+			if redemption
+				self.job = redemption.hex_id
+			else
+				self.job = PrintQueue.get_unique_job_id
+			end
 		end
 	end
 

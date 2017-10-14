@@ -45,7 +45,7 @@ class PrintEpsonResponder
 #	------------- 	SetResponse
 
 	def run_process_print_receipt
-		header = data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]
+		header = per.data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]
 		header = [header] unless header.kind_of?(Array)
 		header.each do |printjob|
 			parse_print_receipts(printjob)
@@ -53,18 +53,26 @@ class PrintEpsonResponder
 	end
 
 	def parse_print_receipts printjob
-		@success = make_boolean(printjob["PrintResponse"]["response"]["success"])
-		@job = printjob["Parameter"]["printjobid"]
+		@success = false
+		if printjob.blank?
+			begin
+				@success = make_boolean(printjob["PrintResponse"]["response"]["success"])
+				@job = printjob["Parameter"]["printjobid"]
+			rescue
+				# do nothing just pass thru to job marking
+			end
+		end
 		if @success
 			puts "\n\nPrintEpsonResponder (47) " + self.inspect
 			PrintQueue.mark_job_as_printed(client_id, job)
 		else
-			@error = printjob["PrintResponse"]["response"]
+			@error = 'Espon Connection Formatting Error'
+			if printjob["PrintResponse"] && printjob["PrintResponse"]["response"]
+				@error = printjob["PrintResponse"]["response"]
+			end
 			puts "\n\nPrintEpsonResponder (63) 500 Internal - EPSON PRINT ERROR #{printjob.inspect}"
 			PrintQueue.mark_job_as_error(client_id, job, @error)
 		end
-	# rescue
-	# 	puts "500 Internal - EPSON XML SCHEMA ERROR #{printjob.inspect}"
 	end
 
 #	------------- 	SetStatus
