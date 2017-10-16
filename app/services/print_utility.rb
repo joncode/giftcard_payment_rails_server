@@ -1,7 +1,7 @@
 module PrintUtility
 
 	def max_length(str='', width=42)
-		str[0..width]
+		str[0...width]
 	end
 
 	def responsive_merchant_name
