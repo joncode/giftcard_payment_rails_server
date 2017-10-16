@@ -88,6 +88,15 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
+	def self.cancel_stale_delivered
+		pqs = where(status: 'delivered').where('updated_at < ?', 20.minutes.ago)
+		pqs.each do |pq|
+			reason = "PrintQueue Delivered on #{pq.updated_at}. No response from Printer. Print Job cancelled #{DateTime.now.utc}"
+			pq.update(status: 'cancel')
+		end
+	end
+
+
 	def self.get_merchant_for_client_id printer_id
 		return nil if !printer_id.kind_of?(String) || printer_id.blank?
 		client = ClientUrlMatcher.get_app_key(printer_id)

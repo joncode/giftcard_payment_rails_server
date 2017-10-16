@@ -20,6 +20,12 @@ namespace :minute do
         end
 
         begin
+            PrintQueue.cancel_stale_delivered
+        rescue => e
+            puts "500 Internal PrintQueue.cancel_stale_delivered #{e.inspect}"
+        end
+
+        begin
             UserSocial.double_check_incomplete_gifts
         rescue => e
             puts "500 Internal UserSocial.double_check_incomplete_gifts #{e.inspect}"
