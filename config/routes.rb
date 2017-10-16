@@ -217,7 +217,7 @@ Drinkboard::Application.routes.draw do
 			resources :promos, only: [:create, :show] do
 				collection do
 					patch :click
-					post :redbull
+					# post :redbull
 				end
 			end
 
