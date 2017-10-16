@@ -436,9 +436,16 @@ class Redeem
 			merchant = gift.merchant
 		end
 
-
 		  # -------------
 
+		if gift.brand_card
+			if gift.original_value != amount
+				puts "Setting the amount to #{gift.original_value} from #{amount}"
+				amount = gift.original_value
+			end
+		end
+
+		  # -------------
 
 		type_of = type_of.to_sym
 
