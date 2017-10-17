@@ -125,11 +125,12 @@ class PrintQueue < ActiveRecord::Base
 		end
 	end
 
-	def self.deliver print_queues
+	def self.deliver print_queues, client_id
 		print_queues = [print_queues] unless (print_queues.is_a?(Array) || print_queues.is_a?(ActiveRecord::Relation))
 			# the redemption ID is not the same as this print job ID
 		print_queues.each do |pq|
 			pq.status = 'delivered'
+			pq.client_id = client_id
 			pq.save
 		end
 		to_epson_xml(print_queues)
