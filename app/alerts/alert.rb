@@ -171,6 +171,10 @@ class Alert < ActiveRecord::Base
 		self.class.to_s.underscore.titleize.gsub('Sys', 'Admin').gsub('Mt', 'Merchant')
 	end
 
+	def self.enum_to_class enum
+		(enum.downcase + '_alert').camelize
+	end
+
 end
 
 

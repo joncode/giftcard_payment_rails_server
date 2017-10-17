@@ -1,6 +1,9 @@
 __END__
 
-the alert system is designed to create quick alerts, place the calls in the code where they are triggered and make a quick class.
+the alert system is designed to create quick alerts, make a quick class and place the calls in the code where they are triggered.
+
+
+-----------------------------   Call the Alert
 
 To call an Alert in the Code you simply use a command similar to this example :
 
@@ -9,28 +12,44 @@ To call an Alert in the Code you simply use a command similar to this example :
 	Alert.perform('NEW_CLIENTS_WEEKLY_SYS')
 	Alert.perform("BANK_ADDED_SYS", bank_ary)
 
-	first argument - class name enum
+	first argument - CLASS_NAME_ENUM
 		to go from enum to class name , downcase enum , add '_alert', convert to upper-camel-case
+		ex: ('NEW_CLIENTS_WEEKLY_SYS'.downcase + '_alert').camelize
+			see Alert class method :enum_to_class
 
 	second argument - target
-		target is the object that you need to do the calculations , could be anything , the alert is target agnostic , so the target is never persisted with the alert itself
+		target is the object that you need to do the calculations , could be anything (the alert is target agnostic)
+		the target is never persisted with the alert itself, it is passed into the :perform method
 
-To creae an alert class , you make an alert that inherits from < Alert
 
-	in :get_data , in the alert , you set a var called @data with the calculations with or without @target
+-----------------------------   Create the Alert
 
+To create an alert class , you make an alert that inherits from < Alert
+
+	in :get_data , in the alert , you set a var called @data with the calculations (with or without @target)
+
+
+-----------------------------   Initializing the Alert in the system
 
 The Alert Enum will need to be called once to initialize the alert process, this will happen automatically
-	feel free to call once in the console to initialise
+	!! feel free to call once in the console to initialize
 
+
+-----------------------------   Processing the Alert in real-time
 
 Alerts are not threaded, they are called on direct thread.  To thread an alert, make a job and then call the alert in the job.
+
+
+-----------------------------   Alerts for different customers
 
 Alerts are ENV-aware
 	use the '_SYS' tag for admin alerts
 	use the '_MT' tag for MT/PT alerts
 
-Alerts have the public methods of :text_msg, :email_msg, & :msg, overwrite tese for the alert if you want more than a basic detail subject styled alert
+
+-----------------------------   Customizing the Messaging
+
+Alerts have the public methods of :text_msg, :email_msg, :msg, overwrite these for the alert if you want more than a basic detail subject styled alert
 
 	def text_msg
 		get_data
@@ -46,6 +65,7 @@ Alerts have the public methods of :text_msg, :email_msg, & :msg, overwrite tese 
 		text_msg
 	end
 
+-----------------------------   Alerts in the Console
 
 To get an alert out of the database , you get the generic alert, and then call :subclass on that alert, or use Alert.find and it will do that for you
 
