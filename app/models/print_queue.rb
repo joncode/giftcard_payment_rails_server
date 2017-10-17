@@ -92,8 +92,8 @@ class PrintQueue < ActiveRecord::Base
 		send_fail_msg = false
 		pqs = where(status: 'delivered').where('updated_at < ?', 20.minutes.ago)
 		pqs.each do |pq|
-			reason = "PrintQueue Delivered on #{pq.updated_at}. No response from Printer. Print Job cancelled #{DateTime.now.utc}"
-			pq.update(status: 'cancel')
+			reason = { success: "false", code: "IOM_SYS_NO_RESPONSE", msg: "PrintQueue Delivered on #{pq.updated_at}. No response from Printer. Print Job cancelled #{DateTime.now.utc}" }
+			pq.update(status: 'cancel', reason: reason)
 			send_fail_msg = true
 		end
 		if send_fail_msg
