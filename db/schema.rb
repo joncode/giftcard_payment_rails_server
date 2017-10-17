@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017231034) do
+ActiveRecord::Schema.define(version: 20171017232122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -920,6 +920,8 @@ ActiveRecord::Schema.define(version: 20171017231034) do
     t.boolean  "pos_direct",                                           default: false
     t.string   "ccy",              limit: 6,                           default: "USD"
     t.date     "live_at"
+    t.string   "yelp"
+    t.string   "hex_id"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin

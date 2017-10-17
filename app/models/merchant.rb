@@ -1,4 +1,6 @@
 class Merchant < ActiveRecord::Base
+    HEX_ID_PREFIX = 'mt_'
+    include HexIdMethods
     include CompanyDuckType
     include ShortenPhotoUrlHelper
     include Formatter
