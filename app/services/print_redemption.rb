@@ -9,7 +9,6 @@ class PrintRedemption
 		@job = job
 		@redemption = redemption
 		@merchant = redemption.merchant
-		max_for_tab = 18
 		@tab = "&#9;&#9;"
 		@name_width = 1
 		responsive_merchant_name
