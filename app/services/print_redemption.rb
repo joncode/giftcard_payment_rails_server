@@ -40,15 +40,15 @@ class PrintRedemption
 <feed line='1'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
-<text>4-digit Code</text>
-<text>#{tab}</text>
-<text>#{redemption.token}</text>
-<feed line='2'/>
-<text width='1' height='2'/>
-<text reverse='false' ul='false' em='false' color='color_1'/>
 <text>Voucher ID</text>
 <text>#{tab}</text>
 <text>#{redemption.paper_id}</text>
+<feed line='2'/>
+<text width='1' height='2'/>
+<text reverse='false' ul='false' em='false' color='color_1'/>
+<text>4-digit Code</text>
+<text>#{tab}</text>
+<text>#{redemption.token}</text>
 #{line_xml}
 #{redemption.brand_card ? brand_value_xml : value_xml}
 #{instructions_xml}
