@@ -11,7 +11,6 @@ class PrintRedemption
 		@merchant = redemption.merchant
 		max_for_tab = 18
 		@tab = "&#9;&#9;"
-		@tab = "&#9;" if redemption.giver_name.length > max_for_tab || redemption.receiver_name.length > max_for_tab
 		@name_width = 1
 		responsive_merchant_name
 	end
