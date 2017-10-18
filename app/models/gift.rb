@@ -143,7 +143,7 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
-    def text_brand_card
+    def brand_item
         cart_ary.first['item_name']
     end
 
