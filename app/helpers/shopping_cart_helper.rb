@@ -21,6 +21,16 @@ module ShoppingCartHelper
         cart_ary.count
     end
 
+    def humanize_cart cart_a=cart
+        cart_a.map do |item|
+            humanize_item(item)
+        end
+    end
+
+    def humanize_item item, separator='x'
+        item["quantity"].to_s +  " #{separator} " +  item["item_name"].to_s.pluralize(item["quantity"].to_i)
+    end
+
     def cart_ary shoppingCart_string=nil
         if shoppingCart_string
             JSON.parse shoppingCart_string
