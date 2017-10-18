@@ -2,10 +2,10 @@ class OpsPushApple
 
 	class << self
 
-		def send_push(pnt, alert, gift_id=nil)
+		def send_push(pnt, alert, target_id=nil)
 
 
-	        payload = format_payload(alert, gift_id)
+	        payload = format_payload(alert, target_id)
 	        puts "SEND APNS push |#{pnt.id}| - #{payload} - ALERT= #{alert}"
             return if Rails.env.development? || Rails.env.test?
 	        n = APNS::Notification.new(pnt.pn_token, payload)
@@ -33,6 +33,10 @@ class OpsPushApple
 			            payload = { alert: alert.to_s,
 			                    title: 'Thank You!',
 			                    args: { gift_id: data }
+			                }
+			        elsif alert.to_s.match(/Your Redemption at/)
+			            payload = { alert: alert.to_s,
+			                    title: 'Redemption Complete!'
 			                }
 			        else
 			            payload = { alert: alert.to_s,

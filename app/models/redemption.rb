@@ -15,7 +15,7 @@ class Redemption < ActiveRecord::Base
     scope :done_for_merchant_in_range, -> (merchant, range) { where(merchant_id: merchant.id, created_at: range, status: 'done') }
 
 
-    delegate :ccy, :giver_name, :receiver_name, :brand_card, :detail, :brand_card_ids, :text_brand_card, to: :gift
+    delegate :ccy, :giver_name, :receiver_name, :receiver, :brand_card, :detail, :brand_card_ids, :text_brand_card, to: :gift
 	delegate :timezone, :current_time, to: :merchant, allow_nil: true
 	def redemption_time
 		self.current_time(self.response_at).to_datetime.to_formatted_s(:time)
@@ -530,6 +530,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 			end
     	end
     end
+
 
 end
 

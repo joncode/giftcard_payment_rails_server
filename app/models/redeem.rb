@@ -329,7 +329,6 @@ class Redeem
 				new_detail = redemption.msg
 			end
 			gift.detail = new_detail + '. ' + gift.detail.to_s
-
 		else
 			puts "FAILURE POS_OBJECT"
 			# why is there a failure
@@ -338,7 +337,6 @@ class Redeem
 			# must set the status of the redemption to something reasonable
 			redemption.amount = 0
 			redemption.status = 'failed'
-
 		end
 
 		redemption.client_id = client_id if redemption.client_id.nil?
@@ -356,16 +354,19 @@ class Redeem
 		if redemption.save
 			set_gift_current_balance_and_status(gift)
 			if gift.save
-				puts "Redeem.complete Save success"
+				puts "Redeem.complete(357) Save success"
 				Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
 			else
-				mg =  "REDEEM - 500 Internal - GIFT SAVED FAILED #{gift.errors.messages}"
+				mg =  "REDEEM(360) - 500 Internal - GIFT SAVED FAILED #{gift.errors.messages}"
 				puts mg
 				resp['system_errors'] = gift.errors.full_messages
 			end
+			Resque.enqueue(RedemptionNotificationJob, redemption.id, 'failed') if redemption.status == 'failed'
+			Resque.enqueue(RedemptionNotificationJob, redemption.id, 'done') if redemption.status == 'done'
+			Resque.enqueue(PushJob, nil, 'redemption_complete', redemption.id) if redemption.status == 'done'
 		else
 			# gift / redemption didnt save , but charge went thru
-			mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption"
+			mg =  "REDEEM(369) - 500 Internal - POS SUCCESS / DB FAIL redemption"
 			puts mg
 			mg = " #{redemption.id} failed \nPOS-#{pos_obj.inspect}\nREDEEM-#{redemption.errors.messages.inspect}\n"
 			puts mg

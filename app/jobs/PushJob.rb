@@ -3,11 +3,17 @@ class PushJob
 
     @queue = :push
 
-    def self.perform gift_id, push_type='gift_receiver_notification'
-        gift = Gift.find gift_id
+    def self.perform gift_id=nil, push_type='gift_receiver_notification', redemption_id=nil
+        gift = Gift.find gift_id if gift_id
+        redemption = Redemption.find redemption_id if redemption_id
 
         push_type = push_type.to_s
         case push_type
+        when 'redemption_complete'
+             push_receiver = redemption.receiver
+
+            alert = "Your Redemption at #{redemption.merchant_name} is complete!"
+
         when 'gift_scheduled_notification'
             push_receiver = gift.receiver
 
@@ -51,7 +57,8 @@ class PushJob
 
         return nil unless push_receiver.respond_to?(:ua_alias)
 
-        self.send_push(push_receiver, alert, gift_id)
+        self.send_push(push_receiver, alert, gift_id) if gift_id
+        self.send_push(push_receiver, alert, nil, redemption_id) if redemption_id
         return true
     end
 

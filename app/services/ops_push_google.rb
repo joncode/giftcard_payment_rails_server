@@ -72,6 +72,11 @@ class OpsPushGoogle
 		                        title: 'Thank You!',
 		                        args: { gift_id: data }
 		                    }
+			        elsif alert.to_s.match(/Your Redemption at/)
+			            payload = { alert: alert.to_s,
+			                    title: 'Redemption Complete!'
+			                }
+
 		            else
 		                payload = { message: alert,
 		                        title: 'New ItsOnMe Gift!',
