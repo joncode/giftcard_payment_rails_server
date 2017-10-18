@@ -1,30 +1,30 @@
 module HexIdMethods
-    extend ActiveSupport::Concern
+	extend ActiveSupport::Concern
 
-    included do |klass|
+	included do |klass|
 		klass.extend         HexIdMethods::ClassMethods
-	    klass.send :include, HexIdMethods::InstanceMethods
+		klass.send :include, HexIdMethods::InstanceMethods
 			#   -------------   HEX ID model callback
-        before_save :set_unique_hex_id
-    end
+		before_save :set_unique_hex_id
+	end
 
 #   -------------
 
-    module InstanceMethods
+	module InstanceMethods
 
-	    def set_unique_hex_id
-	    	if self.hex_id.blank?
-		        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, self.class.const_get(:HEX_ID_PREFIX))
-		    end
-	    end
+		def set_unique_hex_id
+			if self.hex_id.blank?
+				self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, self.class.const_get(:HEX_ID_PREFIX))
+			end
+		end
 
 
 	#   -------------  Instance :paper_id
 
 
-	    def paper_id
-	        @paper_id ||= self.class.hex_to_paper(self.hex_id)
-	    end
+		def paper_id
+			@paper_id ||= self.class.hex_to_paper(self.hex_id)
+		end
 
 	end
 
@@ -41,7 +41,7 @@ module HexIdMethods
 			end
 		end
 
-	    def find_with _id
+		def find_with _id
 				# integer check for integers or integers as strings
 			if _id.to_s == _id.to_i.to_s
 				find(_id)
@@ -57,17 +57,17 @@ module HexIdMethods
 	#   -------------    Class Utilities
 
 
-	    def paper_to_hex paper_id
-	    	return paper_id unless paper_id.try(:match,'-')
-	        hex_id = paper_id[0..6].to_s + paper_id[8..11].to_s
-	        hex_id.gsub('-','_').downcase
-	    end
+		def paper_to_hex paper_id
+			return paper_id unless paper_id.try(:match,'-')
+			hex_id = paper_id[0..6].to_s + paper_id[8..11].to_s
+			hex_id.gsub('-','_').downcase
+		end
 
-	    def hex_to_paper hex_id
-	    	return hex_id unless hex_id.try(:match,'_')
-	        hx = hex_id.to_s.gsub('_', '-').upcase
-	        hx[0..6].to_s + '-' + hx[7..10].to_s
-	    end
+		def hex_to_paper hex_id
+			return hex_id unless hex_id.try(:match,'_')
+			hx = hex_id.to_s.gsub('_', '-').upcase
+			hx[0..6].to_s + '-' + hx[7..10].to_s
+		end
 
 	end
 
