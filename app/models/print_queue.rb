@@ -89,15 +89,15 @@ class PrintQueue < ActiveRecord::Base
 #   -------------
 
 	def self.cancel_stale_delivered
-		send_fail_msg = false
+		send_fail_pq = false
 		pqs = where(status: 'delivered').where('updated_at < ?', 20.minutes.ago)
 		pqs.each do |pq|
 			reason = { success: "false", code: "IOM_SYS_NO_RESPONSE", msg: "PrintQueue Delivered on #{pq.updated_at}. No response from Printer. Print Job cancelled #{DateTime.now.utc}" }
 			pq.update(status: 'cancel', reason: reason)
-			send_fail_msg = true
+			send_fail_pq = pq if pq.redemption
 		end
-		if send_fail_msg
-			OpsTwilio.text_devs(msg: "Cancel stale deivered print queues #{pqs[0].inspect}")
+		if send_fail_pq
+			Alert.perform("REDEMPTION_SYS", send_fail_pq.redemption)
 		end
 	end
 
