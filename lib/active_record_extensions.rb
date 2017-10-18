@@ -30,7 +30,7 @@ module ActiveRecordExtension
   	# add your static(class) methods here
   	module ClassMethods
 
-  		def l(val=1)
+   		def l(val=1)
   			return last if val == 1
   			last(val)
   		end
@@ -47,23 +47,26 @@ module ActiveRecordExtension
 	      	find obj_id
 	    end
 
-	    def wi args
-	    	resp = where("#{args.keys.first} ilike '%#{args.values.first}%'")
-	    	if resp.length == 1
-	    		resp.first
-	    	else
-	    		resp
-			end
-	    end
+		def wi args
+			r = where("#{args.keys.first} ilike '%#{args.values.first}%'")
+			r.length == 1 ? r.first : r
+		end
 
-	    def w args
-	    	resp = where(args)
-	    	if resp.length == 1
-	    		resp.first
-	    	else
-	    		resp
-			end
-	    end
+		def w args
+			r = where(args)
+			r.length == 1 ? r.first : r
+		end
+
+		def wn args
+			r = where.not(args)
+			r.length == 1 ? r.first : r
+		end
+
+		def wnn column_name
+			r = where.not(column_name.to_sym => nil)
+			r.length == 1 ? r.first : r
+		end
+
   	end
 end
 
