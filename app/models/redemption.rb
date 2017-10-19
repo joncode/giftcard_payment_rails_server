@@ -212,6 +212,10 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+    def amount_s
+        display_money cents: self.amount, ccy: ccy
+    end
+
 	def amount_words(currency=nil)
 		currency = ccy if currency.nil?
 		cents_to_words(self.amount, currency)

@@ -14,7 +14,7 @@ class RedemptionSysAlert < GiftPurchasedMtAlert
         if redemption.client && redemption.client.name
         	via = " via #{redemption.client.name}"
         end
-		@data = "#{redemption.receiver_name} has redeemed a #{redemption.amount} redemption#{via}. Status = #{redemption.status}"
+		@data = "#{redemption.receiver_name} has redeemed a #{redemption.amount_s} redemption#{via}. Status = #{redemption.status}"
 	end
 
 end
