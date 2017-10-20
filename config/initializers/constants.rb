@@ -261,4 +261,8 @@ USA_HSH = {
     "WY" => "Wyoming"
 }
 
+STATES = USA_HSH.keys
+STATES_PROVINCES = USA_HSH.invert.merge(CANADIAN_HSH.invert)
+COUNTRIES = ["USA", "Canada"]
 
+GROUPED_SELECT_STATES =  { COUNTRIES[0] => USA_HSH.invert, COUNTRIES[1] => CANADIAN_HSH.invert }
