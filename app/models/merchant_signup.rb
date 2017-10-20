@@ -1,6 +1,6 @@
 class MerchantSignup < ActiveRecord::Base
 	include ActionView::Helpers::NumberHelper
-
+	include SignupToMerchant
 
 #   -------------
 
@@ -18,7 +18,7 @@ class MerchantSignup < ActiveRecord::Base
 
 #   -------------
 
-	after_commit :notify_internal, on: :create
+	after_commit :fire_after_save_queue, on: :create
 
 #   -------------
 
@@ -53,6 +53,62 @@ class MerchantSignup < ActiveRecord::Base
 		m
 	end
 
+#   -------------
+
+	def promotable?
+		self.data["signup_source"] == "Surfboard"
+	end
+
+	def promote
+		merchant_from_hash(self.as_json)
+	end
+
+	def create_card
+		card = init_card
+		card.save
+		if card.active && card.persisted?
+			# card created
+		else
+			# card failed
+		end
+		card
+	end
+
+	def init_card
+		# check to see if there are cc details avail , otherwise exit
+		return nil unless self.data["signup_source"] == "Surfboard"
+		# parse cc details into CardStripe input format
+			# add client and partner from signup - put in signup :data
+		h = {
+			"stripe_id"=> self.data['stripe']['token'],
+			"name"=> self.data['contact']['name'],
+			"email"=> self.data['contact']['email'],
+			"merchant_name"=> self.data['venue']['name'],
+			"zip"=> self.data['stripe']['token']['card']['address_zip'],
+			"last_four"=> self.data['stripe']['token']['card']['last4'],
+			"brand"=> self.data['stripe']['token']['card']['brand'],
+			"csv"=> nil,
+			"month"=> self.data['stripe']['token']['card']['exp_month'],
+			"year"=> self.data['stripe']['token']['card']['exp_year'],
+			"term"=> term,
+			"amount"=> amount,
+			'country' => self.data['stripe']['token']['card']['country'],
+			'client_id' => self.data['client_id'],
+			'partner_id' => self.data['partner_id'],
+			'partner_type' => self.data['partner_type']
+		}
+		# CardStripe.save will take care of sending to stripe
+		CardStripe.create_card_from_hash(h)
+	end
+
+	def term
+		ms.data['plan']['cycleInMonths'] == 12 ? 'Year' : 'Month'
+	end
+
+	def amount
+			# cents
+		100 * ms.data['plan']["pricePerMonth"].to_i * ms.data['plan']['cycleInMonths'].to_i
+	end
 
 #   -------------
 
@@ -79,8 +135,8 @@ class MerchantSignup < ActiveRecord::Base
 
 #   -------------
 
-	def notify_internal
-		Resque.enqueue(InternalMailerJob, { 'method' => 'mail_notice_submit_merchant_setup', 'args' => self })
+	def fire_after_save_queue
+		Resque.enqueu(MerchantSignupCreatedEvent, self.id)
 	end
 
 end

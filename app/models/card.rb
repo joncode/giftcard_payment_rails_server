@@ -9,6 +9,10 @@ class Card < ActiveRecord::Base
 
 	default_scope -> { where(active: true) } # indexed
 
+	## DEPRECATED - DO NOT REMOVE
+	###  THIS CLASS RECEIVES CARD INFO < SENDS TO STRIPE< ENCYPTS AND SAVES A - THIS IS OLD WAY OF DOING IT, FOR NEW WAY SEE -> models/card_stripe.rb
+
+
 #   -------------
 
     # uid = <user_id>

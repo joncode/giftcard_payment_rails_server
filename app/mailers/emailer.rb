@@ -145,6 +145,8 @@ module Emailer
         end
     end
 
+##############   WELCOME EMAIL SENT TO MERCHANTS IN -> Web::V3::MerchantsController :signup
+
     def merchant_signup_welcome full_data_obj
         data = full_data_obj["args"]
         puts "\n Emailer merchant_signup_welcome #{data.inspect}"
@@ -162,6 +164,8 @@ module Emailer
         message       = message_hash(subject, email, name, body, bcc)
         request_mandrill_with_template(template_name, message, [data['id'], "Merchant"])
     end
+
+##############
 
     def merchant_pending data
         merchant = Merchant.unscoped.find(data["merchant_id"])

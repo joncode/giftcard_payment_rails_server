@@ -3,12 +3,14 @@ class Web::V3::MerchantsController < MetalCorsController
     before_action :authentication_no_token
 
 
+    # {"data"=>{"stripe_id"=>"tok_1BElUpHMscfhJNOLBh9", "name"=>"FULL NAME", "email"=>"EMAIL@EXAMPLE.me", "merchant_name"=>"ItsoNme",
+    #       "zip"=>"89101", "last_four"=>"4242", "brand"=>"Visa", "csv"=>"[FILTERED]", "month"=>"04", "year"=>"27", "term"=>"Year", "amount"=>30000}}
     def card
         create_with = anon_stripe_card_params
+        create_with['client_id'] = @current_client.id
+        create_with['partner_id'] = @current_partner.id
+        create_with['partner_type'] = @current_partner.class.to_s
         card = CardStripe.create_card_from_hash create_with
-
-        card.client = @current_client
-        card.partner = @current_partner
         card.save
         if card.active && card.persisted?
             success 'Card Created'
@@ -22,12 +24,15 @@ class Web::V3::MerchantsController < MetalCorsController
     def signup
         extra_data = params[:data].delete(:data)
         hsh = merchant_signup_params
+        extra_data['client_id'] = @current_client.try(:id)
+        extra_data['partner_id'] = @current_partner.try(:id)
+        extra_data['partner_type'] = @current_partner.class.to_s
         hsh[:data] = extra_data
         submit_obj = MerchantSignup.new(hsh)
 
         if submit_obj.save
-            mail_notice_submit_merchant_setup(submit_obj)
-            mail_merchant_signup_welcome(submit_obj)
+            # mail_notice_submit_merchant_setup(submit_obj)
+            # mail_merchant_signup_welcome(submit_obj)
             success submit_obj
         else
             fail_web({
@@ -111,15 +116,15 @@ private
         params.require(:data).permit(:term, :amount, :merchant_name, :email, :stripe_user_id, :stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
     end
 
-    def mail_notice_submit_merchant_setup merchant_submit_obj
-        data = { 'method' => 'mail_notice_submit_merchant_setup', 'args' => merchant_submit_obj }
-        Resque.enqueue(InternalMailerJob, data)
-    end
+    # def mail_notice_submit_merchant_setup merchant_submit_obj
+    #     data = { 'method' => 'mail_notice_submit_merchant_setup', 'args' => merchant_submit_obj }
+    #     Resque.enqueue(InternalMailerJob, data)
+    # end
 
-    def mail_merchant_signup_welcome merchant_submit_obj
-        data = { 'text' => 'merchant_signup_welcome', 'args' => merchant_submit_obj }
-        Resque.enqueue(MailerJob, data)
-    end
+    # def mail_merchant_signup_welcome merchant_submit_obj
+    #     data = { 'text' => 'merchant_signup_welcome', 'args' => merchant_submit_obj }
+    #     Resque.enqueue(MailerJob, data)
+    # end
 
     def merchant_signup_params
         # properties_keys = params[:data].try(:fetch, 'data', {}).keys.map(&:to_sym)

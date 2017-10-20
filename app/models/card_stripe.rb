@@ -1,6 +1,8 @@
 class CardStripe < ActiveRecord::Base
     self.table_name = "cards"
 
+    ###                 ^^
+    ###  THIS CLASS WRAPS THE CARDS TABLE AND ALLOWS FOR STRIPE CARD CREATION IN THAT TABLE
 
 #	-------------
 
@@ -69,25 +71,35 @@ class CardStripe < ActiveRecord::Base
 	end
 
 
-	def self.create_card_from_hash cc_hash
-		cc_hash.stringify_keys!
-		card 			= new
-		card.stripe_id 	= cc_hash["stripe_id"]
-		card.stripe_user_id = cc_hash["stripe_user_id"]
-		card.name 		= cc_hash["name"]
-		card.nickname 	= cc_hash["nickname"]
-		card.zip 		= cc_hash['zip']
-		card.brand 		= cc_hash["brand"]
-		card.csv 		= cc_hash["csv"]
-		card.month 		= cc_hash["month"]
-		card.year 		= cc_hash["year"]
-		card.last_four 	= cc_hash["last_four"]
-        card.nickname = cc_hash["email"]
-        card.origin = cc_hash["merchant_name"]
-        card.user_id = cc_hash['user_id']
-        card.term = cc_hash['term']
-        card.amount = cc_hash['amount']
-        card.ccy = 'USD' if card.amount.present?
+	def self.create_card_from_hash cc_hsh
+		cc_hsh.stringify_keys!
+		card = new
+        card.client_id = cc_hsh['client_id']
+        card.partner_id = cc_hsh['partner_id']
+        card.partner_type = cc_hsh['partner_type']
+
+		card.stripe_id 	= cc_hsh["stripe_id"]
+		card.stripe_user_id = cc_hsh["stripe_user_id"]
+		card.name 		= cc_hsh["name"]
+		card.nickname 	= cc_hsh["nickname"]
+		card.zip 		= cc_hsh['zip']
+		card.brand 		= cc_hsh["brand"]
+		card.csv 		= cc_hsh["csv"]
+		card.month 		= cc_hsh["month"]
+		card.year 		= cc_hsh["year"]
+		card.last_four 	= cc_hsh["last_four"]
+
+        card.nickname = cc_hsh["email"]
+        card.origin = cc_hsh["merchant_name"]
+        card.user_id = cc_hsh['user_id']
+        card.term = cc_hsh['term']
+        card.amount = cc_hsh['amount']
+        card.country = cc_hsh['country']
+        if cc_hsh['country'].present?
+        	card.ccy = 'CAD' if card.country == 'CA'
+        	card.ccy = 'GBP' if card.country == 'GB'
+	        card.ccy = 'USD' if card.ccy.nil?
+	    end
 		card
 	end
 
