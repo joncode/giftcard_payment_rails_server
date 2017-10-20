@@ -10,12 +10,16 @@ class MerchantSignupCreatedEvent
 			# promote merchant to live
 			merchant = ms.promote
 
-			merchant.save
+			if merchant.save
 			# handles the merchant set up criteria
 				# quick gifts
 				# make MT users
 				# make widget clients
 				# make default vouchers
+				ms.update(merchant_id: merchant.id)
+			else
+
+			end
 		end
 
 		# exchange stripe token for customer account
