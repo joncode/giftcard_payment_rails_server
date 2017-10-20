@@ -102,12 +102,12 @@ class MerchantSignup < ActiveRecord::Base
 	end
 
 	def term
-		ms.data['plan']['cycleInMonths'] == 12 ? 'Year' : 'Month'
+		self.data['plan']['cycleInMonths'] == 12 ? 'Year' : 'Month'
 	end
 
 	def amount
 			# cents
-		100 * ms.data['plan']["pricePerMonth"].to_i * ms.data['plan']['cycleInMonths'].to_i
+		100 * self.data['plan']["pricePerMonth"].to_i * self.data['plan']['cycleInMonths'].to_i
 	end
 
 #   -------------
