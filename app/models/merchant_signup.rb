@@ -136,7 +136,7 @@ class MerchantSignup < ActiveRecord::Base
 #   -------------
 
 	def fire_after_save_queue
-		Resque.enqueu(MerchantSignupCreatedEvent, self.id)
+		Resque.enqueue(MerchantSignupCreatedEvent, self.id)
 	end
 
 end
