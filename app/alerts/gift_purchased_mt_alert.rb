@@ -35,6 +35,7 @@ class GiftPurchasedMtAlert < Alert
 	    if gift.shoppingCart
 			@data += gift.humanize_cart.join("\n") + "\n"
         end
+        @data
 	end
 
 end

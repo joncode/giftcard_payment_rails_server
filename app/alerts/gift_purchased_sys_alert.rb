@@ -22,6 +22,7 @@ class GiftPurchasedSysAlert < GiftPurchasedMtAlert
         if gift.client && gift.client.name
 			@data = " via #{gift.client.name}\n"
         end
+        @data
 	end
 
 end
