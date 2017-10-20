@@ -6,7 +6,7 @@ class CardStripe < ActiveRecord::Base
 
 #	-------------
 
-    validates_presence_of :stripe_id, :name, :zip, :brand, :csv, :month, :year, :last_four
+    validates_presence_of :stripe_id, :name, :zip, :brand, :month, :year, :last_four
 
 #	-------------
 

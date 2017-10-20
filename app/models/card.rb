@@ -35,7 +35,7 @@ class Card < ActiveRecord::Base
 	validate :check_for_credit_card_validity
 	validate :month_and_year_should_be_in_future
 	validate :at_least_two_words_in_name
-	validates_presence_of :last_four, :month, :year, :nickname, :user_id, :name
+	validates_presence_of :csv, :last_four, :month, :year, :nickname, :user_id, :name
 	validates :zip, zip_code: true, allow_blank: true
 
 #   -------------
