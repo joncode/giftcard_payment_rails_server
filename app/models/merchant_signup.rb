@@ -80,7 +80,7 @@ class MerchantSignup < ActiveRecord::Base
 		# parse cc details into CardStripe input format
 			# add client and partner from signup - put in signup :data
 		h = {
-			"stripe_id"=> self.data['stripe']['token'],
+			"stripe_id"=> self.data['stripe']['token']['id'],
 			"name"=> self.data['contact']['name'],
 			"email"=> self.data['contact']['email'],
 			"merchant_name"=> self.data['venue']['name'],
