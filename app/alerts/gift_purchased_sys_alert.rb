@@ -20,7 +20,7 @@ class GiftPurchasedSysAlert < GiftPurchasedMtAlert
 			@data += gift.humanize_cart.join("\n") + "\n"
         end
         if gift.client && gift.client.name
-			@data = " via #{gift.client.name}\n"
+			@data += " via #{gift.client.name}\n"
         end
         @data
 	end
