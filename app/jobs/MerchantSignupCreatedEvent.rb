@@ -6,16 +6,17 @@ class MerchantSignupCreatedEvent
 		puts "MerchantSignupCreatedEvent START #{ms_id}"
 		ms = MerchantSignup.find(ms_id)
 
+		merchant = nil
 		if ms.promotable?
 			# promote merchant to live
 			merchant = ms.promote
 
 			if merchant.save
-			# handles the merchant set up criteria
-				# quick gifts
-				# make MT users
-				# make widget clients
-				# make default vouchers
+				# handles the merchant set up criteria
+					# quick gifts
+					# make MT users
+					# make widget clients
+					# make default vouchers
 				ms.update(merchant_id: merchant.id)
 			else
 
@@ -33,9 +34,11 @@ class MerchantSignupCreatedEvent
 		Alert.perform("MERCHANT_SUBMITTED_SYS", ms)
 
 		# send welcome email to merchants
-        data = { 'text' => 'merchant_signup_welcome', 'args' => ms }
-        MailerJob.perform(data)
-
+        e = EmailWelcome.new(merchant || ms)
+	    e.send_email
+	    		# old way
+			        # data = { 'text' => 'merchant_signup_welcome', 'args' => ms }
+			        # MailerJob.perform(data)
 	end
 
 

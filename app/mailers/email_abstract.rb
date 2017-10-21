@@ -1,6 +1,31 @@
 require 'mandrill'
 
+
+<<-DOC
+
+To subclass EmailAbstract
+
+    see app/nookings/email_booking.rb
+
+    define :
+        :initialize
+        :set_vars -> which then calls :set_vars_ary
+
+        DONE
+
+To call email from code
+
+    e = EmailBooking.new(booking, template, "#{merchant_name} Booking Purchase Complete")
+    e.send_email
+
+        DONE
+
+DOC
+
 class EmailAbstract
+
+    include ActionView::Helpers::NumberHelper
+    include MoneyHelper
 
 	attr_reader  :mandrill, :message, :subject, :template
 

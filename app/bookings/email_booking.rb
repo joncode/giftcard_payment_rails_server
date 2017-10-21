@@ -1,10 +1,6 @@
 class EmailBooking < EmailAbstract
 	# inherits from /app/mailers/email_abstract.rb
 
-	include ActionView::Helpers::NumberHelper
-	include MoneyHelper
-
-
 	def initialize booking, template, subject
 		super()
 		@booking = booking

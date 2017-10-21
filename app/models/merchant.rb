@@ -287,6 +287,10 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def widget_instruction_url
+        CLEAR_CACHE
+    end
+
     def short_image_url
         shorten_photo_url(image)
     end
