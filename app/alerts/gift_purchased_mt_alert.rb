@@ -13,7 +13,7 @@ class GiftPurchasedMtAlert < Alert
 
 	def email_msg
 		get_data
-		"<div><h2>#{name_string}</h2><p>#{@data}</p></div>".html_safe
+		"<div><h2>#{name_string}</h2><p>#{@data.gsub("\n", "</p><p>")}</p></div>".html_safe
 	end
 
 	def msg
