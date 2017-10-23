@@ -18,7 +18,7 @@ class EmailWelcome < EmailAbstract
 	end
 
 	def set_vars
-		h = { 	'support_phone' => TWILIO_QUICK_NUM,,
+		h = { 	'support_phone' => TWILIO_QUICK_NUM,
 				'widget_instruction_url' => @merchant.widget_instruction_url,
 				'merchant_name' => @merchant.name,
 				'merchant_address' => @merchant.address,
