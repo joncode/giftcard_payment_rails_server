@@ -1,7 +1,7 @@
 require 'mandrill'
 
 
-<<-DOC
+=begin
 
 To subclass EmailAbstract
 
@@ -20,7 +20,7 @@ To call email from code
 
         DONE
 
-DOC
+=end
 
 class EmailAbstract
 
