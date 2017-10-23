@@ -10,7 +10,7 @@ class RedemptionMtAlert < GiftPurchasedMtAlert
 		return "NO TARGET" if self.target.nil?
 		return "TARGET IS NOT REDEMPTION" unless self.target.kind_of?(Redemption)
 		redemption = self.target
-		@data = "#{redemption.receiver_name} has redeemed a #{redemption.amount_s} redemption. Status = #{redemption.status}"
+		@data = "#{redemption.receiver_name} has redeemed a #{redemption.amount_s} redemption(#{redemption.paper_id}.  Status is #{redemption.status}.  Gift #{redemption.gift.paper_id}}"
 	end
 
 end
