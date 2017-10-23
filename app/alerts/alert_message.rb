@@ -75,7 +75,7 @@ class AlertMessage < ActiveRecord::Base
 			r = OpsTwilio.text to: alert_contact.net_id, msg: self.msg
 		elsif alert_contact.net == 'email'
 			email_data_hsh = {
-				"subject" => "ItsOnMe Alert",
+				"subject" => alert.title,
 				"html"    => "<div><p>#{self.msg}</p></div>".html_safe,
 				"email"   => alert_contact.net_id
 			}

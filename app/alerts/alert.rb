@@ -137,6 +137,10 @@ class Alert < ActiveRecord::Base
 		msg
 	end
 
+	def subject
+		self.title + " ItsOnMe Alert"
+	end
+
 #   -------------
 
 	def self.create_alert name
