@@ -3,13 +3,17 @@ class EmailWelcome < EmailAbstract
 
 	def initialize merchant, subject="Welcome to the ItsOnMe Family!"
 		super()
-		@merchant = merchant
+		if merchant.kind_of?(MerchantSignup)
+			@merchant = merchant.merchant || merchant
+		else
+			@merchant = merchant
+		end
 		@template = "merchant-onboard-welcome-10-18-2017"
 		@subject = subject
 		@body = "<div></div>".html_safe
-		if booking.email.blank?
-			puts "500 Internal - no email on #{booking.id}"
-			raise "Cannot Email for booking #{booking.id}"
+		if merchant.email.blank?
+			puts "500 Internal - no email on #{merchant.id}"
+			raise "Cannot Email for merchant #{merchant.id}"
 		end
 		@to_emails  = [{"email" => merchant.email, "name" => merchant.name }]
 		set_bcc

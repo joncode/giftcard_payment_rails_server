@@ -55,6 +55,15 @@ class MerchantSignup < ActiveRecord::Base
 
 #   -------------
 
+    def city_state_zip
+        self.address
+    end
+
+    def widget_instruction_url
+        # c = clients.where(active: true).where("url_name ilike '74-%%'").first
+        CLEAR_CACHE + "/merchants/widget"
+    end
+
 	def promotable?
 		self.data["signup_source"] == "Surfboard"
 	end
