@@ -54,9 +54,10 @@ Click here for your gift.\n #{self.invite_link}"
                 msg = "Your friend, #{self.giver_name}, sent you a gift at PT's. Download or open the app to claim: https://pteglvapp.com/download/iom"
                 resp = OpsTwilio.text to: self.receiver_phone, msg: msg
             else
-                sys_msg = "Click ^here^ for your gift.\n #{self.giver_name} has sent you a #{self.value_s} gift card
+                usr_msg = "'self.message' -#{self.giver_name}"
+                sys_msg = "Click link to claim your gift.\n#{self.giver_name} has sent you a #{self.value_s} gift card
 at #{self.merchant_name}."
-                resp = OpsTwilio.link_text to: self.receiver_phone, link: self.invite_link, usr_msg: self.message, system_msg: sys_msg
+                resp = OpsTwilio.link_text to: self.receiver_phone, link: self.invite_link, usr_msg: usr_msg, system_msg: sys_msg
             end
         end
     end

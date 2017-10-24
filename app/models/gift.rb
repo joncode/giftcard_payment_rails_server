@@ -129,8 +129,7 @@ class Gift < ActiveRecord::Base
 #   -------------
 
     def invite_link
-        # "#{PUBLIC_URL}/signup/acceptgift?id=#{self.obscured_id}"
-        "#{PUBLIC_URL}/hi/#{self.hex_id}"
+        "#{CLEAR_CACHE}/hi/#{self.hex_id}"
     end
 
     def obscured_id

@@ -10,8 +10,8 @@ class OpsTwilio
 			# 1 send the user to user message
 			# 2. send the link
 			# 3. send the company explanation
-			usr_msg = "1/3 #{usr_msg}" unless usr_msg.blank?
-			system_msg = "3/3 #{system_msg}" unless system_msg.blank?
+			usr_msg = "1/3: #{usr_msg}" unless usr_msg.blank?
+			system_msg = "3/3: #{system_msg}" unless system_msg.blank?
 			[usr_msg, link, system_msg].each do |m|
 				next if m.blank?
 				text(to: to, msg: m)
