@@ -138,7 +138,7 @@ class Alert < ActiveRecord::Base
 	end
 
 	def subject
-		self.title + " ItsOnMe Alert"
+		self.title.to_s + " ItsOnMe Alert"
 	end
 
 #   -------------

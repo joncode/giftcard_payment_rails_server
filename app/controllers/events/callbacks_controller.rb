@@ -8,7 +8,7 @@ class Events::CallbacksController < MetalCorsController
 	end
 
 	def epson_status
-		puts "EPSON RECEIVED ^^^^^  STATUS  ^^^^^ #{params.inspect}"
+		# puts "EPSON RECEIVED ^^^^^  STATUS  ^^^^^ #{params.inspect}"
 		per = PrintEpsonResponder.new(params)
 		per.perform
 		if per.response
@@ -19,7 +19,7 @@ class Events::CallbacksController < MetalCorsController
 	end
 
 	def epson_check
-		puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
+		# puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
 		per = PrintEpsonResponder.new(params)
 		per.perform
 		if per.response
