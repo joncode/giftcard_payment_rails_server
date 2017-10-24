@@ -289,7 +289,11 @@ class Merchant < ActiveRecord::Base
 
     def widget_instruction_url
         c = clients.where(active: true).where("url_name ilike '74-%%'").first
-        CLEAR_CACHE + "/merchants/widget?id=#{c.url_name}"
+        instructons = CLEAR_CACHE + "/merchants/widget"
+        if c
+            instructons + "?id=#{c.url_name}"
+        end
+        instructons
     end
 
     def short_image_url
