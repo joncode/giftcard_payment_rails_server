@@ -33,17 +33,31 @@ module GiftMessenger
         end
     end
 
-    def notify_via_text
+    def notify_via_text_old
         if !self.receiver_phone.blank?
             puts "texting the gift receiver for #{self.id}"
             if self.partner == Affiliate.find(GOLDEN_GAMING_ID)
                 msg = "Your friend, #{self.giver_name}, sent you a gift at PT's. Download or open the app to claim: https://pteglvapp.com/download/iom"
             else
-                msg = "#{self.giver_name} has sent you a #{self.value_s} eGift Card
-at #{self.merchant_name} with ItsOnMe® - the eGifting app.\n
-Click here to claim your gift.\n #{self.invite_link}"
+                msg = "#{self.giver_name} has sent you a #{self.value_s} gift card
+at #{self.merchant_name}.\n
+Click here for your gift.\n #{self.invite_link}"
             end
             resp = OpsTwilio.text to: self.receiver_phone, msg: msg
+        end
+    end
+
+    def notify_via_text
+        if !self.receiver_phone.blank?
+            puts "link texting the gift receiver for #{self.id}"
+            if self.partner == Affiliate.find(GOLDEN_GAMING_ID)
+                msg = "Your friend, #{self.giver_name}, sent you a gift at PT's. Download or open the app to claim: https://pteglvapp.com/download/iom"
+                resp = OpsTwilio.text to: self.receiver_phone, msg: msg
+            else
+                sys_msg = "Click ^here^ for your gift.\n #{self.giver_name} has sent you a #{self.value_s} gift card
+at #{self.merchant_name}."
+                resp = OpsTwilio.link_text to: self.receiver_phone, link: self.invite_link, usr_msg: self.message, system_msg: sys_msg
+            end
         end
     end
 
