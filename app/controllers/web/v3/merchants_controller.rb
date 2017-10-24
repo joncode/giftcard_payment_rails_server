@@ -31,8 +31,6 @@ class Web::V3::MerchantsController < MetalCorsController
         submit_obj = MerchantSignup.new(hsh)
 
         if submit_obj.save
-            # mail_notice_submit_merchant_setup(submit_obj)
-            # mail_merchant_signup_welcome(submit_obj)
             success submit_obj
         else
             fail_web({
@@ -115,16 +113,6 @@ private
     def anon_stripe_card_params
         params.require(:data).permit(:term, :amount, :merchant_name, :email, :stripe_user_id, :stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
     end
-
-    # def mail_notice_submit_merchant_setup merchant_submit_obj
-    #     data = { 'method' => 'mail_notice_submit_merchant_setup', 'args' => merchant_submit_obj }
-    #     Resque.enqueue(InternalMailerJob, data)
-    # end
-
-    # def mail_merchant_signup_welcome merchant_submit_obj
-    #     data = { 'text' => 'merchant_signup_welcome', 'args' => merchant_submit_obj }
-    #     Resque.enqueue(MailerJob, data)
-    # end
 
     def merchant_signup_params
         # properties_keys = params[:data].try(:fetch, 'data', {}).keys.map(&:to_sym)
