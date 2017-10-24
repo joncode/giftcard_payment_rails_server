@@ -288,7 +288,7 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     def widget_instruction_url
-        CLEAR_CACHE
+        CLEAR_CACHE + "/merchants/widget"
     end
 
     def short_image_url
