@@ -10,6 +10,7 @@ class RedemptionNotificationJob
     		Alert.perform("REDEMPTION_MT", r)
     	elsif status == 'done'
     		Alert.perform("REDEMPTION_MT", r)
+            Alert.perform("REDEMPTION_SYS", r) if Rails.env.staging?
     	end
 
     end

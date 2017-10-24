@@ -1,7 +1,11 @@
 module PrintUtility
 
+	def prep_string_for_xml str
+		str.gsub("&","&amp;").gsub("<", "&lt;").gsub(">", "&gt;").gsub('"',"&quot;").gsub("'","&apos;")
+	end
+
 	def max_length(str='', width=42)
-		str[0...width]
+		prep_string_for_xml(str)[0...width]
 	end
 
 	def responsive_merchant_name
@@ -14,7 +18,7 @@ module PrintUtility
 	end
 
 	def responsive_text str, width=21
-		word_wrap(str, line_width: width)
+		word_wrap(prep_string_for_xml(str), line_width: width)
 	end
 
 
@@ -31,7 +35,7 @@ module PrintUtility
 <text font='font_c'/>
 <text width='1' height='1'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
-<text>#{str}</text>"
+<text>#{prep_string_for_xml(str)}</text>"
 	end
 
 	def header_xml text=''
