@@ -19,7 +19,6 @@ class OpsTwilio
 
 		end
 
-
 		def text to:, msg:
 			if Rails.env.development? || Rails.env.test?
 				return {status: 1, data: "Text send to #{to}"}
