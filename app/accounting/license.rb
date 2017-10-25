@@ -143,9 +143,11 @@ class License < ActiveRecord::Base
 
 	def stripe_plan_id
 		if self.recurring_type = 'annual'
-			"Annual Subscription"
+			return "merchant-300-annual" if Rails.env.staging?
+			"$300 Annual"
 		else
-			"Monthly Subscription"
+			return "merchant-30-month" if Rails.env.staging?
+			"$30 Monthly"
 		end
 	end
 
