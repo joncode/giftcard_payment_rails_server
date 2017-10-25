@@ -172,7 +172,7 @@ class PrintQueue < ActiveRecord::Base
 		if merchant = get_merchant_for_client_id(client_id)
 			pqs = where(merchant_id: merchant.id, status: 'delivered')
 			pqs.each do |pq|
-				pq.update(status: 'queue')
+				pq.update(status: 'queue', reason: error)
 			end
 		else
 			return []
