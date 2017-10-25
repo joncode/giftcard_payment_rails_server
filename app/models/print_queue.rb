@@ -295,6 +295,10 @@ class PrintQueue < ActiveRecord::Base
 			false
 		when "EPTR_REC_EMPTY"
 			true
+		when "EPTR_COVER_OPEN"
+			true
+		when "SchemaError"
+			false
 		else
 			true
 		end
@@ -304,4 +308,46 @@ class PrintQueue < ActiveRecord::Base
 end
 
 
+__END__
 
+EPTR_AUTOMATICAL
+	An automatically recoverable error occurred.
+	Continuous printing of high-density printing
+EPTR_BATTERY_LOW
+	No remaining battery.
+	No battery
+EPTR_COVER_OPEN
+	The device has a problem.
+	The cover is open.
+EPTR_CUTTER
+	The device has a problem.
+	The cutter has a foreign matter.
+EPTR_MECHANICAL
+	The device has a problem.
+	Mechanical error, etc.
+EPTR_REC_EMPTY
+	There is no paper.
+	No paper
+EPTR_UNRECOVERABLE
+	An unrecoverable error occurred.
+	Low voltage
+EX_BADPORT
+	The port is invalid or the device is not connected.
+	  The registered information is invalid.
+	  The device power is off.
+	  The device is not connected.
+	  Other device control software exists on the system.
+EX_TIMEOUT
+	Timeout occurred.
+	  The process was not completed within a certain period of time.
+	  A large amount of data was sent
+	with 1 method.
+SchemaError
+	The message does not conform to the schema.
+	The request message is invalid.
+DeviceNotFound
+	No device is found.
+	Inaccessible due to a problem in the operation status control in the output destination device.
+PrintSystemError
+	An error occurred in the printing system.
+	Inaccessible due to a problem in the operation status in the TM printers with SDP support.
