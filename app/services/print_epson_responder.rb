@@ -71,7 +71,14 @@ class PrintEpsonResponder
 				@error = printjob["PrintResponse"]["response"]
 			end
 			puts "\n\nPrintEpsonResponder (63) 500 Internal - EPSON PRINT ERROR #{printjob.inspect} #{@error.inspect}"
-			PrintQueue.mark_job_as_error(client_id, job, @error)
+
+			if PrintQueue.error_reprint?(@error)
+				# re-queue the print jobs
+				PrintQueue.requeue_job(client_id, job, @error)
+			else
+				# cancel the print job
+				PrintQueue.mark_job_as_error(client_id, job, @error)
+			end
 		end
 	end
 

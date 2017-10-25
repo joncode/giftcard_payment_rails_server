@@ -168,6 +168,17 @@ class PrintQueue < ActiveRecord::Base
 
 #   -------------
 
+	def self.requeue_job(client_id, job, error)
+		if merchant = get_merchant_for_client_id(client_id)
+			pqs = where(merchant_id: merchant.id, status: 'delivered')
+			pqs.each do |pq|
+				pq.update(status: 'queue')
+			end
+		else
+			return []
+		end
+	end
+
 	def self.mark_job status_str, client_id, job, msg=nil
 			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
 		if merchant = get_merchant_for_client_id(client_id)
@@ -270,6 +281,25 @@ class PrintQueue < ActiveRecord::Base
 		# redemption must be cancelled if print queue is cancelled
 		# redemption must be expired when print queue is expired , should this be reversed ?
 	end
+
+	def self.error_reprint? error
+		puts "500 Internal #{error.inspect}"
+		if error && error['code']
+			err_string = error['code']
+		else
+			err_string = error
+		end
+
+		case err_string
+		when 'Espon Connection Formatting Error'
+			false
+		when "EPTR_REC_EMPTY"
+			true
+		else
+			true
+		end
+	end
+
 
 end
 
