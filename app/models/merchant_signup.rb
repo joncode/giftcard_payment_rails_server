@@ -111,6 +111,7 @@ class MerchantSignup < ActiveRecord::Base
 	end
 
 	def term
+		return nil if self.data.blank? || self.data['plan'].blank? || self.data['plan']['cycleInMonths'].blank?
 		self.data['plan']['cycleInMonths'] == 12 ? 'Year' : 'Month'
 	end
 

@@ -141,6 +141,14 @@ class License < ActiveRecord::Base
 		d
 	end
 
+	def stripe_plan_id
+		if self.recurring_type = 'annual'
+			"Annual Subscription"
+		else
+			"Monthly Subscription"
+		end
+	end
+
 #   -------------
 
 	def make_monthly_register_today?

@@ -35,6 +35,8 @@ class OpsStripeToken
 		@success
 	end
 
+#   -------------
+
 	def tokenize
 		return nil if @token.nil? || @customer_name.nil? || @email.nil?
 		@response = Stripe::Customer.create(
@@ -58,7 +60,34 @@ class OpsStripeToken
 			:customer => @customer_id
 		)
 	rescue => e
+		puts e.inspect
 		process_error e
 	end
+
+#   -------------
+
+	def self.create_subscription(stripe_user_id, plan_id)
+        request = {
+            :customer => stripe_user_id,
+            :items => [{
+                :plan => plan_id,
+            }]
+        }
+
+        @response = Stripe::Subscription.create(request)
+
+    rescue => e
+    	puts e.inspect
+        process_error e
+	end
+
+	def self.cancel_subscription subscription_id
+        sub = Stripe::Subscription.retrieve(subscription_id)
+        sub.delete
+    rescue => e
+    	puts e.inspect
+        process_error e
+    end
+
 
 end

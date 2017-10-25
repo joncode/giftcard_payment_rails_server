@@ -7,6 +7,7 @@ class MerchantSignupCreatedEvent
 		ms = MerchantSignup.find(ms_id)
 
 		merchant = nil
+		license = nil
 		if ms.promotable?
 			# promote merchant to live
 			merchant = ms.promote
@@ -18,8 +19,16 @@ class MerchantSignupCreatedEvent
 					# make widget clients
 					# make default vouchers
 				ms.update(merchant_id: merchant.id)
+				if ms.term == 'Year'
+					license = License.annual_basic(merchant)
+				elsif ms.term == "Month"
+					license = License.monthly_basic(merchant)
+				else
+					# term does not have correct response
+					OpsTwilio.text_dev msg: "#{ms.id} failed to TERM license"
+				end
 			else
-
+				OpsTwilio.text_dev msg: "#{ms.id} failed to make merchant #{merchant.errors}"
 			end
 		end
 
@@ -27,8 +36,15 @@ class MerchantSignupCreatedEvent
 		# save CC in DB
 		card = ms.create_card
 
-		# attach card to merchant ?
-		# set up the subscription in stripe ?
+		if card.stripe_user_id && license
+			# set up the subscription in stripe ?
+			res = OpsStripeToken.create_subscription(stripe_user_id, license.stripe_plan_id)
+
+			puts res.inspect
+
+			# attach card to merchant ?
+			license.update(charge_type: 'card', charge_id: card.id)
+		end
 
 		# notify internal that sign up has been created
 		Alert.perform("MERCHANT_SUBMITTED_SYS", ms)
