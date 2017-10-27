@@ -12,7 +12,7 @@ class MerchantSignupCreatedEvent
 			# promote merchant to live
 			merchant = ms.promote
 
-			if merchant.save
+			if merchant && merchant.save
 				# handles the merchant set up criteria
 					# quick gifts
 					# make MT users
