@@ -41,6 +41,26 @@ class Web::V3::MerchantsController < MetalCorsController
         respond
     end
 
+    def supply_request
+        extra_data = params[:data].delete(:form_data)
+        hsh = merchant_signup_params
+        extra_data['client_id'] = @current_client.try(:id)
+        extra_data['partner_id'] = @current_partner.try(:id)
+        extra_data['partner_type'] = @current_partner.class.to_s
+        hsh[:data] = extra_data
+        supply_order = SupplyOrder.new(hsh)
+
+        if supply_order.save
+            success supply_order
+        else
+            fail_web({
+                err: "INVALID_INPUT",
+                msg: supply_order.errors.full_messages
+            })
+        end
+        respond
+    end
+
     def show
         merchant = Merchant.unscoped.find(params[:id])
         if merchant.menu_id.nil?
