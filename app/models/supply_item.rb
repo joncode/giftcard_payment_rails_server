@@ -3,6 +3,10 @@ class SupplyItem < ActiveRecord::Base
 	include HexIdMethods
 
 
+	def destroy
+			# DO NOT DELETE RECORDS
+		update_column(:active, false)
+	end
 
 end
 

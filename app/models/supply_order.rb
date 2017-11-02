@@ -6,9 +6,13 @@ class SupplyOrder < ActiveRecord::Base
 
 
 	def mark_as_deliverd
-		self.update(status: 'delivered', delivered_at: DateTime.now.utc)
+		self.update(status: 'delivered')
 	end
 
+	def destroy
+			# DO NOT DELETE RECORDS
+		update_column(:active, false)
+	end
 
 private
 
