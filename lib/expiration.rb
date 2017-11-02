@@ -35,7 +35,7 @@ module Expiration
             m = t.month
             y = t.year
 
-            cs = Card.where('year::int <  ? OR (month::int < ? AND year::int = ?)', y, m ,y)
+            cs = Card.where.not(user_id: nil).where('year::int <  ? OR (month::int < ? AND year::int = ?)', y, m ,y)
             cs.each do |c|
                 c.destroy
                 cards_destroyed += 1
