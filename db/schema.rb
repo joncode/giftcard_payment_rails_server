@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171023190943) do
+ActiveRecord::Schema.define(version: 20171102201847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1411,6 +1411,31 @@ ActiveRecord::Schema.define(version: 20171023190943) do
   end
 
   add_index "socials", ["network_id", "network"], name: "index_socials_on_network_id_and_network", using: :btree
+
+  create_table "supply_items", force: :cascade do |t|
+    t.string   "hex_id"
+    t.string   "name"
+    t.integer  "price"
+    t.string   "ccy",        default: "USD"
+    t.string   "detail"
+    t.string   "photo_url"
+    t.boolean  "active",     default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "supply_orders", force: :cascade do |t|
+    t.string   "hex_id"
+    t.integer  "price"
+    t.string   "ccy",          default: "USD"
+    t.json     "form_data"
+    t.string   "status",       default: "open"
+    t.string   "pay_stat",     default: "due"
+    t.datetime "delivered_at"
+    t.boolean  "active",       default: true
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
 
   create_table "tags", force: :cascade do |t|
     t.string   "name",       limit: 255
