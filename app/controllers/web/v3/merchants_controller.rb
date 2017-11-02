@@ -41,6 +41,11 @@ class Web::V3::MerchantsController < MetalCorsController
         respond
     end
 
+    def supply_items
+        items = SupplyItem.all
+        success items
+    end
+
     def supply_request
         extra_data = params[:data].delete(:form_data)
         hsh = merchant_signup_params

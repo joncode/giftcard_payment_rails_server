@@ -210,6 +210,8 @@ Drinkboard::Application.routes.draw do
 				end
 				collection do
 					post :signup
+					get :supply_items
+					post :supply_request
 					post :card
 				end
 			end
