@@ -98,11 +98,14 @@ class User < ActiveRecord::Base
 	def coupons
 		admin_user_ary = [ 8248, 30003, 7689, 27891, 19192, 378, 11168 ]
 		admin_user_ary = [ 328, 841 ] if Rails.env.staging?
-		intern_user_ary = [ 31346, 30936, 31686, 28843, 29370 ]
+		intern_user_ary = [ 31346, 30936, 31686 ]
+		spokane_user_ary = [ 28843, 29370 ]
 		if admin_user_ary.include?(self.id)
-			[ 'no service fee', 0.7]
+			[ 'no service fee', 0.7 ]
 		elsif intern_user_ary.include?(self.id)
-			[ 'no service fee', 0.75]
+			[ 'no service fee', 0.75 ]
+		elsif spokane_user_ary.include?(self.id)
+			[ 'no service fee', 0.8 ]
 		else
 			[]
 		end
