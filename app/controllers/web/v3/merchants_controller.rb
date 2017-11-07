@@ -44,6 +44,7 @@ class Web::V3::MerchantsController < MetalCorsController
     def supply_items
         items = SupplyItem.all
         success items
+        respond
     end
 
     def supply_request
