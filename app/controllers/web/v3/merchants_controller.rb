@@ -52,7 +52,7 @@ class Web::V3::MerchantsController < MetalCorsController
         extra_data['client_id'] = @current_client.try(:id)
         extra_data['partner_id'] = @current_partner.try(:id)
         extra_data['partner_type'] = @current_partner.class.to_s
-        hsh[:data] = extra_data
+        hsh[:form_data] = extra_data
         supply_order = SupplyOrder.new(hsh)
 
         if supply_order.save

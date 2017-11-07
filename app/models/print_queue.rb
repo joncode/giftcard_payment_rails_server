@@ -214,7 +214,7 @@ class PrintQueue < ActiveRecord::Base
 				if pq.redemption.status == 'pending'
 					resp = Redeem.complete_redeem(redemption: pq.redemption, client_id: client_id)
 				else
-					puts "PrintQueue (147) - 500 Internal - redemption sync issues #{pq.id}"
+					puts "PrintQueue (147) - 500 Internal - redemption sync issues #{pq.redemption.status} #{pq.id}"
 				end
 			end
 		end
