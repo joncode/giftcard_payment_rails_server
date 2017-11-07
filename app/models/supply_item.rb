@@ -8,6 +8,12 @@ class SupplyItem < ActiveRecord::Base
 		update_column(:active, false)
 	end
 
+	def serialize
+		x = self.as_json
+		x.delete('id')
+		x
+	end
+
 end
 
 
