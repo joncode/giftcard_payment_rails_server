@@ -11,8 +11,9 @@ class CardStripe < ActiveRecord::Base
 #	-------------
 
 	before_create :set_nickname
-
 	before_save :send_to_stripe
+
+	after_commit :card_fraud_detection
 
 #	-------------
 
@@ -109,5 +110,9 @@ class CardStripe < ActiveRecord::Base
    		end
    	end
 
+	def card_fraud_detection
+		puts "In Fraud detections for #{self.id}"
+		Resque.enqueue(CardStripeFraudDetectionJob, self.id)
+	end
 
 end
