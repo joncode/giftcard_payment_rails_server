@@ -30,7 +30,7 @@ class SupplyOrder < ActiveRecord::Base
 	def confirm_price
 		ary_prices = supply_items.map do |hsi|
 			si = SupplyItem.find_with(hsi['hex_id'])
-			si.price * (hsi['quantity'] || 1)
+			si.price * (hsi['quantity'].to_i || 1)
 		end
 		cart_total = ary_prices.sum
 		if self.price != cart_total
