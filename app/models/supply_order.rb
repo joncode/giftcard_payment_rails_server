@@ -68,7 +68,7 @@ class SupplyOrder < ActiveRecord::Base
 			"month"=> so.form_data['stripe']['token']['card']['exp_month'],
 			"year"=> so.form_data['stripe']['token']['card']['exp_year'],
 			"amount"=> so.price,
-			"ccy" => so.ccy
+			"ccy" => so.ccy,
 			'country' => so.form_data['stripe']['token']['card']['country'],
 			'client_id' => so.form_data['client_id'],
 			'partner_id' => so.form_data['partner_id'],
