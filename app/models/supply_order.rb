@@ -57,22 +57,22 @@ class SupplyOrder < ActiveRecord::Base
 		# parse cc details into CardStripe input format
 			# add client and partner
 		h = {
-			"stripe_id"=> so.form_data['stripe']['token']['id'],
-			"name"=> so.form_data['contact_name'],
-			"email"=> so.form_data['contact_email'],
-			"merchant_name"=> so.form_data['venue_name'],
-			"zip"=> so.form_data['stripe']['token']['card']['address_zip'],
-			"last_four"=> so.form_data['stripe']['token']['card']['last4'],
-			"brand"=> so.form_data['stripe']['token']['card']['brand'],
+			"stripe_id"=> self.form_data['stripe']['token']['id'],
+			"name"=> self.form_data['contact_name'],
+			"email"=> self.form_data['contact_email'],
+			"merchant_name"=> self.form_data['venue_name'],
+			"zip"=> self.form_data['stripe']['token']['card']['address_zip'],
+			"last_four"=> self.form_data['stripe']['token']['card']['last4'],
+			"brand"=> self.form_data['stripe']['token']['card']['brand'],
 			"csv"=> nil,
-			"month"=> so.form_data['stripe']['token']['card']['exp_month'],
-			"year"=> so.form_data['stripe']['token']['card']['exp_year'],
-			"amount"=> so.price,
-			"ccy" => so.ccy,
-			'country' => so.form_data['stripe']['token']['card']['country'],
-			'client_id' => so.form_data['client_id'],
-			'partner_id' => so.form_data['partner_id'],
-			'partner_type' => so.form_data['partner_type']
+			"month"=> self.form_data['stripe']['token']['card']['exp_month'],
+			"year"=> self.form_data['stripe']['token']['card']['exp_year'],
+			"amount"=> self.price,
+			"ccy" => self.ccy,
+			'country' => self.form_data['stripe']['token']['card']['country'],
+			'client_id' => self.form_data['client_id'],
+			'partner_id' => self.form_data['partner_id'],
+			'partner_type' => self.form_data['partner_type']
 		}
 		# CardStripe.save will take care of sending to stripe
 		CardStripe.create_card_from_hash(h)
