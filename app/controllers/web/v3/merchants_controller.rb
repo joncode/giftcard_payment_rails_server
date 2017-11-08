@@ -10,7 +10,7 @@ class Web::V3::MerchantsController < MetalCorsController
             companies = resource_for_subdomain.titleize.constantize.where("active = 't' AND paused = 'f' AND name ilike ?", "%#{text_frag}%").order(order_attr => :asc)
         end
         puts "SEARCH #{text_frag} - #{companies.count}"
-        success companies
+        success companies.serialize_objs(:web)
         respond
     end
 
