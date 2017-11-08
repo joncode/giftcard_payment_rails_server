@@ -23,7 +23,7 @@ class SupplyOrder < ActiveRecord::Base
 
 
     def supply_items
-        self.form_data['supply_items']
+        self.form_data['supply_items'] || self.form_data['products'] || []
     end
     alias_method :items, :supply_items
 
