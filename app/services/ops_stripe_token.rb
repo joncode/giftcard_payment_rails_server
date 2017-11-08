@@ -52,6 +52,19 @@ class OpsStripeToken
 		process_error e
 	end
 
+	def self.charge_card card_obj, desc="ItsOnMe charge"
+		return nil if card_obj.nil?
+		@response = Stripe::Charge.create(
+			:amount   => card_obj.amount,
+			:description => desc,
+			:source => card_obj.stripe_id,
+			:currency => card_obj.ccy
+		)
+	rescue => e
+		puts e.inspect
+		process_error e
+	end
+
 	def charge_token
 		return nil if @customer_id.nil? || @ccy.nil? || @amount == 0
 		@response = Stripe::Charge.create(

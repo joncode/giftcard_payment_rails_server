@@ -4,6 +4,7 @@ class SupplyOrder < ActiveRecord::Base
 
     before_save :set_delivered_at
 
+	after_commit :charge_card_for_supplies, on: :create
 
 	def mark_as_deliverd
 		self.update(status: 'delivered')
@@ -18,6 +19,62 @@ class SupplyOrder < ActiveRecord::Base
 		x = self.as_json
 		x.delete('id')
 		x
+	end
+
+
+    def supply_items
+        self.form_data['supply_items']
+    end
+    alias_method :items, :supply_items
+
+	def confirm_price
+		ary_prices = supply_items.map do |hsi|
+			si = SupplyItem.find_with(hsi['hex_id'])
+			si.price * (hsi['quantity'] || 1)
+		end
+		cart_total = ary_prices.sum
+		if self.price != cart_total
+			self.update(price: cart_total)
+		end
+	end
+
+	def charge_card_for_supplies
+		confirm_price
+		card = init_card
+		card.save
+		if card.active && card.persisted?
+			# card created
+			# charge the card for the amount
+			return OpsStripeToken.charge_card(card, "ItsOnMe order supply charge")
+		else
+			# card failed
+			return card.errors.messages
+		end
+	end
+
+	def init_card
+		# parse cc details into CardStripe input format
+			# add client and partner
+		h = {
+			"stripe_id"=> so.form_data['stripe']['token']['id'],
+			"name"=> so.form_data['contact_name'],
+			"email"=> so.form_data['contact_email'],
+			"merchant_name"=> so.form_data['venue_name'],
+			"zip"=> so.form_data['stripe']['token']['card']['address_zip'],
+			"last_four"=> so.form_data['stripe']['token']['card']['last4'],
+			"brand"=> so.form_data['stripe']['token']['card']['brand'],
+			"csv"=> nil,
+			"month"=> so.form_data['stripe']['token']['card']['exp_month'],
+			"year"=> so.form_data['stripe']['token']['card']['exp_year'],
+			"amount"=> so.price,
+			"ccy" => so.ccy
+			'country' => so.form_data['stripe']['token']['card']['country'],
+			'client_id' => so.form_data['client_id'],
+			'partner_id' => so.form_data['partner_id'],
+			'partner_type' => so.form_data['partner_type']
+		}
+		# CardStripe.save will take care of sending to stripe
+		CardStripe.create_card_from_hash(h)
 	end
 
 private
