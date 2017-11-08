@@ -23,7 +23,7 @@ class OmnivoreCronJob
 			end
 		end
 		unless msg.blank?
-			msg = "Omnivore Location Down 500 Internal #{msg.inspect}"
+			msg = "Omnivore Location Down #{msg.inspect}"
 			puts msg
 			OpsTwilio.text_devs msg: msg
 		end
