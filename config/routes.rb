@@ -213,6 +213,7 @@ Drinkboard::Application.routes.draw do
 					get :supply_items
 					post :supply_request
 					post :card
+					get :search
 				end
 			end
 

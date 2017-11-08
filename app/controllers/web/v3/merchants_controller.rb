@@ -3,6 +3,17 @@ class Web::V3::MerchantsController < MetalCorsController
     before_action :authentication_no_token
 
 
+    def search
+        text_frag = search_params[:name].blank? ? nil : search_params[:name].strip
+        companies = []
+        if text_frag
+            companies = resource_for_subdomain.titleize.constantize.where("active = 't' AND paused = 'f' AND name ilike ?", "%#{text_frag}%").order(order_attr => :asc)
+        end
+        puts "SEARCH #{text_frag} - #{companies.count}"
+        success companies
+        respond
+    end
+
     # {"data"=>{"stripe_id"=>"tok_1BElUpHMscfhJNOLBh9", "name"=>"FULL NAME", "email"=>"EMAIL@EXAMPLE.me", "merchant_name"=>"ItsoNme",
     #       "zip"=>"89101", "last_four"=>"4242", "brand"=>"Visa", "csv"=>"[FILTERED]", "month"=>"04", "year"=>"27", "term"=>"Year", "amount"=>30000}}
     def card
@@ -135,6 +146,10 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
 private
+
+    def search_params
+        params.require(:data).permit(:name)
+    end
 
     def anon_stripe_card_params
         params.require(:data).permit(:term, :amount, :merchant_name, :email, :stripe_user_id, :stripe_id, :name, :zip, :last_four, :brand, :csv, :month, :year)
