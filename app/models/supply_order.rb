@@ -39,6 +39,7 @@ class SupplyOrder < ActiveRecord::Base
 	end
 
 	def charge_card_for_supplies
+		puts "Charge Card for Supplies"
 		confirm_price
 		card = init_card
 		card.save
