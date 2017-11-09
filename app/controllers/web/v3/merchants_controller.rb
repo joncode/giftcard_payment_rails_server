@@ -68,7 +68,7 @@ class Web::V3::MerchantsController < MetalCorsController
         supply_order = SupplyOrder.new(hsh)
 
         if supply_order.save
-            success supply_order
+            success supply_order.serialize
         else
             fail_web({
                 err: "INVALID_INPUT",
