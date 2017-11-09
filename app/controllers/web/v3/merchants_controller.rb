@@ -79,7 +79,7 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def show
-        merchant = Merchant.unscoped.find(params[:id])
+        merchant = Merchant.unscoped.find_with(params[:id])
         if merchant.menu_id.nil?
             cache_resp = []
         else
@@ -94,7 +94,7 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def books
-        merchant = Merchant.unscoped.find(params[:id])
+        merchant = Merchant.unscoped.find_with(params[:id])
         success({ "books" => merchant.books.map(&:list_serialize), "loc_id" => merchant.id })
         respond
     end
@@ -113,7 +113,7 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def menu
-        merchant = Merchant.unscoped.find(params[:id])
+        merchant = Merchant.unscoped.find_with(params[:id])
 
         if merchant.menu_id.nil?
             cache_resp = []
@@ -130,7 +130,7 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def redeem_locations
-        merchant = Merchant.unscoped.find(params[:id])
+        merchant = Merchant.unscoped.find_with(params[:id])
         if client = merchant.client
             serialized = client.contents(:merchants).map(&:web_serialize)
         else
