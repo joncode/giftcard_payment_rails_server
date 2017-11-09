@@ -6,6 +6,9 @@ class MerchantSignupCreatedEvent
 		puts "MerchantSignupCreatedEvent START #{ms_id}"
 		ms = MerchantSignup.find(ms_id)
 
+		# notify internal that sign up has been created
+		Alert.perform("MERCHANT_SUBMITTED_SYS", ms)
+
 		merchant = nil
 		license = nil
 		if ms.promotable?
@@ -45,9 +48,6 @@ class MerchantSignupCreatedEvent
 			# attach card to merchant ?
 			license.update(charge_type: 'card', charge_id: card.id)
 		end
-
-		# notify internal that sign up has been created
-		Alert.perform("MERCHANT_SUBMITTED_SYS", ms)
 
 		# send welcome email to merchants
         e = EmailWelcome.new(merchant || ms)
