@@ -118,6 +118,7 @@ class Proto < ActiveRecord::Base
 	end
 
 	def self.start_and_stop_bonus_promos
+		now = DateTime.now.utc
 		starters = where( bonus: true, scheduled_at: [(now - 24.hours) .. now])
 		starters.each do |proto|
 			proto.turn_on

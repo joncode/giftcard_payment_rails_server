@@ -179,7 +179,7 @@ class PrintQueue < ActiveRecord::Base
 		end
 	end
 
-	def self.mark_job status_str, client_id, job, msg=nil
+	def self.mark_job status_str, client_id, job=nil, msg=nil
 			# DO I NEED THE CLIENT ID FOR THIS ? GROUPS ARE UNIQUE
 		if merchant = get_merchant_for_client_id(client_id)
 			if job.to_s.match(/XX-/)
@@ -201,12 +201,12 @@ class PrintQueue < ActiveRecord::Base
 		end
 	end
 
-	def self.mark_job_as_error client_id, job, msg=nil
+	def self.mark_job_as_error client_id, job=nil, msg=nil
 		puts "PrintQueue (143) - #{client_id} - #{job} - #{msg}"
 		mark_job 'cancel', client_id, job, msg
 	end
 
-	def self.mark_job_as_printed client_id, job
+	def self.mark_job_as_printed client_id, job=nil
 		puts "PrintQueue (147) #{client_id} #{job}"
 		pqs = mark_job('done', client_id, job)
 		pqs.each do |pq|
