@@ -90,8 +90,10 @@ private
 		args['payable']       = proto
 		args['message']       = proto.message
 		args['detail']        = proto.detail
-		args['expires_at']    = expires_at_calc(proto)
-		args['scheduled_at']  = scheduled_at_calc(proto)
+		unless proto.bonus
+			args['expires_at']    = expires_at_calc(proto)
+			args['scheduled_at']  = scheduled_at_calc(proto)
+		end
 		args['cat']           = proto.cat
 		args['brand_card']    = proto.brand_card
 		args
