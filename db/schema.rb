@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171102201847) do
+ActiveRecord::Schema.define(version: 20171109220108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1180,41 +1180,46 @@ ActiveRecord::Schema.define(version: 20171102201847) do
     t.text     "message"
     t.text     "detail"
     t.text     "shoppingCart"
-    t.string   "value",         limit: 255
-    t.string   "cost",          limit: 255
+    t.string   "value",          limit: 255
+    t.string   "cost",           limit: 255
     t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "giver_id"
-    t.string   "giver_type",    limit: 255
-    t.string   "giver_name",    limit: 255
+    t.string   "giver_type",     limit: 255
+    t.string   "giver_name",     limit: 255
     t.integer  "provider_id"
-    t.string   "provider_name", limit: 255
+    t.string   "provider_name",  limit: 255
     t.integer  "cat"
-    t.integer  "contacts",                  default: 0
-    t.integer  "processed",                 default: 0
+    t.integer  "contacts",                   default: 0
+    t.integer  "processed",                  default: 0
     t.integer  "merchant_id"
-    t.boolean  "split",                     default: false
+    t.boolean  "split",                      default: false
     t.datetime "scheduled_at"
-    t.string   "ccy",           limit: 6,   default: "USD"
-    t.boolean  "quick",                     default: false
+    t.string   "ccy",            limit: 6,   default: "USD"
+    t.boolean  "quick",                      default: false
     t.integer  "expires_in"
     t.integer  "value_cents"
     t.integer  "cost_cents"
     t.string   "title"
-    t.string   "desc"
-    t.boolean  "camp",                      default: false
-    t.boolean  "active",                    default: true
-    t.boolean  "live",                      default: true
+    t.boolean  "camp",                       default: false
+    t.boolean  "active",                     default: true
+    t.boolean  "live",                       default: true
     t.string   "delivery"
     t.string   "promo_code"
     t.integer  "maximum"
     t.integer  "start_in"
-    t.boolean  "brand_card",                default: false
+    t.boolean  "brand_card",                 default: false
+    t.integer  "target_item_id"
+    t.boolean  "bonus",                      default: false
+    t.string   "photo"
+    t.string   "item_photo"
+    t.text     "item_detail"
   end
 
   add_index "protos", ["active"], name: "index_protos_on_active", using: :btree
   add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree
+  add_index "protos", ["target_item_id"], name: "index_protos_on_target_item_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
     t.string "left",  limit: 255

@@ -6,7 +6,7 @@ class Proto < ActiveRecord::Base
 
 #   -------------
 
-    auto_strip_attributes :message, :detail, :title, :desc
+    auto_strip_attributes :message, :detail, :title
     auto_strip_attributes :promo_code, downcase: true, letter_numbers: true
 
 #   -------------
@@ -19,6 +19,8 @@ class Proto < ActiveRecord::Base
 	before_save :set_value_cents
 	before_save :set_cost
 	before_save :set_cost_cents
+	before_save :set_title_automatically
+	before_save :set_target_defaults
 
 #   -------------
 
@@ -31,6 +33,8 @@ class Proto < ActiveRecord::Base
 	belongs_to :provider
   	belongs_to :merchant
 	belongs_to :giver,      polymorphic: :true
+
+	delegate :now, to: :merchant, allow_nil: true
 
 #   -------------
 
@@ -90,6 +94,34 @@ class Proto < ActiveRecord::Base
 
 	def update_processed new_amount=1
         self.increment!(:processed, new_amount)
+	end
+
+	def bonus_on?
+		(self.active && self.live) && self.bonus
+	end
+
+	def toggle_live
+    	@proto.toggle!(:live)
+        if @proto.bonus
+            Resque.enqueue(BonusGiftSwapEvent, self.id)
+        end
+	end
+
+	def toggle_destroy
+    	@proto.toggle!(:active)
+        if @proto.bonus
+            Resque.enqueue(BonusGiftSwapEvent, self.id)
+        end
+	end
+
+#   -------------
+
+	def bonus_photo
+		self.photo
+	end
+
+	def bonus_detail
+		self.detail
 	end
 
 #   -------------
@@ -178,9 +210,43 @@ class Proto < ActiveRecord::Base
 		"Enjoy this gift. Text support if you have any questions."
 	end
 
+#   -------------
+
+	def generic_title
+		time_str = ""
+		if tt = now.try(:to_formatted_s, :url_date)
+			time_str = " [#{tt}]"
+		end
+		if self.camp
+			"Keyword Campaign#{time_str}"
+		elsif self.bonus
+			"Bonus Gift Card#{time_str}"
+		elsif self.quick
+			"Quick Gift#{time_str}"
+		elsif self.brand_card
+			"Brand Card#{time_str}"
+		else
+			"Promotion#{time_str}"
+		end
+	end
+
+	def set_title_automatically
+		if self.title.blank?
+			self.title = generic_title
+		end
+	end
+
 
 private
 
+
+	def set_target_defaults
+		if self.changed_attributes.keys.include?('target_item_id')
+			ti = MenuItem.unscoped.where(id: self.target_item_id).first
+			self.item_photo = ti.photo if ti
+			self.item_detail = ti.detail if ti
+		end
+	end
 
 	def set_value_cents
 		self.value_cents = currency_to_cents(self.value)
