@@ -101,17 +101,13 @@ class Proto < ActiveRecord::Base
 	end
 
 	def toggle_live
-    	@proto.toggle!(:live)
-        if @proto.bonus
-            Resque.enqueue(BonusGiftSwapEvent, self.id)
-        end
+    	self.toggle!(:live)
+        Resque.enqueue(BonusGiftSwapEvent, self.id) if self.bonus
 	end
 
 	def toggle_destroy
-    	@proto.toggle!(:active)
-        if @proto.bonus
-            Resque.enqueue(BonusGiftSwapEvent, self.id)
-        end
+    	self.toggle!(:active)
+        Resque.enqueue(BonusGiftSwapEvent, self.id) if self.bonus
 	end
 
 #   -------------
