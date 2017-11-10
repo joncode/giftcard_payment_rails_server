@@ -21,6 +21,7 @@ class Proto < ActiveRecord::Base
 	before_save :set_cost_cents
 	before_save :set_title_automatically
 	before_save :set_target_defaults
+	before_save :update_target_meta
 
 #   -------------
 
@@ -100,14 +101,31 @@ class Proto < ActiveRecord::Base
 		(self.active && self.live) && self.bonus
 	end
 
+	def turn_on
+		update(live: true)
+	end
+
+	def turn_off
+		update(live: false)
+	end
+
 	def toggle_live
     	self.toggle!(:live)
-        Resque.enqueue(BonusGiftSwapEvent, self.id) if self.bonus
 	end
 
 	def toggle_destroy
     	self.toggle!(:active)
-        Resque.enqueue(BonusGiftSwapEvent, self.id) if self.bonus
+	end
+
+	def self.start_and_stop_bonus_promos
+		starters = where( bonus: true, scheduled_at: [(now - 24.hours) .. now])
+		starters.each do |proto|
+			proto.turn_on
+		end
+		enders = where( bonus: true, expires_at: [(now - 24.hours) .. now])
+		enders.each do |proto|
+			proto.turn_off
+		end
 	end
 
 #   -------------
@@ -235,6 +253,12 @@ class Proto < ActiveRecord::Base
 
 private
 
+
+	def update_target_meta
+		if self.changed_attributes.keys.include?('live') || self.changed_attributes.keys.include?('active')
+			Resque.enqueue(BonusGiftSwapEvent, self.id) if self.bonus
+		end
+	end
 
 	def set_target_defaults
 		if self.changed_attributes.keys.include?('target_item_id')

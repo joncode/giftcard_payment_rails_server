@@ -41,6 +41,12 @@ namespace :morning do
         end
 
         begin
+            Proto.start_and_stop_bonus_promos
+        rescue => e
+            puts "500 Internal Proto.start_and_stop_bonus_promos #{e.inspect}"
+        end
+
+        begin
             Booking.reminders
         rescue => e
             puts "500 Internal Booking.reminders #{e.inspect}"
