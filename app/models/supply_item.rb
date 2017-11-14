@@ -2,6 +2,7 @@ class SupplyItem < ActiveRecord::Base
 	HEX_ID_PREFIX = 'si_'
 	include HexIdMethods
 
+    default_scope -> { where(active: true) }
 
 	def destroy
 			# DO NOT DELETE RECORDS
