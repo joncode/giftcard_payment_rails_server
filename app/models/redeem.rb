@@ -48,6 +48,44 @@ class Redeem
 
 #   -------------   API SURFACE METHODS
 
+	# Redeem.partial_redeem_redemption(redemption: r, amount: amt)
+
+	def self.partial_redeem_redemption(redemption: , amount: )
+		if redemption.amount < amount || redemption.status != 'pending'
+			raise "Incorrect Redemption amount attempted"
+		end
+		gift = redemption.gift
+		set_gift_current_balance_and_status(gift)
+		gift_previous_value = gift.balance
+		gift_next_value = gift_previous_value - amount
+        # reset the redemption
+        # 1. create a new sync redemption for the adjusted amount
+        new_redemption = Redemption.new(gift_id: redemption.gift_id,
+        	amount: amount,
+        	ticket_id: redemption.paper_id,
+        	start_req: { "loc_id" => redemption.merchant_id, "amount" => amount, "api" => redemp, "type_of" => "V2" },
+        	type_of: 1,
+        	merchant_id: redemption.merchant_id,
+        	status: 'done',
+        	gift_prev_value: gift_previous_value,
+        	gift_next_value: gift_next_value
+    	)
+        if new_redemption.save
+	        # 2. adjust the balance on the gift
+	        set_gift_current_balance_and_status(gift)
+	        gift.save
+	        # 3. adjust the prev and next values on the paper redemption that is still pending
+	        redemption.gift_prev_value = gift_next_value
+	        redemption.amount = redemption.amount - amount
+        	redemption.status = 'done' if redemption.gift_next_value <= 0
+	        redemption.save
+	        redemption
+        	return { 'success' => true, "response_code" => 'REDEEMED', "response_text" => "Redemption partially redeemed" }
+		else
+			return { 'success' => false, "response_code" => 'INVALID_INPUT', "response_text" => new_redemption.errors.full_messages }
+		end
+	end
+
 	def self.start_redeem(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant, sync: false)
 		if gift.r_sys == 8
 			api = api.gsub('start_redemption', 'start_apply_redemption')

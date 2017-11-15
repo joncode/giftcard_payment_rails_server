@@ -8,7 +8,21 @@ class Mt::V2::GiftsController < JsonController
         if redemption.nil?
             fail "Redemption not found"
         else
-            if redemption.status == 'pending'
+            if redeem_params["amount"].present? && redeem_params["amount"].to_f.to_s == redeem_params["amount"].to_f
+                new_amount = (redeem_params["amount"].to_f * 100).to_i
+                if new_amount > redemption.amount
+                    # reject this
+                    fail "Redemption #{redemption.token} cannot be redeemed for that amount."
+                elsif new_amount <= redemption.amount
+                    rc = Redeem.partial_redeem_redemption(redemption: redemption, amount: new_amount)
+                    if rc['success']
+                        redemption = rc['redemption']
+                        success(rc['response_text'])
+                    else
+                        fail rc['response_text']
+                    end
+                end
+            elsif redemption.status == 'pending'
                 rc = Redeem.apply_and_complete(redemption: redemption, server: redeem_params['mt_user_id'])
                 if rc['success']
                     success(rc['response_text'])
@@ -49,7 +63,7 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit :redemption_id, :mt_user_id #:gift_id, :token, :server
+        params.require(:data).permit :redemption_id, :mt_user_id, :amount #:gift_id, :token, :server
     end
 
 end
