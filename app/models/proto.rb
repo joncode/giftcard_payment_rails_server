@@ -39,6 +39,10 @@ class Proto < ActiveRecord::Base
 
 #   -------------
 
+	def target
+		@target ||= MenuItem.where(id: self.target_item_id).first
+	end
+
 	def gifting_fail_msg
 		return "we're sorry but this promo is no longer active" if !self.active
 		return "we're sorry but this promo is no longer live" if !self.live
