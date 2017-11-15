@@ -23,13 +23,13 @@ class BonusGiftSwapEvent
 	end
 
 
-	def set_menu_item_bonus proto, target
+	def self.set_menu_item_bonus proto, target
 		target.update(photo: proto.bonus_photo, detail: proto.bonus_detail)
 		# bust the WWW menu item cache
 		WwwHttpService.clear_merchant_cache
 	end
 
-	def set_menu_item_normal proto, target
+	def self.set_menu_item_normal proto, target
 		target.update(photo: proto.item_photo, detail: proto.item_detail)
 		# bust the WWW menu item cache
 		WwwHttpService.clear_merchant_cache
