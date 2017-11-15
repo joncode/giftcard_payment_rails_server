@@ -18,7 +18,7 @@ class GiftPurchasePromotionJob
 
 			_mid = mhsh['item_id']
 
-			promo_items = Proto.where(active: true, live: true, bonus: true, target_item_id: _mid).first
+			promo_items = Proto.where(active: true, live: true, bonus: true, target_item_id: _mid) || []
 
 			unless promo_items.empty?
 
