@@ -16,7 +16,11 @@ class GiftCreatedEvent
 
             # PointsForSaleJob.perform gift_id
             if gift.cat == 300
-                GiftPurchasePromotionJob.perform(gift)
+                begin
+                    GiftPurchasePromotionJob.perform(gift)
+                rescue => e
+                    puts "500 Internal #{e.inspect}"
+                end
                 Alert.perform("GIFT_PURCHASED_SYS", gift)
                 Alert.perform("GIFT_PURCHASED_MT", gift)
             end
