@@ -17,14 +17,11 @@ class GiftPurchasePromotionJob
 		gift.cart_ary.each do |mhsh|
 
 			_mid = mhsh['item_id']
-
 			promo_items = Proto.where(active: true, live: true, bonus: true, target_item_id: _mid) || []
 
 			unless promo_items.empty?
 
-				promo_items.each do |promo_item|
-					proto = promo_item.proto
-
+				promo_items.each do |proto|
 					pj = ProtoJoin.create_with_proto_and_rec(proto, gift.giver)
 					if pj.persisted?
 						gift = GiftProtoJoin.create({ 'proto' => proto, 'proto_join' => pj})
