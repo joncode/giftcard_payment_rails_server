@@ -35,18 +35,22 @@ class MerchantSignupCreatedEvent
 			end
 		end
 
-		# exchange stripe token for customer account
-		# save CC in DB
-		card = ms.create_card
+		if ms.data['payment_method'] == 'stripe'
 
-		if card.stripe_user_id && license
-			# set up the subscription in stripe ?
-			res = OpsStripeToken.create_subscription(card.stripe_user_id, license.stripe_plan_id)
+			# exchange stripe token for customer account
+			# save CC in DB
+			card = ms.create_card
 
-			puts res.inspect
+			if card.stripe_user_id && license
+				# set up the subscription in stripe ?
+				res = OpsStripeToken.create_subscription(card.stripe_user_id, license.stripe_plan_id)
 
-			# attach card to merchant ?
-			license.update(charge_type: 'card', charge_id: card.id)
+				puts res.inspect
+
+				# attach card to merchant ?
+				license.update(charge_type: 'card', charge_id: card.id)
+			end
+
 		end
 
 		# send welcome email to merchants
