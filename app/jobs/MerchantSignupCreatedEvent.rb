@@ -41,7 +41,7 @@ class MerchantSignupCreatedEvent
 
 		if card.stripe_user_id && license
 			# set up the subscription in stripe ?
-			res = OpsStripeToken.create_subscription(stripe_user_id, license.stripe_plan_id)
+			res = OpsStripeToken.create_subscription(card.stripe_user_id, license.stripe_plan_id)
 
 			puts res.inspect
 
