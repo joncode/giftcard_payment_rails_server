@@ -54,7 +54,7 @@ class ProtoJoin < ActiveRecord::Base
 private
 
 	def proto_not_camp?
-		self.proto && !self.proto.camp
+		self.proto && !self.proto.camp && !self.proto.bonus
 	end
 
 	def proto_camp?
