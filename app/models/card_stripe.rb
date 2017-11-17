@@ -105,7 +105,7 @@ class CardStripe < ActiveRecord::Base
 		# Convert 2->4 digit year
 		if (card.year.to_s.length == 2)
 			# Should be correct for the next ~60 years
-			card.year = "20#{card.year}"q
+			card.year = "20#{card.year}"
 
 			puts "[model CardStripe :: create_card_from_hash]  Caught and fixed 2-digit year"
 			puts card.inspect
