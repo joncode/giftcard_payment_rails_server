@@ -186,6 +186,16 @@ class Card < ActiveRecord::Base
 		card.brand 		= cc_hash["brand"]
 		card.number 	= cc_hash["number"]
 		card.zip 		= cc_hash['zip']
+
+		# Convert 2->4 digit year
+		if (card.year.to_s.length == 2)
+			# Should be correct for the next ~60 years
+			card.year = "20#{card.year}"
+
+			puts "[model Card :: create_card_from_hash]  Caught and fixed 2-digit year"
+			puts card.inspect
+		end
+
 		card
 	end
 
