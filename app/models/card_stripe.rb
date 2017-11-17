@@ -101,6 +101,16 @@ class CardStripe < ActiveRecord::Base
         	card.ccy = 'GBP' if card.country == 'GB'
 	        card.ccy = 'USD' if card.ccy.nil?
 	    end
+
+		# Convert 2->4 digit year
+		if (card.year.to_s.length == 2)
+			# Should be correct for the next ~60 years
+			card.year = "20#{card.year}"q
+
+			puts "[model CardStripe :: create_card_from_hash]  Caught and fixed 2-digit year"
+			puts card.inspect
+		end
+
 		card
 	end
 
