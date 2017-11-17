@@ -14,19 +14,24 @@ class GiftPurchasePromotionJob
     	return if gift.nil?
 		return if gift.cat != 300
 
-		gift.cart_ary.each do |mhsh|
+		gift.cart.each do |mhsh|
 
 			_mid = mhsh['item_id']
+			_quantity = mhsh['quantity'] || 1
 			promo_items = Proto.where(active: true, live: true, bonus: true, target_item_id: _mid) || []
 
 			unless promo_items.empty?
 
 				promo_items.each do |proto|
-					pj = ProtoJoin.create_with_proto_and_rec(proto, gift.giver)
-					if pj.persisted?
-						gift = GiftProtoJoin.create({ 'proto' => proto, 'proto_join' => pj})
-					else
-						# proto join save failed
+
+					_quantity.to_i.times do
+						pj = ProtoJoin.create_with_proto_and_rec(proto, gift.giver)
+						if pj.persisted?
+							gift = GiftProtoJoin.create({ 'proto' => proto, 'proto_join' => pj})
+						else
+							# proto join save failed
+							puts "Failed Bonus Gift Card - 500 Internal - #{pj.errors.messages}"
+						end
 					end
 
 				end
