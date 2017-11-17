@@ -27,10 +27,13 @@ class GiftPurchasePromotionJob
 					_quantity.to_i.times do
 						pj = ProtoJoin.create_with_proto_and_rec(proto, gift.giver)
 						if pj.persisted?
-							gift = GiftProtoJoin.create({ 'proto' => proto, 'proto_join' => pj})
+							bonus_gift = GiftProtoJoin.create({ 'proto' => proto, 'proto_join' => pj})
+							if !bonus_gift.persisted?
+								puts "Failed Bonus Gift Card(32) - 500 Internal - #{bonus_gift.errors.messages}"
+							end
 						else
 							# proto join save failed
-							puts "Failed Bonus Gift Card - 500 Internal - #{pj.errors.messages}"
+							puts "Failed Bonus Gift Card(36) - 500 Internal - #{pj.errors.messages}"
 						end
 					end
 
