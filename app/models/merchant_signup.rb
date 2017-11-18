@@ -73,6 +73,7 @@ class MerchantSignup < ActiveRecord::Base
 	end
 
 	def create_card
+		return nil unless self.data['payment_method'] == 'stripe'
 		card = init_card
 		card.save
 		if card.active && card.persisted?
@@ -84,8 +85,6 @@ class MerchantSignup < ActiveRecord::Base
 	end
 
 	def init_card
-		# check to see if there are cc details avail , otherwise exit
-		return nil unless self.data["signup_source"] == "Surfboard"
 		# parse cc details into CardStripe input format
 			# add client and partner from signup - put in signup :data
 		h = {

@@ -41,7 +41,7 @@ class MerchantSignupCreatedEvent
 			# save CC in DB
 			card = ms.create_card
 
-			if card.stripe_user_id && license
+			if card && card.stripe_user_id && license
 				# set up the subscription in stripe ?
 				res = OpsStripeToken.create_subscription(card.stripe_user_id, license.stripe_plan_id)
 
