@@ -8,7 +8,7 @@ class BonusGiftSwapEvent
 
 		proto = Proto.where(bonus: true, id: proto_id).first
 		if proto.bonus
-			if target = proto.target
+			if target == proto.target
 
 					# do the swap
 
