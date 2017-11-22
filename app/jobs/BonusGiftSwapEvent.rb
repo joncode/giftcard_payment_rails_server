@@ -27,7 +27,7 @@ class BonusGiftSwapEvent
 	def self.set_menu_item_normal proto, target
 		puts "[job BonusGiftSwapEvent :: set_menu_item_normal]"
 		target.update(photo: proto.item_photo, detail: proto.item_detail)
-		puts "[job BonusGiftSwapEvent :: set_menu_item_bonus] target: #{target.inspect}"
+		puts "[job BonusGiftSwapEvent :: set_menu_item_normal] target: #{target.inspect}"
 
 		# bust the WWW menu item cache
 		WwwHttpService.clear_merchant_cache
