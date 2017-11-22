@@ -11,6 +11,15 @@ class BonusGiftSwapEvent
 		else
 			set_menu_item_normal proto, proto.target
 		end
+
+		# compile menu to app
+		merchant = proto.merchant
+		merchant.menu.compile_menu_to_app
+		# creatte the new json response for menu
+		cache_resp = merchant.menu_string
+		# save that menu to Redis
+		RedisWrap.set_menu(merchant.menu_id, cache_resp)
+		WwwHttpService.clear_merchant_cache
 	end
 
 
@@ -19,8 +28,6 @@ class BonusGiftSwapEvent
 		target.update(photo: proto.bonus_photo, detail: proto.bonus_detail)
 		puts "[job BonusGiftSwapEvent :: set_menu_item_bonus] target: #{target.inspect}"
 
-		# bust the WWW menu item cache
-		WwwHttpService.clear_merchant_cache
 	end
 
 
@@ -28,9 +35,7 @@ class BonusGiftSwapEvent
 		puts "[job BonusGiftSwapEvent :: set_menu_item_normal]"
 		target.update(photo: proto.item_photo, detail: proto.item_detail)
 		puts "[job BonusGiftSwapEvent :: set_menu_item_normal] target: #{target.inspect}"
-
-		# bust the WWW menu item cache
-		WwwHttpService.clear_merchant_cache
 	end
+
 
 end
