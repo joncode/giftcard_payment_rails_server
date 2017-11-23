@@ -127,7 +127,7 @@ class Proto < ActiveRecord::Base
 		starters.each do |proto|
 			proto.turn_on
 		end
-		enders = where( bonus: true, expires_at: [(now - 24.hours) .. now])
+		enders = where( bonus: true, end_at: [(now - 24.hours) .. now])
 		enders.each do |proto|
 			proto.turn_off
 		end
