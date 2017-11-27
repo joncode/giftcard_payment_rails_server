@@ -21,7 +21,7 @@ module MoneyHelper
 	end
 
  	def string_to_float str
- 		str.to_f.round(2)
+ 		str.to_s.gsub(',','').to_f.round(2)
  	end
 
 	def float_to_money float, ccy: nil
