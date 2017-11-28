@@ -5,12 +5,13 @@ class Book < ActiveRecord::Base
     has_many :bookings
 	belongs_to :merchant
 
-    auto_strip_attributes :name, :zinger, :detail, :notes,
+    auto_strip_attributes :name, :zinger,
 	    :member1, :member2, :member3, :member4,
 		:member1_name, :member2_name, :member3_name, :member4_name,
     	:photo1, :photo2, :photo3, :photo4, :photo5, :photo_banner, :photo_logo,
 		:photo1_name, :photo2_name, :photo3_name, :photo4_name, :photo5_name, :photo_banner_name, :photo_logo_name,
-		:price1_name, :price2_name
+		:price1_name, :price2_name, max_length_char_vary: true
+	auto_strip_attributes  :detail, :notes
 
 	validates_presence_of :merchant, :name, :advance_days, :min_ppl, :max_ppl, :price1
 	validates_numericality_of :tax_rate, greater_than_or_equal_to: 0, less_than_or_equal_to: 1, message: 'must be between 0 & 100'
