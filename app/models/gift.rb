@@ -85,6 +85,10 @@ class Gift < ActiveRecord::Base
         redemptions.where(status: 'pending')
     end
 
+    def cancel_all_pending_redemptions
+        pending_redemptions.each { |r| r.direct_cancel }
+    end
+
     has_many    :registers
     has_one     :sms_contact,   autosave: true
 

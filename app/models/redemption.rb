@@ -171,6 +171,12 @@ class Redemption < ActiveRecord::Base
 		end
 	end
 
+	def direct_cancel
+		self.status = 'cancel'
+		self.response = { 'response_code' => 'API_SYSTEM_CANCEL', 'response_text' => "API direct cancel" }
+		save
+	end
+
 	def run_operation operation
 		if operation == 'cancel'
 			return remove_pending('cancel', { 'response_code' => 'API_SYSTEM_EXPIRE', 'response_text' => "API run_opertion cancel" })
