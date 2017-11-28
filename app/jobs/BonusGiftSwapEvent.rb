@@ -2,9 +2,13 @@ class BonusGiftSwapEvent
     @queue = :database
 
 	def self.perform proto_id
-		# we do not need set_value , the swap exists based on the value of the underlying proto
+			# we do not need set_value , the swap exists based on the value of the underlying proto
 		proto = Proto.where(bonus: true, id: proto_id).first
-		return  unless proto.bonus
+
+			# only process bonus proto
+		return unless proto.present?
+		return unless proto.bonus
+
 
 		if proto.bonus_on?
 			set_menu_item_bonus proto, proto.target
