@@ -10,6 +10,9 @@ AutoStripAttributes::Config.setup do
 	set_filter letter_numbers: false do |value|
 		value.respond_to?(:gsub) ? value.gsub(/[^a-zA-Z0-9]/, '') : value
 	end
+	set_filter max_length_char_vary: false do |value|
+		value.respond_to?(:to_s) ? value.to_s[0..253] : value
+	end
 	filters_enabled[:squish] = true
 end
 

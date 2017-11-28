@@ -23,6 +23,7 @@ class Gift < ActiveRecord::Base
 #   -------------
 
     auto_strip_attributes :receiver_email, :receiver_name, :server
+    auto_strip_attributes :origin, max_length_char_vary: true
 
 #   -------------
 
