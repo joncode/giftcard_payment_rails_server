@@ -45,7 +45,7 @@ class Accountant
 		end
 
 		def gift_partial_redemption_event gift
-			return "Payment time not in sync" if gift.cat >= 200 && gift.cat < 300
+			return "Accountant: Payment time not in sync" if gift.cat >= 200 && gift.cat < 300
 			redemptions = gift.redemptions
 			registers = gift.registers
 				# this will never == ?????
@@ -55,18 +55,18 @@ class Accountant
 			msg = "500 Internal - Accountant - partial_redemption- #{gift.id} - Discrepency = #{discrepency}"
 			puts msg.inspect
 			# OpsTwilio.text_devs(msg: msg)
-			return "Partial Redemption Necessary"
+			return "Accountant: Partial Redemption Necessary"
 		end
 
 #-------      BEHAVIOR METHODS
 
 		def merchant gift, adjusted_value=nil
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
-			return "Not redemption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
+			return "Accountant: Not redemption not a purchase (65)" if gift.status != 'redeemed' && gift.cat != 300
 
 			adjusted_value = gift.location_fee(adjusted_value)
 			register = Register.init_debt(gift, gift.merchant, adjusted_value, "loc")
-			return "Register exists" if register.nil?
+			return "Accountant: Register exists (69)" if register.nil?
 
 			if register.save
 				return "Register #{register.id}"
@@ -76,19 +76,19 @@ class Accountant
 		end
 
 		def affiliate_location gift, adjusted_value=nil
-			return "Gift is not a purchase" if gift.cat != 300
+			return "Accountant: Gift is not a purchase" if gift.cat != 300
 			merchant = gift.merchant
 
 			affiliate = Affiliate.where(id: merchant.affiliate_id).first
 			# nil or not found
-			return "No Location Affiliation" if affiliate.nil?
+			return "Accountant: No Location Affiliation" if affiliate.nil?
 
 			adjusted_value = gift.override_fee(adjusted_value)
 			register = Register.init_debt(gift, affiliate, adjusted_value, "aff_loc")
-			return "Register exists" if register.nil?
+			return "Accountant: Register exists" if register.nil?
 
 			if register.save
-				return "Register #{register.id}"
+				return "Accountant: Register #{register.id}"
 			else
 				return register.errors.messages
 			end
