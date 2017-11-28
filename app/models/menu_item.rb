@@ -22,14 +22,32 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
-    # def price
-    #     puts 'PRICE WRAP'
-    #     str = display_money(cents: self.price_cents)
-    #     if price_o != str
-    #         puts "PRICE INCORRECT #{str} != #{price_o} 500 Internal "
-    #     end
-    #     str
-    # end
+    def multi_redemption_client
+        company = self.owner
+        company.multi_redemption_client
+    end
+
+    def multi_redeemable?
+        multi_redemption_client.length > 0
+    end
+
+    def multi_redemption_merchants
+        c = self.multi_redemption_client
+        if c.nil?
+            [self.owner]
+        else
+            arg_scope = proc { Merchant.where(active: true, paused: false) }
+            c.contents(:merchants, &arg_scope)
+        end
+    end
+
+    def multi_redemption_merchant_ids
+        multi_redemption_merchants.map(&:id)
+    end
+
+
+#   -------------
+
 
     def price_o
         self.read_attribute(:price)

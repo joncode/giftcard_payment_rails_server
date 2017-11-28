@@ -115,7 +115,7 @@ class Merchant < ActiveRecord::Base
     end
 
 
-#   -------------
+#   -------------            MUILTI REDEMPTION METHODS
 
     def multi_redemption_client
         self.client
