@@ -58,9 +58,15 @@ module HexIdMethods
 
 
 		def paper_to_hex paper_id
-			return paper_id unless paper_id.try(:match,'-')
-			hex_id = paper_id[0..6].to_s + paper_id[8..11].to_s
-			hex_id.gsub('-','_').downcase
+			new_str = ""
+			paper_id.chars.each do |char|
+				if char.match /[a-zA-Z0-9]/
+					new_str += char.downcase
+				else
+					next
+				end
+			end
+			new_str[0..1] + '_' + new_str[2..-1]
 		end
 
 		def hex_to_paper hex_id
