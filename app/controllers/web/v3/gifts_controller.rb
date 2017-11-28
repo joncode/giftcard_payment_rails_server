@@ -412,7 +412,7 @@ private
             if gift_hsh["link"]
                 gift_hsh["origin"] = gift_hsh["link"]
             else
-                gift_hsh["origin"] = request.headers['User-Agent']
+                gift_hsh["origin"] = request.headers['User-Agent'][0..250] rescue nil
             end
         end
         gift_hsh["client_id"]     = @current_client.id
