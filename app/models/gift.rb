@@ -321,7 +321,7 @@ class Gift < ActiveRecord::Base
     def location_fee convert_amount=nil
         if self.cat >= 300
             return merchant.location_fee(convert_amount || converted_value_cents)
-        elsif self.cat < 200
+        elsif self.cat < 200 # cat >= 100 < 200  ADMIN GIFT
             return cost_cents
         else
             return 0

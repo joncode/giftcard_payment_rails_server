@@ -108,7 +108,7 @@ class PrintQueue < ActiveRecord::Base
 		if client && client.partner_type == 'Merchant'
 			return client.partner
 		else
-			puts "500 Internal - Epson Client is matched with nothing OR affiliate - client_id = #{printer_id}"
+			puts "500 Internal - Epson Client is matched with nothing OR affiliate - client_id = #{printer_id}" if Rails.env.production?
 			return nil
 		end
 	end
