@@ -28,7 +28,7 @@ module ShoppingCartHelper
     end
 
     def humanize_item item, separator='x'
-        item["quantity"].to_s +  " #{separator} " +  item["item_name"].to_s.pluralize(item["quantity"].to_i)
+        item["quantity"].to_s +  " #{separator} " +  item["item_name"].to_s
     end
 
     def cart_ary shoppingCart_string=nil
