@@ -56,9 +56,9 @@ Click here for your gift.\n #{self.invite_link}"
             else
                 usr_msg = nil
                 usr_msg = "'#{self.message}' -#{self.giver_name}" unless self.message.blank?
-                sys_msg = "Click link to claim your gift.\n#{self.giver_name} has sent you a #{self.value_s} gift card
-at #{self.merchant_name}."
-                resp = OpsTwilio.link_text to: self.receiver_phone, link: self.invite_link, usr_msg: usr_msg, system_msg: sys_msg
+                sys_msg = "#{self.giver_name} has sent you a #{self.value_s} gift card at #{self.merchant_name}."
+                link_msg = "Click link to accept your gift #{self.invite_link}"
+                resp = OpsTwilio.link_text to: self.receiver_phone, link: link_msg, usr_msg: usr_msg, system_msg: sys_msg
             end
         end
     end

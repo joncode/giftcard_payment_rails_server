@@ -6,14 +6,21 @@ class OpsTwilio
 
 		def link_text to: , link: , usr_msg: , system_msg: nil
 
-			# 3 steps to the process
+			# 	3 steps to the process
 			# 1 send the user to user message
 			# 2. send the link
 			# 3. send the company explanation
-			system_msg = "1/3: #{system_msg}" unless system_msg.blank?
-			usr_msg = "3/3: #{usr_msg}" unless usr_msg.blank?
-			[system_msg, link, usr_msg].each do |m|
-				next if m.blank?
+			indexed_msg = []
+			[system_msg, link, usr_msg].each do |msg|
+				next if msg.blank?
+				indexed_msg << msg
+			end
+			total = indexed_msg.length
+			new_ary = []
+			indexed_msg = indexed_msg.each_with_index do |msg, i|
+				new_ary << "#{i+ 1}/#{total}: #{msg}"
+			end
+			new_ary.each do |m|
 				text(to: to, msg: m)
 			end
 
