@@ -66,7 +66,7 @@ module HexIdMethods
 					next
 				end
 			end
-			new_str[0..1] + '_' + new_str[2..-1]
+			new_str[0..1].to_s + '_' + new_str[2..-1].to_s
 		end
 
 		def hex_to_paper hex_id

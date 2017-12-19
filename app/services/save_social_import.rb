@@ -11,7 +11,7 @@ class SaveSocialImport
             #errors.add :email, "Row #{index+1}: #{social.network_id} is not a valid email"
             puts "#{social.network_id} is not a valid email - #{social.errors.full_messages}"
         else
-            ProvidersSocial.create(merchant_id: merchant_id, social_id: social.id)
+            # ProvidersSocial.create(merchant_id: merchant_id, social_id: social.id)
             if proto_id && proto_id > 0
                 ProtoJoin.find_or_create_by(receivable_type: "Social", receivable_id: social.id, gift_id: nil, proto_id: proto_id)
             end

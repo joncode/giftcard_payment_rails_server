@@ -1,4 +1,4 @@
-workers Integer(ENV['PUMA_WORKERS'] || 5)
+workers Integer(ENV['WEB_CONCURRENCY'] || 4)
 threads Integer(ENV['MIN_THREADS']  || 1), Integer(ENV['MAX_THREADS'] || 1)
 
 
