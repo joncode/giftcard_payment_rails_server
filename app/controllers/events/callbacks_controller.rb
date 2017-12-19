@@ -12,7 +12,7 @@ class Events::CallbacksController < MetalCorsController
 		per = PrintEpsonResponder.new(params)
 		per.perform
 		if per.response
-			render xml: per.xml
+			render xml: per.xml, encoding: :utf8
 		else
 			head :ok
 		end
@@ -23,7 +23,7 @@ class Events::CallbacksController < MetalCorsController
 		per = PrintEpsonResponder.new(params)
 		per.perform
 		if per.response
-			render xml: per.xml
+			render xml: per.xml, encoding: :utf8
 		else
 			head :ok
 		end
@@ -39,7 +39,7 @@ class Events::CallbacksController < MetalCorsController
 		per = PrintEpsonResponder.new(params)
 		per.perform
 		if per.response
-			render xml: per.xml
+			render xml: per.xml, encoding: :utf8
 		else
 			head :ok
 		end
