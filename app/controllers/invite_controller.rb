@@ -28,7 +28,7 @@ class InviteController < ApplicationController
 		        respond_to do |format|
 		            format.html
 		            format.pdf do
-		                render pdf: "paper_gifts"
+		                render pdf: "paper_gifts", encoding: :utf8
 		            end
 		        end
 	        else
