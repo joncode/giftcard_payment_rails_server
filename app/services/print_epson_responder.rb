@@ -62,6 +62,7 @@ class PrintEpsonResponder
 	end
 
 	def parse_print_receipts printjob
+		return if client_id.blank?
 		@success = false
 		unless printjob.blank?
 			begin
