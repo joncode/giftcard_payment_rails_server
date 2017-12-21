@@ -38,7 +38,8 @@ class PrintEpsonResponder
 			# Catch missing / incorrect `client_id`s, as these will not resolve on their own.
 			#  * missing   -> misconfigured printer
 			#  * incorrect -> someone deleted/deactivated the printer's <Client> object
-		if client_id.blank? # ||  Client.where(application_key: client_id).count == 0
+
+		if client_id.blank? 	# || ClientUrlMatcher.get_app_key(client_id).nil?
 			return recall(:misconfiguration)
 		end
 

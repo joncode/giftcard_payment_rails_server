@@ -19,7 +19,7 @@ class ClientUrlMatcher
 		end
 
 		def get_app_key app_key
-			Client.where(active: true).where("application_key like '#{app_key}'").first
+			Client.where(active: true).where(application_key: app_key).first
 		end
 
 		def gen_type client_url_name
