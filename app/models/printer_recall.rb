@@ -1,7 +1,11 @@
 class PrinterRecall < ActiveRecord::Base
 
-    def type= type
-        self.type_of = type
+    def name
+        self.printer_name
+    end
+
+    def type= type_sym
+        self.type_of = type_sym.to_s
     end
 
     def type
@@ -13,13 +17,13 @@ class PrinterRecall < ActiveRecord::Base
     end
 
     def notifying!
-        self.notified_at = Time.now
+        self.notified_at = DateTime.now.utc
         self.save
         self
     end
 
     def to_epson_xml
-        return case(type_of)
+        return case(type_of.to_s)
             when 'misconfiguration'
                 PrintRecallMisconfiguration.new.to_epson_xml
             when 'faulty'
