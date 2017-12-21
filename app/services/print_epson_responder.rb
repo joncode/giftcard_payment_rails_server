@@ -34,6 +34,13 @@ class PrintEpsonResponder
 #	------------- 	GetRequest
 
 	def run_check_print_queue
+		# Catch missing / incorrect `client_id`s, as these will not resolve on their own.
+		#  * missing   -> misconfigured printer
+		#  * incorrect -> someone deleted/deactivated the printer's <Client> object
+		if client_id.blank?  ||  Client.where(id: client_id).count == 0
+			return recall(:misconfiguration)
+		end
+
 		if print_queues = PrintQueue.print_request(client_id)
 			@response = true
 			@xml = PrintQueue.deliver(print_queues, client_id)
@@ -109,5 +116,41 @@ class PrintEpsonResponder
 			end
 		end
 	end
+
+
+
+	def recall(type)
+		# Fetch or create a <PrinterRecall> object
+		printer_recall = PrinterRecall.where(printer_name: name).first
+		if printer_recall.nil?
+			printer_recall = PrinterRecall.new
+			printer_recall.client_id    = client_id
+			printer_recall.printer_name = name
+			printer_recall.type_of      = type
+
+			unless printer_recall.save
+				#TODO: Send an Alert indicating we could not save the <PrinterRecall> object
+				raise NotImplementedError, "[service PrintEpsonResponder :: recall] save failure handler"
+				##! Oh dear. Should this happen, it will continue to happen, and will spam the logs every 15 seconds.
+			end
+		end
+
+		# Make sure we only send the notice every so often.
+		if printer_recall.should_notify?
+			# Log the event
+			puts "[service PrintEpsonResponder :: run_check_print_queue -> recall]  caught invalid client_id: '#{client_id.inspect}'.  Sending recall notice."
+			#TODO: Send a Recall Alert
+
+
+			# Tell <PrinterRecall> we're notifying the merchant.
+			printer_recall.notifying!
+			# and return the recall notice
+			return printer_recall.get_epson_xml
+		end
+
+		# Otherwise, return nothing to the printer.
+		return ""
+	end
+
 
 end
