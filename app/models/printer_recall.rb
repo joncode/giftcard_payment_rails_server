@@ -25,7 +25,8 @@ class PrinterRecall < ActiveRecord::Base
     def to_epson_xml
         return case(type_of.to_s)
             when 'misconfiguration'
-                PrintRecallMisconfiguration.new.to_epson_xml
+                # PrintRecallMisconfiguration.new.to_epson_xml
+                PrintHelp.new(86,12).to_epson_xml
             when 'faulty'
                 PrintRecallFaulty.new.to_epson_xml
             else
