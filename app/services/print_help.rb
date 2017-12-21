@@ -27,7 +27,7 @@ class PrintHelp
 <text>HELP&#10;</text>
 <text width="1" height="1"/>
 <text reverse="false" ul="false" em="false" color="color_1"/>
-<text>#{merchant.current_time}</text>' +
+<text>' + merchant.current_time + '</text>' +
 		xml_footer
 	end
 
