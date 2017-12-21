@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171128214721) do
+ActiveRecord::Schema.define(version: 20171221210112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1145,6 +1145,15 @@ ActiveRecord::Schema.define(version: 20171128214721) do
   add_index "print_queues", ["job"], name: "index_print_queues_on_job", using: :btree
   add_index "print_queues", ["merchant_id", "status"], name: "index_print_queues_on_merchant_id_and_status", using: :btree
   add_index "print_queues", ["redemption_id"], name: "index_print_queues_on_redemption_id", using: :btree
+
+  create_table "printer_recalls", force: :cascade do |t|
+    t.string   "client_id"
+    t.string   "printer_name"
+    t.datetime "notified_at"
+    t.string   "type_of"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "progresses", force: :cascade do |t|
     t.integer  "merchant_id"
