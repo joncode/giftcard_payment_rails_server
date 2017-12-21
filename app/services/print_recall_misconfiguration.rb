@@ -4,7 +4,11 @@ class PrintRecallMisconfiguration
     include PrintXmlRecallFooter
     include PrintUtility
 
-    def initialize; end
+    attr_reader :job
+
+    def initialize
+        @job = 8600
+    end
 
 
     def to_epson_xml

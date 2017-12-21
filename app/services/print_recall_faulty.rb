@@ -3,11 +3,10 @@ class PrintRecallFaulty
     include PrintXmlRecallHeader
     include PrintXmlRecallFooter
 
+    attr_reader :job
 
-    attr_reader :job, :merchant
-
-    def initialize job=nil
-        @job = job
+    def initialize
+        @job = 8612
     end
 
     def to_epson_xml
