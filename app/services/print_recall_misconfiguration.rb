@@ -20,7 +20,6 @@ class PrintRecallMisconfiguration
 
     def epson_xml
         xml_header +
-        xml_title +
 '<text>&#10;</text>
 <text align="left"/>
 <text font="font_a"/>
