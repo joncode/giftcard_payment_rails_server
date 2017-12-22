@@ -12,11 +12,15 @@ class PrintRecallMisconfiguration
 
 
     def to_epson_xml
-        xml_wrap(epson_xml)
-    end
-
-    def epson_xml
-        return "<epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
+        return "
+<ePOSPrint>
+<Parameter>
+<devid>local_printer</devid>
+<timeout>20000</timeout>
+<printjobid>rd_332af7c0</printjobid>
+</Parameter>
+<PrintData>
+<epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
 <text lang='en'/>
 <text smooth='true'/>
 <text align='center'/>
@@ -54,7 +58,7 @@ class PrintRecallMisconfiguration
 <text font='font_b'/>
 <text width='1' height='2'/>
 <text reverse='false' ul='false' em='false' color='color_1'/>
-<text>December 21, 2017  4:34 PM</text>
+<text>December 21, 2017  4:38 PM</text>
 <feed line='2'/>
 <text align='left'/>
 <text font='font_a'/>
@@ -120,9 +124,13 @@ any questions.</text>
 <text>Text Support for any reason 310-736-4884</text>
 <feed line='5'/>
 <cut type='feed'/>
-</epos-print>"
+</epos-print>
+</PrintData>
+</ePOSPrint>"
+        # xml_wrap(epson_xml)
+    end
 
-
+    def epson_xml
         xml_recall_header +
         xml_recall_content_misconfiguration +
         line_xml +
