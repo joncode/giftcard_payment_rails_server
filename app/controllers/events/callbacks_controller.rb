@@ -23,8 +23,10 @@ class Events::CallbacksController < MetalCorsController
 		per = PrintEpsonResponder.new(params)
 		per.perform
 		if per.response
+			puts "[Events::CallbacksController :: epson_check]  Responding!  per.response: #{per.response},  per.xml:  #{per.xml}"
 			render xml: per.xml, encoding: :utf8
 		else
+			puts "[Events::CallbacksController :: epson_check]  Not responding."
 			head :ok
 		end
 	end
