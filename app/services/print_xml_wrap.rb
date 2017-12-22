@@ -1,5 +1,12 @@
 module PrintXmlWrap
 
+    def complete_xml_wrap(xml_job)
+        xml = '<?xml version="1.0" encoding="utf-8"?><PrintRequestInfo Version="2.00">'
+        xml += xml_wrap(xml_job)
+        xml += '</PrintRequestInfo>'
+        xml
+    end
+
 	def xml_wrap(xml_job)
 %{
 <ePOSPrint>
