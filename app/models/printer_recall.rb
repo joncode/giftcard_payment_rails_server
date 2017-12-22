@@ -1,5 +1,7 @@
 class PrinterRecall < ActiveRecord::Base
 
+
+
     def name
         self.printer_name
     end
@@ -13,7 +15,13 @@ class PrinterRecall < ActiveRecord::Base
     end
 
     def should_notify?
-        self.notified_at.nil? || (self.notified_at < 24.hours.ago)
+        if Rails.env.production?
+            printout_pause_time = (self.notified_at < 24.hours.ago)
+        else
+            printout_pause_time = (self.notified_at < 2.minutes.ago)
+        end
+
+        self.notified_at.nil? || printout_pause_time
     end
 
     def notifying!

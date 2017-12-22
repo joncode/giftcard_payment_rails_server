@@ -7,17 +7,15 @@ class PrintRecallMisconfiguration
     attr_reader :job
 
     def initialize
-        @job = 8600
+        @job = 'pr_332af7c0'
     end
 
-
     def to_epson_xml
-        return "
-<ePOSPrint>
+"<ePOSPrint>
 <Parameter>
 <devid>local_printer</devid>
 <timeout>20000</timeout>
-<printjobid>rd_332af7c0</printjobid>
+<printjobid>#{@job}</printjobid>
 </Parameter>
 <PrintData>
 <epos-print xmlns='http://www.epson-pos.com/schemas/2011/03/epos-print'>
@@ -127,7 +125,6 @@ any questions.</text>
 </epos-print>
 </PrintData>
 </ePOSPrint>"
-        # xml_wrap(epson_xml)
     end
 
     def epson_xml
