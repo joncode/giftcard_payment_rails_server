@@ -54,6 +54,8 @@ class PrintEpsonResponder
 #	------------- 	SetResponse
 
 	def run_process_print_receipt
+		puts "[service PrintEpsonResponder :: perform(:SetResponse) -> run_process_print_receipt]  data:"
+		pp data
 		header = data["ResponseFile"]["PrintResponseInfo"]["ePOSPrint"]
 		header = [header] unless header.kind_of?(Array)
 		header.each do |printjob|
