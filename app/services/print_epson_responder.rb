@@ -41,13 +41,15 @@ class PrintEpsonResponder
 			#  * incorrect -> someone deleted/deactivated the printer's <Client> object
 
 		if client_id.blank? 	# || ClientUrlMatcher.get_app_key(client_id).nil?
-			return recall(:misconfiguration)
-		end
+			recall(:misconfiguration)
+		else
 
-		if print_queues = PrintQueue.print_request(client_id)
-			@response = true
-			@xml = PrintQueue.deliver(print_queues, client_id)
-			puts "PrintEpsonResponder(44) " + @xml.inspect
+			if print_queues = PrintQueue.print_request(client_id)
+				@response = true
+				@xml = PrintQueue.deliver(print_queues, client_id)
+				puts "PrintEpsonResponder(44) " + @xml.inspect
+			end
+
 		end
 		@xml
 	end
