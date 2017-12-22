@@ -1,4 +1,5 @@
 class PrintEpsonResponder
+	require 'pp'
 
 	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :job, :success, :error
 
