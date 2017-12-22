@@ -1,4 +1,4 @@
-class PrintRecallFaulty
+class PrintRecallMisconfiguration
     include PrintXmlWrap
     include PrintXmlRecallHeader
     include PrintXmlRecallFooter
