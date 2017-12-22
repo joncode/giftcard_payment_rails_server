@@ -12,7 +12,7 @@ class PrintRecallMisconfiguration
 
 
     def to_epson_xml
-        xml_wrap(epson_xml)
+        complete_xml_wrap(epson_xml)
     end
 
     def epson_xml
