@@ -10,7 +10,7 @@ class PrintRecallFaulty
     end
 
     def to_epson_xml
-        xml_wrap(epson_xml)
+        complete_xml_wrap(epson_xml)
     end
 
     def epson_xml
@@ -23,11 +23,16 @@ class PrintRecallFaulty
 private
 
     def xml_recall_content_faulty
-        '<text align="left"/>' +
+        '<text align="center"/>' +
         '<text font="font_a"/>' +
         '<text width="1" height="1"/>' +
         '<text reverse="false" ul="false" em="false" color="color_1"/>' +
-        '<text>Your printer has been recalled. This is likely due to damage or defects we\'ve detected.</text>'
+        '<text>Your printer has been recalled.</text>' +
+        '<feed line="2" />' +
+        '<text>This is likely due to damage</text>' +
+        '<feed line="1" />' +
+        '<text>or defects we\'ve detected.</text>' +
+        '<feed line="1" />'
     end
 
 end

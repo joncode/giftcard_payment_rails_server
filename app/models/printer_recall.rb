@@ -13,13 +13,8 @@ class PrinterRecall < ActiveRecord::Base
     end
 
     def should_notify?
-        if Rails.env.production?
-            printout_pause_time = (self.notified_at < 24.hours.ago)
-        else
-            printout_pause_time = (self.notified_at < 2.minutes.ago)
-        end
-
-        self.notified_at.nil? || printout_pause_time
+        # Notify immediately (when nil), or every 24 hours in production / every 2 minutes in QA
+        self.notified_at.nil? || (self.notified_at < (Rails.env.production? ? 24.hours : 2.minutes).ago)
     end
 
     def notifying!

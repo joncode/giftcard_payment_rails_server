@@ -134,7 +134,7 @@ class PrintEpsonResponder
 			printer_recall = PrinterRecall.new
 			printer_recall.client_id    = client_id
 			printer_recall.printer_name = name
-			printer_recall.type_of      = type
+			printer_recall.type_of      = :faulty
 
 			unless printer_recall.save
 				puts "[service PrintEpsonResponder :: recall] save failure handler '#{client_id.inspect}' , name: '#{name}'"
