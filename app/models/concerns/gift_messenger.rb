@@ -20,6 +20,7 @@ module GiftMessenger
         puts "send_receiver_notification"
         Relay.send_push_notification(self)
         notify_receiver(thread_it)
+        notify_via_text
     end
 
     def send_gift_delivered_notifications
@@ -29,7 +30,6 @@ module GiftMessenger
         else
             Relay.send_gift_delivered(self)
             send_receiver_notification
-            notify_via_text
         end
     end
 

@@ -1,7 +1,5 @@
 class PrinterRecall < ActiveRecord::Base
 
-
-
     def name
         self.printer_name
     end
