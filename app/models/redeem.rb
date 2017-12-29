@@ -226,11 +226,6 @@ class Redeem
 		when 3   # OMNIVORE
 			pos_obj, resp = omnivore_redemption( redemption, gift, ticket_num, redemption.amount, merchant )
 		when 4   # PAPER
-			if redemption.merchant.r_sys == 8  # Epson
-				puts "[model Redeem :: apply]  Merchant is on Epson; printing paper cert redemption."
-				pq = PrintQueue.queue_redemption(redemption)
-				puts "[model Redeem :: apply]  queued redemption: #{pq.inspect}"
-			end
 			pos_obj, resp = internal_redemption( redemption, gift, "#{ticket_num}-#{server}" )
 		when 5   # ZAPPER
 			if callback_params.present?
@@ -248,6 +243,19 @@ class Redeem
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
 		end
+
+
+		# Print the redemption if the merchant is on Epson
+		if redemption.merchant.r_sys == 8
+			# and if the redemption's r_sys isn't also Epson (since that queues a print job above)
+			if redemption.r_sys != 8
+				puts "[model Redeem :: apply]  Merchant is on Epson; printing the redemption."
+				pq = PrintQueue.queue_redemption(redemption)
+				puts "[model Redeem :: apply]  queued redemption: #{pq.inspect}"
+			end
+		end
+
+
 		# redemption.save
 		hsh = { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
 		puts hsh.inspect
