@@ -226,6 +226,11 @@ class Redeem
 		when 3   # OMNIVORE
 			pos_obj, resp = omnivore_redemption( redemption, gift, ticket_num, redemption.amount, merchant )
 		when 4   # PAPER
+			if redemption.merchant.r_sys == 8  # Epson
+				puts "[model Redeem :: apply]  Merchant is on Epson; printing paper cert redemption."
+				pq = PrintQueue.queue_redemption(redemption)
+				puts "[model Redeem :: apply]  queued redemption: #{pq.inspect}"
+			end
 			pos_obj, resp = internal_redemption( redemption, gift, "#{ticket_num}-#{server}" )
 		when 5   # ZAPPER
 			if callback_params.present?
