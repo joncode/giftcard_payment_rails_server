@@ -10,7 +10,7 @@ class GiftNotificationJob
     	if alert_type == 'invoice'
     		gift.invoice_giver
     	elsif alert_type == 'receiver'
-    		gift.notify_via_text
+    		# gift.notify_via_text
     		gift.send_receiver_notification
     	else
             puts "500 Internal - BAD ALERT TYPE RECEIVED - #{alert_type} - GiftNotificationJob"
