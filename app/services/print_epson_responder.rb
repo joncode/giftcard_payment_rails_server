@@ -41,7 +41,7 @@ class PrintEpsonResponder
 			#  * incorrect -> someone deleted/deactivated the printer's <Client> object
 
 		if client_id.blank? 	# || ClientUrlMatcher.get_app_key(client_id).nil?
-			recall(:misconfiguration)
+			recall(:misconfiguration, "Missing ServerDirectPrint ID")
 		else
 
 			if print_queues = PrintQueue.print_request(client_id)
@@ -100,6 +100,10 @@ class PrintEpsonResponder
 #	------------- 	SetStatus
 
 	def run_set_printer_status
+		if client_id.blank? 	# || ClientUrlMatcher.get_app_key(client_id).nil?
+			recall(:misconfiguration, "Missing StatusNotification ID")
+		else
+
 		# no plan for this yet
 	end
 
@@ -127,7 +131,7 @@ class PrintEpsonResponder
 
 #	-------------	Printer Recall
 
-	def recall(type)
+	def recall(type, details: nil)
 		# Fetch or create a <PrinterRecall> object
 		printer_recall = PrinterRecall.where(printer_name: name).last
 		if printer_recall.nil?
@@ -135,6 +139,7 @@ class PrintEpsonResponder
 			printer_recall.client_id    = client_id
 			printer_recall.printer_name = name
 			printer_recall.type_of      = type
+			printer_recall.details      = details
 
 			unless printer_recall.save
 				puts "[service PrintEpsonResponder :: recall] save failure handler '#{client_id.inspect}' , name: '#{name}'"
