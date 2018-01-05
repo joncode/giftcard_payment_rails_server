@@ -131,7 +131,7 @@ class PrintEpsonResponder
 
 #	-------------	Printer Recall
 
-	def recall(type, details: nil)
+	def recall(type, details=nil)
 		# Fetch or create a <PrinterRecall> object
 		printer_recall = PrinterRecall.where(printer_name: name).last
 		if printer_recall.nil?
