@@ -102,7 +102,7 @@ class PrintEpsonResponder
 	def run_set_printer_status
 		if client_id.blank? 	# || ClientUrlMatcher.get_app_key(client_id).nil?
 			recall(:misconfiguration, "Missing StatusNotification ID")
-		else
+		end
 
 		# no plan for this yet
 	end
