@@ -5,7 +5,7 @@ module PrintXmlRecallFooter
         '<text align="center" />' +
         '<text width="1" height="1" />' +
         '<text reverse="false" ul="false" em="false" color="color_1" />' +
-        '<text>Please contact support at </text>' +
+        '<text>Please text support at </text>' +
         '<text em="true" />' +
         '<text>' + TWILIO_QUICK_NUM + '</text>' +
         '<feed line="1" />' +
