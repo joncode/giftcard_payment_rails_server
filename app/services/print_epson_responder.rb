@@ -56,7 +56,7 @@ class PrintEpsonResponder
 			# But if we are given a key, create a new EpsonPrinter!
 
 			# First, fetch the associated Client (for its ID)
-			client = Client.where(application_key: client_id, active: true)
+			client = Client.where(application_key: client_id, active: true).first
 
 			if client.nil?
 				# Oh no, the client doesn't exist either!
@@ -174,7 +174,7 @@ class PrintEpsonResponder
 			# But if we are given a key, create a new EpsonPrinter!
 
 			# First, fetch the associated Client (for its ID)
-			client = Client.where(application_key: client_id, active: true)
+			client = Client.where(application_key: client_id, active: true).first
 
 			# Check if the client doesn't exist or if it's deactivated. In both casess, there's nothing more we can do.
 			return  if client.nil?
