@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180105213435) do
+ActiveRecord::Schema.define(version: 20180118051252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -534,6 +534,25 @@ ActiveRecord::Schema.define(version: 20180105213435) do
 
   add_index "dittos", ["notable_id", "notable_type"], name: "index_dittos_on_notable_id_and_notable_type", using: :btree
   add_index "dittos", ["status"], name: "index_dittos_on_status", using: :btree
+
+  create_table "epson_printers", force: :cascade do |t|
+    t.string   "ip"
+    t.string   "name"
+    t.string   "client_id"
+    t.string   "application_key"
+    t.string   "recall_id"
+    t.boolean  "tracking"
+    t.datetime "last_polll_capture_at"
+    t.datetime "last_status_at"
+    t.datetime "last_mechanical_error_at"
+    t.datetime "last_cutter_error_at"
+    t.datetime "cover_open_at"
+    t.datetime "paper_low_at"
+    t.datetime "paper_out_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "active",                   default: true
+  end
 
   create_table "friendships", force: :cascade do |t|
     t.integer  "user_id"
