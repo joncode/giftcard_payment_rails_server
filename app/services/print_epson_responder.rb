@@ -72,7 +72,9 @@ class PrintEpsonResponder
 			end
 
 			# Alright, create the new EpsonPrinter!
-			printer = EpsonPrinter.new(client)
+			printer = EpsonPrinter.new
+			printer.application_key = client.application_key
+			printer.client_id = client.id
 			printer.name = name
 			touched = true
 		end
@@ -179,7 +181,9 @@ class PrintEpsonResponder
 			return  if deactivated_client_check key: client_id, name: name, type: :status  ##! This does an unnecessary Client lookup (same as the one above)
 
 			# Alright, create the new EpsonPrinter!
-			printer = EpsonPrinter.new(client)
+			printer = EpsonPrinter.new
+			printer.application_key = client.application_key
+			printer.client_id = client.id
 		end
 
 
