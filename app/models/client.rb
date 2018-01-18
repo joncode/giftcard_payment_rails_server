@@ -25,7 +25,7 @@ class Client < ActiveRecord::Base
 
 	has_many :gifts
 	has_many :redemptions
-	mas_many :epson_printers
+	has_many :epson_printers
 
 	belongs_to :list
 	belongs_to :partner, polymorphic: true
