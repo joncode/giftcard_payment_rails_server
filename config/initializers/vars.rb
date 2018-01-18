@@ -248,12 +248,14 @@ else
     ENV["ZAPPER_API_KEY"]
 end
 
+EPSON_TRACKING_SECONDS_BETWEEN_POLL_CAPTURES = if local_env
+    24.hours / (24*60.0) # one per minute
+else
+    24.hours / 4.0
+end
 
-
-
-
-
-
-
-
-
+EPSON_TRACKING_POLL_CAPTURE_DURATION = if local_env
+    15.seconds * 2
+else
+    15.seconds * 3
+end
