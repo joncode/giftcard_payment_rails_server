@@ -14,7 +14,6 @@ class PrintEpsonResponder
 		@client_id = @data.delete("ID")
 		@connection_type =  @data.delete("ConnectionType")
 		@name =  @data.delete("Name")
-		@status = @data["Status"]["statusmonitor"]["printerstatus"]["asbstatus"].to_i(16)  # hex bitflags
 
 		@response = false
 		@xml = ''
@@ -204,9 +203,11 @@ class PrintEpsonResponder
 			# Only generate alerts/warnings for known, tracked printers
 			deactivated_client_check key: client_id, name: name, type: :status
 
-
+			# Pluck out the status bitflags
 			# For (a total lack of) details about these status responses, see page 65 of
 			# https://files.support.epson.com/pdf/pos/bulk/server_direct_print_um_en_revk.pdf
+			status = @data["Status"]["statusmonitor"]["printerstatus"]["asbstatus"].to_i(16)  rescue nil
+			puts "[PrintEpsonResponder :: run_set_printer_status]  Could not pluck out asbstatus flags from @data"  if status.nil?
 
 			# -- Durations --
 			# Store only the first report's timestamp; reset to `nil` when resolved.  `now - timestamp` gives the duration
@@ -216,17 +217,15 @@ class PrintEpsonResponder
 			#     If either the status bitflag is set OR the timestamp is present (but not both), flip the timestamp.
 			#     This stores the first timestamp, and resets to `nil` when the status is no longer present. Yay for XOR!
 
-			# Toggle timestamp      between nil <-> set/now                   if (status.set?                   XOR timestamp.present?)
-			printer.cover_open_at = (printer.cover_open_at.nil? ? now : nil)  if ((@status & 0x40    == 0x40)    ^ printer.cover_open_at.present?)  # cover open
-			printer.paper_low_at  = (printer.paper_low_at.nil?  ? now : nil)  if ((@status & 0x20000 == 0x20000) ^ printer.paper_low_at.present?)   # paper low
-			printer.paper_out_at  = (printer.paper_out_at.nil?  ? now : nil)  if ((@status & 0x80000 == 0x80000) ^ printer.paper_out_at.present?)   # paper out
-
+			# Toggle timestamp      between nil <-> set/now                   if (status bitflag set?          XOR  timestamp.present?)
+			printer.cover_open_at = (printer.cover_open_at.nil? ? now : nil)  if ((status & 0x40    == 0x40)    ^ printer.cover_open_at.present?)  # cover open
+			printer.paper_low_at  = (printer.paper_low_at.nil?  ? now : nil)  if ((status & 0x20000 == 0x20000) ^ printer.paper_low_at.present?)   # paper low
+			printer.paper_out_at  = (printer.paper_out_at.nil?  ? now : nil)  if ((status & 0x80000 == 0x80000) ^ printer.paper_out_at.present?)   # paper out
 
 			# -- Last instance --
 			# Update the timestamp every time.
-			printer.last_mechanical_error_at = now  if @status & 0x400 == 0x400  # mechanical error
-			printer.last_cutter_error_at     = now  if @status & 0x800 == 0x800  # auto cutter error
-
+			printer.last_mechanical_error_at = now  if status & 0x400 == 0x400  # mechanical error
+			printer.last_cutter_error_at     = now  if status & 0x800 == 0x800  # auto cutter error
 
 			# I don't know what these mean, and I haven't been able to find documentation on them, either.
 			# I can determine "offline" duration by `DateTime.now - last_status_at` (to within 4 minutes)
@@ -234,7 +233,7 @@ class PrintEpsonResponder
 			# So, for now, I'll just leave them here as comments:
 			#     0x8    => offline (?)
 			#     0x2000 => unrecoverable error (?)
-			#     0x4000 => auto recovery error (?)
+			#     0x4000 => auto recovery error (?)  ## I think this is from the manually-initiated firmware update/recovery mode failing. Not something we need to worry about.
 
 
 			##+ Add alerts here
