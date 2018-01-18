@@ -4,6 +4,7 @@ class PrintEpsonResponder
 	require 'pp'
 
 	attr_reader :client_id, :connection_type, :name, :data, :xml, :response, :job, :success, :error
+	attr_accessor :remote_ip  # Since we cannot access `request.remote_ip` outside of a controller
 
 	CONNECTION_TYPES = ["GetRequest", "SetResponse", "SetStatus"]
 
@@ -49,7 +50,7 @@ class PrintEpsonResponder
 			if client_id.nil?
 				# Trigger a recall notice.
 				@response = true
-				return recall!(:misconfiguration, "Missing ServerDirectPrint ID; cannot find EpsonPrinter object by name (#{name}), IP (#{request.remote_ip})")
+				return recall!(:misconfiguration, "Missing ServerDirectPrint ID; cannot find EpsonPrinter object by name (#{name}), IP (#{remote_ip})")
 			end
 
 			# But if we are given a key, create a new EpsonPrinter!
@@ -67,7 +68,7 @@ class PrintEpsonResponder
 				# If not, the printer is misconfigured / just sending us garbage, or (very unlikely) someone destroyed the record.
 				# Either way, the printer needs servicing, so trigger a recall notice.
 				@response = true
-				return recall!(:misconfiguration, "Missing ServerDirectPrint ID; cannot find Client by application_key (#{client_id}). Printer name: #{name}, ip: #{request.remote_ip}")
+				return recall!(:misconfiguration, "Missing ServerDirectPrint ID; cannot find Client by application_key (#{client_id}). Printer name: #{name}, ip: #{remote_ip}")
 			end
 
 			# Alright, create the new EpsonPrinter!
@@ -78,14 +79,14 @@ class PrintEpsonResponder
 
 
 		# Has the printer's IP changed?
-		if printer.ip != request.remote_ip  ##!? Does this work here, since it's part of Rack::Request? (we're outside of a controller)
+		if printer.ip != remote_ip
 			# Auto-enable tracking if:
 			#  * printer.ip differs from this ip  -- printer has moved  (99.99% chance this means it's installed in a venue)
 			#  * printer.tracking is `nil`        -- printer tracking has never been enabled/disabled yet
 			#  * printer.ip is already set        -- printer has already talked to us once  (during configuration)
 			printer.tracking = true  if printer.tracking.nil? && printer.ip.present?
 
-			printer.ip = request.remote_ip
+			printer.ip = remote_ip
 			touched = true
 		end
 
@@ -101,6 +102,7 @@ class PrintEpsonResponder
 
 		# Expensive, so save only when necessary.
 		printer.save  if touched
+		puts "[service PrintEpsonResponder :: run_check_print_queue] Updated printer! #{printer.inspect}"  if touched
 
 
 
@@ -183,14 +185,14 @@ class PrintEpsonResponder
 
 
 		# Has the printer's IP changed?
-		if printer.ip != request.remote_ip  ##!? Does this work here, since it's part of Rack::Request? (we're outside of a controller)
+		if printer.ip != remote_ip
 			# Auto-enable tracking if:
 			#  * printer.ip differs from this ip  -- printer has moved  (99.99% chance this means it's installed in a venue)
 			#  * printer.tracking is `nil`        -- printer tracking has never been enabled/disabled yet
 			#  * printer.ip is already set        -- printer has already talked to us once  (during configuration)
 			printer.tracking = true  if printer.tracking.nil? && printer.ip.present?
 
-			printer.ip = request.remote_ip
+			printer.ip = remote_ip
 		end
 
 		now = DateTime.now
@@ -207,7 +209,7 @@ class PrintEpsonResponder
 			# For (a total lack of) details about these status responses, see page 65 of
 			# https://files.support.epson.com/pdf/pos/bulk/server_direct_print_um_en_revk.pdf
 			status = @data["Status"]["statusmonitor"]["printerstatus"]["asbstatus"].to_i(16)  rescue nil
-			puts "[PrintEpsonResponder :: run_set_printer_status]  Could not pluck out asbstatus flags from @data"  if status.nil?
+			puts "[service PrintEpsonResponder :: run_set_printer_status]  Could not pluck out asbstatus flags from @data"  if status.nil?
 
 			# -- Durations --
 			# Store only the first report's timestamp; reset to `nil` when resolved.  `now - timestamp` gives the duration
@@ -241,6 +243,7 @@ class PrintEpsonResponder
 
 		# Save the status
 		printer.save
+		puts "[service PrintEpsonResponder :: run_set_printer_status] Updated printer! #{printer.inspect}"
 	end
 
 #	-------------	Utilities
@@ -276,7 +279,7 @@ class PrintEpsonResponder
 
 		EpsonPrinter.where(active: true, application_key: client_id).first \
 		|| EpsonPrinter.where(active: true, name: name).first              \
-		|| EpsonPrinter.where(active: true, ip: request.remote_ip).first   \
+		|| EpsonPrinter.where(active: true, ip: remote_ip).first           \
 		|| nil
 	end
 
@@ -289,7 +292,7 @@ class PrintEpsonResponder
 			# but there's a deactivated client
 			if Client.where(application_key: key, active: false).first.present?
 				# log it for manual inspection
-				puts "[PrintEpsonResponder :: deactivated_client_check]  Oh no! There's a deactivated printer talking to us.  key:#{key}  name:#{name}  request type: #{type}"
+				puts "[service PrintEpsonResponder :: deactivated_client_check]  Oh no! There's a deactivated printer talking to us.  key:#{key}  name:#{name}  request type: #{type}"
 				return true
 			end
 		end

@@ -10,6 +10,7 @@ class Events::CallbacksController < MetalCorsController
 	def epson_status
 		# puts "EPSON RECEIVED ^^^^^  STATUS  ^^^^^ #{params.inspect}"
 		per = PrintEpsonResponder.new(params)
+		per.remote_ip = request.remote_ip
 		per.perform
 		if per.response
 			render xml: per.xml, encoding: :utf8
@@ -21,6 +22,7 @@ class Events::CallbacksController < MetalCorsController
 	def epson_check
 		# puts "EPSON RECEIVED !!!!!!!! CHECK !!!!!!!! #{params.inspect}"
 		per = PrintEpsonResponder.new(params)
+		per.remote_ip = request.remote_ip
 		per.perform
 		if per.response
 			puts "[Events::CallbacksController :: epson_check]  Responding!  per.response: #{per.response},  per.xml:  #{per.xml}"
@@ -39,6 +41,7 @@ class Events::CallbacksController < MetalCorsController
 	def epson_data
 		puts "EPSON RECEIVED ----------------------- DATA ------------------ #{params.inspect}"
 		per = PrintEpsonResponder.new(params)
+		per.remote_ip = request.remote_ip
 		per.perform
 		if per.response
 			render xml: per.xml, encoding: :utf8
