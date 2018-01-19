@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118051252) do
+ActiveRecord::Schema.define(version: 20180119004405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -542,7 +542,7 @@ ActiveRecord::Schema.define(version: 20180118051252) do
     t.string   "application_key"
     t.string   "recall_id"
     t.boolean  "tracking"
-    t.datetime "last_polll_capture_at"
+    t.datetime "last_poll_capture_at"
     t.datetime "last_status_at"
     t.datetime "last_mechanical_error_at"
     t.datetime "last_cutter_error_at"
