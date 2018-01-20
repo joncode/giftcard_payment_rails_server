@@ -224,7 +224,7 @@ class PrintEpsonResponder
 			#     This stores the first timestamp, and resets to `nil` when the status is no longer present. Yay for XOR!
 
 			# Toggle timestamp      between nil <-> set/now                   if (status bitflag set?          XOR  timestamp.present?)
-			printer.cover_open_at = (printer.cover_open_at.nil? ? now : nil)  if ((status & 0x40    == 0x40)    ^ printer.cover_open_at.present?)  # cover open
+			printer.cover_open_at = (printer.cover_open_at.nil? ? now : nil)  if ((status & 0x20    == 0x20)    ^ printer.cover_open_at.present?)  # cover open
 			printer.paper_low_at  = (printer.paper_low_at.nil?  ? now : nil)  if ((status & 0x20000 == 0x20000) ^ printer.paper_low_at.present?)   # paper low
 			printer.paper_out_at  = (printer.paper_out_at.nil?  ? now : nil)  if ((status & 0x80000 == 0x80000) ^ printer.paper_out_at.present?)   # paper out
 
