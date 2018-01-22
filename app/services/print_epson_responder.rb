@@ -92,9 +92,9 @@ class PrintEpsonResponder
 			touched = true
 		end
 
-		# Do the more expensive operations during a brief window only so many times per day.
+		# Do the more expensive operations during a brief window only so many times per day, or on its very first poll.
 		now = DateTime.now
-		if (now.seconds_since_midnight % EPSON_TRACKING_SECONDS_BETWEEN_POLL_CAPTURES) <= EPSON_TRACKING_POLL_CAPTURE_DURATION
+		if printer.last_poll_capture_at.nil? || (now.seconds_since_midnight % EPSON_TRACKING_SECONDS_BETWEEN_POLL_CAPTURES) <= EPSON_TRACKING_POLL_CAPTURE_DURATION
 			printer.last_poll_capture_at = now
 			printer.name = name
 			touched = true
