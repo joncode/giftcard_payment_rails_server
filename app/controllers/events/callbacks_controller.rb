@@ -28,7 +28,7 @@ class Events::CallbacksController < MetalCorsController
 			puts "[Events::CallbacksController :: epson_check]  Responding!  per.response: #{per.response},  per.xml:  #{per.xml}"
 			render xml: per.xml, encoding: :utf8
 		else
-			puts "[Events::CallbacksController :: epson_check]  Not responding."
+			# puts "[Events::CallbacksController :: epson_check]  Not responding."
 			head :ok
 		end
 	end
@@ -39,7 +39,7 @@ class Events::CallbacksController < MetalCorsController
 			# call Redeem.apply_and_complete with this response
 
 	def epson_data
-		puts "EPSON RECEIVED ----------------------- DATA ------------------ #{params.inspect}"
+		# puts "EPSON RECEIVED ----------------------- DATA ------------------ #{params.inspect}"
 		per = PrintEpsonResponder.new(params)
 		per.remote_ip = request.remote_ip
 		per.perform

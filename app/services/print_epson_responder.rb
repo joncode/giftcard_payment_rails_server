@@ -32,7 +32,8 @@ class PrintEpsonResponder
 			run_set_printer_status
 		else # new connection-type
 				# Alert devs
-			puts "500 Internal NEW EPSON CONNECTION TYPE #{connection_type}"
+			# puts "500 Internal NEW EPSON CONNECTION TYPE #{connection_type}"
+			# The new connection type has always been blank
 		end
 		puts self.inspect
 	end
@@ -113,7 +114,7 @@ class PrintEpsonResponder
 		if print_queues = PrintQueue.print_request(key)
 			@response = true
 			@xml = PrintQueue.deliver(print_queues, key)
-			puts "PrintEpsonResponder(44) " + @xml.inspect
+			# puts "PrintEpsonResponder(44) " + @xml.inspect
 		end
 		@xml
 	end
