@@ -61,7 +61,6 @@ class Events::CallbacksController < MetalCorsController
 
 		@app_response = "You've reached ItsOnMe!  One of our people will be texting you shortly.  Thank you, we're here to help :)"
 		respond
-		# render text: '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>'
 	end
 
 	def zappernotify
