@@ -61,7 +61,6 @@ Click here for your gift.\n #{self.invite_link}"
                 suffix    = "(Damn, that's a sweet gift right there!)"
                 suffix    = "'#{self.message}' -#{self.giver_name}"  unless self.message.blank?
                 link_msg += suffix
-                end
                 resp = OpsTwilio.link_text to: self.receiver_phone, link: link_msg, usr_msg: usr_msg, system_msg: sys_msg
             end
         end
