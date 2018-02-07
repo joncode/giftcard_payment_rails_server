@@ -57,8 +57,8 @@ Click here for your gift.\n #{self.invite_link}"
                 usr_msg = nil
                 sys_msg = "#{self.giver_name} has sent you a #{self.value_s} gift card at #{self.merchant_name}."
                 # Append a newline to `link_msg`, followed by the user message here to prevent iOS 11 from inserting a "Tap to load preview" message.
-                link_msg  = "Tap the link to accept your gift: #{self.invite_link}\n"
-                suffix    = "(Damn, that's a sweet gift right there!)"
+                link_msg  = "Tap the link to accept your gift: #{self.invite_link}\n\n"
+                suffix    = "Enjoy!"
                 suffix    = "'#{self.message}' -#{self.giver_name}"  unless self.message.blank?
                 link_msg += suffix
                 resp = OpsTwilio.link_text to: self.receiver_phone, link: link_msg, usr_msg: usr_msg, system_msg: sys_msg
