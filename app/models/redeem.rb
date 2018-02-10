@@ -217,6 +217,10 @@ class Redeem
 
 
 			# Let's process the redemption
+		puts "[Redeem :: self.apply -> case(redemption.r_sys)]"
+		puts "  | redemption: #{redemption.inspect}"
+		puts "  |  | merchant: #{redemption.merchant.inspect}"
+		puts "  |  | gift: #{redemption.gift.inspect}"
 		case redemption.r_sys
 		when 1   # V1
 			# there is no POS for V1 - always works
@@ -247,11 +251,12 @@ class Redeem
 
 		# Print the redemption if the merchant is on Epson
 		if redemption.merchant.r_sys == 8
+			puts "[model Redeem :: apply -> case -> after] Merchant is on epson"
 			# and if the redemption's r_sys isn't also Epson (since that queues a print job above)
 			if redemption.r_sys != 8
-				puts "[model Redeem :: apply]  Merchant is on Epson; printing the redemption."
+				puts "[model Redeem :: apply -> case -> after]  Merchant is on Epson, redemption is not; printing the redemption."
 				pq = PrintQueue.queue_redemption(redemption)
-				puts "[model Redeem :: apply]  queued redemption: #{pq.inspect}"
+				puts "[model Redeem :: apply -> case -> after]  queued redemption: #{pq.inspect}"
 			end
 		end
 
