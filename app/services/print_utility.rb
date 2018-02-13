@@ -146,7 +146,7 @@ module PrintUtility
 	end
 
 	def instructions_xml
-		single_line responsive_text(redemption.detail, 42) if redemption.promo?
+		single_line responsive_text(redemption.detail, 42)  if redemption.promo? && redemption.detail.present?
 	end
 
 
