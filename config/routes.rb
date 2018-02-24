@@ -259,6 +259,20 @@ Drinkboard::Application.routes.draw do
 			end
 		end
 
+		namespace :v4 do
+			namespace :associations do
+				get      "",                                   action: "list_user"
+				post     ":merchant_id",                       action: "associate"
+				delete   ":merchant_id",                       action: "disassociate"
+				get      ":merchant_id",                       action: "list_merchant"
+				patch    ":merchant_id/:user_access_code_id",  action: "new_code"
+				delete   ":merchant_id/:user_access_code_id",  action: "delete_code"
+				get      "pending/:merchant_id",               action: "list_pending"
+				post     "authorize/:user_access_id",          action: "authorize"
+				delete   "deauthorize/:user_access_id",        action: "deauthorize"
+			end
+		end
+
 	end
 
 #################          ADMIN TOOLS routes for API              /////////////////////////////

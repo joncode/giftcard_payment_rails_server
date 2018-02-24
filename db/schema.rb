@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180119004405) do
+ActiveRecord::Schema.define(version: 20180223205446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1477,6 +1477,32 @@ ActiveRecord::Schema.define(version: 20180119004405) do
     t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "user_access_codes", force: :cascade do |t|
+    t.integer "merchant_id"
+    t.integer "affiliate_id"
+    t.string  "code",                             null: false
+    t.integer "role_id",                          null: false
+    t.integer "created_by"
+    t.boolean "approval_required", default: true, null: false
+    t.boolean "active",            default: true, null: false
+  end
+
+  create_table "user_access_roles", force: :cascade do |t|
+    t.string  "role",                  null: false
+    t.string  "label",                 null: false
+    t.boolean "active", default: true, null: false
+  end
+
+  create_table "user_accesses", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "merchant_id"
+    t.integer  "affiliate_id"
+    t.integer  "role_id",                     null: false
+    t.datetime "approved_at"
+    t.datetime "approved_by"
+    t.boolean  "active",       default: true, null: false
   end
 
   create_table "user_points", force: :cascade do |t|
