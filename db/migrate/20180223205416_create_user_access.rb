@@ -6,7 +6,7 @@ class CreateUserAccess < ActiveRecord::Migration
       t.integer   :affiliate_id
       t.integer   :role_id,      null: false
       t.datetime  :approved_at
-      t.datetime  :approved_by  # user id
+      t.integer   :approved_by  # user id
       t.boolean   :active,       null: false,  default: true
     end
   end

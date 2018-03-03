@@ -1501,7 +1501,7 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.integer  "affiliate_id"
     t.integer  "role_id",                     null: false
     t.datetime "approved_at"
-    t.datetime "approved_by"
+    t.integer  "approved_by"
     t.boolean  "active",       default: true, null: false
   end
 
