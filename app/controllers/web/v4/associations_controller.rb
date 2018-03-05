@@ -105,7 +105,7 @@ class Web::V4::AssociationsController < MetalCorsController
                 merchant:  merchant,
                 affiliate: affiliate,
                 type:      type,
-                access:    grant.role.id,  # Terrible.
+                access:    grant.role_id,
                 approved:  grant.approved_at.present?,
             }
         end
