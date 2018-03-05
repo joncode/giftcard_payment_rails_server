@@ -261,6 +261,7 @@ Drinkboard::Application.routes.draw do
 
 		namespace :v4 do
 			namespace :associations do
+				get      "/generate_access_coes",              action: "debug_generate_codes"
 				get      "/roles",                             action: "list_roles"
 				get      "",                                   action: "list_user"
 				post     "",                                   action: "associate"

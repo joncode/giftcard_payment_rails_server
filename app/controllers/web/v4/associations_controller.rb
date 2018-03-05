@@ -4,6 +4,31 @@ class Web::V4::AssociationsController < MetalCorsController
     before_action :authenticate_admin, only: [ :list_merchant, :new_code, :delete_code, :list_pending, :authorize, :deauthorize ]
 
 
+    ##@ GET /generate_access_coes
+    def debug_generate_codes
+
+        # Verify presence
+        if params[:merchant_id].blank?
+            fail({ message: "Missing merchant_id" })
+            return respond
+        end
+
+        codes = []
+        ::UserAccessRole.each do |role|
+            code = UserAccessCode.new
+            code.role = role
+            code.code = generate_code
+            code.merchant_id = params[:merchant_id]
+            code.save
+
+            codes << code
+        end
+
+        success({ codes: codes.as_json })
+        respond
+    end
+
+
     # GET /roles
     def list_roles
         # Despite the name, ARel#as_json returns a Ruby hash
