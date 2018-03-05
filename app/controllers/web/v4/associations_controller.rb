@@ -14,7 +14,9 @@ class Web::V4::AssociationsController < MetalCorsController
         end
 
         codes = []
-        ::UserAccessRole.each do |role|
+        ::UserAccessRole.all.each do |role|
+            next  if ::UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id], role_id: role.id).count > 0
+
             code = UserAccessCode.new
             code.role = role
             code.code = generate_code
