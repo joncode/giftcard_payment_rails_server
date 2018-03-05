@@ -89,21 +89,21 @@ class Web::V4::AssociationsController < MetalCorsController
 
     # POST /
     def associate
-        #   Input:  code_id
+        #   Input:  code
         # Actions:  Push notification and or email to admins of pending access grant  ##TODO
         # Returns:  association object
 
         # Verify presence
-        if params[:code_id].blank?
-            fail({ message: "Missing code_id" })
+        if params[:code].blank?
+            fail({ message: "Missing code" })
             return respond
         end
 
 
-        codes = UserAccessCode.where(active: true).where(code: params[:code_id])
+        codes = UserAccessCode.where(active: true).where(code: params[:code])
 
         if codes.length > 1
-            puts "[api v4 Associations :: associate] Warning: There are #{codes.length} UserAccessCodes matching: '#{params[:code_id]}'"
+            puts "[api v4 Associations :: associate] Warning: There are #{codes.length} UserAccessCodes matching: '#{params[:code]}'"
         end
 
         # Verify presence
