@@ -149,6 +149,7 @@ class Web::V4::AssociationsController < MetalCorsController
             grant.merchant_id  = code.merchant_id
             grant.affiliate_id = code.affiliate_id
             grant.role_id      = code.role_id
+            grant.approved_at  = DateTime.now  unless code.approval_required
             grant.save
 
             grants << grant
