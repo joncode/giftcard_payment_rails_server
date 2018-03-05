@@ -383,8 +383,12 @@ private
 
     def debug_output
         puts "------------------------------------------------------------------------"
-        # puts "[debug] Headers: "
-        # pp request.headers
+        puts "[debug] Headers: "
+        # puts request.headers.rack.request.form_hash
+        # puts request.headers["rack.request.form_hash"] || "whaaaaaaaaat"
+        request.headers.each do |k,v|
+            puts " | #{k}: #{v}"
+        end
         puts "[debug] Params: "
         pp params
         puts "------------------------------------------------------------------------"
