@@ -353,10 +353,11 @@ class Web::V4::AssociationsController < MetalCorsController
 private
 
     def fetch_user
-        session = SessionToken.find_by_token(params[:X_AUTH_TOKEN])  rescue nil
+        token = request.headers["HTTP_X_AUTH_TOKEN"]
+        session = SessionToken.find_by_token(token)  rescue nil
         if session.nil?
             fail({ message: "User not logged in" })
-            respond
+            return respond
         end
 
         @user = session.user
