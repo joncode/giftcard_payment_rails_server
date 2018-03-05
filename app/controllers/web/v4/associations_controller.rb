@@ -409,7 +409,7 @@ private
 
     def authenticate_admin
         # Every action that requires Admin access also requires a merchant_id
-        if params[:merchant_id].empty?
+        if params[:merchant_id].nil? || params[:merchant_id].empty?
             fail({ message: "Missing merchant_id" })
             return respond
         end
