@@ -383,8 +383,8 @@ private
 
     def debug_output
         puts "------------------------------------------------------------------------"
-        puts "[debug] Headers: "
-        pp request.headers
+        # puts "[debug] Headers: "
+        # pp request.headers
         puts "[debug] Params: "
         pp params
         puts "------------------------------------------------------------------------"
