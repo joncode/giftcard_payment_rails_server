@@ -1,7 +1,9 @@
 class Web::V4::AssociationsController < MetalCorsController
+    before_action :debug_output
     before_action :authentication_token_required, except: [:list_roles]
     before_action :fetch_user, except: [:list_roles]
     before_action :authenticate_admin, only: [ :list_merchant, :new_code, :delete_code, :list_pending, :authorize, :deauthorize ]
+
 
 
     ##@ GET /generate_access_coes
@@ -378,6 +380,16 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
 private
+
+    def debug_output
+        puts "------------------------------------------------------------------------"
+        puts "[debug] Headers: "
+        pp request.headers
+        puts "[debug] Params: "
+        pp params
+        puts "------------------------------------------------------------------------"
+    end
+
 
     def fetch_user
         token = request.headers["HTTP_X_AUTH_TOKEN"]
