@@ -2,7 +2,7 @@ class Web::V4::AssociationsController < MetalCorsController
     before_action :debug_output
     before_action :authentication_token_required, except: [:list_roles]
     before_action :fetch_user, except: [:list_roles]
-    before_action :authenticate_admin, only: [ :list_merchant, :new_code, :delete_code, :list_pending, :authorize, :deauthorize ]
+    before_action :authenticate_admin, only: [ :list_merchant, :new_code, :delete_code, :list_pending, :list_merchant_users, :authorize, :deauthorize ]
 
 
 
@@ -324,6 +324,23 @@ class Web::V4::AssociationsController < MetalCorsController
         end
 
         success({ pending: pending.as_json })
+        respond
+    end
+
+
+    # GET /users/:merchant_id
+    def list_merchant_users
+        if params[:merchant_id].empty?
+            fail({ msg: "Missing merchant_id" })
+            return respond
+        end
+
+        users = []
+        ::UserAccess.where(active: true).where(merchant_id: params[:merchant_id]).each do |user|
+            users << as_json_with_role_data(user)
+        end
+
+        success({ users: users.as_json })
         respond
     end
 
