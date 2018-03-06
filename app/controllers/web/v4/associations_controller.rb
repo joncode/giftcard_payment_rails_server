@@ -152,6 +152,8 @@ class Web::V4::AssociationsController < MetalCorsController
             grant.approved_at  = DateTime.now  unless code.approval_required
             grant.save
 
+            grant = grant.as_json
+            grant["role"] = grant.role.role  # Sadness.
             grants << grant
         end
 
