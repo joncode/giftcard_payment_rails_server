@@ -3,6 +3,7 @@ class Web::V4::AssociationsController < MetalCorsController
     before_action :authentication_token_required, except: [:list_roles]
     before_action :fetch_user, except: [:list_roles]
     before_action :authenticate_admin, only: [ :list_merchant, :new_code, :delete_code, :list_pending, :list_merchant_users, :deauthorize ]
+    before_action :verify_sufficient_permissions, only: [:authorize, :deauthorize]
 
 
 
@@ -380,60 +381,9 @@ class Web::V4::AssociationsController < MetalCorsController
 
     # POST /authorize/:association_id
     def authorize
-        # Requires:  Admin Access
+        # Requires:  Higher permissions than the association (or Admin)
         #    Input:  association_id
         #  Returns:  updated association
-
-        # Verify presence
-        if params[:association_id].nil? || params[:association_id].empty?
-            fail({ msg: "Missing association_id" })
-            return respond
-        end
-
-        grant = UserAccess.where(active: true).find(params[:association_id]) || nil
-        if grant.nil?
-            fail({ msg: "Association does not exist" })
-            return respond
-        end
-
-        # Compare logged in user's grants relevant to the indicated grant (association) and compare the roles.
-        merchant_id  = grant.merchant_id
-        affiliate_id = grant.affiliate_id
-        type = :merchant   if merchant_id
-        type = :affiliate  if affiliate_id
-
-
-        user_grant_types = []
-        user_grant_types << UserAccess.where(active: true).where(user_id: @user.id).where( merchant_id: merchant_id ).where.not( merchant_id: nil)
-        user_grant_types << UserAccess.where(active: true).where(user_id: @user.id).where(affiliate_id: affiliate_id).where.not(affiliate_id: nil)
-        user_grant_types.reject!{|array| array.empty?}
-
-
-        # Find the user's highest permissions role
-        roles = [:employee, :manager, :admin]
-        user_highest_role_index = -1
-        user_grant_types.each do |user_grant_type|
-            user_grant_type.each do |user_grant|
-                puts "Comparing role: #{user_grant.role.role}"
-                puts "Current hightest: #{roles[user_highest_role_index] rescue "nil"}"
-                user_grant_index = roles.index(user_grant.role.role.to_sym)
-                user_highest_role_index = user_grant_index  if user_grant_index > user_highest_role_index
-            end
-        end
-
-        grant_role_index = roles.index(grant.role.role.to_sym)
-        admin_role_index = roles.index(:admin)
-        # Admins can approve everything, including other admins.
-        if (user_highest_role_index != admin_role_index)
-            # Everyone else can approve only the roles below them: Manager->Employee->nothing
-            if (user_highest_role_index < grant_role_index)
-                fail({ msg: "Insufficient permissions" })
-                return respond
-            end
-        end
-
-
-        # User has sufficient permissions to authorize the grant
 
         # Approve!
         grant.approved_by = @user.id
@@ -447,26 +397,9 @@ class Web::V4::AssociationsController < MetalCorsController
 
     # DELETE /deauthorize/:association_id
     def deauthorize
-        # Requires:  Admin Access
+        # Requires:  Higher permissions than the association (or Admin)
         #    Input:  association_id
         #  Returns:  updated association
-
-        if params[:association_id].empty?
-            fail({ msg: "Missing association_id" })
-            return respond
-        end
-
-        grant = ::UserAccess.find(params[:association_id])  rescue nil
-
-        if grant.nil?
-            fail({ msg: "Could not find association" })  # should be a 404
-            return respond
-        end
-
-        unless grant.active
-            fail({ msg: "Association is inactive" })  # should be a 422:unprocessable
-            return respond
-        end
 
         # Deactivate.
         grant.active = false
@@ -526,6 +459,59 @@ class Web::V4::AssociationsController < MetalCorsController
 
         fail({ msg: "Unauthorized user" })
         return respond
+    end
+
+
+    def verify_sufficient_permissions
+        # Verify presence of association
+        if params[:association_id].nil? || params[:association_id].empty?
+            fail({ msg: "Missing association_id" })
+            return respond
+        end
+
+        grant = ::UserAccess.where(active: true).find(params[:association_id]) || nil
+        if grant.nil?
+            fail({ msg: "Association does not exist" })
+            return respond
+        end
+
+        # Compare logged in user's grants relevant to the indicated grant (association) and compare the roles.
+        merchant_id  = grant.merchant_id
+        affiliate_id = grant.affiliate_id
+        type = :merchant   if merchant_id
+        type = :affiliate  if affiliate_id
+
+
+        user_grant_types = []
+        user_grant_types << ::UserAccess.where(active: true).where(user_id: @user.id).where( merchant_id: merchant_id ).where.not( merchant_id: nil)
+        user_grant_types << ::UserAccess.where(active: true).where(user_id: @user.id).where(affiliate_id: affiliate_id).where.not(affiliate_id: nil)
+        user_grant_types.reject!{|array| array.empty?}
+
+
+        # Find the user's highest permissions role
+        roles = [:employee, :manager, :admin]
+        user_highest_role_index = -1
+        user_grant_types.each do |user_grant_type|
+            user_grant_type.each do |user_grant|
+                puts "Comparing role: #{user_grant.role.role}"
+                puts "Current hightest: #{roles[user_highest_role_index] rescue "nil"}"
+                user_grant_index = roles.index(user_grant.role.role.to_sym)
+                user_highest_role_index = user_grant_index  if user_grant_index > user_highest_role_index
+            end
+        end
+
+        grant_role_index = roles.index(grant.role.role.to_sym)
+        admin_role_index = roles.index(:admin)
+        # Admins can approve everything, including other admins.
+        if (user_highest_role_index != admin_role_index)
+            # Everyone else can approve only the roles below them: Manager->Employee->nothing
+            if (user_highest_role_index < grant_role_index)
+                fail({ msg: "Insufficient permissions" })
+                return respond
+            end
+        end
+
+        true
     end
 
 
