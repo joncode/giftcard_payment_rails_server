@@ -270,8 +270,8 @@ Drinkboard::Application.routes.draw do
 				patch    ":merchant_id/:role_id",              action: "new_code"
 				delete   ":merchant_id/:user_access_code_id",  action: "delete_code"
 				get      "pending/:merchant_id",               action: "list_pending"
-				post     "authorize/:user_access_id",          action: "authorize"
-				delete   "deauthorize/:user_access_id",        action: "deauthorize"
+				post     "authorize/:association_id",          action: "authorize"
+				delete   "deauthorize/:association_id",        action: "deauthorize"
 			end
 		end
 
