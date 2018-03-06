@@ -2,7 +2,7 @@ class Web::V4::AssociationsController < MetalCorsController
     before_action :debug_output
     before_action :authentication_token_required, except: [:list_roles]
     before_action :fetch_user, except: [:list_roles]
-    before_action :authenticate_admin, only: [ :list_merchant, :new_code, :delete_code, :list_pending, :list_merchant_users, :deauthorize ]
+    before_action :authenticate_admin, only: [:list_merchant, :new_code, :delete_code, :list_pending, :list_merchant_users]
     before_action :verify_sufficient_permissions, only: [:authorize, :deauthorize]
 
 
