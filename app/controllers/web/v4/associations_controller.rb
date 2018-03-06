@@ -371,8 +371,8 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
         user_grant_types = []
-        user_grant_types << UserAcces.where(active: true).where(user_id: @user.id).where( merchant_id: merchant_id ).where.not( merchant_id: nil)
-        user_grant_types << UserAcces.where(active: true).where(user_id: @user.id).where(affiliate_id: affiliate_id).where.not(affiliate_id: nil)
+        user_grant_types << UserAccess.where(active: true).where(user_id: @user.id).where( merchant_id: merchant_id ).where.not( merchant_id: nil)
+        user_grant_types << UserAccess.where(active: true).where(user_id: @user.id).where(affiliate_id: affiliate_id).where.not(affiliate_id: nil)
         user_grant_types.reject!{|array| array.empty?}
 
 
