@@ -386,6 +386,7 @@ class Web::V4::AssociationsController < MetalCorsController
         #  Returns:  updated association
 
         # Approve!
+        grant = ::UserAccess.where(active: true).find(params[:association_id])
         grant.approved_by = @user.id
         grant.approved_at = DateTime.now
         grant.save
@@ -402,6 +403,7 @@ class Web::V4::AssociationsController < MetalCorsController
         #  Returns:  updated association
 
         # Deactivate.
+        grant = ::UserAccess.where(active: true).find(params[:association_id])
         grant.active = false
         grant.save
 
