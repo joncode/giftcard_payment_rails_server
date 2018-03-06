@@ -330,14 +330,47 @@ class Web::V4::AssociationsController < MetalCorsController
 
     # GET /users/:merchant_id
     def list_merchant_users
-        if params[:merchant_id].empty?
-            fail({ msg: "Missing merchant_id" })
+        merchant = Merchant.find(params[:merchant_id])  rescue nil
+        if merchant.nil?
+            fail({ msg: "Unknown merchant" })  # Should be a 404 :/
             return respond
         end
 
+
+        # Fetch all grants
+        types = []
+        types.push ::UserAccess.where(active: true).where(affiliate_id: merchant.affiliate_id).where.not(affiliate_id: nil).to_a
+        types.push ::UserAccess.where(active: true).where(merchant_id:  params[:merchant_id] ).where.not(merchant_id: nil).to_a
+        types.reject!{ |array| array.empty? }
+
+
+        # Process grants
         users = []
-        ::UserAccess.where(active: true).where(merchant_id: params[:merchant_id]).each do |user|
-            users << as_json_with_role_data(user)
+        types.each do |grants|
+            grants.each do |grant|
+                user = grant.user
+
+                type = :merchant   if grant.merchant_id.present?
+                type = :affiliate  if grant.affiliate_id.present?
+
+                users << {
+                    id:  grant.id,
+                    user: {
+                        id:    user.id,
+                        name:  user.name,
+                        email: user.email,
+                        city:  user.city,
+                        state: user.state,
+                        zip:   user.zip,
+                        sex:   user.sex,
+                    },
+                    role:       grant.role.role,  # Sadness.
+                    role_id:    grant.role_id,
+                    role_label: grant.role.label,
+                    type:       type,
+                    approved:   grant.approved_at.present?,
+                }
+            end
         end
 
         success({ users: users.as_json })
