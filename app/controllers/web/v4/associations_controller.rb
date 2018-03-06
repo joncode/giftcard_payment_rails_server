@@ -431,18 +431,9 @@ class Web::V4::AssociationsController < MetalCorsController
         grants = UserAccess.where(active:true).where(user_id: @user.id).where.not(approved_at: nil)
         grants.each do |grant|
             # with sufficient priveleges for the merchant or its affiliate?
-            unless [:manager, :admin].include? grant.role.role.to_sym  # Terrible.
-                puts "[api Web::V4::Associations :: authenticate_admin] Failed: #{grant.role.role} not within [:manager, :admin]"
-                next
-            end
-            unless grant.merchant_id.to_s  == params[:merchant_id].to_s.strip
-                puts "[api Web::V4::Associations :: authenticate_admin] Failed: grant.merchant_id(#{grant.merchant_id}::#{grant.merchant_id.class}}) != params[:merchant_id](#{params[:merchant_id]}::#{params[:merchant_id].class})"
-                next
-            end
-            unless grant.affiliate_id.to_s == params[:affiliate_id].to_s.strip
-                puts "[api Web::V4::Associations :: authenticate_admin] Failed: grant.affiliate_id(#{grant.affiliate_id}::#{grant.affiliate_id.class}) != params[:affiliate_id](#{params[:affiliate_id]}::#{params[:affiliate_id].class})"
-                next
-            end
+            next  unless [:manager, :admin].include? grant.role.role.to_sym  # Terrible.
+            next  unless grant.merchant_id.to_s  == params[:merchant_id].to_s.strip   # (Make sure we're only comparing
+            next  unless grant.affiliate_id.to_s == params[:affiliate_id].to_s.strip  #  strings, not ints or nils)
 
             # Awesome.
             return true
