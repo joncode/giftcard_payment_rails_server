@@ -435,11 +435,11 @@ class Web::V4::AssociationsController < MetalCorsController
                 puts "[api Web::V4::Associations :: authenticate_admin] Failed: #{grant.role.role} not within [:manager, :admin]"
                 next
             end
-            unless grant.merchant_id.to_s  == params[:merchant_id].strip
+            unless grant.merchant_id.to_s  == params[:merchant_id].to_s.strip
                 puts "[api Web::V4::Associations :: authenticate_admin] Failed: grant.merchant_id(#{grant.merchant_id}::#{grant.merchant_id.class}}) != params[:merchant_id](#{params[:merchant_id]}::#{params[:merchant_id].class})"
                 next
             end
-            unless grant.affiliate_id.to_s == params[:affiliate_id].strip
+            unless grant.affiliate_id.to_s == params[:affiliate_id].to_s.strip
                 puts "[api Web::V4::Associations :: authenticate_admin] Failed: grant.affiliate_id(#{grant.affiliate_id}::#{grant.affiliate_id.class}) != params[:affiliate_id](#{params[:affiliate_id]}::#{params[:affiliate_id].class})"
                 next
             end
