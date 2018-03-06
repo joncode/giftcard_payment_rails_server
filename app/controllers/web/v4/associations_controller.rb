@@ -290,8 +290,8 @@ class Web::V4::AssociationsController < MetalCorsController
 
         # Fetch pending grants
         types = []
-        types.push ::UserAccess.where(active: true).where(affiliate_id: merchant.affiliate_id).where(approved_at: nil).to_a
-        types.push ::UserAccess.where(active: true).where(merchant_id:  params[:merchant_id] ).where(approved_at: nil).to_a
+        types.push ::UserAccess.where(active: true, approved_at: nil).where(affiliate_id: merchant.affiliate_id).where.not(affiliate_id: nil).to_a
+        types.push ::UserAccess.where(active: true, approved_at: nil).where(merchant_id:  params[:merchant_id] ).where.not(merchant_id: nil).to_a
         types.reject!{ |array| array.empty? }
 
 
