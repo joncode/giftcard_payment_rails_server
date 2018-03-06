@@ -381,7 +381,9 @@ class Web::V4::AssociationsController < MetalCorsController
 
         user_grant_types.each do |user_grant_type|
             user_grant_type.each do |user_grant|
-                user_grant_index = roles.index(user_grant)
+                puts "Comparing role: #{user_grant.role.role}"
+                puts "Current hightest: #{roles[user_highest_role_index] rescue "nil"}"
+                user_grant_index = roles.index(user_grant.role.role)
                 user_highest_role_index = user_grant_index  if user_grant_index > user_highest_role_index
             end
         end
