@@ -289,36 +289,38 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
         # Fetch pending grants
-        grants = []
-        grants.push ::UserAccess.where(active: true).where(affiliate_id: merchant.affiliate_id).where(approved_at: nil).to_a
-        grants.push ::UserAccess.where(active: true).where(merchant_id:  params[:merchant_id] ).where(approved_at: nil).to_a
-        grants.reject!{ |array| array.empty? }
+        types = []
+        types.push ::UserAccess.where(active: true).where(affiliate_id: merchant.affiliate_id).where(approved_at: nil).to_a
+        types.push ::UserAccess.where(active: true).where(merchant_id:  params[:merchant_id] ).where(approved_at: nil).to_a
+        types.reject!{ |array| array.empty? }
 
 
         # Process pending grants
         pending = []
-        grants.each do |grant|
-            user = grant.user
+        types.each do |grants|
+            grants.each do |grant|
+                user = grant.user
 
-            type = :merchant   if grant.merchant_id.present?
-            type = :affiliate  if grant.affiliate_id.present?
+                type = :merchant   if grant.merchant_id.present?
+                type = :affiliate  if grant.affiliate_id.present?
 
-            pending << {
-                id:  grant.id,
-                user: {
-                    id:    user.id,
-                    name:  user.name,
-                    email: user.email,
-                    city:  user.city,
-                    state: user.state,
-                    zip:   user.zip,
-                    sex:   user.sex,
-                },
-                role:       grant.role.role,  # Sadness.
-                role_id:    grant.role_id,
-                role_label: grant.role.label,
-                type:       type,
-            }
+                pending << {
+                    id:  grant.id,
+                    user: {
+                        id:    user.id,
+                        name:  user.name,
+                        email: user.email,
+                        city:  user.city,
+                        state: user.state,
+                        zip:   user.zip,
+                        sex:   user.sex,
+                    },
+                    role:       grant.role.role,  # Sadness.
+                    role_id:    grant.role_id,
+                    role_label: grant.role.label,
+                    type:       type,
+                }
+            end
         end
 
         success({ pending: pending.as_json })
