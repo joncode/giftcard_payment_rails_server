@@ -431,7 +431,7 @@ class Web::V4::AssociationsController < MetalCorsController
         grants = UserAccess.where(active:true).where(user_id: @user.id).where.not(approved_at: nil)
         grants.each do |grant|
             # with sufficient priveleges for the merchant or its affiliate?
-            unless [:manager, :admin].include? grant.role.role  # Terrible.
+            unless [:manager, :admin].include? grant.role.role.to_sym  # Terrible.
                 puts "[api Web::V4::Associations :: authenticate_admin] Failed: #{grant.role.role} not within [:manager, :admin]"
                 next
             end
