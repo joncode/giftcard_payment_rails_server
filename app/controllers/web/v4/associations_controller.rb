@@ -25,7 +25,7 @@ class Web::V4::AssociationsController < MetalCorsController
             code.merchant_id = params[:merchant_id]
             code.save
 
-            codes << code
+            codes << as_json_with_role_data(code)
         end
 
         success({ codes: codes.as_json })
@@ -101,12 +101,14 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
             associations << {
-                id:        grant.id,
-                merchant:  merchant,
-                affiliate: affiliate,
-                type:      type,
-                access:    grant.role_id,
-                approved:  grant.approved_at.present?,
+                id:         grant.id,
+                merchant:   merchant,
+                affiliate:  affiliate,
+                type:       type,
+                role:       grant.role.role,
+                role_id:    grant.role.id,
+                role_label: grant.role.label,
+                approved:   grant.approved_at.present?,
             }
         end
 
@@ -152,10 +154,8 @@ class Web::V4::AssociationsController < MetalCorsController
             grant.approved_at  = DateTime.now  unless code.approval_required
             grant.save
 
-            role = grant.role.role  # Sadness.
-            grant = grant.as_json
-            grant["role"] = role
-            grants << grant
+            # Pass the Role data to the client
+            grants << as_json_with_role_data(grant)
         end
 
 
@@ -201,7 +201,8 @@ class Web::V4::AssociationsController < MetalCorsController
         grant.active = false
         grant.save
 
-        success({ association: grant.as_json })
+        # Pass the Role data to the client
+        success({ association: as_json_with_role_data(grant) })
         respond
     end
 
@@ -213,8 +214,14 @@ class Web::V4::AssociationsController < MetalCorsController
         #    Input:  merchant_id
         #  Returns:  [{id, code, role}, ...]
 
+        codes = []
+        # ::UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id]).map(&:as_json_with_role_data)  # ?
+        ::UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id]).each do |code|
+            codes << as_json_with_role_data(code)
+        end
+
         success({
-            codes: UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id]).as_json
+            codes: codes.as_json
         })
         respond
     end
@@ -243,7 +250,7 @@ class Web::V4::AssociationsController < MetalCorsController
         code.code = generate_code
         code.save
 
-        success({ code: code.as_json })
+        success({ code: as_json_with_role_data(code) })
         respond
     end
 
@@ -263,7 +270,7 @@ class Web::V4::AssociationsController < MetalCorsController
         code.active = false
         code.save
 
-        success({ code: code.as_json })
+        success({ code: as_json_with_role_data(code) })
         respond
     end
 
@@ -307,8 +314,10 @@ class Web::V4::AssociationsController < MetalCorsController
                     zip:   user.zip,
                     sex:   user.sex,
                 },
-                role:  grant.id,
-                type:  type,
+                role:       grant.role.role,  # Sadness.
+                role_id:    grant.role_id,
+                role_label: grant.role.label,
+                type:       type,
             }
         end
 
@@ -346,7 +355,7 @@ class Web::V4::AssociationsController < MetalCorsController
         grant.approved_at = DateTime.now
         grant.save
 
-        success({ associations: grant.as_json })
+        success({ association: as_json_with_role_data(grant) })
         respond
     end
 
@@ -378,12 +387,12 @@ class Web::V4::AssociationsController < MetalCorsController
         grant.active = false
         grant.save
 
-        success({ association: grant.as_json })
+        success({ association: as_json_with_role_data(grant) })
         respond
     end
 
 
-private
+# eprivate
 
     def debug_output
         puts "------------------------------------------------------------------------"
@@ -452,6 +461,20 @@ private
 
         code
     end
+
+
+    def as_json_with_role_data(access_obj)
+        unless access_obj.respond_to? :role_id
+            raise ArgumentError, "Invalid object passed to Web::V4::AssociationsController#as_json_with_role_data -- must respond to #role_id"
+        end
+        role = access_obj.role
+        json = access_obj.as_json
+        json["role"]       = role.role  # Sadness.
+        json["role_id"]    = role.id
+        json["role_label"] = role.label
+        json
+    end
+
 
 
 end
