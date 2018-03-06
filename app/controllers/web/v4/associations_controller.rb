@@ -376,14 +376,14 @@ class Web::V4::AssociationsController < MetalCorsController
         user_grant_types.reject!{|array| array.empty?}
 
 
+        # Find the user's highest permissions role
         roles = [:employee, :manager, :admin]
         user_highest_role_index = -1
-
         user_grant_types.each do |user_grant_type|
             user_grant_type.each do |user_grant|
                 puts "Comparing role: #{user_grant.role.role}"
                 puts "Current hightest: #{roles[user_highest_role_index] rescue "nil"}"
-                user_grant_index = roles.index(user_grant.role.role)
+                user_grant_index = roles.index(user_grant.role.role.to_sym)
                 user_highest_role_index = user_grant_index  if user_grant_index > user_highest_role_index
             end
         end
