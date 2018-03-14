@@ -251,9 +251,17 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
+        # Find the Merchant
+        merchant = Merchant.where(active: true).find(params[:merchant_id].to_i) || nil
+        if merchant.nil?
+            fail_web({ msg: "Merchant not found" })
+            return respond
+        end
+
         code = UserAccessCode.new
         code.role = role
         code.code = generate_code
+        code.merchant_id = merchant.id
         code.approval_required = (["t", "true", "1"].include? params[:moderate])
         code.created_by = @current_user.id
         code.save
