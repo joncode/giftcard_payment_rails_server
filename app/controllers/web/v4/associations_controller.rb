@@ -1,7 +1,6 @@
 class Web::V4::AssociationsController < MetalCorsController
     before_action :debug_output
     before_action :authentication_token_required, except: [:list_roles]
-    before_action :fetch_user, except: [:list_roles]
     before_action :authenticate_admin, only: [:list_merchant, :new_code, :delete_code, :list_pending, :list_merchant_users]
     before_action :verify_sufficient_permissions, only: [:authorize, :deauthorize]
 
@@ -12,7 +11,7 @@ class Web::V4::AssociationsController < MetalCorsController
 
         # Verify presence
         if params[:merchant_id].blank?
-            fail({ msg: "Missing merchant_id" })
+            fail_web({ msg: "Missing merchant_id" })
             return respond
         end
 
@@ -20,7 +19,7 @@ class Web::V4::AssociationsController < MetalCorsController
         ::UserAccessRole.all.each do |role|
             next  if ::UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id], role_id: role.id).count > 0
 
-            code = UserAccessCode.new
+            code = ::UserAccessCode.new
             code.role = role
             code.code = generate_code
             code.merchant_id = params[:merchant_id]
@@ -47,7 +46,7 @@ class Web::V4::AssociationsController < MetalCorsController
         # Returns:  association_id, merchant, access type, access role, approval status
 
         # Fetch access grants
-        access_grants = ::UserAccess.where(active: true).where(user_id: @user.id)
+        access_grants = ::UserAccess.where(active: true).where(user_id: @current_user.id)
         if access_grants.empty?
             success({ associations: [] })
             return respond
@@ -127,7 +126,7 @@ class Web::V4::AssociationsController < MetalCorsController
 
         # Verify presence
         if params[:code].blank?
-            fail({ msg: "Missing code" })
+            fail_web({ msg: "Missing code" })
             return respond
         end
 
@@ -140,7 +139,7 @@ class Web::V4::AssociationsController < MetalCorsController
 
         # Verify presence
         if codes.empty?
-            fail({ msg: "No matching code found" })
+            fail_web({ msg: "No matching code found" })
             return respond
         end
 
@@ -148,7 +147,7 @@ class Web::V4::AssociationsController < MetalCorsController
         grants = []
         codes.each do |code|
             grant = UserAccess.new
-            grant.user_id      = @user.id
+            grant.user_id      = @current_user.id
             grant.merchant_id  = code.merchant_id
             grant.affiliate_id = code.affiliate_id
             grant.role_id      = code.role_id
@@ -180,11 +179,11 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
         if merchant_id.nil? && affiliate_id.nil?
-            fail({ msg: "Missing merchant_id, affiliate_id; both cannot be blank" })
+            fail_web({ msg: "Missing merchant_id, affiliate_id; both cannot be blank" })
             return respond
         end
         if association_id.nil?
-            fail({ msg: "Missing association_id" })
+            fail_web({ msg: "Missing association_id" })
             return respond
         end
 
@@ -194,7 +193,7 @@ class Web::V4::AssociationsController < MetalCorsController
         grant = UserAccess.where(active: true, merchant_id: merchant_id, affiliate_id: affiliate_id).where(id: association_id).first
 
         if grant.nil?
-            fail({ association: nil, msg: "No association found" })
+            fail_web({ association: nil, msg: "No association found" })
             return respond
         end
 
@@ -235,13 +234,13 @@ class Web::V4::AssociationsController < MetalCorsController
         #  Returns:  {id, code, role, active}
 
         if params[:role_id].empty?
-            fail({ msg: "Missing role_id" })
+            fail_web({ msg: "Missing role_id" })
             return respond
         end
 
         role = UserAccessRole.find(params[:role_id])  rescue nil
         unless role.nil?
-            fail({ msg: "Role not found" })  # Should be a 404
+            fail_web({ msg: "Role not found" })  # Should be a 404
             return respond
         end
 
@@ -263,7 +262,7 @@ class Web::V4::AssociationsController < MetalCorsController
         #  Returns:  {id, code role, active}
 
         if params[:code_id].empty?
-            fail({ msg: "Missing code_id" })
+            fail_web({ msg: "Missing code_id" })
             return respond
         end
 
@@ -284,7 +283,7 @@ class Web::V4::AssociationsController < MetalCorsController
 
         merchant = Merchant.find(params[:merchant_id])  rescue nil
         if merchant.nil?
-            fail({ msg: "Unknown merchant" })  # Should be a 404 :/
+            fail_web({ msg: "Unknown merchant" })  # Should be a 404 :/
             return respond
         end
 
@@ -333,7 +332,7 @@ class Web::V4::AssociationsController < MetalCorsController
     def list_merchant_users
         merchant = Merchant.find(params[:merchant_id])  rescue nil
         if merchant.nil?
-            fail({ msg: "Unknown merchant" })  # Should be a 404 :/
+            fail_web({ msg: "Unknown merchant" })  # Should be a 404 :/
             return respond
         end
 
@@ -387,7 +386,7 @@ class Web::V4::AssociationsController < MetalCorsController
 
         # Approve!
         grant = ::UserAccess.where(active: true).find(params[:association_id])
-        grant.approved_by = @user.id
+        grant.approved_by = @current_user.id
         grant.approved_at = DateTime.now
         grant.save
 
@@ -428,27 +427,15 @@ class Web::V4::AssociationsController < MetalCorsController
     end
 
 
-    def fetch_user
-        token = request.headers["HTTP_X_AUTH_TOKEN"]
-        session = SessionToken.find_by_token(token)  rescue nil
-        if session.nil?
-            fail({ msg: "User not logged in" })
-            return respond
-        end
-
-        @user = session.user
-    end
-    
-
     def authenticate_admin
         # Every action that requires Admin access also requires a merchant_id
         if params[:merchant_id].nil? || params[:merchant_id].empty?
-            fail({ msg: "Missing merchant_id" })
+            fail_web({ msg: "Missing merchant_id" })
             return respond
         end
 
         # Does the user have any access grants?
-        grants = UserAccess.where(active:true).where(user_id: @user.id).where.not(approved_at: nil)
+        grants = UserAccess.where(active:true).where(user_id: @current_user.id).where.not(approved_at: nil)
         grants.each do |grant|
             # with sufficient priveleges for the merchant or its affiliate?
             next  unless [:manager, :admin].include? grant.role.role.to_sym  # Terrible.
@@ -459,7 +446,7 @@ class Web::V4::AssociationsController < MetalCorsController
             return true
         end
 
-        fail({ msg: "Unauthorized user" })
+        fail_web({ msg: "Unauthorized user" })
         return respond
     end
 
@@ -467,13 +454,13 @@ class Web::V4::AssociationsController < MetalCorsController
     def verify_sufficient_permissions
         # Verify presence of association
         if params[:association_id].nil? || params[:association_id].empty?
-            fail({ msg: "Missing association_id" })
+            fail_web({ msg: "Missing association_id" })
             return respond
         end
 
         grant = ::UserAccess.where(active: true).find(params[:association_id]) || nil
         if grant.nil?
-            fail({ msg: "Association does not exist" })
+            fail_web({ msg: "Association does not exist" })
             return respond
         end
 
@@ -485,8 +472,8 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
         user_grant_types = []
-        user_grant_types << ::UserAccess.where(active: true).where(user_id: @user.id).where( merchant_id: merchant_id ).where.not( merchant_id: nil)
-        user_grant_types << ::UserAccess.where(active: true).where(user_id: @user.id).where(affiliate_id: affiliate_id).where.not(affiliate_id: nil)
+        user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where( merchant_id: merchant_id ).where.not( merchant_id: nil)
+        user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where(affiliate_id: affiliate_id).where.not(affiliate_id: nil)
         user_grant_types.reject!{|array| array.empty?}
 
 
@@ -508,7 +495,7 @@ class Web::V4::AssociationsController < MetalCorsController
         if (user_highest_role_index != admin_role_index)
             # Everyone else can approve only the roles below them: Manager->Employee->nothing
             if (user_highest_role_index < grant_role_index)
-                fail({ msg: "Insufficient permissions" })
+                fail_web({ msg: "Insufficient permissions" })
                 return respond
             end
         end
