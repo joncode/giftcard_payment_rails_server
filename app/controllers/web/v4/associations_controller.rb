@@ -227,27 +227,35 @@ class Web::V4::AssociationsController < MetalCorsController
     end
 
 
-    # PATCH /:merchant_id/:role_id
+    # PATCH /:merchant_id
     def new_code
         # Requires:  Admin Access
-        #    Input:  merchant_id, role_id
+        #    Input:  merchant_id, (role | role_id), moderate=false
         #  Returns:  {id, code, role, active}
 
-        if params[:role_id].empty?
-            fail_web({ msg: "Missing role_id" })
+        role_id   = params[:role_id] || nil
+        role_code = params[:role]    || nil
+
+        if role_id.nil? && role_code.nil?
+            fail_web({ msg: "Missing role_id, role; both cannot be blank" })
             return respond
         end
 
-        role = UserAccessRole.find(params[:role_id])  rescue nil
-        unless role.nil?
-            fail_web({ msg: "Role not found" })  # Should be a 404
+        # Find the UserAccessRole; `role_id` takes precedence.
+        role = nil
+        role = UserAccessRole.find_by_role(role_code) rescue nil  if role_code.present?
+        role = UserAccessRole.find(role_id)           rescue nil  if role_id.present?
+
+        if role.nil?
+            fail_web({ msg: "Role not found" })
             return respond
         end
 
-        
         code = UserAccessCode.new
         code.role = role
         code.code = generate_code
+        code.approval_required = (["t", "true", "1"].include? params[:moderate])
+        code.created_by = @current_user.id
         code.save
 
         success({ code: as_json_with_role_data(code) })
