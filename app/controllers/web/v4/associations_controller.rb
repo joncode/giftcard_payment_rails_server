@@ -258,6 +258,12 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
+        # Disable all existing access codes for this role at this merchant
+        ::UserAccessCode.where(active: true).where(merchant_id: merchant.id, role_id: role.id).each do |code|
+            code.active = false
+            code.save
+        end
+
         code = UserAccessCode.new
         code.role = role
         code.code = generate_code
