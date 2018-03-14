@@ -264,12 +264,13 @@ class Web::V4::AssociationsController < MetalCorsController
             code.save
         end
 
+        # Create the new access code
         code = UserAccessCode.new
-        code.role = role
-        code.code = generate_code
+        code.role        = role
+        code.code        = generate_code
         code.merchant_id = merchant.id
+        code.created_by  = @current_user.id
         code.approval_required = (["t", "true", "1"].include? params[:moderate])
-        code.created_by = @current_user.id
         code.save
 
         success({ code: as_json_with_role_data(code) })
