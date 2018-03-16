@@ -288,12 +288,6 @@ class Web::V4::AssociationsController < MetalCorsController
         #  Returns:  [{id, user, role_id, type}, ...]
         #   Caveat:  pending merchant grants also include pending affiliate grants for that merchant.
 
-        [affiliate, merchant]
-
-        pass in merchant:  get merchant.affiliate_id
-        pass in affiliate: just fetch affiliate data
-
-
         # Fetch pending grants
         types = []
         types.push ::UserAccess.where(active: true, approved_at: nil).where(owner: @owner).to_a
@@ -449,7 +443,7 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
-        unless ["Merchant", "Affiliate"].include? param[:owner_type].capitalize
+        unless ["Merchant", "Affiliate"].include? params[:owner_type].capitalize
             fail_web({ msg: "Incorrect owner_type. Allowed types: Merchant,Affiliate" })
             return respond
         end
