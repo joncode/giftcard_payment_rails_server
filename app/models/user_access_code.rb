@@ -1,7 +1,5 @@
 class UserAccessCode < ActiveRecord::Base
-    belongs_to :merchant
-    belongs_to :affiliate
-
+    belongs_to :owner, polymorphic: true
 
     def role
         return nil  if self.role_id.nil?
