@@ -1,33 +1,34 @@
 class Web::V4::AssociationsController < MetalCorsController
     before_action :debug_output
     before_action :authentication_token_required, except: [:list_roles]
-    before_action :authenticate_admin, only: [:list_merchant, :new_code, :delete_code, :list_pending, :list_merchant_users]
-    before_action :verify_sufficient_permissions, only: [:authorize, :deauthorize]
+    before_action :verify_owner,                  except: [:list_roles, :list_user, :associate, :authorize, :deauthorize]
+    before_action :clean_roles,                   only:   [:associate]
+    before_action :authenticate_admin,            only:   [:list_entity, :new_code, :delete_code, :list_entity_pending, :list_entity_users]
+    before_action :verify_sufficient_permissions, only:   [:authorize, :deauthorize]
 
 
 
-    ##@ GET /generate_access_coes
+    ##@ PATCH /:owner_type/:owner_id/generate_codes
     def debug_generate_codes
-
-        # Verify presence
-        if params[:merchant_id].blank?
-            fail_web({ msg: "Missing merchant_id" })
-            return respond
-        end
-
         codes = []
         ::UserAccessRole.all.each do |role|
-            next  if ::UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id], role_id: role.id).count > 0
+            next  if ::UserAccessCode.where(active: true).where(owner: @owner, role_id: role.id).count > 0
 
             code = ::UserAccessCode.new
             code.role = role
             code.code = generate_code
-            code.merchant_id = params[:merchant_id]
+            code.owner = @owner
+            code.approval_required = false
             code.save
 
             codes << as_json_with_role_data(code)
         end
 
+        # Return all codes for the merchant
+        codes = ::UserAccessCode.where(active: true).where(owner: @owner).map do |code|
+            # with role data
+            as_json_with_role_data(code)
+        end
         success({ codes: codes.as_json })
         respond
     end
@@ -56,55 +57,49 @@ class Web::V4::AssociationsController < MetalCorsController
         associations = []
         access_grants.each do |grant|
 
-            type = nil
-            type = :merchant  if grant.merchant_id.present?
-            type = :affiliate if grant.affiliate_id.present?
-
             # Catch malformed access grants
-            if type.nil?
-                puts "[api v4 Associations::list_user] Warning: UserAccess[#{grant.id}] has neither a linked merchant nor association."
+            if grant.owner.nil?
+                puts "[api v4 Associations::list_user] Warning: UserAccess[#{grant.id}] has no owner."
                 # and skip them
                 next
             end
 
-            merchant = nil
-            if grant.merchant_id.present?
-                merchant = {
-                    id:        grant.merchant.id,
-                    name:      grant.merchant.name,
-                    address:   grant.merchant.address,
-                    address_2: grant.merchant.address_2,
-                    city_name: grant.merchant.city_name,
-                    state:     grant.merchant.state,
-                    zip:       grant.merchant.zip,
-                    photo:     grant.merchant.photo,
-                    photo_l:   grant.merchant.photo_l,
-                    r_sys:     grant.merchant.r_sys,
-                    hex_id:    grant.merchant.hex_id,
-                    active:    grant.merchant.active,
+            owner = nil
+            if grant.owner_type.capitalize == "Merchant"
+                owner = {
+                    id:        grant.owner.id,
+                    name:      grant.owner.name,
+                    address:   grant.owner.address,
+                    address_2: grant.owner.address_2,
+                    city_name: grant.owner.city_name,
+                    state:     grant.owner.state,
+                    zip:       grant.owner.zip,
+                    photo:     grant.owner.photo,
+                    photo_l:   grant.owner.photo_l,
+                    r_sys:     grant.owner.r_sys,
+                    hex_id:    grant.owner.hex_id,
+                    active:    grant.owner.active,
                 }
             end
 
-            affiliate = nil
-            if grant.affiliate_id.present?
-                affiliate = {
-                    id:        grant.affiliate.id,
-                    name:      grant.affiliate.name,
-                    address:   grant.affiliate.address,
-                    city_name: grant.affiliate.city_name,
-                    state:     grant.affiliate.state,
-                    zip:       grant.affiliate.zip,
-                    phone:     grant.affiliate.phone,
-                    url_name:  grant.affiliate.url_name,
+            if grant.owner_type.capitalize == "Affiliate"
+                owner = {
+                    id:        grant.owner.id,
+                    name:      grant.owner.name,
+                    address:   grant.owner.address,
+                    city_name: grant.owner.city_name,
+                    state:     grant.owner.state,
+                    zip:       grant.owner.zip,
+                    phone:     grant.owner.phone,
+                    url_name:  grant.owner.url_name,
                 }
             end
 
 
             associations << {
                 id:         grant.id,
-                merchant:   merchant,
-                affiliate:  affiliate,
-                type:       type,
+                owner:      owner,
+                owner_type: grant.owner_type.capitalize,
                 role:       grant.role.role,
                 role_id:    grant.role.id,
                 role_label: grant.role.label,
@@ -130,68 +125,61 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
-
-        codes = UserAccessCode.where(active: true).where(code: params[:code])
-
-        if codes.length > 1
-            puts "[api v4 Associations :: associate] Warning: There are #{codes.length} UserAccessCodes matching: '#{params[:code]}'"
-        end
-
-        # Verify presence
-        if codes.empty?
+        # Fetch code and verify presence
+        code = ::UserAccessCode.where(active: true).find_by_code(params[:code])  rescue nil
+        if code.nil?
             fail_web({ msg: "No matching code found" })
             return respond
         end
 
-        # While `UserAccessCode.code` should be unique, process all matches.
-        grants = []
-        codes.each do |code|
-            grant = UserAccess.new
-            grant.user_id      = @current_user.id
-            grant.merchant_id  = code.merchant_id
-            grant.affiliate_id = code.affiliate_id
-            grant.role_id      = code.role_id
-            grant.approved_at  = DateTime.now  unless code.approval_required
-            grant.save
-
-            # Pass the Role data to the client
-            grants << as_json_with_role_data(grant)
+        # Disallow if user access level > code access level
+        # (This allows switching between roles of the same level)
+        user_grant = ::UserAccess.where(active: true).where(user_id: @current_user.id, owner: code.owner).first
+        if user_grant.present?
+            if access_level(user_grant.role.role) < access_level(code.role.role)
+                fail_web({ msg: "Denied: User access level exceeds code access level" })
+                return respond
+            end
         end
 
 
-        success({ associations: grants.as_json })
+        # Create the grant
+        grant = ::UserAccess.new
+        grant.user_id      = @current_user.id
+        grant.owner        = code.owner
+        grant.role_id      = code.role_id
+        grant.approved_at  = DateTime.now  unless code.approval_required
+        grant.save
+
+        # Deactivate all other grants as well if this code does not require moderation
+        unless code.approval_required
+            ::UserAccess.where(active: true)  \
+                .where(user_id: @current_user.id, owner: code.owner)  \
+                .where.not(id: grant.id)  \
+                .update_all(active: false)
+        end
+
+        # return the new grant (with added Role data)
+        success({ association: as_json_with_role_data(grant) })
         return respond
+
     end
 
 
     # DELETE /
     def disassociate
-        # Input:    merchant_id, affiliate_id, association_id
+        # Input:    owner_id, owner_type, association_id
         # Returns:  updated association object
 
-        merchant_id    = params[:merchant_id]
-        affiliate_id   = params[:affiliate_id]
-        association_id = params[:association_id]
-        
-        merchant_id    = nil  if merchant_id.blank?
-        affiliate_id   = nil  if affiliate_id.blank?
-        association_id = nil  if association_id.blank?
+        association_id = params[:association_id] || nil
 
-
-        if merchant_id.nil? && affiliate_id.nil?
-            fail_web({ msg: "Missing merchant_id, affiliate_id; both cannot be blank" })
-            return respond
-        end
         if association_id.nil?
             fail_web({ msg: "Missing association_id" })
             return respond
         end
 
         # Fetch UserAccess grant
-        # This will locate at most one entry because of the association_id clause
-        # Note: as merchant/affiliate id's default to nil, including both clauses isn't an issue
-        grant = UserAccess.where(active: true, merchant_id: merchant_id, affiliate_id: affiliate_id).where(id: association_id).first
-
+        grant = ::UserAccess.where(active: true, owner: @owner).where(id: association_id).first
         if grant.nil?
             fail_web({ association: nil, msg: "No association found" })
             return respond
@@ -208,29 +196,25 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
 
-    # GET /:merchant_id
-    def list_merchant
+    # GET /:owner_type/:owner_id
+    def list_entity
         # Requires:  Admin Access
-        #    Input:  merchant_id
+        #    Input:  owner_type, owner_id
         #  Returns:  [{id, code, role}, ...]
 
-        codes = []
-        # ::UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id]).map(&:as_json_with_role_data)  # ?
-        ::UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id]).each do |code|
-            codes << as_json_with_role_data(code)
+        codes = ::UserAccessCode.where(active: true).where(owner: @owner).collect do |code|
+            as_json_with_role_data(code)
         end
 
-        success({
-            codes: codes.as_json
-        })
+        success({ codes: codes.as_json })
         respond
     end
 
 
-    # PATCH /:merchant_id
+    # PATCH /:owner_type/:owner_id
     def new_code
         # Requires:  Admin Access
-        #    Input:  merchant_id, (role | role_id), moderate=false
+        #    Input:  owner_type, owner_id, (role | role_id), moderate=false
         #  Returns:  {id, code, role, active}
 
         role_id   = params[:role_id] || nil
@@ -251,24 +235,17 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
-        # Find the Merchant
-        merchant = Merchant.where(active: true).find(params[:merchant_id].to_i) || nil
-        if merchant.nil?
-            fail_web({ msg: "Merchant not found" })
-            return respond
-        end
-
         # Disable all existing access codes for this role at this merchant
-        ::UserAccessCode.where(active: true).where(merchant_id: merchant.id, role_id: role.id).each do |code|
+        ::UserAccessCode.where(active: true).where(owner: @owner, role_id: role.id).each do |code|
             code.active = false
             code.save
         end
 
         # Create the new access code
-        code = UserAccessCode.new
+        code = ::UserAccessCode.new
         code.role        = role
         code.code        = generate_code
-        code.merchant_id = merchant.id
+        code.owner       = @owner
         code.created_by  = @current_user.id
         code.approval_required = (["t", "true", "1"].include? params[:moderate])
         code.save
@@ -278,10 +255,10 @@ class Web::V4::AssociationsController < MetalCorsController
     end
 
 
-    # DELETE /:merchant_id/:code_id
+    # DELETE /:owner_type/:owner_id/:code_id
     def delete_code
         # Requires:  Admin Access
-        #    Input:  merchant_id, code_id
+        #    Input:  owner_type, owner_id, code_id
         #  Returns:  {id, code role, active}
 
         if params[:code_id].empty?
@@ -289,7 +266,13 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
-        code = UserAccessCode.where(active: true).where(merchant_id: params[:merchant_id], id: params[:code_id]).first
+
+        code = ::UserAccessCode.where(active: true).where(owner: @owner, id: params[:code_id]).first
+        if code.nil?
+            fail_web({ msg: "Code not found" })
+            return respond
+        end
+
         code.active = false
         code.save
 
@@ -298,34 +281,33 @@ class Web::V4::AssociationsController < MetalCorsController
     end
 
 
-    # GET /pending/:merchant_id
-    def list_pending
+    # GET /:owner_type/:owner_id/pending
+    def list_entity_pending
         # Requires:  Admin Access
-        #    Input:  merchant_id
+        #    Input:  owner_type, owner_id
         #  Returns:  [{id, user, role_id, type}, ...]
+        #   Caveat:  pending merchant grants also include pending affiliate grants for that merchant.
 
-        merchant = Merchant.find(params[:merchant_id])  rescue nil
-        if merchant.nil?
-            fail_web({ msg: "Unknown merchant" })  # Should be a 404 :/
-            return respond
-        end
+        [affiliate, merchant]
+
+        pass in merchant:  get merchant.affiliate_id
+        pass in affiliate: just fetch affiliate data
 
 
         # Fetch pending grants
         types = []
-        types.push ::UserAccess.where(active: true, approved_at: nil).where(affiliate_id: merchant.affiliate_id).where.not(affiliate_id: nil).to_a
-        types.push ::UserAccess.where(active: true, approved_at: nil).where(merchant_id:  params[:merchant_id] ).where.not(merchant_id: nil).to_a
+        types.push ::UserAccess.where(active: true, approved_at: nil).where(owner: @owner).to_a
+        if @owner_type == "Merchant"
+            affiliate_id = @owner.affiliate_id
+            types.push ::UserAccess.where(active: true, approved_at: nil).where(owner_id: affiliate_id, owner_type: "Affiliate").to_a
+        end
         types.reject!{ |array| array.empty? }
-
 
         # Process pending grants
         pending = []
         types.each do |grants|
             grants.each do |grant|
                 user = grant.user
-
-                type = :merchant   if grant.merchant_id.present?
-                type = :affiliate  if grant.affiliate_id.present?
 
                 pending << {
                     id:  grant.id,
@@ -341,7 +323,7 @@ class Web::V4::AssociationsController < MetalCorsController
                     role:       grant.role.role,  # Sadness.
                     role_id:    grant.role_id,
                     role_label: grant.role.label,
-                    type:       type,
+                    owner_type: grant.owner_type,
                 }
             end
         end
@@ -351,19 +333,20 @@ class Web::V4::AssociationsController < MetalCorsController
     end
 
 
-    # GET /users/:merchant_id
-    def list_merchant_users
-        merchant = Merchant.find(params[:merchant_id])  rescue nil
-        if merchant.nil?
-            fail_web({ msg: "Unknown merchant" })  # Should be a 404 :/
-            return respond
-        end
-
+    # GET /:owner_type/:owner_id/users
+    def list_entity_users
+        # Requires:  Admin Access
+        #    Input:  owner_type, owner_id
+        #  Returns:  [{id, user, role_id, type}, ...]
+        #   Caveat:  merchant users also include affiliate users for that merchant.
 
         # Fetch all grants
         types = []
-        types.push ::UserAccess.where(active: true).where(affiliate_id: merchant.affiliate_id).where.not(affiliate_id: nil).to_a
-        types.push ::UserAccess.where(active: true).where(merchant_id:  params[:merchant_id] ).where.not(merchant_id: nil).to_a
+        types.push ::UserAccess.where(active: true).where(owner: @owner).to_a
+        if @owner_type == "Merchant"
+            affiliate_id = @owner.affiliate_id
+            types.push ::UserAccess.where(active: true).where(owner_id: affiliate_id, owner_type: "Affiliate").to_a
+        end
         types.reject!{ |array| array.empty? }
 
 
@@ -372,9 +355,6 @@ class Web::V4::AssociationsController < MetalCorsController
         types.each do |grants|
             grants.each do |grant|
                 user = grant.user
-
-                type = :merchant   if grant.merchant_id.present?
-                type = :affiliate  if grant.affiliate_id.present?
 
                 users << {
                     id:  grant.id,
@@ -390,7 +370,7 @@ class Web::V4::AssociationsController < MetalCorsController
                     role:       grant.role.role,  # Sadness.
                     role_id:    grant.role_id,
                     role_label: grant.role.label,
-                    type:       type,
+                    owner_type: grant.owner_type,
                     approved:   grant.approved_at.present?,
                 }
             end
@@ -407,10 +387,22 @@ class Web::V4::AssociationsController < MetalCorsController
         #    Input:  association_id
         #  Returns:  updated association
 
-        # Approve!
+        # Fetch access grant
         grant = ::UserAccess.where(active: true).find(params[:association_id])
+
+
+        # Deactivate all other access grants at the merchant
+        # The user is not be able use lower-access codes, meaning this will only ever revoke lesser (or equal) roles.
+        ::UserAccess.where(active: true)  \
+            .where(user_id: grant.user_id, owner: grant.owner)  \
+            .where.not(id: grant.id)  \
+            .update_all(active: false)
+
+
+        # Approve!
         grant.approved_by = @current_user.id
         grant.approved_at = DateTime.now
+        grant.active      = true  # In case future devs break the `update_all` above
         grant.save
 
         success({ association: as_json_with_role_data(grant) })
@@ -449,21 +441,74 @@ class Web::V4::AssociationsController < MetalCorsController
         puts "------------------------------------------------------------------------"
     end
 
-
-    def authenticate_admin
-        # Every action that requires Admin access also requires a merchant_id
-        if params[:merchant_id].nil? || params[:merchant_id].empty?
-            fail_web({ msg: "Missing merchant_id" })
+    def verify_owner
+        # Verify `owner_id` and `owner_type` exist and point to a valid object
+        [:owner_id, :owner_type].each do |param|
+            next  if params[param].present?
+            fail_web({ msg: "Missing #{param}" })
             return respond
         end
 
+        unless ["Merchant", "Affiliate"].include? param[:owner_type].capitalize
+            fail_web({ msg: "Incorrect owner_type. Allowed types: Merchant,Affiliate" })
+            return respond
+        end
+
+        @owner_id   = params[:owner_id]
+        @owner_type = params[:owner_type].capitalize  # aFFILiate -> Affiliate
+        @owner      = @owner_type.constantize.where(id: @owner_id).first
+        if @owner.nil?
+            fail_web({ msg: "Could not find specified #{@owner_type}" })
+            return respond
+        end
+
+        true
+    end
+
+    def user_access_levels
+        ##? Should this be a constant?
+        [:employee, :manager, :admin]
+    end
+
+    def access_level(role)
+        user_access_levels.index(role.to_sym)
+    end
+
+
+    def clean_roles
+        # if a user has 2+ grants at a merchant, deactivate all but highest
+        grants = ::UserAccess.where(active: true).where(user_id: @current_user.id, owner: @owner)
+
+        return true  if grants.empty?
+
+        # Determine the highest access role
+        highest_access = nil
+        grants.each do |grant|
+            if highest_access.nil? || access_level(grant.role.role) > access_level(highest_access.role.role)
+                highest_access = grant
+            end
+        end
+
+        # Deactivate the rest
+        grants.where.not(id: highest_access.id).update_all(active: false)
+
+        #TODO: clean affiliate roles as well
+    end
+
+
+    def authenticate_admin
         # Does the user have any access grants?
-        grants = UserAccess.where(active:true).where(user_id: @current_user.id).where.not(approved_at: nil)
+        grants = ::UserAccess.where(active:true).where(user_id: @current_user.id).where.not(approved_at: nil)
         grants.each do |grant|
             # with sufficient priveleges for the merchant or its affiliate?
             next  unless [:manager, :admin].include? grant.role.role.to_sym  # Terrible.
-            next  unless grant.merchant_id.to_s  == params[:merchant_id].to_s.strip   # (Make sure we're only comparing
-            next  unless grant.affiliate_id.to_s == params[:affiliate_id].to_s.strip  #  strings, not ints or nils)
+            return true  if grant.owner == @owner
+
+            # If we're looking at a merchant, look for affiliate-level grants for that merchant, too
+            if @owner_type == "Merchant"
+                ##Workaround: `Merchant.affiliate` returns nil, even when `Affiliate.find(Merchant.affiliate_id)` does not.
+                return true  if @owner.affiliate_id == grant.owner_id && grant.owner_type == "Affiliate"
+            end
 
             # Awesome.
             return true
@@ -488,42 +533,33 @@ class Web::V4::AssociationsController < MetalCorsController
         end
 
         # Compare logged in user's grants relevant to the indicated grant (association) and compare the roles.
-        merchant_id  = grant.merchant_id
-        affiliate_id = grant.affiliate_id
-        type = :merchant   if merchant_id
-        type = :affiliate  if affiliate_id
-
-
         user_grant_types = []
-        user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where( merchant_id: merchant_id ).where.not( merchant_id: nil)
-        user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where(affiliate_id: affiliate_id).where.not(affiliate_id: nil)
+        user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where(owner: @owner).to_a
+        if @owner_type == "Merchant"
+            user_grant_types.push ::UserAccess.where(active: true).where(user_id: @current_user.id).where(owner_id: @owner.affiliate_id, owner_type: "Affiliate").to_a
+        end
         user_grant_types.reject!{|array| array.empty?}
 
 
         # Find the user's highest permissions role
-        roles = [:employee, :manager, :admin]
-        user_highest_role_index = -1
+        user_highest_access = -1
         user_grant_types.each do |user_grant_type|
             user_grant_type.each do |user_grant|
                 puts "Comparing role: #{user_grant.role.role}"
-                puts "Current hightest: #{roles[user_highest_role_index] rescue "nil"}"
-                user_grant_index = roles.index(user_grant.role.role.to_sym)
-                user_highest_role_index = user_grant_index  if user_grant_index > user_highest_role_index
+                puts "Current hightest: #{access_level(user_highest_access) rescue "nil"}"
+                user_access = access_level(user_grant.role.role)
+                user_highest_access = user_access  if user_access > user_highest_access
             end
         end
 
-        grant_role_index = roles.index(grant.role.role.to_sym)
-        admin_role_index = roles.index(:admin)
         # Admins can approve everything, including other admins.
-        if (user_highest_role_index != admin_role_index)
-            # Everyone else can approve only the roles below them: Manager->Employee->nothing
-            if (user_highest_role_index < grant_role_index)
-                fail_web({ msg: "Insufficient permissions" })
-                return respond
-            end
-        end
+        return true  if user_highest_role_index == access_level(:admin)
+        # Everyone else can approve only the roles below them: Manager->Employee->nothing
+        return true  if user_highest_role_index >  access_level(grant.role.role)
 
-        true
+        fail_web({ msg: "Insufficient permissions" })
+        respond
+        false
     end
 
 
@@ -540,7 +576,7 @@ class Web::V4::AssociationsController < MetalCorsController
         code   = chars.shuffle[0..length].join
 
         # Ensure uniqueness
-        code = generate_code  if UserAccessCode.where(code: code).count > 0
+        code = generate_code  if ::UserAccessCode.where(active: true, code: code).count > 0
 
         code
     end
