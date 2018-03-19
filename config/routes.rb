@@ -261,18 +261,18 @@ Drinkboard::Application.routes.draw do
 
 		namespace :v4 do
 			namespace :associations do
-				get      "/generate_access_coes/:merchant_id", action: "debug_generate_codes"
+				patch    ":owner_type/:owner_id/generate_codes",  action: "debug_generate_codes"
 				get      "/roles",                             action: "list_roles"
 				get      "",                                   action: "list_user"
 				post     "",                                   action: "associate"
 				delete   "",                                   action: "disassociate"
 				post     "authorize/:association_id",          action: "authorize"
 				delete   "deauthorize/:association_id",        action: "deauthorize"
-				get      ":merchant_id",                       action: "list_merchant"
-				patch    ":merchant_id",                       action: "new_code"
-				delete   ":merchant_id/:user_access_code_id",  action: "delete_code"
-				get      "users/:merchant_id",                 action: "list_merchant_users"
-				get      "pending/:merchant_id",               action: "list_pending"
+				get      ":owner_type/:owner_id",              action: "list_entity"
+				patch    ":owner_type/:owner_id",              action: "new_code"
+				delete   ":owner_type/:owner_id/:code_id",     action: "delete_code"
+				get      ":owner_type/:owner_id/users",        action: "list_entity_users"
+				get      ":owner_type/:owner_id/pending",      action: "list_entity_pending"
 			end
 		end
 
