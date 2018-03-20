@@ -410,8 +410,13 @@ class Web::V4::AssociationsController < MetalCorsController
         #    Input:  association_id
         #  Returns:  updated association
 
+        grant = ::UserAccess.where(active: true).find(params[:association_id])  rescue nil
+        if grant.nil?
+            fail_web({ msg: "Association not found" })
+            return respond
+        end
+
         # Deactivate.
-        grant = ::UserAccess.where(active: true).find(params[:association_id])
         grant.active = false
         grant.save
 
