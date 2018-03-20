@@ -136,7 +136,7 @@ class Web::V4::AssociationsController < MetalCorsController
         # (This allows switching between roles of the same level)
         user_grant = ::UserAccess.where(active: true).where(user_id: @current_user.id, owner: code.owner).first
         if user_grant.present?
-            if access_level(user_grant.role.role) < access_level(code.role.role)
+            if access_level(user_grant.role.role) > access_level(code.role.role)
                 fail_web({ msg: "Denied: User access level exceeds code access level" })
                 return respond
             end
