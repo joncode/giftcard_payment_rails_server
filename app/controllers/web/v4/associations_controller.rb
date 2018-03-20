@@ -247,7 +247,7 @@ class Web::V4::AssociationsController < MetalCorsController
         code.code        = generate_code
         code.owner       = @owner
         code.created_by  = @current_user.id
-        code.approval_required = (["t", "true", "1"].include? params[:moderate])
+        code.approval_required = (["t", "true", "1", true].include? params[:moderate])
         code.save
 
         success({ code: as_json_with_role_data(code) })
