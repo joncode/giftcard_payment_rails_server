@@ -525,7 +525,7 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
-        grant = ::UserAccess.where(active: true).find(params[:association_id]) || nil
+        grant = ::UserAccess.where(active: true).where(id: params[:association_id]).first
         if grant.nil?
             fail_web({ msg: "Association does not exist" })
             return respond
