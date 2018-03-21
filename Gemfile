@@ -46,6 +46,7 @@ gem 'roo'
 #gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
+gem 'rqrcode', '~> 0.10.1'
 gem 'to_words'
 
 gem "koala", "~> 3.0"

@@ -68,6 +68,7 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.5.6)
       ffi (~> 1.0, >= 1.0.11)
+    chunky_png (1.3.10)
     coderay (1.1.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
@@ -217,6 +218,8 @@ GEM
     roo (2.1.1)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
+    rqrcode (0.10.1)
+      chunky_png (~> 1.0)
     rspec-core (2.13.1)
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
@@ -331,6 +334,7 @@ DEPENDENCIES
   resque_spec
   rest-client
   roo
+  rqrcode (~> 0.10.1)
   rspec-rails (~> 2.13.0)
   stripe!
   test-unit

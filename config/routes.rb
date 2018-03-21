@@ -386,6 +386,8 @@ Drinkboard::Application.routes.draw do
 #################          Resources                              /////////////////////////////
 
 	namespace :resources do
+		get "qr"
+
 		namespace :merchant do
 			get  "team_code_handout",  action: "handout"
 		end
