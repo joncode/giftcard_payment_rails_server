@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style>
+        @page {
+          size: 8.5in 11in;
+          margin: .5in;
+        }
+        body {
+            background-color: green;
+            margin: 0;
+            padding: 0;
+        }
+        section.page {
+            margin: 0 auto;
+            font-size: 12pt;
+            width: 720px;
+            height: 960px;  /* You'll need to play with this value */
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+        section.page-1 {
+            background-color: red;
+        }
+        section.page-2 {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <section class="page page-1">
+
+    </section>
+
+    <section class="page page-2">
+
+    </section>
+</body>
+</html>

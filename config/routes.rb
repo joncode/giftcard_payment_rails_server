@@ -383,6 +383,15 @@ Drinkboard::Application.routes.draw do
 	mount Resque::Server, :at => "/resque"
 
 
+#################          Resources                              /////////////////////////////
+
+	namespace :resources do
+		namespace :merchant do
+			get  "team_code_handout",  action: "handout"
+		end
+	end
+
+
 #################          POS V1 routes for API                  /////////////////////////////
 
 	# namespace :pos, defaults: { format: 'json' } do
