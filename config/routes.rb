@@ -260,6 +260,10 @@ Drinkboard::Application.routes.draw do
 		end
 
 		namespace :v4 do
+			namespace :gifts do
+				get      "/find/:token",  action: "find"
+			end
+
 			namespace :associations do
 				patch    ":owner_type/:owner_id/generate_codes",  action: "debug_generate_codes"
 				get      "/roles",                             action: "list_roles"
