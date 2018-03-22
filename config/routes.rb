@@ -261,7 +261,7 @@ Drinkboard::Application.routes.draw do
 
 		namespace :v4 do
 			namespace :gifts do
-				get      "/find/:token",  action: "find"
+				get      "find/:token",                       action: "find"
 			end
 
 			namespace :associations do
