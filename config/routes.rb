@@ -262,6 +262,7 @@ Drinkboard::Application.routes.draw do
 		namespace :v4 do
 			namespace :gifts do
 				get      "find/:token",                       action: "find"
+				patch    ":id/complete_paper_redemption",     controller: "/web/v3/gifts", action: "complete_redemption"
 			end
 
 			namespace :associations do
