@@ -552,9 +552,9 @@ class Web::V4::AssociationsController < MetalCorsController
         end
 
         # Admins can approve everything, including other admins.
-        return true  if user_highest_role_index == access_level(:admin)
+        return true  if user_highest_access == access_level(:admin)
         # Everyone else can approve only the roles below them: Manager->Employee->nothing
-        return true  if user_highest_role_index >  access_level(grant.role.role)
+        return true  if user_highest_access >  access_level(grant.role.role)
 
         fail_web({ msg: "Insufficient permissions" })
         respond
