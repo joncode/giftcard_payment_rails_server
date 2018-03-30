@@ -14,11 +14,7 @@ class Web::V4::AssociationsController < MetalCorsController
         ::UserAccessRole.all.each do |role|
             next  if ::UserAccessCode.where(active: true).where(owner: @owner, role_id: role.id).count > 0
 
-            code = ::UserAccessCode.new
-            code.role = role
-            code.code = generate_code
-            code.owner = @owner
-            code.approval_required = false
+            code = ::UserAccessCode.for(role: role, owner: @owner, moderate: false)
             code.save
 
             codes << as_json_with_role_data(code)
@@ -241,13 +237,10 @@ class Web::V4::AssociationsController < MetalCorsController
             code.save
         end
 
+        moderate = (["t", "true", "1", true].include? params[:moderate])
+
         # Create the new access code
-        code = ::UserAccessCode.new
-        code.role        = role
-        code.code        = generate_code
-        code.owner       = @owner
-        code.created_by  = @current_user.id
-        code.approval_required = (["t", "true", "1", true].include? params[:moderate])
+        code = ::UserAccessCode.for(role: role, owner: @owner, created_by: @current_user.id, moderate: moderate)
         code.save
 
         success({ code: as_json_with_role_data(code) })
@@ -559,25 +552,6 @@ class Web::V4::AssociationsController < MetalCorsController
         fail_web({ msg: "Insufficient permissions" })
         respond
         false
-    end
-
-
-    def generate_code
-        #TODO: generate random phrases, such as: "two distant tortoises" -- "#{number} #{adjective} #{noun(s)}"
-
-        # chars   = ('a'..'z').to_a
-        # numeric = (0..9).to_a.map(&:to_s)
-        # 0.upto(rand(6..12)) { code += chars.sample   }
-        # 0.upto(rand(2..4))  { code += numeric.sample }
-
-        length = 6+rand(4)
-        chars  = (('a'..'z').to_a - ['q','o','l']) * 3  # Multiple sets to allow duplicates. Disallow easily-confused chars.
-        code   = chars.shuffle[0..length].join
-
-        # Ensure uniqueness
-        code = generate_code  if ::UserAccessCode.where(active: true, code: code).count > 0
-
-        code
     end
 
 
