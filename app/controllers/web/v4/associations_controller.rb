@@ -526,6 +526,10 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
+        puts " | Inspection:"
+        puts " |  | @current_user.id: #{@current_user.id rescue 'error'}"
+        puts " |  | @owner_type:      #{@owner_type      rescue 'error'}"
+        puts " |  | @owner.id:        #{@owner.id        rescue 'error'}"
         puts " | Fetching user##{@current_user.id}'s active grants for #{@owner_type}##{@owner.id}"
         # Compare logged in user's grants relevant to the indicated grant (association) and compare the roles.
         user_grant_types = []
