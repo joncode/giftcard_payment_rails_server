@@ -536,13 +536,17 @@ class Web::V4::AssociationsController < MetalCorsController
         # Find the user's highest permissions role
         user_highest_access = -1
         user_grant_types.each do |user_grant_type|
+            puts "jsredtfyguhijuytfcghvbjnkhyftdrfxcgvhfdsrfhkgf"
             user_grant_type.each do |user_grant|
                 puts "Comparing role: #{user_grant.role.role}"
-                puts "Current hightest: #{access_level(user_highest_access) rescue "nil"}"
+                puts "Current highest: #{access_level(user_highest_access) rescue "nil"}"
                 user_access = access_level(user_grant.role.role)
                 user_highest_access = user_access  if user_access > user_highest_access
             end
         end
+
+        puts "Highest access: #{user_highest_access} (#{user_access_levels[user_highest_access]})"
+        puts "Grant access:   #{access_level(grant.role.role)} (#{grant.role.role})"
 
         # Admins can approve everything, including other admins.
         return true  if user_highest_access == access_level(:admin)
