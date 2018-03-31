@@ -528,15 +528,17 @@ class Web::V4::AssociationsController < MetalCorsController
 
         puts " | Inspection:"
         puts " |  | @current_user.id: #{@current_user.id rescue 'error'}"
-        puts " |  | @owner_type:      #{@owner_type      rescue 'error'}"
-        puts " |  | @owner.id:        #{@owner.id        rescue 'error'}"
-        puts " | Fetching user##{@current_user.id}'s active grants for #{@owner_type}##{@owner.id}"
+        puts " |  | grant.owner_type: #{grant.owner_type rescue 'error'}"
+        puts " |  | grant.owner_id:   #{grant.owner_id   rescue 'error'}"
+        puts " | Fetching user##{@current_user.id}'s active grants for #{grant.owner_type}##{grant.owner_id}"
         # Compare logged in user's grants relevant to the indicated grant (association) and compare the roles.
         user_grant_types = []
-        user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where(owner: @owner).to_a
-        if @owner_type == "Merchant"
+        user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where(owner: grant.owner).to_a
+        if grant.owner_type == "Merchant"
             puts " | Fetching Affiliate grants for this merchant as well"
-            user_grant_types.push ::UserAccess.where(active: true).where(user_id: @current_user.id).where(owner_id: @owner.affiliate_id, owner_type: "Affiliate").to_a
+            # FYI: `#<Merchant>.affiliate` doesn't always work for some reason, so I'm using id/type instead.
+            user_grant_types.push ::UserAccess.where(active: true).where(user_id: @current_user.id)  \
+                                              .where(owner_id: grant.owner.affiliate_id, owner_type: "Affiliate").to_a
         end
         user_grant_types.reject!{|array| array.empty?}
 
