@@ -188,13 +188,19 @@ private
     end
 
     def self.random_adjective
-        %w[arrogant angry raging happy sad pretty sizzling steaming chopped
-            minced diced boiled cold hot frozen broken bent].sample
+        %w[arrogant angry raging happy sad pretty sizzling steamed steaming
+           minced diced boiled boiling cold hot frozen freezing broken bent
+           baked peppered flat juicy chipped seared seasoned fried local
+           exotic toasted crispy chewy sour sweet salty spicy peeled
+           chopped saucy cheesy].sample
     end
 
     def self.random_noun(count=1)
         %w[beaver badger beehive bishop fish prawn crab shallot pan pot spoon
-           fork knife plate napkin chopstick shaker bottle jar glass].sample.pluralize(count)
+           fork knife plate napkin chopstick shaker bottle jar glass biscuit pepper
+           burger plum apple spork juice chips melon fruit vegetable meat steak
+           sushi bread cookie roll cheese carrot pea egg pie pizza blender soup
+           wine noodle jam biscuit].sample.pluralize(count)
     end
 
 end
