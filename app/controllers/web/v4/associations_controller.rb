@@ -512,8 +512,6 @@ class Web::V4::AssociationsController < MetalCorsController
 
 
     def verify_sufficient_permissions
-        puts "[api web::v4::associations :: verify_sufficient_permissions]"
-        puts " | <guards>"
         # Verify presence of association
         if params[:association_id].nil? || params[:association_id].empty?
             fail_web({ msg: "Missing association_id" })
@@ -526,41 +524,25 @@ class Web::V4::AssociationsController < MetalCorsController
             return respond
         end
 
-        puts " | Inspection:"
-        puts " |  | @current_user.id: #{@current_user.id rescue 'error'}"
-        puts " |  | grant.owner_type: #{grant.owner_type rescue 'error'}"
-        puts " |  | grant.owner_id:   #{grant.owner_id   rescue 'error'}"
-        puts " | Fetching user##{@current_user.id}'s active grants for #{grant.owner_type}##{grant.owner_id}"
         # Compare logged in user's grants relevant to the indicated grant (association) and compare the roles.
         user_grant_types = []
         user_grant_types << ::UserAccess.where(active: true).where(user_id: @current_user.id).where(owner: grant.owner).to_a
         if grant.owner_type == "Merchant"
-            puts " | Fetching Affiliate grants for this merchant as well"
             # FYI: `#<Merchant>.affiliate` doesn't always work for some reason, so I'm using id/type instead.
             user_grant_types.push ::UserAccess.where(active: true).where(user_id: @current_user.id)  \
                                               .where(owner_id: grant.owner.affiliate_id, owner_type: "Affiliate").to_a
         end
         user_grant_types.reject!{|array| array.empty?}
 
-        puts ":::[ user grant types ]:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
-        pp user_grant_types
-        puts "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 
         # Find the user's highest permissions role
-        puts " | Determining highest access level"
         user_highest_access = -1
         user_grant_types.each do |user_grant_type|
-            puts " |  | <inner loop>"
             user_grant_type.each do |user_grant|
-                puts " |  |  | Comparing role: #{user_grant.role.role}"
-                puts " |  |  | Current highest: #{access_level(user_highest_access) rescue "nil"}"
                 user_access = access_level(user_grant.role.role)
                 user_highest_access = user_access  if user_access > user_highest_access
             end
         end
-
-        puts " |  | Highest access: #{user_highest_access} (#{user_access_levels[user_highest_access]})"
-        puts " |  | Grant access:   #{access_level(grant.role.role)} (#{grant.role.role})"
 
         # Admins can approve everything, including other admins.
         return true  if user_highest_access == access_level(:admin)
