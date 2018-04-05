@@ -14,7 +14,13 @@ module HexIdMethods
 
 		def set_unique_hex_id
 			if self.hex_id.blank?
-				self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, self.class.const_get(:HEX_ID_PREFIX))
+				prefix = self.class.const_get(:HEX_ID_PREFIX)
+
+				if self.class == Redemption
+					self.hex_id = UniqueIdMaker.eight_alpha(self.class, :hex_id, prefix)
+				else
+					self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, prefix)
+				end
 			end
 		end
 

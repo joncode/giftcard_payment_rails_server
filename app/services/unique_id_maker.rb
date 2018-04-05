@@ -29,6 +29,28 @@ class UniqueIdMaker
 	        return unique_hex
 		end
 
+		def eight_alpha klass, column_name, prefix=''
+			klass = klass.to_s.titleize.constantize unless klass.kind_of?(Class)
+			column_name = column_name.to_sym
+
+			# It's possible, if incredibly unlikely, that this will return <8 alpha, rednering e.g. a paper cert unredeemable.
+			# unique_alpha = prefix + SecureRandom.urlsafe_base64(128).gsub(/[0-9_-]/,'')[0..7].downcase
+
+			# Select 8 random letters instead
+			generate = Proc.new do
+				alpha = ('a'..'z').to_a
+				unique_alpha = ""
+				8.times { unique_alpha += alpha[ SecureRandom.random_number(26) ] }
+				unique_alpha
+			end
+
+			unique_alpha = prefix + generate[]
+			until klass.unscoped.where(column_name => unique_alpha).count == 0
+				unique_alpha = prefix + generate[]
+			end
+			return unique_alpha
+		end
+
 		def four_digit_token klass, column_name, where_clause
 			klass = klass.to_s.titleize.constantize unless klass.kind_of?(Class)
 			column_name = column_name.to_sym
