@@ -130,13 +130,16 @@ private
         numeric_token = !!@token.match(/^[0-9]+$/)
         hex_token     = !!@token.match(/^(gf|rd)_[\da-z]{4}{2}$/)  # Caveat: some (ancient) Redemption hex_id's in the database lack the "rd_" prefix
 
+        puts " | numeric: #{numeric_token}"
+        puts " | hex:     #{hex_token}"
+
         unless numeric_token || hex_token
             puts " | fail!"
-            puts " |  | numeric: #{numeric_token}"
-            puts " |  | hex:     #{hex_token}"
             fail_web({ err: "INVALID_INPUT", msg: "Malformed token. This may either be a Gift/Redemption hex_id, or a Gift id" })
             return respond
         end
+
+        puts " | Everything OK!"
 
         true
     end
