@@ -139,15 +139,14 @@ private
 
         @gift = case(@token[0..2])
         when 'gf_'
-            Gift.includes(:merchant).find_with(token)  rescue nil
+            Gift.includes(:merchant).find_with(@token)  rescue nil
         when 'rd_'
-            Redemption.find_with(token).gift  rescue nil
+            Redemption.find_with(@token).gift  rescue nil
         else
-            Gift.where(id: token).first
+            Gift.where(id: @token).first
         end
 
         return true  if @gift.present?
-
 
         fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
         return respond
