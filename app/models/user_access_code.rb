@@ -135,7 +135,7 @@ class UserAccessCode < ActiveRecord::Base
 
         # Ensure uniqueness
         if UserAccessCode.where(active: true).where(code: code).size > 0
-            code = self.generate(format)
+            code = self.generate(format: format)
         end
 
         code
