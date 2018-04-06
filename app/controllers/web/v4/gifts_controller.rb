@@ -111,8 +111,11 @@ private
 
 
     def verify_token
+        puts "[api Web::v4::Gifts :: verify_token]"
+        puts " | params: #{params.inspect}"
         @token = params[:token].to_s.strip.downcase
         if @token.empty?
+            puts " | fail!  @token is empty"
             fail_web({ err: "INVALID_INPUT", msg: "Missing token. This may either be a Gift/Redemption hex_id, or a Gift id" })
             return respond
         end
@@ -122,10 +125,15 @@ private
         @token.gsub!(/[_\- ]/, '')   # Note: Order is intentional to demostrate that, when unescaped, "-" forms a range, even between " " and "_".
         @token.gsub!(/^(gf|rd)([\da-z]{4}{2})$/, '\1_\2') # select the gf|rd prefix and two sets of four alphanumeric chars, and separate the two with _'s
 
+        puts " | normalized token: #{@token}"
+
         numeric_token = !!@token.match(/^[0-9]+$/)
         hex_token     = !!@token.match(/^(gf|rd)_[\da-z]{4}{2}$/)  # Caveat: some (ancient) Redemption hex_id's in the database lack the "rd_" prefix
 
         unless numeric_token || hex_token
+            puts " | fail!"
+            puts " |  | numeric: #{numeric_token}"
+            puts " |  | hex:     #{hex_token}"
             fail_web({ err: "INVALID_INPUT", msg: "Malformed token. This may either be a Gift/Redemption hex_id, or a Gift id" })
             return respond
         end
