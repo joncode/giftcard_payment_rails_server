@@ -81,11 +81,32 @@ class User < ActiveRecord::Base
 	has_many :session_tokens
 	has_many :user_points
 
+	has_many :access_grants, class_name: UserAccess
+
 	belongs_to :client
 	belongs_to :partner, polymorphic: true
 
 	attr_accessor :api_v1, :session_token_obj
 
+#   -------------
+
+
+	def highest_access_at(owner)
+		#TODO: add `owner_id:, owner_type:` params to avoid an extra lookup
+		unless owner.instance_of?(Merchant) || owner.instance_of?(Affiliate)
+			raise ArgumentError, "Expected a Merchant or Affiliate instance, got #{owner.class}"
+		end
+
+		# `grant.level` returns higher numbers for higher access levels, so reverse the order here.
+		self.access_grants.where(active: true).where(owner: owner).sort{|grant| grant.level}.reverse.first
+	end
+
+	def can_redeem_gift?(gift)
+		access_level = self.highest_access_at(gift.merchant).level  rescue nil
+		return false  if access_level.nil?
+		return false  if access_level < UserAccess.level(:employee)
+		true
+	end
 
 #   -------------
 

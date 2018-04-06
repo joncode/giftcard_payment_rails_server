@@ -59,6 +59,9 @@ class Merchant < ActiveRecord::Base
     has_many :registers,    as: :partner
     has_many :sales
 
+    has_many :access_grants, class_name: UserAccess
+    has_many :access_codes,  class_name: UserAccessCode, foreign_key: :owner_id, foreign_type: "Merchant"  # a rather verbose `polymorphic: true`
+
     belongs_to :brand
     belongs_to :client
     belongs_to :region
