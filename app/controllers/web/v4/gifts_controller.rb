@@ -22,8 +22,8 @@ class Web::V4::GiftsController < MetalCorsController
 
         verify_user_can_redeem_gift(gift)
 
-        loc_id = params["loc_id"]
-        amount = params["amount"]
+        loc_id = params["data"]["loc_id"]
+        amount = params["data"]["amount"]
         resp = Redeem.start_redeem(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id, api: "web/v4/gifts/#{gift.id}/start_redemption")
         # resp = Redeem.start_redeem(gift: g, client_id: 1, api: "test_epson")
         if resp['success']
