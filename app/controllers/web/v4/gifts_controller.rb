@@ -47,14 +47,14 @@ class Web::V4::GiftsController < MetalCorsController
         puts " | params: #{params.inspect}"
 
         # set the data
-        redemption_id = ((params["redemption_id"].to_i > 0) ? params["redemption_id"].to_i : nil)
-        server_inits = params["server"]
-        ticket_num = params["ticket_num"]
-        qrcode = params["qrcode"]
+        redemption_id = ((params["data"]["redemption_id"].to_i > 0) ? params["data"]["redemption_id"].to_i : nil)
+        server_inits = params["data"]["server"]
+        ticket_num = params["data"]["ticket_num"]
+        qrcode = params["data"]["qrcode"]
 
         # amount && loc_id are on the redemption
-        amount = params["amount"]
-        loc_id = ((params["loc_id"].to_i > 0) ? params["loc_id"].to_i : nil)
+        amount = params["data"]["amount"]
+        loc_id = ((params["data"]["loc_id"].to_i > 0) ? params["data"]["loc_id"].to_i : nil)
 
         # find the redemption
         @current_redemption = nil
