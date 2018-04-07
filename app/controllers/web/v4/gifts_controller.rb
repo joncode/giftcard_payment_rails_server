@@ -1,8 +1,9 @@
 class Web::V4::GiftsController < MetalCorsController
+    # I haven't cleaned up the redemption methods yet.
 
     before_action :authentication_token_required
-    before_action :verify_token
-    before_action :resolve_gift, except: [:start_redemption, :complete_redemption]  # I haven't cleaned up these methods yet.
+    before_action :verify_token, only: [:find]
+    before_action :resolve_gift, only: [:find]
 
 
 
