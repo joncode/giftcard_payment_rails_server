@@ -101,7 +101,13 @@ class Web::V4::GiftsController < MetalCorsController
                 fail_web({ err: "ALREADY_REDEEMED", msg: "Gift #{gift.token} at #{gift.provider_name} has already been redeemed" })
             end
         else
-            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app" })
+            details = []
+            details << "Specified Redemption does not exist"                                       if  redemption_id.present? && !@current_redemption.present?
+            details << "Redemption was not created"                                                if !redemption_id.present? && !@current_redemption.present?
+            details << "Incorrect redemption type (expected 2, got #{@current_redemption.r_sys})"  unless @current_redemption.r_sys   == 2
+            details << "Gift ID mismatch (#{@current_redemption.gift_id} vs #{params[:id].to_i})"  unless @current_redemption.gift_id == params[:id].to_i
+            details = details.join(";  ")
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app.", details: details })
         end
         respond(status)
     end
