@@ -99,7 +99,7 @@ class Mdot::V2::GiftsController < JsonController
                             fail(rc["response_text"])
                         end
                     else
-                        fail("Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app")
+                        fail("Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app. (v2-102)")
                     end
 
                     # resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, redeem_params['loc_id'])
@@ -156,7 +156,7 @@ class Mdot::V2::GiftsController < JsonController
                         fail rc["response_text"]
                     end
                 else
-                    fail("Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app")
+                    fail("Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app. (v2-159)")
                 end
 
             else

@@ -298,7 +298,7 @@ class Web::V3::GiftsController < MetalCorsController
                 end
             else
                 status = :ok
-                fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app" })
+                fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app. (v3-301)" })
             end
 
         else
@@ -369,7 +369,7 @@ class Web::V3::GiftsController < MetalCorsController
                 end
             end
         else
-            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app" })
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app. (v3-372)" })
         end
         respond(status)
     end
