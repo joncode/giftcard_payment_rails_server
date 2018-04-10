@@ -101,21 +101,16 @@ class Web::V4::GiftsController < MetalCorsController
                 fail_web({ err: "ALREADY_REDEEMED", msg: "Gift #{gift.token} at #{gift.provider_name} has already been redeemed" })
             end
         else
-            details = []
-            details << "redemption_id: #{redemption_id}"
-            details << "@current_redemption.present? #{@current_redemption.present?}"
-            details << "r_sys: #{@current_redemption.r_sys rescue nil}"
-            details << "@current_redemption.gift_id: #{@current_redemption.gift_id rescue nil}"
-            details << "params[:id]: #{params[:id]}"
-            details << "------ Summary: ------"
-            details << "Specified Redemption does not exist"                                       if  redemption_id.present? && !@current_redemption.present?
-            details << "Redemption was not created"                                                if !redemption_id.present? && !@current_redemption.present?
-            details << "Gift ID mismatch (#{@current_redemption.gift_id} vs #{params[:id].to_i})"  unless @current_redemption.gift_id == params[:id].to_i
-            details << "------ Inspect: ------"
-            details << (@current_redemption.inspect  rescue "(@current_redemption does not exist)")
-            details = details.join(" -- ")
-            details = "(None)"  if details.empty?
-            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app.  Details: #{details}" })
+            puts " | Failed with 'Technical issues'"
+            puts " |  | redemption_id:       #{redemption_id}"
+            puts " |  | current_redemption:  #{@current_redemption.inspect}"
+            if @current_redemption.present?
+                puts " |  | Gift ID mismatch (#{@current_redemption.gift_id} vs #{params[:id].to_i})"  if @current_redemption.gift_id != params[:id].to_i
+            else
+                puts " |  | Specified Redemption does not exist"          if  redemption_id.present?
+                puts " |  | Failed to create Redemption  (500 Internal)"  if !redemption_id.present?
+            end
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app" })
         end
         respond(status)
     end
