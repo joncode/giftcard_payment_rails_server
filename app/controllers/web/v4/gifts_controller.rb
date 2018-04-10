@@ -73,7 +73,7 @@ class Web::V4::GiftsController < MetalCorsController
                 # what if current pending R != amount or loc ?
             end
         end
-        if @current_redemption.present? && @current_redemption.r_sys != 2 && @current_redemption.gift_id == params[:id].to_i
+        if @current_redemption.present? && @current_redemption.gift_id == params[:id].to_i
             gift ||= @current_redemption.gift
 
             verify_user_can_redeem_gift(gift)
