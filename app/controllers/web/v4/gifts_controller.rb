@@ -65,7 +65,7 @@ class Web::V4::GiftsController < MetalCorsController
             @current_redemption = Redemption.current_pending_redemption(gift, nil, gift.merchant.r_sys)
             if @current_redemption.nil?
                 resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
-                    client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/complete_redemption")
+                    client_id: @current_client.id, api: "web/v4/gifts/#{gift.id}/complete_redemption")
                 if resp['success']
                     @current_redemption = resp['redemption']
                 end
