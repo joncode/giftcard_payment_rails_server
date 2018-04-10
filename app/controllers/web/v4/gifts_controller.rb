@@ -108,7 +108,7 @@ class Web::V4::GiftsController < MetalCorsController
             details << "Gift ID mismatch (#{@current_redemption.gift_id} vs #{params[:id].to_i})"  unless @current_redemption.gift_id == params[:id].to_i
             details = details.join(";  ")
             details = "(None)"  if details.empty?
-            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app.", details: details })
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app.  Details: #{details}" })
         end
         respond(status)
     end
