@@ -267,7 +267,6 @@ Drinkboard::Application.routes.draw do
 			end
 
 			namespace :associations do
-				patch    ":owner_type/:owner_id/generate_codes",  action: "debug_generate_codes"
 				get      "/roles",                             action: "list_roles"
 				get      "",                                   action: "list_user"
 				post     "",                                   action: "associate"
