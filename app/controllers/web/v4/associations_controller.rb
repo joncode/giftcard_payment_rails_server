@@ -7,29 +7,6 @@ class Web::V4::AssociationsController < MetalCorsController
     before_action :verify_sufficient_permissions, only:   [:authorize, :deauthorize]
 
 
-
-    ##@ PATCH /:owner_type/:owner_id/generate_codes
-    def debug_generate_codes
-        codes = []
-        ::UserAccessRole.all.each do |role|
-            next  if ::UserAccessCode.where(active: true).where(owner: @owner, role_id: role.id).count > 0
-
-            code = ::UserAccessCode.for(role: role, owner: @owner, moderate: false)
-            code.save
-
-            codes << as_json_with_role_data(code)
-        end
-
-        # Return all codes for the merchant
-        codes = ::UserAccessCode.where(active: true).where(owner: @owner).map do |code|
-            # with role data
-            as_json_with_role_data(code)
-        end
-        success({ codes: codes.as_json })
-        respond
-    end
-
-
     # GET /roles
     def list_roles
         # Despite the name, ARel#as_json returns a Ruby hash
