@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180223205446) do
+ActiveRecord::Schema.define(version: 20180316043526) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "plpgsql"
   enable_extension "pgcrypto"
   enable_extension "uuid-ossp"
 
@@ -228,7 +228,7 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "owner_id"
-    t.string   "owner_type"
+    t.string   "owner_type",            limit: 255
   end
 
   add_index "banks", ["merchant_id"], name: "index_banks_on_merchant_id", using: :btree
@@ -416,8 +416,8 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.string   "zip",            limit: 255
     t.boolean  "active",                     default: true
     t.integer  "partner_id"
-    t.string   "partner_type"
-    t.string   "origin"
+    t.string   "partner_type",   limit: 255
+    t.string   "origin",         limit: 255
     t.integer  "client_id"
     t.string   "ccy",            limit: 6,   default: "USD"
     t.string   "trans_token"
@@ -434,21 +434,21 @@ ActiveRecord::Schema.define(version: 20180223205446) do
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
 
   create_table "clients", force: :cascade do |t|
-    t.string   "name"
-    t.string   "url_name"
-    t.string   "download_url"
-    t.string   "application_key"
-    t.string   "detail"
+    t.string   "name",            limit: 255
+    t.string   "url_name",        limit: 255
+    t.string   "download_url",    limit: 255
+    t.string   "application_key", limit: 255
+    t.string   "detail",          limit: 255
     t.integer  "partner_id"
-    t.string   "partner_type"
-    t.integer  "platform",        default: 0
-    t.boolean  "active",          default: true
-    t.integer  "ecosystem",       default: 0
+    t.string   "partner_type",    limit: 255
+    t.integer  "platform",                    default: 0
+    t.boolean  "active",                      default: true
+    t.integer  "ecosystem",                   default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "data_type",       default: 0
+    t.integer  "data_type",                   default: 0
     t.integer  "data_id"
-    t.integer  "clicks",          default: 0
+    t.integer  "clicks",                      default: 0
     t.integer  "list_id"
   end
 
@@ -493,10 +493,10 @@ ActiveRecord::Schema.define(version: 20180223205446) do
 
   create_table "contents", force: :cascade do |t|
     t.integer  "partner_id"
-    t.string   "partner_type"
+    t.string   "partner_type", limit: 255
     t.integer  "client_id"
     t.integer  "content_id"
-    t.string   "content_type"
+    t.string   "content_type", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -597,7 +597,7 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.integer "quantity"
     t.string  "name",         limit: 255
     t.text    "detail"
-    t.string  "ccy",          limit: 6,   default: "USD"
+    t.string  "ccy",                      default: "USD"
     t.integer "price_cents"
   end
 
@@ -643,7 +643,7 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.integer  "balance"
     t.string   "origin",         limit: 255
     t.integer  "partner_id"
-    t.string   "partner_type"
+    t.string   "partner_type",   limit: 255
     t.integer  "client_id"
     t.integer  "rec_client_id"
     t.integer  "merchant_id"
@@ -677,7 +677,6 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.boolean  "general",                  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "clearance",    limit: 225
     t.string   "company_type", limit: 255
   end
 
@@ -818,7 +817,7 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "pos_item_id"
-    t.string   "ccy",               limit: 6,   default: "USD"
+    t.string   "ccy",                           default: "USD"
     t.integer  "price_cents"
     t.integer  "price_promo_cents"
     t.string   "token"
@@ -1270,16 +1269,16 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.datetime "updated_at"
     t.integer  "merchant_id"
     t.string   "status",                      default: "done"
-    t.json     "start_req"
-    t.json     "start_res"
-    t.datetime "request_at"
-    t.datetime "response_at"
     t.integer  "r_sys"
     t.integer  "client_id"
     t.integer  "token"
     t.datetime "new_token_at"
     t.string   "hex_id"
     t.boolean  "active",                      default: true
+    t.json     "start_req"
+    t.json     "start_res"
+    t.datetime "request_at"
+    t.datetime "response_at"
   end
 
   add_index "redemptions", ["gift_id", "status", "active"], name: "index_redemptions_on_gift_id_and_status_and_active", using: :btree
@@ -1377,9 +1376,9 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.string   "push",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "origin"
+    t.string   "origin",       limit: 255
     t.integer  "partner_id"
-    t.string   "partner_type"
+    t.string   "partner_type", limit: 255
     t.integer  "client_id"
     t.datetime "destroyed_at"
     t.integer  "count",                    default: 0
@@ -1480,13 +1479,13 @@ ActiveRecord::Schema.define(version: 20180223205446) do
   end
 
   create_table "user_access_codes", force: :cascade do |t|
-    t.integer "merchant_id"
-    t.integer "affiliate_id"
     t.string  "code",                             null: false
     t.integer "role_id",                          null: false
     t.integer "created_by"
     t.boolean "approval_required", default: true, null: false
     t.boolean "active",            default: true, null: false
+    t.integer "owner_id"
+    t.string  "owner_type"
   end
 
   create_table "user_access_roles", force: :cascade do |t|
@@ -1497,12 +1496,12 @@ ActiveRecord::Schema.define(version: 20180223205446) do
 
   create_table "user_accesses", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "merchant_id"
-    t.integer  "affiliate_id"
-    t.integer  "role_id",                     null: false
+    t.integer  "role_id",                    null: false
     t.datetime "approved_at"
     t.integer  "approved_by"
-    t.boolean  "active",       default: true, null: false
+    t.boolean  "active",      default: true, null: false
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
   create_table "user_points", force: :cascade do |t|
@@ -1570,7 +1569,7 @@ ActiveRecord::Schema.define(version: 20180223205446) do
     t.tsvector "ftmeta"
     t.string   "affiliate_url_name",  limit: 255
     t.integer  "partner_id"
-    t.string   "partner_type"
+    t.string   "partner_type",        limit: 255
     t.integer  "client_id"
     t.string   "stripe_id"
   end
