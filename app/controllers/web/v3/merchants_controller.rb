@@ -52,7 +52,7 @@ class Web::V3::MerchantsController < MetalCorsController
 	end
 
 	def supply_items
-		items = SupplyItem.all
+		items = SupplyItem.order(order: :asc)
 		success items
 		respond
 	end
