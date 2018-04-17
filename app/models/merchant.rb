@@ -154,6 +154,15 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def pending_redemptions
+        Redemption.joins(:gift)                                       \
+        .where(      gifts: {merchant_id: self.id})                   \
+        .where(      gifts: {     status: ['notified', 'redeemed']})  \
+        .where(redemptions: {     status: "pending"})                 \
+        .where('gifts.new_token_at > ?', reset_time)
+    end
+
+
     def pending_redeems
         gifts = Gift.where(merchant_id: self.id, status: ['notified', 'redeemed']).where('new_token_at > ?', reset_time)
         notified_gifts = gifts.where(status: 'notified').order("created_at DESC")
