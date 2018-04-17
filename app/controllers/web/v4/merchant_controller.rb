@@ -8,10 +8,16 @@ class Web::V4::MerchantController < MetalCorsController
     # GET /:merchant_id/pending_gifts
     def list_pending
         puts "[api Web::v4::Merchant :: list_pending]"
-        redeems = @merchant.pending_redeems
-        puts " | responding with: #{redeems}"
+        redemptions = @merchant.pending_redemptions
 
-        success redeems
+        json_redemptions = redemptions.collect do |redemption|
+            json = redemption.as_json
+            json["gift"] = redemption.gift.serialize.as_json
+            json
+        end
+        puts " | responding with: #{json_redemptions.as_json}"
+
+        success json_redemptions.as_json
         return respond
     end
 
