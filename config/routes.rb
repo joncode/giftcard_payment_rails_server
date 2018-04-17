@@ -266,6 +266,10 @@ Drinkboard::Application.routes.draw do
 				patch    ":id/complete_redemption",           action: "complete_redemption"
 			end
 
+			namespace :merchant do
+				get      ":merchant_id/pending_gifts",        action: "list_pending"
+			end
+
 			namespace :associations do
 				get      "/roles",                             action: "list_roles"
 				get      "",                                   action: "list_user"
