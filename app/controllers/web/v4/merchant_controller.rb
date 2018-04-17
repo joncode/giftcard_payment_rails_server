@@ -5,7 +5,7 @@ class Web::V4::MerchantController < MetalCorsController
     before_action :verify_employee_access, only: [:list_pending]
 
 
-    # GET /:merchant_id/pending_gifts
+    # GET /:merchant_id/pending_redemptions
     def list_pending
         puts "[api Web::v4::Merchant :: list_pending]"
         redemptions = @merchant.pending_redemptions

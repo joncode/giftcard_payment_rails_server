@@ -267,7 +267,7 @@ Drinkboard::Application.routes.draw do
 			end
 
 			namespace :merchant do
-				get      ":merchant_id/pending_gifts",        action: "list_pending"
+				get      ":merchant_id/pending_redemptions",   action: "list_pending"
 			end
 
 			namespace :associations do
