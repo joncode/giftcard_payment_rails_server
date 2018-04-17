@@ -154,6 +154,14 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def recent_redemptions
+        recent = Redemption.includes(:gift).where(merchant_id: self.id, active: true, status: ['pending', 'done']).where.not(r_sys: 4).order(status: :desc)
+
+        recent.select do |redemption|
+            redemption.fresh? || redemption.recently_completed?
+        end
+    end
+
     def pending_redemptions
         Redemption.joins(:gift)                                       \
         .where(      gifts: {merchant_id: self.id})                   \

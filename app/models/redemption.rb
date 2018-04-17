@@ -80,6 +80,10 @@ class Redemption < ActiveRecord::Base
     end
     alias_method :token_fresh?, :fresh?
 
+	def recently_completed?
+		self.status == 'done' && self.new_token_at.present? && self.new_token_at > 24.hours.ago
+	end
+
     def stale?
 		if self.new_token_at.nil?
 			OpsTwilio.text_devs msg: "Redemption #{self.id} has no :new_token_at  - BAD DATA"
@@ -352,6 +356,12 @@ class Redemption < ActiveRecord::Base
 		h
 	end
 
+
+#   -------------
+
+    def self.pending_for merchant
+        includes(:gift).where(merchant_id: merchant.id, active: true, status: ['pending', 'done']).where.not(r_sys: 4).order(status: :desc)
+    end
 
 #   -------------
 

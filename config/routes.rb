@@ -268,6 +268,7 @@ Drinkboard::Application.routes.draw do
 
 			namespace :merchant do
 				get      ":merchant_id/pending_redemptions",   action: "list_pending"
+				get      ":merchant_id/recent_redemptions",    action: "list_recent"
 			end
 
 			namespace :associations do
