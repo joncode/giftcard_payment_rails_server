@@ -91,18 +91,18 @@ class User < ActiveRecord::Base
 #   -------------
 
 
-	def highest_access_at(owner)
+	def highest_access_level_at(owner)
 		#TODO: add `owner_id:, owner_type:` params to avoid an extra lookup
 		unless owner.instance_of?(Merchant) || owner.instance_of?(Affiliate)
 			raise ArgumentError, "Expected a Merchant or Affiliate instance, got #{owner.class}"
 		end
 
-		# `grant.level` returns higher numbers for higher access levels, so reverse the order here.
-		self.access_grants.where(active: true).where(owner: owner).sort{|grant| grant.level}.reverse.first
+		# `grant.level` returns higher numbers for higher access levels, so pluck off the last grant after sorting and return its level
+		self.access_grants.where(active: true).where(owner: owner).sort{|grant| grant.level}.last.level
 	end
 
 	def can_redeem_gift?(gift)
-		access_level = self.highest_access_at(gift.merchant).level  rescue nil
+		access_level = self.highest_access_level_at(gift.merchant)  rescue nil
 		return false  if access_level.nil?
 		return false  if access_level < UserAccess.level(:employee)
 		true

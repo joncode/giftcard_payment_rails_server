@@ -27,8 +27,8 @@ private
     end
 
     def verify_employee_access
-        #TODO: refactor after fixing `user#highest_access_at`
-        unless @current_user.highest_access_at_merchant(@merchant) >= UserAccess.level(:employee)
+        #TODO: refactor after fixing `user#highest_access_level_at`
+        unless @current_user.highest_access_level_at(@merchant) >= UserAccess.level(:employee)
             fail_web({ err: "UNAUTHORIZED",  msg: "You lack sufficient permissions at this merchant." })
             return respond
         end
