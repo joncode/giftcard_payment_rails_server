@@ -40,7 +40,7 @@ class Web::V4::MerchantController < MetalCorsController
 
     # GET  /:merchant_id/printer/queue
     def list_print_queue
-        # Because the default scope sorts these ascending, and for whatever reason, specifying descending (even on the same colum)n attempts to perform both orders. simultaneously.  BLOODY BRILLIANT.
+        # Because the default scope sorts these ascending, and for whatever reason, specifying descending (even on the same colum) attempts to perform both orders. simultaneously.  BLOODY BRILLIANT.
         queue = PrintQueue.unscoped.where(merchant: @merchant).where('created_at >= ?', 24.hours.ago).order(created_at: :desc)
         queue = queue.collect do |job|
             # Pluck out objects
