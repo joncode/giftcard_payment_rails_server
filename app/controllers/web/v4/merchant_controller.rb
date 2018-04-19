@@ -42,6 +42,21 @@ class Web::V4::MerchantController < MetalCorsController
     def list_print_queue
         # Because the default scope sorts these ascending, and for whatever reason, specifying descending (even on the same colum)n attempts to perform both orders. simultaneously.  BLOODY BRILLIANT.
         queue = PrintQueue.unscoped.where(merchant: @merchant).where('created_at >= ?', 24.hours.ago).order(created_at: :desc)
+        queue = queue.collect do |job|
+            # Pluck out objects
+            redemption = job.redemption
+            gift       = redemption.gift
+            # Convert to json
+            json_job        = job.as_json
+            json_redemption = redemption.serialize
+            json_gift       = gift.serialize
+            # Add them back in
+            json_redemption["gift"] = json_gift
+            json_job["redemption"] = json_redemption
+
+            json_job
+        end
+
         success queue
         respond
     end
