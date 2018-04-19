@@ -2,7 +2,7 @@ class Web::V4::MerchantController < MetalCorsController
 
     before_action :authentication_token_required
     before_action :resolve_merchant
-    before_action :verify_employee_access, only: [:list_pending, :list_recent]
+    before_action :verify_employee_access
 
 
     # GET /:merchant_id/pending_redemptions
