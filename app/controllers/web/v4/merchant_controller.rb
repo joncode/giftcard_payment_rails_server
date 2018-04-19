@@ -5,6 +5,8 @@ class Web::V4::MerchantController < MetalCorsController
     before_action :verify_employee_access
 
 
+    # ---[ V2: List Redemptions ]---------
+
     # GET /:merchant_id/pending_redemptions
     def list_pending
         puts "[api Web::v4::Merchant :: list_pending]"
@@ -33,6 +35,8 @@ class Web::V4::MerchantController < MetalCorsController
         return respond
     end
 
+
+    # ---[ Printers ]---------
 
     # GET  /:merchant_id/printer/queue
     def list_print_queue
