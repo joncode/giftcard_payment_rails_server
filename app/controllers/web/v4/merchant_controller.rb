@@ -34,6 +34,37 @@ class Web::V4::MerchantController < MetalCorsController
     end
 
 
+    # GET  /:merchant_id/printer/queue
+    def list_print_queue
+        # Because the default scope sorts these ascending, and for whatever reason, specifying descending (even on the same colum)n attempts to perform both orders. simultaneously.  BLOODY BRILLIANT.
+        queue = PrintQueue.unscoped.where(merchant: @merchant).where('created_at >= ?', 24.years.ago).order(created_at: :desc)
+        success queue
+        respond
+    end
+
+    # POST /:merchant_id/printer/reprint/:id
+    def reprint
+        redemption = Redemption.find_with(params[:id])  rescue nil
+        if redemption.nil?
+            fail_web({ err: "INVALID_INPUT", msg: "Redemption not found" })
+            return respond
+        end
+
+        print_queue = PrintQueue.reprint_redemption(redemption)
+        if print_queue.nil? || !print_queue.persisted?
+            msg = "Redemption #{redemption.paper_id} reprint error.  "
+            msg += print_queue.errors.messages  rescue ""
+
+            fail_web({ msg: msg.trim })
+            return respond
+        end
+
+        success({ msg: "Redemption #{redemption.paper_id} scheduled for reprint" })
+        respond
+    end
+
+
+
 private
 
     def resolve_merchant
