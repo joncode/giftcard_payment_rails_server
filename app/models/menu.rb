@@ -1,7 +1,7 @@
 class Menu < ActiveRecord::Base
     has_many    :menu_items , through: :sections
     has_many    :sections, 	dependent: :destroy
-    belongs_to  :merchant
+    belongs_to  :merchant  ##j- Probably not needed anymore (see #owner)
 
     validates_presence_of :owner_id, :owner_type
 

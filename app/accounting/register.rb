@@ -79,7 +79,7 @@ class Register < ActiveRecord::Base
 		make gift_obj, pay_amount, 'debt', partner_obj, origin_type
 	end
 
-	def self.make gift_obj, pay_amount, credit_debt='debt', partner_obj=nil, origin_type='loc'
+	def self.make gift_obj, pay_amount, credit_debt='debt', partner_obj=nil, origin_type='loc'  ##j partner: who gets paid
 		return nil unless (pay_amount.to_i > 0)
 		return nil if origin_type != 'loc' && partner_obj.nil?
 		if origin_type == 'loc' && partner_obj.nil?

@@ -35,7 +35,7 @@ class PrintEpsonResponder
 			# puts "500 Internal NEW EPSON CONNECTION TYPE #{connection_type}"
 			# The new connection type has always been blank
 		end
-		puts self.inspect
+		puts self.inspect  ##j- comment
 	end
 
 #	------------- 	GetRequest

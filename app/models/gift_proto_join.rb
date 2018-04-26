@@ -4,6 +4,7 @@ class GiftProtoJoin < Gift
 
 #   -------------
 
+    ##j split
     def self.create args={}
     	proto, proto_join = self.process_input args
 		outside_gift = nil

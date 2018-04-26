@@ -7,9 +7,10 @@ class RedisCacheControl
 
 		def perform
 				# rebuild the cities cache
-			rebuild_regions
+			rebuild_regions  ##j- Probably not needed anymore.
+			# rebuild_lists  ##j+
 				# rebuild merchants in each city /  list
-			rebuild_region_merchants
+			rebuild_region_merchants  ##j- Probably not needed anymore.
 				# rebuild each merchant cache
 			rebuild_merchants
 				# rebuild each menu cache

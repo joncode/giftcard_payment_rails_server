@@ -18,9 +18,9 @@ class AccountsPayableCronJob
         # registers = Register.where(created_at: sd ... ed, payment_id: nil)
         # registers = Register.where('payment_id IS NULL AND created_at < ?', ed)
 
-        registers.each do |reg|
+        registers.each do |reg|  ##j each->find_each
 
-            next if reg.subscription?
+            next if reg.subscription?  ##j- remove when pushing licenses live
             next if self.already_paid?(reg) # already paid
             partner = reg.partner
 

@@ -84,6 +84,7 @@ class Redemption < ActiveRecord::Base
 		self.status == 'done' && self.new_token_at.present? && self.new_token_at > 24.hours.ago
 	end
 
+    ##j Times listed within #stale? must match those within #expires_at, and must match across AdminTools, Drinkboard, and MerchantTools.
     def stale?
 		if self.new_token_at.nil?
 			OpsTwilio.text_devs msg: "Redemption #{self.id} has no :new_token_at  - BAD DATA"
@@ -519,13 +520,13 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 #   -------------
 
-	def set_response_at
+	def set_response_at  ##j Must exist across all three apps
 		if self.resp_json.present? && self.response_at.nil?
 			self.response_at = DateTime.now.utc
 		end
 	end
 
-	def set_request_at
+	def set_request_at  ##j Must exist across all three apps
 		if self.req_json.present? && self.request_at.nil?
 			self.request_at = DateTime.now.utc
 		end
@@ -536,7 +537,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 	end
 
 	def set_unique_token
-		self.token = UniqueIdMaker.four_digit_token(Redemption, :token, { status: 'pending', active: true })
+		self.token = UniqueIdMaker.four_digit_token(Redemption, :token, { status: 'pending', active: true })  ##j! May break around 1k pending redemptions
 		self.new_token_at = DateTime.now.utc
 	end
 

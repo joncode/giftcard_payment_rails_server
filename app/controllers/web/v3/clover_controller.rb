@@ -30,7 +30,7 @@ class Web::V3::CloverController < MetalCorsController
 		mid = h[:id]
 		h[:ccy] = h[:currency]
 
-		puts "HERE is PRE_PARSE  #{h.inspect}"
+		puts "HERE is PRE_PARSE  #{h.inspect}"  ##j- remove extraneous logs
 
 		if h[:email].kind_of?(String)
 			if ' ' == h[:email].last
@@ -47,7 +47,7 @@ class Web::V3::CloverController < MetalCorsController
 			h[:support_phone].gsub!(/[^0-9]/,'')
 		end
 
-		puts "HERE is MERCHANT_HSH #{h.inspect}"
+		puts "HERE is MERCHANT_HSH #{h.inspect}"  ##j- remove extraneous logs
 
 		o = OpsClover.new(h)
 		puts o.inspect

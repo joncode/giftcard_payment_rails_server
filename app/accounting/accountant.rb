@@ -3,6 +3,7 @@ class Accountant
 	# ASSUMPTIONS
 		# when a merchant is on redemption, a partial redemption triggers a full payment of the gift amount
 			# this is to keep things simple with gifts and registers
+		##j! ^ This will cause an issue with global gifting
 
 
 	class << self
@@ -31,6 +32,7 @@ class Accountant
     		puts affiliate_location(gift)
 		end
 
+		##j+ Will need to improve these two for global gifting.
 		def gift_redeemed_event gift
 			return nil unless gift.class.to_s.match /Gift/
 			return "Gift status not approved" if !gift_status_approved?(gift)
@@ -65,7 +67,7 @@ class Accountant
 			return "Accountant: Not redemption not a purchase (65)" if gift.status != 'redeemed' && gift.cat != 300
 
 			adjusted_value = gift.location_fee(adjusted_value)
-			register = Register.init_debt(gift, gift.merchant, adjusted_value, "loc")
+			register = Register.init_debt(gift, gift.merchant, adjusted_value, "loc")  ##j+ May need to change `gift.merchant` for global gifting
 			return "Accountant: Register exists (69)" if register.nil?
 
 			if register.save
@@ -83,7 +85,7 @@ class Accountant
 			# nil or not found
 			return "Accountant: No Location Affiliation" if affiliate.nil?
 
-			adjusted_value = gift.override_fee(adjusted_value)
+			adjusted_value = gift.override_fee(adjusted_value)  ##j override_fee: commission fee
 			register = Register.init_debt(gift, affiliate, adjusted_value, "aff_loc")
 			return "Accountant: Register exists" if register.nil?
 
