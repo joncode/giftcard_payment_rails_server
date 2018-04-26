@@ -1,8 +1,8 @@
 class Web::V4::MerchantController < MetalCorsController
 
-    before_action :authentication_token_required,  except: [:print_shift_report]
+    before_action :authentication_token_required
     before_action :resolve_merchant
-    before_action :verify_employee_access,         except: [:print_shift_report]
+    before_action :verify_employee_access
 
 
     # ---[ V2: List Redemptions ]---------
