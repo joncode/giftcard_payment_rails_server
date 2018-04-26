@@ -280,7 +280,7 @@ class Omnivore
 			"tender_type" => @tender_type_id,
 			"comment" => @gift_card_id
 		}
-		if ['8crEn8T9'].include?(@pos_merchant_id)
+		if ['8crEn8T9'].include?(@pos_merchant_id)  # "8crEn8T9": Carson Kitchen  #! this will crash other Omnivore locations
 			h['auto_close'] = false
 		end
 		h
