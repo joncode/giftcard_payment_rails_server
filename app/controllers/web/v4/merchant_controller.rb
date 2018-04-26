@@ -1,8 +1,8 @@
 class Web::V4::MerchantController < MetalCorsController
 
-    before_action :authentication_token_required
+    before_action :authentication_token_required,  except: [:print_shift_report]
     before_action :resolve_merchant
-    before_action :verify_employee_access
+    before_action :verify_employee_access,         except: [:print_shift_report]
 
 
     # ---[ V2: List Redemptions ]---------
@@ -82,6 +82,17 @@ class Web::V4::MerchantController < MetalCorsController
         respond
     end
 
+    # POST /:merchant_id/printer/shift_report
+    def print_shift_report
+        pq = PrintQueue.queue_shift(@merchant)
+
+        if pq.is_a? PrintQueue
+            success pq
+        else
+            fail_web({ msg: "Failed to queue a Shift Report" })
+        end
+        respond
+    end
 
 
 private

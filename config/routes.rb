@@ -271,6 +271,7 @@ Drinkboard::Application.routes.draw do
 				get      ":merchant_id/recent_redemptions",    action: "list_recent"
 				get      ":merchant_id/printer/queue",         action: "list_print_queue"
 				post     ":merchant_id/printer/reprint/:id",   action: "reprint"
+				post     ":merchant_id/printer/shift_report",  action: "print_shift_report"
 			end
 
 			namespace :associations do
