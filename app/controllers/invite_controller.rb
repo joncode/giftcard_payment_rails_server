@@ -25,6 +25,20 @@ class InviteController < ApplicationController
 	        if resp['success']
 	        	@redemption = resp['redemption']
 	        	@gift = resp['gift']
+
+				@items = @gift.cart.collect do |item|
+					"#{item['quantity']}x #{item['item_name']}"
+				end
+
+				if @items.count > 3
+					_count = @items.count
+					@items = @items[0..1]
+					@items << "(And #{_count} more)"
+				end
+
+				@value_dollars, @value_cents = @gift.value.split(".")
+				@value_cents ||= "00"
+
 		        respond_to do |format|
 		            format.html
 		            format.pdf do

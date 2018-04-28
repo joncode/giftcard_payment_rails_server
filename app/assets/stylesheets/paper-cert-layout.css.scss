@@ -1,0 +1,101 @@
+/***************************
+ * Page Layout
+ ***************************/
+
+@page {
+    size: 8.5in 11in;
+    margin: .5in;
+}
+
+body.paper-cert {
+    margin: 0;
+    padding: 0;
+    font-size: 14pt;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    color: #143A4C;
+
+    section.page {
+        width: 900px;
+        height: 1200px;
+        margin: 0 auto;
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+
+    /***************************
+     * General Element Layout
+     ***************************/
+
+    .header {
+        text-align: center;
+        box-sizing: border-box;
+
+        h1 {
+            margin-top: 0;
+        }
+    }
+
+
+    .container {
+        padding: 20px 45px 25px;
+        margin-bottom: 45px;
+        box-sizing: border-box;
+    }
+
+    .container-shaded {
+        background-color: #F5F7F9;
+    }
+
+    .row {
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .col {
+        display: inline-block;
+        padding-right: 15px;
+        vertical-align: top;
+        white-space: normal;
+    }
+
+    .col-30 { width: 30%; }
+    .col-33 { width: 33.3%; }
+    .col-35 { width: 35%; }
+    .col-40 { width: 40%; }
+    .col-45 { width: 45%; }
+    .col-50 { width: 50%; }
+    .col-55 { width: 55%; }
+    .col-60 { width: 60%; }
+    .col-65 { width: 65%; }
+    .col-70 { width: 70%; }
+
+    h1 {
+        font-size: 18pt;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #143A4C;
+    }
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-size: 18pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #143A4C;
+    }
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-size: 16pt;
+        font-weight: 700;
+        color: #143A4C;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+}

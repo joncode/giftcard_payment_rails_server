@@ -1,0 +1,132 @@
+section.section-gift-card {
+    height: 485px;
+    padding-top: 0px;
+    padding-bottom: 0;
+
+    .gift-card {
+        background-image: url(https://res.cloudinary.com/drinkboard/image/upload/v1524846772/app/paper-certs/main-gift-card.png);
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 60px;
+        height: 440px;
+        box-sizing: border-box;
+
+        .gift-card-parties {
+            font-weight: 500;
+            padding-bottom: 10px;
+        }
+
+        .gift-card-location {
+            padding-bottom: 10px;
+            margin: 35px 0px;
+
+            .gift-card-qr {
+                min-height: 155px;
+            }
+
+            strong {
+                font-weight: 700;
+                font-size: 18pt;
+                margin-top: 35px;
+                display: block;
+            }
+
+            span {
+                color: #29A5DE;
+                font-weight: 500;
+                display: block;
+            }
+        }
+
+        .gift-card-voucher-id {
+            color: #29A5DE;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding-bottom: 10px;
+        }
+
+        .gift-card-amount {
+            margin-top: 70px;
+            font-size: 70pt;
+            color: #fff;
+            font-weight: 900;
+            text-align: center;
+            white-space: nowrap;
+
+            .gift-card-currency {
+                font-size: 34pt;
+                display: inline-block;
+                vertical-align: text-top;
+            }
+
+            .gift-card-cents {
+                font-size: 34pt;
+                display: inline-block;
+                vertical-align: text-top;
+                margin-top: 12px;
+            }
+        }
+
+        .gift-card-items {
+            bottom: 10px;
+            position: absolute;
+            width: 250px;
+
+            div {
+                color: #fff;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                small {
+                    font-size: 10pt;
+                    color: #f7f7f7;
+                }
+            }
+        }
+    }
+
+    .gift-card-details {
+        font-size: 11pt;
+        text-align: center;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+section.section-instructions {
+    height: 310px;
+    border-top: solid 1px #d2d2d2;
+    padding-top: 45px;
+    padding-bottom: 45px;
+
+    p {
+        margin-bottom: 30px;
+    }
+}
+
+section.section-about {
+    height: 365px;
+    text-align: center;
+}
+
+.logo {
+    margin-bottom: 25px;
+}
+
+.card-samples ul {
+    list-style-type: none;
+    margin: 0;
+
+    li {
+        list-style-type: none;
+        margin: 0;
+        display: inline-block;
+
+        img {
+            width: 110px;
+            margin: 10px 7px;
+        }
+    }
+}
