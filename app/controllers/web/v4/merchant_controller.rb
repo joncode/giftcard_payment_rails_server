@@ -42,7 +42,7 @@ class Web::V4::MerchantController < MetalCorsController
     # NOT LINKED
     def list_print_queue
         # Because the default scope sorts these ascending, and for whatever reason, specifying descending (even on the same colum) attempts to perform both orders. simultaneously.  BLOODY BRILLIANT.
-        queue = PrintQueue.unscoped.where(merchant: @merchant).where('created_at >= ?', 24.years.ago).order(created_at: :desc)
+        queue = PrintQueue.unscoped.where(merchant: @merchant).where('created_at >= ?', 24.hours.ago).order(created_at: :desc)
         queue.collect!{|job| job_to_json_with_redemption_data(job) }
 
         success(queue) and respond
