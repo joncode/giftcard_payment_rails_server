@@ -61,26 +61,19 @@ class Web::V4::MerchantController < MetalCorsController
         success(queue) and respond
     end
 
+
     # POST /:merchant_id/printer/reprint/:id
     def reprint
-        redemption = Redemption.find_with(params[:id])  rescue nil
-        if redemption.nil?
-            fail_web({ err: "INVALID_INPUT", msg: "Redemption not found" })
+        pq = PrintQueue.where(id: params[:id]).first
+        if pq.nil?
+            fail_web({ err: "INVALID_INPUT", msg: "PrintQueue not found" })
             return respond
         end
 
-        print_queue = PrintQueue.reprint_redemption(redemption)
-        if print_queue.nil? || !print_queue.persisted?
-            msg = "Redemption #{redemption.paper_id} reprint error.  "
-            msg += print_queue.errors.messages  rescue ""
-
-            fail_web({ msg: msg.trim })
-            return respond
-        end
-
-        success({ msg: "Redemption #{redemption.paper_id} scheduled for reprint" })
-        respond
+        job = pq.reprint
+        success(job) and respond
     end
+
 
     # POST /:merchant_id/printer/shift_report
     def print_shift_report

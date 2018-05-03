@@ -86,6 +86,26 @@ class PrintQueue < ActiveRecord::Base
 		['queue', 'delivered'].include?(self.status)
 	end
 
+
+	def reprint
+		puts "\n\n"
+		puts "[model print_queue :: reprint]"
+		puts " | self:  #{self.inspect}"
+		if self.redemption.present?
+			# Redemption print queues should be cancelled and recreated to simplify merchant's accounting
+			puts " | canceling..."
+			self.update(status: 'cancel')
+			puts " | reprinting..."
+			PrintQueue.new_print_queue(self.redemption)
+		else
+			# Everything else can simply be requeued
+			puts " | requeueing..."
+			self.status = "queue"
+			self.save
+			self
+		end
+	end
+
 #   -------------
 
 	def self.cancel_stale_delivered
