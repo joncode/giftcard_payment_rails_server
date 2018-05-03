@@ -13,7 +13,7 @@ class Web::V4::MerchantController < MetalCorsController
         redemptions = @merchant.pending_redemptions
 
         json_redemptions = redemptions.collect do |redemption|
-            as_json_with_gift_data(redemption)
+            redemption_to_json_with_gift_data(redemption)
         end
         puts " | responding with: #{json_redemptions.as_json}"
 
@@ -27,7 +27,7 @@ class Web::V4::MerchantController < MetalCorsController
         redemptions = @merchant.recent_redemptions
 
         json_redemptions = redemptions.collect do |redemption|
-            as_json_with_gift_data(redemption)
+            redemption_to_json_with_gift_data(redemption)
         end
         puts " | responding with: #{json_redemptions.as_json}"
 
@@ -114,9 +114,9 @@ private
         end
     end
 
-    def as_json_with_gift_data(redemption)
+    def redemption_to_json_with_gift_data(redemption)
         unless redemption.respond_to? :gift_id
-            puts "[api Web::v4::Merchant :: as_json_with_gift_data]  Error"
+            puts "[api Web::v4::Merchant :: redemption_to_json_with_gift_data]  Error"
             puts " | Invalid object passed. Must respond to #gift_id"
             puts " | Got: #{redemption.inspect}"
             raise ArgumentError, "Object does not respond to #gift_id"
