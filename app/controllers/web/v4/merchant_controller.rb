@@ -37,28 +37,28 @@ class Web::V4::MerchantController < MetalCorsController
 
 
     # ---[ Printers ]---------
+    #TODO: Create a new route for `list_redemption_print_queue` and transition the Mobile App to the new route.
+
+    # NOT LINKED
+    def list_print_queue
+        # Because the default scope sorts these ascending, and for whatever reason, specifying descending (even on the same colum) attempts to perform both orders. simultaneously.  BLOODY BRILLIANT.
+        queue = PrintQueue.unscoped.where(merchant: @merchant).where('created_at >= ?', 24.years.ago).order(created_at: :desc)
+        queue.collect!{|job| job_to_json_with_redemption_data(job) }
+
+        success(queue) and respond
+    end
+
 
     # GET  /:merchant_id/printer/queue
-    def list_print_queue
+    def list_redemption_print_queue
         # Because the default scope sorts these ascending, and for whatever reason, specifying descending (even on the same colum) attempts to perform both orders. simultaneously.  BLOODY BRILLIANT.
         queue = PrintQueue.unscoped.where(merchant: @merchant).where('created_at >= ?', 24.hours.ago).order(created_at: :desc)
         queue = queue.collect do |job|
-            # Pluck out objects
-            redemption = job.redemption
-            gift       = redemption.gift
-            # Convert to json
-            json_job        = job.as_json
-            json_redemption = redemption.serialize
-            json_gift       = gift.serialize
-            # Add them back in
-            json_redemption["gift"] = json_gift
-            json_job["redemption"] = json_redemption
+            # Only list redemption (gift) print jobs  (exclude shift reports, etc.)
+            (job.redemption.present? ? job_to_json_with_redemption_data(job) : nil)
+        end.compact
 
-            json_job
-        end
-
-        success queue
-        respond
+        success(queue) and respond
     end
 
     # POST /:merchant_id/printer/reprint/:id
@@ -124,6 +124,22 @@ private
         json         = redemption.as_json
         json["gift"] = redemption.gift.serialize.as_json
         json
+    end
+
+    def job_to_json_with_redemption_data(job)
+        # Only jobs including redemptions will have a gift.
+        # (Non-redemption jobs include shift reports, help, recall notices, etc.)
+        return job.as_json  unless job.redemption.present?
+
+        # Convert the data to json and include it within our print job data.
+        json_redemption = job.redemption.serialize
+        json_gift       = job.redemption.gift.serialize
+
+        json_job = job.as_json
+        json_redemption["gift"] = json_gift
+        json_job["redemption"]  = json_redemption
+
+        json_job
     end
 
 end
