@@ -269,7 +269,7 @@ Drinkboard::Application.routes.draw do
 			namespace :merchant do
 				get      ":merchant_id/pending_redemptions",   action: "list_pending"
 				get      ":merchant_id/recent_redemptions",    action: "list_recent"
-				get      ":merchant_id/printer/queue",         action: "list_print_queue"
+				get      ":merchant_id/printer/queue",         action: "list_redemption_print_queue"
 				post     ":merchant_id/printer/reprint/:id",   action: "reprint"
 				post     ":merchant_id/printer/shift_report",  action: "print_shift_report"
 			end
