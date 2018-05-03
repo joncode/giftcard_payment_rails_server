@@ -280,22 +280,6 @@ class PrintQueue < ActiveRecord::Base
 		create(status: 'queue', merchant_id: merchant.id, type_of: 'help' )
 	end
 
-	def self.reprint_redemption(redemption)
-		puts "[PrintQueue::queue_redemption]"
-		puts " | hex_id: #{redemption.hex_id}"
-		# Check for previous PrintQueue; cancel and reprint if it exists.
-		pq = where(job: redemption.hex_id, merchant_id: redemption.merchant_id, type_of: 'redeem', redemption_id: redemption.id ).first
-		if pq.nil?
-			puts " | PrintQueue for that redemption does not exist.  Not reprinting."
-			return nil
-		end
-
-		puts " | pq.status: #{pq.status}"
-		puts " | cancelling."
-		pq.update(status: 'cancel')
-		puts " | Reprinting"
-		new_print_queue(redemption)
-	end
 
 #   -------------
 
