@@ -65,13 +65,27 @@ class Web::V4::MerchantController < MetalCorsController
     # POST /:merchant_id/printer/reprint/:id
     def reprint
         pq = PrintQueue.where(id: params[:id]).first
-        if pq.nil?
+        redemption = Redemption.where_with(params[:id]).first
+
+        if pq.nil? && redemption.nil?
             fail_web({ err: "INVALID_INPUT", msg: "PrintQueue not found" })
             return respond
         end
 
-        job = pq.reprint
-        success(job) and respond
+        if pq.present?
+            job = pq.reprint
+            success(job) and respond
+        end
+
+        if redemption.present?
+            # Check for previous PrintQueue; cancel and reprint if it exists.
+            filters = {job: redemption.hex_id, merchant_id: redemption.merchant_id, type_of: 'redeem', redemption_id: redemption.id}
+            pq = PrintQueue.unscoped.where(filters).order(created_at: :desc).first
+            pq.update(status: 'cancel')
+            job = PrintQueue.new_print_queue(redemption)
+
+            success(job) and respond
+        end
     end
 
 
