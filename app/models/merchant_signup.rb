@@ -123,18 +123,21 @@ class MerchantSignup < ActiveRecord::Base
 
 
 	def email_body
-		str  = "\nNAME:#{self.name} at EMAIL:#{self.email} would like to set up"
-		str += "\nVENUE NAME:#{self.venue_name}\nVENUE URL: #{self.venue_url}\nPOS system: #{self.point_of_sale_system}"
-		if self.phone.present?
-			str += "\nPHONE: #{number_to_phone self.phone}"
-		end
-		if self.position.present?
-			str += "\nPosition: #{self.position}"
-		end
-		if self.message.present?
-			str += "\nMessage: #{self.message}"
-		end
-		str
+		body = [
+			["NAME",       self.name],
+			["EMAIL",      self.email],
+			["VENUE NAME", self.venue_name],
+			["VENUE URL",  self.venue_url],
+			["POS",        self.point_of_sale_system],
+		]
+		body << ["PHONE",      number_to_phone(self.phone)]    if self.phone.present?
+		body << ["Position",   self.position]                  if self.position.present?
+		body << ["Message",    self.message]                   if self.message.present?
+		body << ["Extra Info", self.data['contact']['notes']]  if self.data.present? && self.data['contact']['notes'].present?
+
+		body.collect do |line|
+			line.join(": ")
+		end.join("\n")
 	end
 
     def destroy

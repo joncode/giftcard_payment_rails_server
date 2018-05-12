@@ -20,14 +20,16 @@ class MerchantSubmittedSysAlert < Alert
 #   -------------
 
 	def get_data
-		merchant_submit_obj = @target
+        title = "New merchant signup:\n"
+
+        merchant_submit_obj = @target
 		if merchant_submit_obj.kind_of?(MerchantSignup)
-			@data = "Please login to Admin Tools create account for:\n#{merchant_submit_obj.email_body}"
+            @data = title + merchant_submit_obj.email_body
 		else
-			@data = "Please login to Admin Tools create account for:\n#{merchant_submit_obj}"
+			@data = title + merchant_submit_obj.inspect
 	        if merchant_submit_obj["id"].to_i > 0
 	            if signup_obj = MerchantSignup.where(id: merchant_submit_obj["id"]).first
-	                @data = "Please login to Admin Tools create account for:\n#{signup_obj.email_body}"
+                    @data = title + signup_obj.email_body
 	            end
 	        end
 		end
