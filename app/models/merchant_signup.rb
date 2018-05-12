@@ -137,7 +137,7 @@ class MerchantSignup < ActiveRecord::Base
 
 		body.collect do |line|
 			line.join(": ")
-		end.join("\n")
+		end.join("<br/>\n")
 	end
 
     def destroy
