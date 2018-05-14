@@ -20,7 +20,7 @@ class MerchantSubmittedSysAlert < Alert
 #   -------------
 
 	def get_data
-        title = "New merchant signup:\n"
+        title = "<strong><u>New merchant signup:</u></strong><br/>"
 
         merchant_submit_obj = @target
 		if merchant_submit_obj.kind_of?(MerchantSignup)
