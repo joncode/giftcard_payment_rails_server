@@ -52,9 +52,7 @@ class Web::V3::DevicesController < MetalCorsController
 					   header: "How To Redeem",
 					   items: [
 						   "The gift is a form of payment, it does not need to be presented prior to ordering. Think of it as a credit or gift card.",
-						   "Check Gift Card Details for any specific rules associated with this gift",
 						   "This gift does not guarantee you a reservation or the ability to order, it is just a form of payment.",
-						   "Unused portions of this gift cannot be exchanged for cash.",
 						   "If you are under age or do not have proper ID, you may be refused service.",
 						   "At checkout inform the cashier or server that you have ItsOnMe for all or part of your bill."
 					   ]
