@@ -48,7 +48,11 @@
 					</div>
 					<div class="col col-35">
 						<div class="gift-card-amount">
-							<span class="gift-card-currency">$</span><%= @value_dollars %><span class="gift-card-cents">.<%= @value_cents %></span>
+							<!-- The following must all be on a single line as any whitespace between tags breaks the layout. -->
+							<span class="gift-card-currency">$</span><%= @value_dollars %><div class="gift-card-currency-extra">
+								<span class="gift-card-cents">.<%= @value_cents %></span>
+								<span class="gift-card-currency-type"><%= @redemption.ccy %></span>
+							</div>
 						</div>
 						<% unless @items.empty? %>
 							<div class="gift-card-items">
