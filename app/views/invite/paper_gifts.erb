@@ -42,7 +42,7 @@
 							<% if @redemption.gift.expires_at.present? %>
 								<br/>
 								<span class="gift-card-label">Expires on:</span>
-								<span><%= @redemption.gift.expires_at.to_date.inspect %></span>
+								<span><%= @redemption.gift.expires_at.strftime("%A %h %d, %Y") %></span>
 							<% end %>
 						</div>
 					</div>
