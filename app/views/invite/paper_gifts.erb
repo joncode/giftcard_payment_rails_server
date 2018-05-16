@@ -37,8 +37,13 @@
 							</div>
 						</div>
 						<div class="gift-card-voucher-id">
-							<span>Voucher ID:</span>
+							<span class="gift-card-label">Voucher ID:</span>
 							<span><%= @redemption.paper_id %></span>
+							<% if @redemption.gift.expires_at.present? %>
+								<br/>
+								<span class="gift-card-label">Expires on:</span>
+								<span><%= @redemption.gift.expires_at.to_date.inspect %></span>
+							<% end %>
 						</div>
 					</div>
 					<div class="col col-35">
