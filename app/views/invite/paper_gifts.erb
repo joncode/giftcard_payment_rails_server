@@ -66,12 +66,11 @@
 					</div>
 				</div>
 			</div>
-
 			<% if @gift.detail.present? %>
-			<div class="gift-card-details">
-				<strong>Gift Details:</strong>
-				<%= @gift.detail[0..200] %>
-			</div>
+				<div class="gift-card-details">
+					<strong>Gift Details:</strong>
+					<%= @gift.detail[0..200] %>
+				</div>
 			<% end %>
 		</section>
 
