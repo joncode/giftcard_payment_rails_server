@@ -193,7 +193,7 @@ private
 
     def basic_data gift_hsh
         gift_hsh["gift_id"] = self.id
-        gift_hsh["hex_id"] = self.hex_id unless Rails.env.production?
+        gift_hsh["hex_id"] = self.hex_id
         gift_hsh["status"] = self.status
         gift_hsh["cat"] = self.cat
         gift_hsh["created_at"] = self.created_at
