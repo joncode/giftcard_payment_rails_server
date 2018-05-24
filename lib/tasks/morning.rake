@@ -64,6 +64,12 @@ namespace :morning do
             puts "500 Internal ListByStateMakerJob #{e.inspect}"
         end
 
+        begin
+            Alert.perform('EPSON_PRINTER_DAILY_ISSUES_REPORT_SYS')
+        rescue => e
+            puts "500 Internal Epson Printer Daily Issues Report #{e.inspect}"
+        end
+
         end_time = DateTime.now.utc.to_i - start_time.to_i
         puts "MORNING CRON End #{end_time} seconds"
     end
