@@ -1,4 +1,4 @@
-class EpsonPrinterDailySysAlert < Alert
+class EpsonPrinterDailyIssuesReportSysAlert < Alert
 
 	# description:
 	# Send a summary of all printers requiring attention (critical issue + offline count)
@@ -8,7 +8,7 @@ class EpsonPrinterDailySysAlert < Alert
 	def text_msg
 		data = get_data
 
-		sms  = "Daily IOM Printer Report: "
+		sms  = "Daily IOM Epson Issues Report: "
 		sms += "#{data[:attention]} printers have critical issues"
 		sms += "; #{data[:offline].count} of them are OFFLINE"  unless data[:offline].empty?
 		sms += ". See https://admin.itson.me/epson_printers for details."
@@ -18,7 +18,7 @@ class EpsonPrinterDailySysAlert < Alert
 	def email_msg
 		data = get_data
 
-		markup  = "<h3>Epson Printer Daily Report</h3>"
+		markup  = "<h3>Epson Printer Daily Issues Report</h3>"
 		markup += "<strong>There are #{data[:attention]} printers with critical issues"
 		markup += "; <span style=\"color: firebrick\">#{data[:offline].count} of them are OFFLINE</span>"  unless data[:offline].empty?
 		markup += ".</strong>"
