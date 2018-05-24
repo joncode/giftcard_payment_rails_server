@@ -11,7 +11,7 @@ class EpsonPrinterDailyIssuesReportSysAlert < Alert
 		sms  = "Daily IOM Epson Issues Report: "
 		sms += "#{data[:attention]} printers have critical issues"
 		sms += "; #{data[:offline].count} of them are OFFLINE"  unless data[:offline].empty?
-		sms += ". See #{PUBLIC_URL_AT}/epson_printers for details."
+		sms += ". See https://admin.itson.me/epson_printers for details."
 		sms
 	end
 
@@ -34,7 +34,7 @@ class EpsonPrinterDailyIssuesReportSysAlert < Alert
 		end
 
 		markup += "<br/>"
-		markup += "Open the <a href=\"#{PUBLIC_URL_AT}/epson_printers\">printer tracking page</a> for more information."
+		markup += "Open the <a href=\"https://admin.itson.me/epson_printers\">printer tracking page</a> for more information."
 
 		markup.html_safe
 	end
