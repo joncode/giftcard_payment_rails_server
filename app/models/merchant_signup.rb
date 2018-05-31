@@ -134,6 +134,7 @@ class MerchantSignup < ActiveRecord::Base
 		body << ["Position",   self.position]                  if self.position.present?
 		body << ["Message",    self.message]                   if self.message.present?
 		body << ["Extra Info", self.data['contact']['notes']]  if self.data.present? && self.data['contact']['notes'].present?
+		body << ["Payment via",self.data['payment_method']]    if self.data.present? && self.data['payment_method'].present?
 
 		body.collect do |line|
 			line.join(": ")
