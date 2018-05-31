@@ -117,7 +117,7 @@ describe User do
         user = FactoryGirl.create :user, iphone_photo: nil
         user.should be_valid
         user.iphone_photo.should == nil
-        user.get_photo.should    == "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
+        user.get_photo.should    == "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.jpg"
     end
 
     it "should downcase email" do
@@ -137,7 +137,7 @@ describe User do
     it "should get photo defaut or real" do
         user  = FactoryGirl.create(:user, :iphone_photo => "test_photo")
         user.get_photo.should_not == "test_photo"
-        user.get_photo.should == "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
+        user.get_photo.should == "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.jpg"
         user.iphone_photo = "http://res.cloudinary.com/test_photo.jpg"
         user.save
         user.get_photo.should == "http://res.cloudinary.com/test_photo.jpg"

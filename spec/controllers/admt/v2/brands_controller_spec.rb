@@ -17,7 +17,7 @@ describe Admt::V2::BrandsController do
         it_should_behave_like("token authenticated", :post, :create)
 
         it "should create new brand" do
-            new_brand_hsh = { "name" => "Starwood" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}
+            new_brand_hsh = { "name" => "Starwood" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.jpg"}
             post :create, format: :json, data: new_brand_hsh
             brand = Brand.last
             brand.name.should        == new_brand_hsh["name"]
@@ -28,7 +28,7 @@ describe Admt::V2::BrandsController do
         end
 
         it "should return validation errors when failed validation" do
-            new_brand_hsh = { "name" => "" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}
+            new_brand_hsh = { "name" => "" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.jpg"}
             post :create, format: :json, data: new_brand_hsh
             json["status"].should == 0
             json["data"].class.should == Hash

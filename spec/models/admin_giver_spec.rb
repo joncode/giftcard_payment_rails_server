@@ -27,7 +27,7 @@ describe AdminGiver do
     it "should respond to get_photo with cloud logo URL" do
         admin_user  = FactoryGirl.create :admin_user
         admin_giver = admin_user.giver
-        admin_giver.get_photo.should == "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
+        admin_giver.get_photo.should == "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.jpg"
     end
 
     it "should associate with gift as giver" do

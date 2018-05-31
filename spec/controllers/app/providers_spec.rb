@@ -45,5 +45,5 @@ end
 # { city: "Las Vegas", name: "Artifice" photo: { photo: { url: "http://res.cloudinary.com/hsdbwezkg/image/upload/v1372783758/utucnqk55jfbfvkxtft4.jpg" } }, phone: ... },
 # { city: "Las Vegas", name: "Blue Limon" photo: "http://res.cloudinary.com/drinkboard/image/upload/v1375763254/dylssmstvcpynfusivtr.jpg", phone: ... },
 # { city: "Las Vegas", name: "Double Down Saloon" photo: { photo: { url: "http://res.cloudinary.com/hsdbwezkg/image/upload/v1368884947/jfxow40nq7wcvg32ee2f.jpg" } }, phone: ... },
-# { city: "Las Vegas", name: "Encore" photo: "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png", phone: ... }
+# { city: "Las Vegas", name: "Encore" photo: "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.jpg", phone: ... }
 # ]

@@ -20,7 +20,7 @@ module LandingPageFactory
 			template_id: nil
 		}
 		LandingPage.any_instance.stub_chain(:banner, :fullpath).and_return("http://res.cloudinary.com/drinkboard/image/upload/v1414092461/sample_header_x5vdk6.jpg")
-		LandingPage.any_instance.stub_chain(:sponsor, :fullpath).and_return("http://res.cloudinary.com/drinkboard/image/upload/v1414703963/sponsor_photo_sample_mgzmo1.png")
+		LandingPage.any_instance.stub_chain(:sponsor, :fullpath).and_return("http://res.cloudinary.com/drinkboard/image/upload/v1414703963/sponsor_photo_sample_mgzmo1.jpg")
 		landing_page = FactoryGirl.create :landing_page, landing_page_params
 		landing_page
 	end

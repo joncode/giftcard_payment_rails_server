@@ -69,7 +69,7 @@ module EmailHelper
 		"<div style=#{default_style}>
 			<div style='width:100%; text-align:center;'>
 						<div style='color:#3F3F3F; font-size:30px; font-weight:lighter; padding-top:20px;''>
-					<span><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/gold_celebrate_icon_hi074a.png'></span>
+					<span><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/gold_celebrate_icon_hi074a.jpg'></span>
 					<span>Celebrate</span>
 						</div>
 				</div>
@@ -84,15 +84,15 @@ module EmailHelper
 				<table style='width: 100%;'>
 					<tr>
 						<td style='text-align:center; width:33%;'>
-							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/gold_heart_zzd8mq.png'></div><br/>
+							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/gold_heart_zzd8mq.jpg'></div><br/>
 								<div>Find something new to love</div>
 		</td>
 						<td style='text-align:center; width:33%;'>
-							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1410563975/gold_gift_su2ced.png'></div><br/>
+							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1410563975/gold_gift_su2ced.jpg'></div><br/>
 								<div>Make someone's day</div>
 						</td>
 						<td style='text-align:center; width:33%;'>
-							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/gold_cup_jbaj66.png'></div><br/>
+							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/gold_cup_jbaj66.jpg'></div><br/>
 								<div>Enjoy time with friends</div>
 		</td>
 					</tr>
@@ -140,7 +140,7 @@ module EmailHelper
 					if gift.giver.class == "User"
 					giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
 					else
-						giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.png', width: "50", height: "50")
+						giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.jpg', width: "50", height: "50")
 					end
 					provider_name = gift.provider_name
 					expires_at    = make_ordinalized_date_with_day(gift.expires_at)
@@ -228,7 +228,7 @@ module EmailHelper
 		if gift.giver.class == "User"
 			giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
 		else
-			giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.png', width: "50", height: "50")
+			giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.jpg', width: "50", height: "50")
 		end
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
@@ -431,13 +431,13 @@ module EmailHelper
 				</div><br/>
 				<table>
 					<tr>
-						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_check_icon_drn49s.png'></td>
+						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_check_icon_drn49s.jpg'></td>
 						<td>Your account rep will review your information and contact you within 48 hours.</td>
 					</tr>
 				</table><br/>
 				<table>
 					<tr>
-						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_X_icon_nstleh.png'></td>
+						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_X_icon_nstleh.jpg'></td>
 						<td>Your rep will inform you if there is any missing account information that must be completed before going live.</td>
 					</tr>
 				</table>
@@ -454,7 +454,7 @@ module EmailHelper
 		"<div style=#{default_style}>
 			<div style='width:100%; text-align:center;'>
 						<div style='font-size:28px; padding-top:20px;''>
-					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_location_icon_vnmf3j.png'></div>
+					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_location_icon_vnmf3j.jpg'></div>
 					<div style='font-weight:bold;padding-top:10px'>Welcome</div>
 					<div style='padding:10px;'>to the ItsOnMe family</div>
 						</div>
@@ -466,7 +466,7 @@ module EmailHelper
 				</div><br/>
 				<table>
 					<tr>
-						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_docs_icon_nuauo9.png'></td>
+						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_docs_icon_nuauo9.jpg'></td>
 						<td><div>Train  your staff using the following materials. (Feel free to contact us if you have questions)</div></td>
 					</tr>
 					<tr>
@@ -499,7 +499,7 @@ module EmailHelper
 				</table><br/>
 				<table>
 					<tr>
-						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_clock_icon_cyewpv.png'></td>
+						<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_clock_icon_cyewpv.jpg'></td>
 						<td>Your account rep will contact you shortly to set your go-live date.</td>
 					</tr>
 				</table>
@@ -542,15 +542,15 @@ private
 	end
 
 	def v1_redemption
-		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>How to redeem this gift</div></div></div><div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''><div>Order your items like you normally would.</div><div>When the bill arrives follow the steps below to use your gift.</div></div></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>1. Click the Gift Center and open your gift</td><td style='width:33%;'>2. Click redeem on the gift</td><td style='width:34%;'>3. Show your phone to the cashier</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-3.png' style='width:100%;'></td></tr></table></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>4. The cashier will complete the redemption</td><td style='width:33%;'>5. The app will give the cashier an order number</td><td style='width:34%;'>6. The cashier will apply the gift value to your bill</td></tr><tr><td le='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-4.png' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-5.png' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-6.png' style='width:100%;'></td></tr></table></div>"
+		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>How to redeem this gift</div></div></div><div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''><div>Order your items like you normally would.</div><div>When the bill arrives follow the steps below to use your gift.</div></div></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>1. Click the Gift Center and open your gift</td><td style='width:33%;'>2. Click redeem on the gift</td><td style='width:34%;'>3. Show your phone to the cashier</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.jpg' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.jpg' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-3.jpg' style='width:100%;'></td></tr></table></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>4. The cashier will complete the redemption</td><td style='width:33%;'>5. The app will give the cashier an order number</td><td style='width:34%;'>6. The cashier will apply the gift value to your bill</td></tr><tr><td le='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-4.jpg' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-5.jpg' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-6.jpg' style='width:100%;'></td></tr></table></div>"
 	end
 
 	def v2_redemption
-		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>How to redeem this gift</div></div></div><div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''><div>Order your items like you normally would.</div><div>When the bill arrives follow the steps below to use your gift.</div></div></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>1. Click the Gift Center and open your gift</td><td style='width:33%;'>2. Click redeem on the gift</td><td style='width:34%;'>3. The app will give you a redemption code</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180910/redemption_help/V2/V2-3.png' style='width:100%;'></td></tr></table></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>4. Write the redemption code on the ItsOnMe line item on your receipt</td><td style='width:33%;'>5. Give the receipt to your cashier and they will apply the gift value to your bill</td><td style='width:34%;'>&nbsp;</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180911/redemption_help/V2/V2-4.png' style='width:100%;'></td><td style='width:33%;'>&nbsp;</td><td style='width:34%;'>&nbsp;</td></tr></table></div>"
+		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>How to redeem this gift</div></div></div><div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''><div>Order your items like you normally would.</div><div>When the bill arrives follow the steps below to use your gift.</div></div></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>1. Click the Gift Center and open your gift</td><td style='width:33%;'>2. Click redeem on the gift</td><td style='width:34%;'>3. The app will give you a redemption code</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.jpg' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.jpg' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180910/redemption_help/V2/V2-3.jpg' style='width:100%;'></td></tr></table></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>4. Write the redemption code on the ItsOnMe line item on your receipt</td><td style='width:33%;'>5. Give the receipt to your cashier and they will apply the gift value to your bill</td><td style='width:34%;'>&nbsp;</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180911/redemption_help/V2/V2-4.jpg' style='width:100%;'></td><td style='width:33%;'>&nbsp;</td><td style='width:34%;'>&nbsp;</td></tr></table></div>"
 	end
 
 	def pos_redemption
-		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>How to redeem this gift</div></div></div><div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''><div>Order your items like you normally would.</div><div>When the bill arrives follow the steps below to use your gift.</div></div></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>1. Click the Gift Center and open your gift</td><td style='width:33%;'>2. Click redeem on the gift</td><td style='width:34%;'>3. Find your check number on the receipt from the venue</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180799/redemption_help/pos/POS-3.png' style='width:100%;'></td></tr></table></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>4. Enter your receipt check number in the app</td><td style='width:33%;'>5. The app will update and confirm the gift was applied to your bill</td><td style='width:34%;'>6. Pay the remaining balance on your check and don’t forget to tip</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180800/redemption_help/pos/POS-4.png' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180800/redemption_help/pos/POS-5.png' style='width:100%;'></td><td style='width:34%;'>&nbsp;</td></tr></table></div>"
+		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>How to redeem this gift</div></div></div><div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''><div>Order your items like you normally would.</div><div>When the bill arrives follow the steps below to use your gift.</div></div></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>1. Click the Gift Center and open your gift</td><td style='width:33%;'>2. Click redeem on the gift</td><td style='width:34%;'>3. Find your check number on the receipt from the venue</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.jpg' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.jpg' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180799/redemption_help/pos/POS-3.jpg' style='width:100%;'></td></tr></table></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>4. Enter your receipt check number in the app</td><td style='width:33%;'>5. The app will update and confirm the gift was applied to your bill</td><td style='width:34%;'>6. Pay the remaining balance on your check and don’t forget to tip</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180800/redemption_help/pos/POS-4.jpg' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180800/redemption_help/pos/POS-5.jpg' style='width:100%;'></td><td style='width:34%;'>&nbsp;</td></tr></table></div>"
 	end
 
 	def default_style
@@ -568,10 +568,10 @@ private
 	def app_download_buttons_text
 		"<div>
 		<a href='https://itunes.apple.com/us/app/drinkboard-mobile-gifting/id659661295' target='_blank'>
-		<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/0ef011d7-25b6-4a92-894d-a42376893dcf.png'>
+		<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/0ef011d7-25b6-4a92-894d-a42376893dcf.jpg'>
 		</a>
 		<a href='https://play.google.com/store/apps/details?id=com.fbg.drinkboard&hl=en' target='_blank'>
-				<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/f4936d42-c3b7-49f8-adf1-cdf48166a3ed.png'>
+				<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/f4936d42-c3b7-49f8-adf1-cdf48166a3ed.jpg'>
 		</a>
 		</div>".html_safe
 	end
@@ -580,15 +580,15 @@ private
 		"<table style='width: 100%;'>
 			<tr>
 				<td style='text-align:center; width:33%;'>
-					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_check_icon_jgf7qu.png'></div><br/>
+					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_check_icon_jgf7qu.jpg'></div><br/>
 					<div>Track gift redemptions</div>
 				</td>
 				<td style='text-align:center; width:33%;'>
-					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_gift_baocpx.png'></div><br/>
+					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_gift_baocpx.jpg'></div><br/>
 					<div>Drive customers</div>
 				</td>
 				<td style='text-align:center; width:33%;'>
-					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_money_q1mott.png'></div><br/>
+					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_money_q1mott.jpg'></div><br/>
 					<div>Increase revenue</div>
 				</td>
 			</tr>

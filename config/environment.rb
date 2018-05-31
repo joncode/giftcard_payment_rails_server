@@ -18,10 +18,10 @@ else
 end
 CLOUDINARY_SECURE_URL = "https://d3jpl91pxevbkh.cloudfront.net/drinkboard"
 CLOUDINARY_UPLOAD     = "https://api.cloudinary.com/v1_1/drinkboard/image/upload"
-CLOUDINARY_GHOST_USER = "https://d3jpl91pxevbkh.cloudfront.net/drinkboard/image/upload/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+CLOUDINARY_GHOST_USER = "https://d3jpl91pxevbkh.cloudfront.net/drinkboard/image/upload/v1349221640/yzjd1hk2ljaycqknvtyg.jpg"
 
-MERCHANT_DEFAULT_IMG = "https://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png"
+MERCHANT_DEFAULT_IMG = "https://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.jpg"
 
 
-# http://res.cloudinary.com/drinkboard/image/upload/v1349148077/ezsucdxfcc7iwrztkags.png
-# https://d3jpl91pxevbkh.cloudfront.net/drinkboard/image/upload/v1349221640/yzjd1hk2ljaycqknvtyg.png
+# http://res.cloudinary.com/drinkboard/image/upload/v1349148077/ezsucdxfcc7iwrztkags.jpg
+# https://d3jpl91pxevbkh.cloudfront.net/drinkboard/image/upload/v1349221640/yzjd1hk2ljaycqknvtyg.jpg

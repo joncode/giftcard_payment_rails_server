@@ -60,7 +60,7 @@ class Campaign < ActiveRecord::Base
         if self.photo_path.present?
             self.photo_path
         else
-            "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
+            "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.jpg"
         end
     end
 
