@@ -131,7 +131,7 @@ FactoryGirl.define do
         sequence(:name)    { |n| "Starwoodz#{n}" }
         website     "www.starwood.com"
         description "AMAZING!"
-        photo       "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.jpg"
+        photo       "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"
         next_view   "m"
     end
 

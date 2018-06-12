@@ -22,7 +22,7 @@ describe Boomerang do
 
     it "should respond to photo methods" do
         bgiver = FactoryGirl.create :boomerang
-        bgiver.get_photo.should       == "http://res.cloudinary.com/drinkboard/image/upload/v1402519573/boomerang_120x120_clshuw.jpg"
+        bgiver.get_photo.should       == "http://res.cloudinary.com/drinkboard/image/upload/v1402519573/boomerang_120x120_clshuw.png"
         bgiver.short_image_url.should == "d|v1402519573/boomerang_120x120_clshuw.png"
     end
 end

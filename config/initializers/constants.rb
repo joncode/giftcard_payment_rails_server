@@ -94,7 +94,7 @@ FACEBOOK_OPS_PAGE_LIMIT = 1000
 
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
 
-DEFAULT_RECEIPT_IMG_URL = "https://res.cloudinary.com/drinkboard/image/upload/v1420767965/default_receipt_photo_pymjmb.jpg"
+DEFAULT_RECEIPT_IMG_URL = "https://res.cloudinary.com/drinkboard/image/upload/v1420767965/default_receipt_photo_pymjmb.png"
 
 AT_EMAIL       = "@itson.me"
 SUPPORT_EMAIL  = "support#{AT_EMAIL}"
@@ -126,7 +126,7 @@ else
     CSV_LIMIT   = 5000
 end
 
-BLANK_AVATAR_URL = "https://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.jpg"
+BLANK_AVATAR_URL = "https://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
 GENERIC_RECEIVER_NAME = "Enjoy!"
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i

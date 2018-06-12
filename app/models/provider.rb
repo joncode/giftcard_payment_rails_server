@@ -169,7 +169,7 @@
 #         if photo_l.present?
 #             photo_l
 #         else
-#             "http://res.cloudinary.com/drinkboard/image/upload/v1408401050/blank_logo_njwzxk.jpg"
+#             "http://res.cloudinary.com/drinkboard/image/upload/v1408401050/blank_logo_njwzxk.png"
 #         end
 #     end
 

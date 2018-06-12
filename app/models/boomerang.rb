@@ -22,7 +22,7 @@ class Boomerang < ActiveRecord::Base
 	end
 
 	def get_photo
-		"http://res.cloudinary.com/drinkboard/image/upload/v1402519573/boomerang_120x120_clshuw.jpg"
+		"http://res.cloudinary.com/drinkboard/image/upload/v1402519573/boomerang_120x120_clshuw.png"
 	end
 
 	def short_image_url
