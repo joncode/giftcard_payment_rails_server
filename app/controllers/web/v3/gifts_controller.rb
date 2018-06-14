@@ -163,6 +163,9 @@ class Web::V3::GiftsController < MetalCorsController
 
     def create
         gps = gift_params
+        puts "WEB/V3 GIFTS raw headers: #{request.headers}"
+        puts "WEB/V3 GIFTS raw params:  #{gift_params}"
+
         vobj = VerifyGift.new(gps)
         vobj.verify
         if false && !vobj.success?
