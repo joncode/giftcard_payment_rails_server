@@ -174,6 +174,7 @@ class Web::V3::GiftsController < MetalCorsController
             gift_hsh = {}
             set_receiver(gps, gift_hsh)
             set_origin(gps, gift_hsh)
+            gift_hsh["rec_net"]       = gps[:rec_net]
             gift_hsh["shoppingCart"]  = gps[:items]
             gift_hsh["giver"]         = @current_user
             gift_hsh["credit_card"]   = gps[:pay_id]
