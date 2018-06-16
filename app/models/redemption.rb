@@ -483,7 +483,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 			2
 		when 'omnivore'
 			3
-		when 'paper'
+		when 'paper', 'hand_delivery'
 			4
 		when 'zapper'
 			5

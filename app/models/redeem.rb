@@ -445,7 +445,7 @@ class Redeem
 			# set data and reject invalid submissions
 		if !gift.kind_of?(Gift)
 			return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'}
-		elsif !gift.notifiable?
+		elsif !(gift.notifiable? || gift.hand_delivery?)
 			if gift.status == 'redeemed'
 				return { 'success' => false, "response_code" => 'ALREADY_REDEEMED',
 					"response_text" => "Gift #{gift.token} at #{gift.provider_name} has already been redeemed" }
@@ -491,7 +491,7 @@ class Redeem
 			r_sys = Redemption.convert_type_of_to_r_sys(type_of)
 		end
 
-		if type_of == :paper
+		if [:paper, :hand_delivery].include? type_of
 				# re-issuing a paper cert
 			redeems = Redemption.current_paper(gift)
 			if redeems.length > 1
@@ -501,9 +501,9 @@ class Redeem
 			else
 				# no other paper redemption , move on
 			end
-		end
 
-		if type_of != :paper
+		else
+			# Non-paper, non-hand-delivery
 				# check for existing pending redemptions
 					# paper does not issue a non-paper redemption
 			already_have_one = nil
