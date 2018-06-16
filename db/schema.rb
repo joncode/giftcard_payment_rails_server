@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411235758) do
+ActiveRecord::Schema.define(version: 20180612021244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -651,6 +651,7 @@ ActiveRecord::Schema.define(version: 20180411235758) do
     t.datetime "scheduled_at"
     t.string   "ccy",            limit: 6,   default: "USD"
     t.string   "hex_id"
+    t.string   "rec_net",        limit: 2
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
