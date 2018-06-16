@@ -2,9 +2,17 @@ class PapergiftsController < ApplicationController
 
     def paper_cert
         puts "PAPER GIFT REQUEST #{params.inspect}"
+
         @gift = Gift.includes(:merchant).find_with(params[:id])
-        if @gift.kind_of?(Gift) && ['incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
-            resp = Redeem.start(gift: @gift, api: "/papergifts/#{params[:id]}", type_of: :paper)
+        raise ActiveRecord::RecordNotFound  unless @gift.kind_of?(Gift)
+
+        @hand_delivery = (@gift.status == 'hand_delivery')
+        type = :paper
+        type = :hand_delivery  if @hand_delivery
+
+
+        if ['hand_delivery', 'incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
+            resp = Redeem.start(gift: @gift, api: "/papergifts/#{params[:id]}", type_of: type)
             # puts resp.inspect
             if resp['success']
                 @redemption = resp['redemption']
@@ -32,8 +40,6 @@ class PapergiftsController < ApplicationController
             else
                 render :text => resp['response_text']
             end
-        else
-            raise ActiveRecord::RecordNotFound
         end
     end
 
