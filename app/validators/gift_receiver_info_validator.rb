@@ -7,7 +7,7 @@ class GiftReceiverInfoValidator < ActiveModel::Validator
                 network_ids += 1
             end
         end
-        if network_ids == 0
+        if network_ids == 0 && record.rec_net.to_s != 'hd'
             return record.errors[:receiver] << "No network_id receiver data. Cannot process gift. Please re-log in if this is an error."
         end
     end
