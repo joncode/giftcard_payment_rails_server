@@ -369,6 +369,7 @@ class Gift < ActiveRecord::Base
     end
 
     def set_status
+        ##TODO: Refactor.
         if self.pay_stat == "payment_error"
             self.status = "cancel"
         else
@@ -393,7 +394,11 @@ class Gift < ActiveRecord::Base
                 if self.receiver_id.nil?
                     self.status = "incomplete"
                 else
-                    self.status = 'open'
+                    if self.rec_net.to_s == 'hd'
+                        self.status = 'hand_delivery'
+                    else
+                        self.status = 'open'
+                    end
                 end
             end
         end
