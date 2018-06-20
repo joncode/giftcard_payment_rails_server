@@ -115,10 +115,17 @@ module EmailHelper
 		elsif !gift.twitter.blank?
 			receiver_info += " <p>via twitter</p>"
 		end
-		"<table cellpadding='0' cellspacing='0' border='0' align='center' width='100%' class='devicewidth' style='width: 100%'>
+		title    = 'Thanks for gifting local with ItsOnMe!'
+		subtitle = "Your gift is being delivered to #{receiver_info}"
+
+		if gift.status == 'hand_delivery'
+			subtitle = "You've chosen to deliver this gift to #{receiver_info} yourself."
+		end
+
+		markup = "<table cellpadding='0' cellspacing='0' border='0' align='center' width='100%' class='devicewidth' style='width: 100%'>
 <tbody><tr><td align='center' style='font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;color:#404547;text-align:center;line-height: 150%;padding: 15px 10px;'>
-<h2 style='line-height:33px;'>Thanks for gifting local with ItsOnMe!</h2>
-<p>Your gift is being delivered to #{receiver_info}</p></td></tr><tr><td align='center'>
+<h2 style='line-height:33px;'>#{title}</h2>
+<p>#{subtitle}</p></td></tr><tr><td align='center'>
 <table cellpadding='0' cellspacing='0' border='0' align='center' width='400' class='devicewidth' style='width:100%;max-width: 400px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;color:#404547;line-height: 150%;border: 1px solid #efefef;border-radius:4px;margin:15px 0'>
 <tbody><tr><td style=' padding: 15px; border-bottom: 1px solid #efefef;'>Location</td>
 <td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.merchant.name}</td>
@@ -127,8 +134,16 @@ module EmailHelper
 </tr><tr><td style=' padding: 15px;border-bottom: 1px solid #efefef;'>Processing Fee</td>
 <td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.service_s}</td>
 </tr><tr><td style=' padding: 15px;border-bottom: 1px solid #efefef;'><strong>Total</strong></td>
-<td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.purchase_total}</td>
-</tr></tbody></table></td></tr></tbody></table>".html_safe
+<td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.purchase_total}</td></tr>"
+		if gift.status == 'hand_delivery'
+			markup += "<tr>"
+			markup +=   "<td colspan='2'>"
+			markup +=     "If you need to reprint the gift for any reason, <a href='#{PUBLIC_URL}/papergifts/#{gift.hex_id}.pdf'>click here</a>."
+			markup +=   "</td>"
+			markup += "</tr>"
+		end
+		markup += "</tbody></table></td></tr></tbody></table>"
+		markup.html_safe
 	end
 
 	def text_for_notify_receiver_wo_redemption gift
