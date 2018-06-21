@@ -137,7 +137,7 @@ module EmailHelper
 <td style='text-align:right;padding: 15px;border-bottom: 1px solid #efefef;'>#{gift.purchase_total}</td></tr>"
 		if gift.status == 'hand_delivery'
 			markup += "<tr>"
-			markup +=   "<td colspan='2'>"
+			markup +=   "<td colspan='2' style='padding: 15px; border-bottom: 1px solid #efefef'>"
 			markup +=     "If you need to reprint the gift for any reason, <a href='#{DRINKBOARD_URL}/papergifts/#{gift.hex_id}.pdf'>click here</a>."
 			markup +=   "</td>"
 			markup += "</tr>"
