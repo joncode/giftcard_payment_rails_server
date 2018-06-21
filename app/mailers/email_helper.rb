@@ -138,7 +138,7 @@ module EmailHelper
 		if gift.status == 'hand_delivery'
 			markup += "<tr>"
 			markup +=   "<td colspan='2'>"
-			markup +=     "If you need to reprint the gift for any reason, <a href='#{PUBLIC_URL}/papergifts/#{gift.hex_id}.pdf'>click here</a>."
+			markup +=     "If you need to reprint the gift for any reason, <a href='#{DRINKBOARD_URL}/papergifts/#{gift.hex_id}.pdf'>click here</a>."
 			markup +=   "</td>"
 			markup += "</tr>"
 		end
