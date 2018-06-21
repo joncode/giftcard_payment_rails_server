@@ -543,12 +543,13 @@ class Gift < ActiveRecord::Base
 	end
 
 	def add_receiver receiver
+		# Don't change the status of hand_delivery gifts
 		if receiver.id
-			self.status 	  = 'open'
+			self.status       = 'open'  if self.status != 'hand_delivery'
 			self.receiver_id  = receiver.id
 		else
 		 	self.receiver_id  = nil
-		 	self.status 	  = 'incomplete'
+			self.status       = 'incomplete'  if self.status != 'hand_delivery'
 		end
 		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
