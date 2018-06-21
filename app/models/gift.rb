@@ -511,6 +511,12 @@ class Gift < ActiveRecord::Base
 #/-------------------------------------data population methods-----------------------------/
 
     def delivery_method
+        # Hey, we're storing this now!
+        # (All hand_delivery gifts have this saved.)
+        return self.rec_net  if self.rec_net.present?
+
+        # But for previous gifts without a saved rec_net, let's try to infer it from what we did bother to save.
+        ##? Why isn't there an 'io' entry here?
         if !self.receiver_phone.blank?
             'ph'
         elsif !self.receiver_email.blank?
@@ -520,6 +526,9 @@ class Gift < ActiveRecord::Base
         elsif !self.twitter.blank?
             'tw'
         else
+            # Because of course email delivery is correct despite the
+            # above indicating there's no receiver_email stored.  yep.
+            # Regardless, I'll leave this as-is.
             'em'
         end
     end
