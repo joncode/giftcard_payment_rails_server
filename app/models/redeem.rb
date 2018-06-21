@@ -23,7 +23,7 @@ class Redeem
 	end
 
 	def self.set_gift_current_status(gift)
-		return 'BAD STATUS' unless ['incomplete', 'open', 'notified', 'redeemed'].include?(gift.status)
+		return 'BAD STATUS' unless ['incomplete', 'open', 'hand_delivery', 'notified', 'redeemed'].include?(gift.status)
 
 		if gift.balance == 0
 			if gift.complete_redemptions.length > 0
@@ -34,7 +34,10 @@ class Redeem
 			end
 		end
 
-		if gift.balance != gift.original_value
+		if gift.rec_net.to_s == 'hd'
+			# Status of hand_delivery gifts should only be (hand_delivery|redeemed)
+			gift.status == 'hand_delivery'
+		elsif gift.balance != gift.original_value
 			gift.status = 'notified'
 		elsif gift.notified_at.present? && gift.receiver_id
 			gift.status = 'notified'
