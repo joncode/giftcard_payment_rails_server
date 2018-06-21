@@ -36,7 +36,7 @@ class Redeem
 
 		if gift.rec_net.to_s == 'hd'
 			# Status of hand_delivery gifts should only be (hand_delivery|redeemed)
-			gift.status == 'hand_delivery'
+			gift.status = 'hand_delivery'
 		elsif gift.balance != gift.original_value
 			gift.status = 'notified'
 		elsif gift.notified_at.present? && gift.receiver_id
