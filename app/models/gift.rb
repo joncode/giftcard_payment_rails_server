@@ -392,13 +392,13 @@ class Gift < ActiveRecord::Base
                 end
             else
                 if self.receiver_id.nil?
-                    self.status = "incomplete"
-                else
                     if self.rec_net.to_s == 'hd'
                         self.status = 'hand_delivery'
                     else
-                        self.status = 'open'
+                        self.status = "incomplete"
                     end
+                else
+                    self.status = 'open'
                 end
             end
         end
