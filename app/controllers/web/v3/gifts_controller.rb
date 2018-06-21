@@ -136,6 +136,9 @@ class Web::V3::GiftsController < MetalCorsController
                 if gift.errors.messages == {:receiver=> ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]}
                     status = :bad_request
                 end
+            elsif gift.status == 'hand_delivery'
+                fail_web({ err: "INVALID_INPUT", msg: "Cannot regift a hand delivered gift.", data: gift })
+                status = :bad_request
             else
                 gift.fire_after_save_queue(@current_client)
                 success gift.web_serialize
