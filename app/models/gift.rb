@@ -381,6 +381,7 @@ class Gift < ActiveRecord::Base
                     if DateTime.now.utc.hour > 14
                         # if its after 14 UTC and scheduled_at is same day as today .. deliver now
                         if self.receiver_id.nil?
+                            # Can't schedule a hand_delivery, so no need to check here.
                             self.status = "incomplete"
                         else
                             self.status = 'open'
