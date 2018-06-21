@@ -534,6 +534,7 @@ class Gift < ActiveRecord::Base
     end
 
 	def remove_receiver
+		puts "[Gift :: remove_receiver]  gift: #{self.hex_id}"
 		self.status         = 'incomplete'
 		self.receiver_id    = nil
 		self.receiver_name  = nil
