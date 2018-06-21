@@ -610,7 +610,7 @@ class Redeem
 #   -------------
 
 	def self.response redemption, gift
-		gift.status = 'notified'
+		gift.status = 'notified'  unless gift.status == 'hand_delivery'
 		gift.token = redemption.token
 		gift.new_token_at = redemption.new_token_at
 		gift.rec_client_id = redemption.client_id if gift.rec_client_id.nil?
