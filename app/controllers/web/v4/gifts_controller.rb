@@ -124,7 +124,7 @@ private
         @token = params[:token].to_s.strip.downcase
         if @token.empty?
             fail_web({ err: "INVALID_INPUT", msg: "Missing token. This may either be a Gift/Redemption hex_id, or a Gift id" })
-            return respond
+            respond and return false
         end
 
         # convert e.g. "rd 0000__ffff" -> "rd_0000ffff"
@@ -137,7 +137,7 @@ private
 
         unless numeric_token || hex_token
             fail_web({ err: "INVALID_INPUT", msg: "Malformed token. This may either be a Gift/Redemption hex_id, or a Gift id" })
-            return respond
+            respond and return false
         end
 
         true
@@ -159,7 +159,7 @@ private
         return true  if @gift.present?
 
         fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
-        return respond
+        respond and return false
     end
 
 
@@ -167,7 +167,7 @@ private
         return true  if @current_user.can_redeem_gift?(gift)
 
         fail_web({ err: "UNAUTHORIZED", msg: "You lack sufficient permission to redeem a gift at #{gift.provider_name}" })
-        respond
+        respond and return false
     end
 
 end
