@@ -250,7 +250,7 @@ class Gift < ActiveRecord::Base
     end
 
     def value
-        if self.status == 'notified' && self.balance.present?
+        if %w[notified hand_delivery].include?(self.status) && self.balance.present?
             display_money cents: balance
         else
             super
