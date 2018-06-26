@@ -316,11 +316,11 @@ class Redemption < ActiveRecord::Base
 
     def msg
     	if status == 'done'
-	    	str = ticket_id.present? ? "(#{ticket_id})" : ''
+			str = (ticket_id.present? ? " (#{ticket_id})" : '')
 	    	if self.gift_next_value == 0
-	    		"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. Gift has been fully used."
+				"#{display_money(cents: amount, ccy: ccy)} was applied#{str}. Gift has been fully used."
 	    	else
-		    	"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. #{display_money(cents: self.gift_next_value, ccy: ccy)} remains on the gift."
+				"#{display_money(cents: amount, ccy: ccy)} was applied#{str}. #{display_money(cents: self.gift_next_value, ccy: ccy)} remains on the gift."
 		    end
 	    else
 		   	"Redemption is #{apply_code}"
