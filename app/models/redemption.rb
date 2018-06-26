@@ -545,6 +545,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
     	if self.status != 'pending' && self.r_sys == 2
     		g = self.gift
     		if g.token == self.token && g.status == 'notified'
+				##!? `g.token == nil`  This should be an assignment, but will changing it break anything?  (Previous commit: f07e098b6)
     			g.token == nil
     			g.new_token_at = nil
     			g.save
