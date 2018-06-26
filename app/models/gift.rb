@@ -250,6 +250,7 @@ class Gift < ActiveRecord::Base
     end
 
     def value
+        ##!?  What will break when gift.status is [redeemed, regifted, cancel, expired, incomplete]?
         if %w[notified hand_delivery].include?(self.status) && self.balance.present?
             display_money cents: balance
         else
