@@ -7,6 +7,23 @@ class PapergiftsController < ApplicationController
         # Publicly-accessible API despite the controller location
         puts "[api Papergifts :: paper_cert]  params: #{params.inspect}"
 
+        # Fully redeemed gift?
+        if @gift.status == 'redeemed'
+            respond_to do |format|
+                format.html do
+                    render template: "papergifts/gift_already_redeemed", encoding: :utf8, formats: [:html]
+                end
+                format.pdf do
+                    # Because for some reason I must specify the template in both places, or it renders 'paper_cert.erb' instead :/
+                    render pdf: "papergifts/gift_already_redeemed", template: "papergifts/gift_already_redeemed", encoding: :utf8, formats: [:pdf]
+                end
+            end
+            return
+        end
+
+        # Otherwise-invalid gift?
+        raise ActiveRecord::RecordNotFound  unless @gift.kind_of?(Gift)  if invalid_gift_status?
+
 
         @hand_delivery = (@gift.status == 'hand_delivery')
 
@@ -50,6 +67,8 @@ private
         raise ActiveRecord::RecordNotFound  unless @gift.kind_of?(Gift)
     end
 
+    def invalid_gift_status?
+        !['hand_delivery', 'incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
     end
 
 end
