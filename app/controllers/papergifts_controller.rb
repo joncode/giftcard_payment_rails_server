@@ -1,13 +1,12 @@
 class PapergiftsController < ApplicationController
 
+    before_action :resolve_gift
+
     # GET  /papergifts/:id
     def paper_cert
         # Publicly-accessible API despite the controller location
         puts "[api Papergifts :: paper_cert]  params: #{params.inspect}"
 
-        @gift = Gift.includes(:merchant).find_with(params[:id])
-        raise ActiveRecord::RecordNotFound  unless @gift.kind_of?(Gift)
-        raise ActiveRecord::RecordInvalid   unless valid_status?(@gift.status)
 
         @hand_delivery = (@gift.status == 'hand_delivery')
 
@@ -45,8 +44,12 @@ class PapergiftsController < ApplicationController
 
 private
 
-    def valid_status?(status)
-        ['hand_delivery', 'incomplete', 'open', 'notified', 'schedule'].include?(status)
+    def resolve_gift
+        @gift = Gift.includes(:merchant).find_with(params[:id]) rescue nil
+
+        raise ActiveRecord::RecordNotFound  unless @gift.kind_of?(Gift)
+    end
+
     end
 
 end
