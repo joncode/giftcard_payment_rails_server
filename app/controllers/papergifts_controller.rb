@@ -9,6 +9,8 @@ class PapergiftsController < ApplicationController
 
         # Fully redeemed gift?
         if @gift.status == 'redeemed'
+
+            @redemptions = @gift.redemptions.reverse
             respond_to do |format|
                 format.html do
                     render template: "papergifts/gift_already_redeemed", encoding: :utf8, formats: [:html]

@@ -5,16 +5,31 @@
 	<meta charset="utf-8" />
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
 	<%= wicked_pdf_stylesheet_link_tag "paper-cert-layout" %>
+	<%= wicked_pdf_stylesheet_link_tag "paper-cert-redemptions" %>
 	<%= wicked_pdf_stylesheet_link_tag "paper-cert" %>
 </head>
 <body class="paper-cert">
 	<section class="page page-1">
 
-		<br/>
-		<header class="header"><h1>This gift has already been fully redeemed.</h1></header>
+		<header class="header">
+			<h1>This gift has already been fully redeemed.</h1>
+			<div class="subheading">Redeemed gifts cannot be reprinted.</div>
+		</header>
 
-		<br/>
-		<br/>
+
+		<section class="container container-shaded redemptions">
+			<h3>Redemption history:</h3>
+			<hr/>
+			<span class="redemption-history">
+				<ol>
+					<% @redemptions.each do |redemption| %>
+						<li class="redemption">
+							On <span class="redemption-date"><%= redemption.response_at.strftime("%B %-d, %Y") %></span> at <span class="redemption-time"><%= redemption.response_at.strftime("%l:%M %P") %></span>, this gift was redeemed for <span class="redemption-currency"><%= number_to_currency(redemption.amount/100.0) %></span> at <span class="redemption-venue"><%= redemption.merchant.name %></span>.
+						</li>
+					<% end %>
+				</ol>
+			</span>
+		</section>
 
 		<section class="container container-shaded section-about">
 			<div class="logo">
