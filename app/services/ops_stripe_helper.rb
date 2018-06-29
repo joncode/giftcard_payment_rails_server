@@ -29,24 +29,28 @@ module OpsStripeHelper
 		@country = card.country
 		@ccy = set_ccy(card.country)
 		@brand = card.brand.downcase.gsub(' ', '_') if card.brand.respond_to?(:downcase)
-		if !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check == 'pass') && (card.cvc_check == 'pass')
+
+		if !@cvc_check_skip && card.cvc_check == 'pass' && check_passed?(card.address_zip_check) && (card.address_line1_check.nil? || check_passed?(card.address_line1_check))
 			process_card_success card
-		elsif !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?) && (card.cvc_check == 'pass')
-			process_card_success card
-		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?)
+		elsif @cvc_check_skip && check_passed?(card.address_zip_check) && (card.address_line1_check.nil? || check_passed?(card.address_line1_check))
 			# do nothing
-		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check == 'pass')
-			# do nothing
-		elsif (card.address_zip_check == 'fail')
+		elsif card.address_zip_check == 'fail' || card.address_line1_check == 'fail'
 			address_validation_error
-		elsif (card.address_line1_check == 'fail')
-			address_validation_error
-		elsif (card.cvc_check == 'fail')
+		elsif card.cvc_check == 'fail'
 			cvc_validation_error
 		else
 			unavailable_validations
 		end
 		card
+	end
+
+#	-------------
+
+	# Occasionally, Stripe will report that a certain check is unavailable.
+	# These are not failures, so treat them as passing.
+	# Example: `address_zip_check` for Australian 4-digit zips was unavailable at the time of this addition.
+	def check_passed?(check)
+		%w[pass unavailable].include? check.downcase
 	end
 
 #	-------------
