@@ -29,7 +29,9 @@ module OpsStripeHelper
 		@country = card.country
 		@ccy = set_ccy(card.country)
 		@brand = card.brand.downcase.gsub(' ', '_') if card.brand.respond_to?(:downcase)
-		if  !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil? || card.address_line1_check == 'pass') && (card.cvc_check == 'pass')
+		if !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check == 'pass') && (card.cvc_check == 'pass')
+			process_card_success card
+		elsif !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?) && (card.cvc_check == 'pass')
 			process_card_success card
 		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?)
 			# do nothing
