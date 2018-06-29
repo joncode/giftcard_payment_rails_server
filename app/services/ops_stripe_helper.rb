@@ -30,9 +30,12 @@ module OpsStripeHelper
 		@ccy = set_ccy(card.country)
 		@brand = card.brand.downcase.gsub(' ', '_') if card.brand.respond_to?(:downcase)
 
-		if !@cvc_check_skip && card.cvc_check == 'pass' && check_passed?(card.address_zip_check) && (card.address_line1_check.nil? || check_passed?(card.address_line1_check))
+		address_zip_check_passed   = check_passed?(card.address_zip_check)
+		address_line1_check_passed = check_passed?(card.address_line1_check)
+
+		if !@cvc_check_skip && card.cvc_check == 'pass' && address_zip_check_passed && (card.address_line1_check.nil? || address_line1_check_passed)
 			process_card_success card
-		elsif @cvc_check_skip && check_passed?(card.address_zip_check) && (card.address_line1_check.nil? || check_passed?(card.address_line1_check))
+		elsif @cvc_check_skip && address_zip_check_passed && (card.address_line1_check.nil? || address_line1_check_passed)
 			# do nothing
 		elsif card.address_zip_check == 'fail' || card.address_line1_check == 'fail'
 			address_validation_error
