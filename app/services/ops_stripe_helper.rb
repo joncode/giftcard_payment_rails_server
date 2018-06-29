@@ -39,7 +39,7 @@ module OpsStripeHelper
 			# do nothing
 		elsif card.address_zip_check == 'fail' || card.address_line1_check == 'fail'
 			address_validation_error
-		elsif (card.cvc_check == 'fail')
+		elsif card.cvc_check == 'fail'
 			cvc_validation_error
 		else
 			unavailable_validations
