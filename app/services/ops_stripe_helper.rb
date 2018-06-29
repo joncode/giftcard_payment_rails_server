@@ -35,9 +35,13 @@ module OpsStripeHelper
 
 		if !@cvc_check_skip && card.cvc_check == 'pass' && address_zip_check_passed && (card.address_line1_check.nil? || address_line1_check_passed)
 			process_card_success card
-		elsif @cvc_check_skip && address_zip_check_passed && (card.address_line1_check.nil? || address_line1_check_passed)
+		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?)
 			# do nothing
-		elsif card.address_zip_check == 'fail' || card.address_line1_check == 'fail'
+		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check == 'pass')
+			# do nothing
+		elsif (card.address_zip_check == 'fail')
+			address_validation_error
+		elsif (card.address_line1_check == 'fail')
 			address_validation_error
 		elsif (card.cvc_check == 'fail')
 			cvc_validation_error
