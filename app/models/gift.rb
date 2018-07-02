@@ -250,7 +250,8 @@ class Gift < ActiveRecord::Base
     end
 
     def value
-        if self.status == 'notified' && self.balance.present?
+        ##!?  What will break when gift.status is [redeemed, regifted, cancel, expired, incomplete]?
+        if %w[notified hand_delivery].include?(self.status) && self.balance.present?
             display_money cents: balance
         else
             super
@@ -369,6 +370,7 @@ class Gift < ActiveRecord::Base
     end
 
     def set_status
+        ##TODO: Refactor.
         if self.pay_stat == "payment_error"
             self.status = "cancel"
         else
@@ -380,6 +382,7 @@ class Gift < ActiveRecord::Base
                     if DateTime.now.utc.hour > 14
                         # if its after 14 UTC and scheduled_at is same day as today .. deliver now
                         if self.receiver_id.nil?
+                            # Can't schedule a hand_delivery, so no need to check here.
                             self.status = "incomplete"
                         else
                             self.status = 'open'
@@ -391,7 +394,11 @@ class Gift < ActiveRecord::Base
                 end
             else
                 if self.receiver_id.nil?
-                    self.status = "incomplete"
+                    if self.rec_net.to_s == 'hd'
+                        self.status = 'hand_delivery'
+                    else
+                        self.status = "incomplete"
+                    end
                 else
                     self.status = 'open'
                 end
@@ -505,6 +512,12 @@ class Gift < ActiveRecord::Base
 #/-------------------------------------data population methods-----------------------------/
 
     def delivery_method
+        # Hey, we're storing this now!
+        # (All hand_delivery gifts have this saved.)
+        return self.rec_net  if self.rec_net.present?
+
+        # But for previous gifts without a saved rec_net, let's try to infer it from what we did bother to save.
+        ##? Why isn't there an 'io' entry here?
         if !self.receiver_phone.blank?
             'ph'
         elsif !self.receiver_email.blank?
@@ -514,6 +527,9 @@ class Gift < ActiveRecord::Base
         elsif !self.twitter.blank?
             'tw'
         else
+            # Because of course email delivery is correct despite the
+            # above indicating there's no receiver_email stored.  yep.
+            # Regardless, I'll leave this as-is.
             'em'
         end
     end
@@ -528,6 +544,7 @@ class Gift < ActiveRecord::Base
     end
 
 	def remove_receiver
+		puts "[Gift :: remove_receiver]  gift: #{self.hex_id}"
 		self.status         = 'incomplete'
 		self.receiver_id    = nil
 		self.receiver_name  = nil
@@ -538,12 +555,13 @@ class Gift < ActiveRecord::Base
 	end
 
 	def add_receiver receiver
+		# Don't change the status of hand_delivery gifts
 		if receiver.id
-			self.status 	  = 'open'
+			self.status       = 'open'  if self.status != 'hand_delivery'
 			self.receiver_id  = receiver.id
 		else
 		 	self.receiver_id  = nil
-		 	self.status 	  = 'incomplete'
+			self.status       = 'incomplete'  if self.status != 'hand_delivery'
 		end
 		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil

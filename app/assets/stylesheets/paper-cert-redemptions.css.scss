@@ -1,0 +1,28 @@
+.support {
+    font-size: 80%;
+    color: #444;
+
+    .contact-email { font-weight: bold; }
+    .contact-phone { font-weight: bold; color: black; }
+}
+
+
+section.redemptions {
+    margin-top: 3em;
+
+    .redemption-history {
+        color: grey;
+
+        .redemption {
+            font-family: 'Roboto', sans-serif;
+            font-size:   12pt;
+            font-weight: normal !important;
+            font-weight: 100 !important;
+
+            .redemption-date     { color: black; }
+            .redemption-time     { color: black; }
+            .redemption-currency { color: darkgreen; font-weight: bold; }
+            .redemption-venue    { color: black; }
+        }
+    }
+}

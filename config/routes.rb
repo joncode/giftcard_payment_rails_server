@@ -3,11 +3,6 @@ Drinkboard::Application.routes.draw do
 	root  to: 'react#index'
 	match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
-    # if !Rails.env.production?
-    get '/papergifts/:id',  to: 'invite#paper_gifts'
-    # get '/newpaper',  to: 'invite#new_paper'
-    # end
-
 #################        Mdot V2 API                              /////////////////////////////
 
 
@@ -394,6 +389,12 @@ Drinkboard::Application.routes.draw do
 
 	get "/confirm_email(/:email(/:user))", to: "users#confirm_email"
 	mount Resque::Server, :at => "/resque"
+
+#################          Paper Gifts                            /////////////////////////////
+
+	namespace :papergifts do
+		get '/:id',  action: 'paper_cert'
+	end
 
 
 #################          Resources                              /////////////////////////////

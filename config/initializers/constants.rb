@@ -6,7 +6,8 @@ if Rails.env.production?
     MERCHANT_URL     = "http://merchtools.herokuapp.com"
     PUBLIC_URL       = "http://www.itson.me"
     CLEAR_CACHE      = 'https://www.itson.me'
-    APIURL           = "https://api.itson.me/web/v3"
+    DRINKBOARD_URL   = "https://api.itson.me"
+    APIURL           = "#{DRINKBOARD_URL}/web/v3"
     PUBLIC_URL_AT    = "http://admin.itson.me"
     PUBLIC_URL_MT    = "http://merchant.itson.me"
     PUBLIC_URL_PT    = "http://partner.itson.me"
@@ -26,7 +27,8 @@ elsif Rails.env.staging?
     TEST_URL         = "http://qa.drinkboardapp.com"
     MERCHANT_URL     = "http://merchtoolsdev.herokuapp.com"
     CLEAR_CACHE      = 'https://qa.itson.me'
-    APIURL           = "https://qaapi.itson.me/web/v3"
+    DRINKBOARD_URL   = "https://qaapi.itson.me"
+    APIURL           = "#{DRINKBOARD_URL}/web/v3"
     PUBLIC_URL       = "http://qa.itson.me"
     PUBLIC_URL_AT    = "http://qaadmin.itson.me"
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
@@ -47,7 +49,8 @@ else
     TEST_URL         = "http://0.0.0.0:3001"
     MERCHANT_URL     = "http://0.0.0.0:3000"
     CLEAR_CACHE      = 'http://0.0.0.0:3001'
-    APIURL           = "https://api.itson.me/web/v3"
+    DRINKBOARD_URL   = "http://0.0.0.0:3001"
+    APIURL           = "#{DRINKBOARD_URL}/web/v3"
     PUBLIC_URL       = "http://0.0.0.0:3001"
     PUBLIC_URL_AT    = "http://0.0.0.0:3002"
     PUBLIC_URL_MT    = "http://merchant.happyer.dev/"

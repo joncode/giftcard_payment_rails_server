@@ -5,7 +5,7 @@ class GiftDeactivatedEvent
     	puts "\n gift #{gift_id} is being GiftDeactivatedEvent job\n"
     	gift = Gift.unscoped.find gift_id
 
-        if ['incomplete', 'schedule', 'open', 'notified'].include?(gift.status)
+        if ['incomplete', 'schedule', 'open', 'hand_delivery', 'notified'].include?(gift.status)
             registers = gift.registers
             if registers.length == 0
                 gift_parent = gift.parent

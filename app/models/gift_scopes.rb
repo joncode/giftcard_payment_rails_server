@@ -61,7 +61,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
 #### USER SCOPES
 
     def get_gifts user
-        includes(:merchant, :giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        includes(:merchant, :giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where(status: %w[open hand_delivery notified]).order("updated_at DESC")
     end
 
     def get_notifications user
@@ -73,7 +73,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
     end
 
     def get_buy_history user
-        gifts       = where( giver_id: user).where("status = :open OR status = :notified OR status = :incom", :open => 'open', :notified => 'notified', :incom => "incomplete").order("created_at DESC")
+        gifts       = where( giver_id: user).where(status: %w[open hand_delivery notified incomplete]).order("created_at DESC")
         past_gifts  = where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
         return gifts, past_gifts
     end
@@ -147,7 +147,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
     end
 
     def transactions user
-        gifts_raw = where(giver_id: user.id, status: ["open","redeemed", "notified", "incomplete", 'schedule']).order("created_at DESC")
+        gifts_raw = where(giver_id: user.id, status: %w[open hand_delivery redeemed notified incomplete schedule]).order("created_at DESC")
         gifts_raw.map do |g|
             gift_hash               = g.serializable_hash only: [ :provider_name, :total, :receiver_name]
             gift_hash["gift_id"]    = g.id
@@ -159,7 +159,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
 ##### PROVIDER SCOPES
 
     def get_provider merchant  #indexed
-        where(merchant_id: merchant).where("pay_stat not in (?)", ['unpaid']).where("status = :open OR status = :notified OR status = :incomplete", :open => 'open', :notified => 'notified', :incomplete => 'incomplete').order("updated_at DESC")
+        where(merchant_id: merchant).where("pay_stat not in (?)", ['unpaid']).where(status: %w[open hand_delivery notified incomplete]).order("updated_at DESC")
     end
 
     def get_history_provider merchant #indexed

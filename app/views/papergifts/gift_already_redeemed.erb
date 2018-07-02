@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8" />
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+	<%= wicked_pdf_stylesheet_link_tag "paper-cert-layout" %>
+	<%= wicked_pdf_stylesheet_link_tag "paper-cert-redemptions" %>
+	<%= wicked_pdf_stylesheet_link_tag "paper-cert" %>
+</head>
+<body class="paper-cert">
+	<section class="page page-1">
+
+		<header class="header">
+			<h1>This gift has already been fully redeemed.</h1>
+			<div class="subheading">
+				<strong>Redeemed gifts cannot be reprinted.</strong>
+				<br/><br/>
+				<span class="support">
+					Please contact support at <span class="contact-email"><%= link_to SUPPORT_EMAIL %></span> or<br/>
+					text <span class="contact-phone"><%= TWILIO_QUICK_NUM %></span> if you need assistance.
+				</span>
+			</div>
+		</header>
+
+
+		<section class="container container-shaded redemptions">
+			<h3>Redemption history:</h3>
+			<hr/>
+			<span class="redemption-history">
+				<ol>
+					<% @redemptions.each do |redemption| %>
+						<li class="redemption">
+							On <span class="redemption-date"><%= redemption.response_at.strftime("%B %-d, %Y") %></span> at <span class="redemption-time"><%= redemption.response_at.strftime("%l:%M %P") %></span>, this gift was redeemed for <span class="redemption-currency"><%= number_to_currency(redemption.amount/100.0) %></span> at <span class="redemption-venue"><%= redemption.merchant.name %></span>.
+						</li>
+					<% end %>
+				</ol>
+			</span>
+		</section>
+
+		<section class="container container-shaded section-about">
+			<div class="logo">
+				<img src="https://res.cloudinary.com/drinkboard/image/upload/c_scale,h_50/v1524846779/app/paper-certs/logo.png" />
+			</div>
+			<p>
+				ItsOnMe makes it easy for you to think global but gift local.
+			</p>
+			<p>
+				Shop on <a>www.itson.me</a> or download our app for other great gift ideas<br/>
+				at celebrated local restaurants, bars, golf courses, salons, and more.
+			</p>
+			<div class="card-samples">
+				<ul>
+					<li><img src="https://res.cloudinary.com/drinkboard/image/upload/v1524846790/app/paper-certs/Burger_Card.png" /></li>
+					<li><img src="https://res.cloudinary.com/drinkboard/image/upload/v1524846790/app/paper-certs/Haircut_Card.png" /></li>
+					<li><img src="https://res.cloudinary.com/drinkboard/image/upload/v1524846790/app/paper-certs/FineDining_Card.png" /></li>
+					<li><img src="https://res.cloudinary.com/drinkboard/image/upload/v1524846790/app/paper-certs/Golf_Card.png" /></li>
+					<li><img src="https://res.cloudinary.com/drinkboard/image/upload/v1524846790/app/paper-certs/Drinks_Card.png" /></li>
+					<li><img src="https://res.cloudinary.com/drinkboard/image/upload/v1524846790/app/paper-certs/Steaks_Card.png" /></li>
+				</ul>
+			</div>
+		</section>
+
+	</section>
+</body>
+</html>

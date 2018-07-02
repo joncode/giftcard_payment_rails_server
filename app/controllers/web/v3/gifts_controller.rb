@@ -136,6 +136,9 @@ class Web::V3::GiftsController < MetalCorsController
                 if gift.errors.messages == {:receiver=> ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]}
                     status = :bad_request
                 end
+            elsif gift.status == 'hand_delivery'
+                fail_web({ err: "INVALID_INPUT", msg: "Cannot regift a hand delivered gift.", data: gift })
+                status = :bad_request
             else
                 gift.fire_after_save_queue(@current_client)
                 success gift.web_serialize
@@ -163,6 +166,8 @@ class Web::V3::GiftsController < MetalCorsController
 
     def create
         gps = gift_params
+        puts "WEB/V3 GIFTS raw params:  #{gift_params}"
+
         vobj = VerifyGift.new(gps)
         vobj.verify
         if false && !vobj.success?
@@ -171,6 +176,7 @@ class Web::V3::GiftsController < MetalCorsController
             gift_hsh = {}
             set_receiver(gps, gift_hsh)
             set_origin(gps, gift_hsh)
+            gift_hsh["rec_net"]       = gps[:rec_net]
             gift_hsh["shoppingCart"]  = gps[:items]
             gift_hsh["giver"]         = @current_user
             gift_hsh["credit_card"]   = gps[:pay_id]

@@ -65,11 +65,20 @@
 					</div>
 				</div>
 			</div>
-			<% if @gift.detail.present? %>
-				<div class="gift-card-details">
-					<strong>Gift Details:</strong>
-					<%= @gift.detail[0..200] %>
-				</div>
+			<% if @hand_delivery %>
+				<% if @gift.message.present? %>
+					<div class="gift-card-details">
+						<strong>Personal message:</strong>
+						<%= @gift.message[0...512] %>
+					</div>
+				<% end %>
+			<% else %>
+				<% if @gift.detail.present? %>
+					<div class="gift-card-details">
+						<strong>Gift Details:</strong>
+						<%= @gift.detail[0..200] %>
+					</div>
+				<% end %>
 			<% end %>
 		</section>
 

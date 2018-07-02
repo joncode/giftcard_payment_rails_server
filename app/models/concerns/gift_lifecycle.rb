@@ -56,6 +56,10 @@ token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #
         end
     end
 
+    def hand_delivery?
+        self.status == 'hand_delivery'
+    end
+
     def notifiable?
         return self.status == 'open' || self.status == 'notified'
     end

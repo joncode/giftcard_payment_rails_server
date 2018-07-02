@@ -23,7 +23,7 @@ class Redeem
 	end
 
 	def self.set_gift_current_status(gift)
-		return 'BAD STATUS' unless ['incomplete', 'open', 'notified', 'redeemed'].include?(gift.status)
+		return 'BAD STATUS' unless ['incomplete', 'open', 'hand_delivery', 'notified', 'redeemed'].include?(gift.status)
 
 		if gift.balance == 0
 			if gift.complete_redemptions.length > 0
@@ -34,7 +34,10 @@ class Redeem
 			end
 		end
 
-		if gift.balance != gift.original_value
+		if gift.rec_net.to_s == 'hd'
+			# Status of hand_delivery gifts should only be (hand_delivery|redeemed)
+			gift.status = 'hand_delivery'
+		elsif gift.balance != gift.original_value
 			gift.status = 'notified'
 		elsif gift.notified_at.present? && gift.receiver_id
 			gift.status = 'notified'
@@ -445,7 +448,7 @@ class Redeem
 			# set data and reject invalid submissions
 		if !gift.kind_of?(Gift)
 			return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'}
-		elsif !gift.notifiable?
+		elsif !(gift.notifiable? || gift.hand_delivery?)
 			if gift.status == 'redeemed'
 				return { 'success' => false, "response_code" => 'ALREADY_REDEEMED',
 					"response_text" => "Gift #{gift.token} at #{gift.provider_name} has already been redeemed" }
@@ -491,7 +494,7 @@ class Redeem
 			r_sys = Redemption.convert_type_of_to_r_sys(type_of)
 		end
 
-		if type_of == :paper
+		if [:paper, :hand_delivery].include? type_of
 				# re-issuing a paper cert
 			redeems = Redemption.current_paper(gift)
 			if redeems.length > 1
@@ -501,9 +504,9 @@ class Redeem
 			else
 				# no other paper redemption , move on
 			end
-		end
 
-		if type_of != :paper
+		else
+			# Non-paper, non-hand-delivery
 				# check for existing pending redemptions
 					# paper does not issue a non-paper redemption
 			already_have_one = nil
@@ -607,7 +610,7 @@ class Redeem
 #   -------------
 
 	def self.response redemption, gift
-		gift.status = 'notified'
+		gift.status = 'notified'  unless gift.status == 'hand_delivery'
 		gift.token = redemption.token
 		gift.new_token_at = redemption.new_token_at
 		gift.rec_client_id = redemption.client_id if gift.rec_client_id.nil?
