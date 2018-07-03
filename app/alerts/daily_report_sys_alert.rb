@@ -19,8 +19,8 @@ class DailyReportSysAlert < Alert
 
 	def get_data
 		time_period = 24.hours.ago.beginning_of_day
-        @header = TimeGem.dt_to_s(time_period)
-		super between: (time_period ... (time_period-24.hours))
+		@header = TimeGem.dt_to_s(time_period)
+		super between: (time_period ... (time_period+24.hours))
 	end
 
 end
