@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180612021244) do
+ActiveRecord::Schema.define(version: 20180713082732) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
   enable_extension "uuid-ossp"
+  enable_extension "pg_stat_statements"
 
   create_table "affiliates", force: :cascade do |t|
     t.string   "first_name",         limit: 255
@@ -1252,6 +1252,45 @@ ActiveRecord::Schema.define(version: 20180612021244) do
   add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree
   add_index "protos", ["target_item_id"], name: "index_protos_on_target_item_id", using: :btree
 
+  create_table "purchase_verification_checks", force: :cascade do |t|
+    t.string   "hex_id"
+    t.integer  "verification_id"
+    t.string   "session_id"
+    t.datetime "expires_at"
+    t.datetime "verified_at"
+    t.datetime "failed_at"
+    t.string   "check_type"
+    t.string   "rule_name"
+    t.json     "rule_options"
+    t.string   "frequency"
+    t.json     "data"
+    t.json     "request"
+    t.json     "response"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "purchase_verification_checks", ["hex_id"], name: "index_purchase_verification_checks_on_hex_id", using: :btree
+
+  create_table "purchase_verifications", force: :cascade do |t|
+    t.string   "hex_id"
+    t.integer  "check_count",           default: 0
+    t.string   "session_id"
+    t.datetime "expires_at"
+    t.datetime "verified_at"
+    t.datetime "failed_at"
+    t.integer  "user_id"
+    t.integer  "merchant_id"
+    t.integer  "gift_id"
+    t.string   "cart"
+    t.string   "value"
+    t.string   "ccy",         limit: 6, default: "USD"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "purchase_verifications", ["hex_id"], name: "index_purchase_verifications_on_hex_id", using: :btree
+
   create_table "questions", force: :cascade do |t|
     t.string "left",  limit: 255
     t.string "right", limit: 255
@@ -1540,40 +1579,41 @@ ActiveRecord::Schema.define(version: 20180612021244) do
   add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",               limit: 255
-    t.string   "password_digest",     limit: 255,                 null: false
-    t.string   "remember_token",      limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.string   "address",             limit: 255
-    t.string   "address_2",           limit: 255
-    t.string   "city",                limit: 20
-    t.string   "state",               limit: 2
-    t.string   "zip",                 limit: 16
-    t.string   "phone",               limit: 255
-    t.string   "first_name",          limit: 255
-    t.string   "last_name",           limit: 255
-    t.string   "facebook_id",         limit: 255
-    t.string   "handle",              limit: 255
-    t.string   "twitter",             limit: 255
-    t.boolean  "active",                          default: true
-    t.string   "persona",             limit: 255, default: ""
-    t.string   "sex",                 limit: 255
+    t.string   "email",                  limit: 255
+    t.string   "password_digest",        limit: 255,                 null: false
+    t.string   "remember_token",         limit: 255
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.string   "address",                limit: 255
+    t.string   "address_2",              limit: 255
+    t.string   "city",                   limit: 20
+    t.string   "state",                  limit: 2
+    t.string   "zip",                    limit: 16
+    t.string   "phone",                  limit: 255
+    t.string   "first_name",             limit: 255
+    t.string   "last_name",              limit: 255
+    t.string   "facebook_id",            limit: 255
+    t.string   "handle",                 limit: 255
+    t.string   "twitter",                limit: 255
+    t.boolean  "active",                             default: true
+    t.string   "persona",                limit: 255, default: ""
+    t.string   "sex",                    limit: 255
     t.boolean  "is_public"
-    t.string   "iphone_photo",        limit: 255
+    t.string   "iphone_photo",           limit: 255
     t.datetime "reset_token_sent_at"
-    t.string   "reset_token",         limit: 255
+    t.string   "reset_token",            limit: 255
     t.date     "birthday"
-    t.string   "origin",              limit: 255
-    t.string   "confirm",             limit: 255, default: "00"
-    t.boolean  "perm_deactive",                   default: false
-    t.string   "cim_profile",         limit: 255
+    t.string   "origin",                 limit: 255
+    t.string   "confirm",                limit: 255, default: "00"
+    t.boolean  "perm_deactive",                      default: false
+    t.string   "cim_profile",            limit: 255
     t.tsvector "ftmeta"
-    t.string   "affiliate_url_name",  limit: 255
+    t.string   "affiliate_url_name",     limit: 255
     t.integer  "partner_id"
-    t.string   "partner_type",        limit: 255
+    t.string   "partner_type",           limit: 255
     t.integer  "client_id"
     t.string   "stripe_id"
+    t.datetime "purchase_lockout_until"
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
