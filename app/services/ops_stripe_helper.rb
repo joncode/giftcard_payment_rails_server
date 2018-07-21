@@ -30,13 +30,13 @@ module OpsStripeHelper
 		@ccy = set_ccy(card.country)
 		@brand = card.brand.downcase.gsub(' ', '_') if card.brand.respond_to?(:downcase)
 
-		if !@cvc_check_skip && card.cvc_check == 'pass' && check_passed?(card.address_zip_check) && (card.address_line1_check.nil? || check_passed?(card.address_line1_check))
+		if !@cvc_check_skip && checks_passed?(card.cvc_check, card.address_zip_check, card.address_line1_check)
 			process_card_success card
-		elsif @cvc_check_skip && check_passed?(card.address_zip_check) && (card.address_line1_check.nil? || check_passed?(card.address_line1_check))
+		elsif @cvc_check_skip && checks_passed?(card.address_zip_check, card.address_line1_check)
 			# do nothing
-		elsif card.address_zip_check == 'fail' || card.address_line1_check == 'fail'
+		elsif check_failed?(card.address_zip_check) || check_failed?(card.address_line1_check)
 			address_validation_error
-		elsif card.cvc_check == 'fail'
+		elsif check_failed?(card.cvc_check)
 			cvc_validation_error
 		else
 			unavailable_validations
@@ -46,11 +46,22 @@ module OpsStripeHelper
 
 #	-------------
 
-	# Occasionally, Stripe will report that a certain check is unavailable.
-	# These are not failures, so treat them as passing.
+	# Occasionally, Stripe will report that a certain check is unavailable or not performed.
+	# These are not failures, so treat them as passing.  (Also assume a pass if there's no explicit fail)
 	# Example: `address_zip_check` for Australian 4-digit zips was unavailable at the time of this addition.
 	def check_passed?(check)
-		%w[pass unavailable].include? check.downcase
+		check.nil? || %w[pass unavailable unchecked].include?(check.downcase)
+	end
+
+	def checks_passed?(*checks)
+		# Check each then & the results together
+		checks.map{|check| check_passed?(check) }.reduce(&:&)
+	end
+
+
+	# Explicit failures only
+	def check_failed?(check)
+		check.present? && check.downcase == 'fail'
 	end
 
 #	-------------
