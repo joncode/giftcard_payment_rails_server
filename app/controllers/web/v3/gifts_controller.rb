@@ -1,6 +1,8 @@
 class Web::V3::GiftsController < MetalCorsController
     include MoneyHelper
     before_action :authentication_token_required, except: [:show, :hex, :detail]
+    before_action :construct_gift_hash, only: [:verify, :create]
+    before_action :validate_session,    only: [:verify, :verify_response, :verify_sms_resume]
 
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
@@ -151,54 +153,119 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
 
+    # --- Purchase Verification (Anti-fraud) ------------------
+
+    # verify   -> (client) -> verify_response
+    # purchase -> verify   -> (success?) -> GiftSale
+
+
+
+
+
+
+
+    # POST  /web/v3/gifts/verify
     def verify
-        gps = gift_params
-        puts "Web::V3::GiftsController " + gps.insp
-        vobj = VerifyGift.new(gps)
-        vobj.verify
-        if vobj.succces?
-            success(vobj.data)
-        else
-            fail_web({ err: vobj.err, msg: vobj.msg })
+        puts "\n[api Web::V3::Gifts :: verify]"
+        puts " | params: #{@gift_hash}"
+        response = PurchaseVerification.for(@gift_hash).perform
+
+        if response[:verdict] == :expired
+            fail_web({err: "BAD_REQUEST", msg: "Expired"})
+            return
         end
+
+        (response[:success] ? success(response) : fail_web(response))
+
+    rescue => e
+        puts "\n[api Web::V3::Gifts :: verify] Error 500: #{e.message}"
+        fail_web({err: e, msg: e.message})
+    ensure
         respond
     end
 
+
+    # POST  /web/v3/gifts/verify_response
+    def verify_response
+        puts "\n[api Web::V3::Gifts :: verify_response]"
+        puts " | params: #{params}"
+
+        if params['data']['response'].nil? || params['data']['response'].strip.empty?
+            fail_web({err: "INVALID_INPUT", msg: "Missing response"})
+            return
+        end
+
+        pv = PurchaseVerification.for_session(params['data']['session_id'])
+        if pv.nil?
+            fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
+            return
+        elsif pv.check_count == 0
+            fail_web({err: "BAD_REQUEST", msg: "Nothing to verify"})
+            return
+        end
+
+        result =  pv.verify_check(params['data']['response'])
+        if result[:verdict] == :defer
+            fail_web({err: "BAD_REQUEST", msg: "Cannot verify a deferred check"})
+            return
+        end
+
+        (result[:success] ? success(result) : fail_web(result))
+    rescue => e
+        puts "\n[api Web::V3::Gifts :: verify_response] Error 500: #{e.message}"
+        fail_web({err: e, msg: e.message})
+    ensure
+        respond
+    end
+
+
+    # POST  /web/v3/gifts/verify_sms
+    def verify_sms_resume
+        puts "\n[api Web::V3::Gifts :: verify_sms_resume]"
+        puts " | params: #{params}"
+
+        pv = PurchaseVerification.for_session(params['data']['session_id'])
+        if pv.nil?
+            fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
+            return
+        end
+
+        result = pv.deferred_sms
+        if result.nil?
+            fail_web({err: "BAD_REQUEST", msg: "No deferred SMS verifications pending"})
+            return
+        end
+
+        (result[:success] ? success(result) : fail_web({err: "FAIL", msg: ""}.merge(result)))
+    rescue => e
+        puts "\n[api Web::V3::Gifts :: verify_sms_resume] Error 500: #{e.message}"
+        fail_web({err: e, msg: e.message})
+    ensure
+        respond
+    end
+
+
+    # ------
+
     def create
-        gps = gift_params
         puts "WEB/V3 GIFTS raw params:  #{gift_params}"
+        puts "WEB/V3 GIFTS hash #{@gift_hash}"
 
-        vobj = VerifyGift.new(gps)
-        vobj.verify
-        if false && !vobj.success?
-            # fail_web({ err: vobj.err, msg: vobj.msg })
+        ##TODO verify purchase and return pass/fail
+        ## For now, just delete `session_id` if it exists.
+        @gift_hash.delete "session_id"
+
+
+        gift = GiftSale.create(@gift_hash)
+        if gift.kind_of?(Gift) && !gift.id.nil?
+            # binding.pry
+            gift.fire_after_save_queue(@current_client)
+            success gift.web_serialize
         else
-            gift_hsh = {}
-            set_receiver(gps, gift_hsh)
-            set_origin(gps, gift_hsh)
-            gift_hsh["rec_net"]       = gps[:rec_net]
-            gift_hsh["shoppingCart"]  = gps[:items]
-            gift_hsh["giver"]         = @current_user
-            gift_hsh["credit_card"]   = gps[:pay_id]
-
-            gift_hsh["merchant_id"]   = gps[:loc_id]
-            gift_hsh["value"]         = gps[:value]
-            gift_hsh["message"]       = gps[:msg]
-            gift_hsh["scheduled_at"]  = gps[:scheduled_at]
-
-            puts "WEB/V3 GIFTS hash #{gift_hsh}"
-
-            gift = GiftSale.create(gift_hsh)
-            if gift.kind_of?(Gift) && !gift.id.nil?
-                # binding.pry
-                gift.fire_after_save_queue(@current_client)
-                success gift.web_serialize
+            if gift.kind_of?(Gift) && gift.persisted?
+                fail_web fail_web_payload("not_created_gift", gift.errors)
             else
-                if gift.kind_of?(Gift) && gift.persisted?
-                    fail_web fail_web_payload("not_created_gift", gift.errors)
-                else
-                    fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})
-                end
+                fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})
             end
         end
         respond
@@ -410,6 +477,30 @@ class Web::V3::GiftsController < MetalCorsController
 
 private
 
+
+    # Pluck out the useful bits from `gift_params`, etc.
+    def construct_gift_hash
+        @gift_hash ||= {}
+
+        # Only construct it once
+        return @gift_hash  unless @gift_hash.empty?
+
+        gps = gift_params
+        set_receiver(gps, @gift_hash)
+        set_origin(gps, @gift_hash)
+        @gift_hash["session_id"]    = gps[:session_id]
+        @gift_hash["rec_net"]       = gps[:rec_net]
+        @gift_hash["shoppingCart"]  = gps[:items]
+        @gift_hash["giver"]         = @current_user
+        @gift_hash["credit_card"]   = gps[:pay_id]
+        @gift_hash["merchant_id"]   = gps[:loc_id]
+        @gift_hash["value"]         = gps[:value]
+        @gift_hash["message"]       = gps[:msg]
+
+        @gift_hash
+    end
+
+
     def set_origin gps, gift_hsh
         gift_hsh["link"] = gps[:link] || nil
         if gps[:origin]
@@ -457,6 +548,20 @@ private
         end
     end
 
+
+    # Prevent user-removal of `session_id` in an attempt to bypass fraud checks
+    def validate_session
+        #TODO: bypass for specific `application_key`s
+        if @gift_hash["session_id"].nil?
+            fail_web({err: "BAD_REQUEST", msg: "Missing session ID"})
+            respond
+        end
+    end
+
+
+    # ------------
+
+
     def promo_params
         params.require(:data).permit(:code)
     end
@@ -466,7 +571,7 @@ private
     end
 
     def gift_params
-        params.require(:data).permit(:merchant_id, :link, :rec_email, :rec_phone, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :scheduled_at, :msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+        params.require(:data).permit(:session_id, :merchant_id, :link, :rec_email, :rec_phone, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :scheduled_at, :msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
     end
 
     def redemption_params

@@ -110,6 +110,18 @@ class User < ActiveRecord::Base
 
 #   -------------
 
+	def purchase_lockout_for(duration)
+		raise ArgumentError, "Expected #{1.day.class}, got #{duration.class}"  unless duration.respond_to? :from_now
+		self.purchase_lockout_until = duration.from_now
+		self.save
+	end
+
+	def purchase_lockout?
+		self.purchase_lockout_until.present?  &&  self.purchase_lockout_until < DateTime.now
+	end
+
+#   -------------
+
 	def test_push alert_str=nil
 		pnts = self.pn_tokens
 		alert = alert_str || "Testing Push"
