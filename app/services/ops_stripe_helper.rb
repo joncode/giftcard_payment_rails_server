@@ -17,13 +17,14 @@ module OpsStripeHelper
 		end
 	end
 
-	def get_ccy country
+	def get_ccy(country)
 		{'US' => 'USD', 'CA' => 'CAD', 'GB' => 'GBP'}[country]
 	end
 
 #	-------------
 
-	def process_card_validation card
+	# noinspection RubyResolve
+	def process_card_validation(card)
 		# Note: @cvc_check_skip comes from the OpsStripe class that includes this module.
 		@card_id = card.id
 		@card = card
@@ -91,12 +92,12 @@ module OpsStripeHelper
 
 #	-------------
 
-	def process_card_success card
+	def process_card_success(_card)
 		@success = true
 		@http_status = 200
 	end
 
-	def process_error e
+	def process_error(e)
 		@error = e
 		@success = false
 		@resp_code = 3
