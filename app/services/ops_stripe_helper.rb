@@ -42,6 +42,12 @@ module OpsStripeHelper
 			unavailable_validations
 		end
 		card
+	rescue => err
+		puts "[module OpsStripeHelper :: process_card_validation]  Error"
+		puts " | card:   #{card.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
 	end
 
 #	-------------
@@ -51,17 +57,35 @@ module OpsStripeHelper
 	# Example: `address_zip_check` for Australian 4-digit zips was unavailable at the time of this addition.
 	def check_passed?(check)
 		check.nil? || %w[pass unavailable unchecked].include?(check.downcase)
+	rescue => err
+		puts "[module OpsStripeHelper :: check_passed?]  Error"
+		puts " | check:   #{check.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
 	end
 
 	def checks_passed?(*checks)
 		# Check each then & the results together
 		checks.map{|check| check_passed?(check) }.reduce(&:&)
+	rescue => err
+		puts "[module OpsStripeHelper :: checks_passed?]  Error"
+		puts " | checks:  #{checks.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
 	end
 
 
 	# Explicit failures only
 	def check_failed?(check)
 		check.present? && check.downcase == 'fail'
+	rescue => err
+		puts "[module OpsStripeHelper :: check_failed?]  Error"
+		puts " | check:   #{check.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
 	end
 
 #	-------------
