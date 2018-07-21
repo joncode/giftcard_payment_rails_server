@@ -24,6 +24,7 @@ module OpsStripeHelper
 #	-------------
 
 	def process_card_validation card
+		# Note: @cvc_check_skip comes from the OpsStripe class that includes this module.
 		@card_id = card.id
 		@card = card
 		@country = card.country
