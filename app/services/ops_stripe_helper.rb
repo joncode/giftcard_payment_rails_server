@@ -17,7 +17,7 @@ module OpsStripeHelper
 		end
 	end
 
-	def set_ccy country
+	def get_ccy country
 		{'US' => 'USD', 'CA' => 'CAD', 'GB' => 'GBP'}[country]
 	end
 
@@ -28,7 +28,7 @@ module OpsStripeHelper
 		@card_id = card.id
 		@card = card
 		@country = card.country
-		@ccy = set_ccy(card.country)
+		@ccy = get_ccy(card.country)
 		@brand = card.brand.downcase.gsub(' ', '_') if card.brand.respond_to?(:downcase)
 
 		if !@cvc_check_skip && checks_passed?(card.cvc_check, card.address_zip_check, card.address_line1_check)
