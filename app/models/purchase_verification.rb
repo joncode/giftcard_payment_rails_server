@@ -100,7 +100,7 @@ private
   def update_expiry
     puts "\n[model PurchaseVerification(#{self.hex_id}) :: update_expiry]"
     # Set `expires_at` to that of the most recent check, or default when missing
-    checks = self.checks.order(expires_at: :desc)
+    checks = self.checks.pending.order(expires_at: :desc)
 
     if checks.count == 0
       self.expires_at ||= 5.minutes.from_now
