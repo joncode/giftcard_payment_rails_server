@@ -188,14 +188,14 @@ class Web::V3::GiftsController < MetalCorsController
     # POST  /web/v3/gifts/verify_response
     def verify_response
         puts "\n[api Web::V3::Gifts :: verify_response]"
-        puts " | params: #{params}"
+        puts " | params: #{verify_params}"
 
-        if params['data']['response'].nil? || params['data']['response'].strip.empty?
+        if verify_params['response'].nil? || verify_params['response'].strip.empty?
             fail_web({err: "INVALID_INPUT", msg: "Missing response"})
             return
         end
 
-        pv = PurchaseVerification.for_session(params['data']['session_id'])
+        pv = PurchaseVerification.for_session(verify_params['session_id'])
         if pv.nil?
             fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
             return
@@ -204,7 +204,7 @@ class Web::V3::GiftsController < MetalCorsController
             return
         end
 
-        result =  pv.verify_check(params['data']['response'])
+        result =  pv.verify_check(verify_params['response'])
         if result[:verdict] == :defer
             fail_web({err: "BAD_REQUEST", msg: "Cannot verify a deferred check"})
             return
@@ -552,7 +552,7 @@ private
     # Prevent user-removal of `session_id` in an attempt to bypass fraud checks
     def validate_session
         #TODO: bypass for specific `application_key`s
-        if @gift_hash["session_id"].nil?
+        if params["data"]["session_id"].nil?
             fail_web({err: "BAD_REQUEST", msg: "Missing session ID"})
             respond
         end
@@ -572,6 +572,10 @@ private
 
     def gift_params
         params.require(:data).permit(:session_id, :merchant_id, :link, :rec_email, :rec_phone, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :scheduled_at, :msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+    end
+
+    def verify_params
+        params.require(:data).permit(:session_id, :response)
     end
 
     def redemption_params
