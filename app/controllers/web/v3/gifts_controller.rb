@@ -199,7 +199,7 @@ class Web::V3::GiftsController < MetalCorsController
         if pv.nil?
             fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
             return
-        elsif pv.check_count == 0
+        elsif pv.check_count == 0 || pv.checks.last.verified?
             fail_web({err: "BAD_REQUEST", msg: "Nothing to verify"})
             return
         end
