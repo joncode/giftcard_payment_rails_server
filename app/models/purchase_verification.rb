@@ -56,8 +56,8 @@ class PurchaseVerification < ActiveRecord::Base
 
   # @return PurchaseVerification
   def self.for_session(session_id)
-    ##TODO: How do I handle duplicate `session_id`s?
-    pending.where(session_id: session_id).first
+    # Note: Duplicate session_id's will simply return an expired PV.
+    where(session_id: session_id).first
   end
 
 
