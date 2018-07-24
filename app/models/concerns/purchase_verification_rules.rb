@@ -59,14 +59,17 @@ module PurchaseVerificationRules
     return  unless verification.user.sent.empty?
     return  unless @_value >= 100
 
+    puts " | Triggering SMS check\n\n"
     :sms_check
   end
 
 
   def rule_large_gift(_)
     puts "\n[module PurchaseVerificationRules :: rule_large_gift]"
+    puts " | Comparing: #{@_value} >= 250"
     return  unless @_value >= 250
 
+    puts " | Triggering SMS check\n\n"
     :sms_check
   end
 
