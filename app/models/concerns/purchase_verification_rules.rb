@@ -104,7 +104,9 @@ private
     puts " | rule:         #{rule}"
     specifics = {}
     msg = nil
-    if verification.user.phone.present?
+    user_phone   = verification.user.user_socials.where(type_of: :phone).order(updated_at: :desc).first
+    user_phone ||= verification.user.phone  # Only use this as a fallback
+    if user_phone.present?
       specifics[:type] = :sms
       ##TODO: pull already-existing PVCheck out and update its code
       specifics[:code] = (((0..9).to_a.shuffle)*4).join[0...5]  # 5 random digits
@@ -117,7 +119,7 @@ private
       puts " | to:  #{verification.user.phone}"
       puts " | msg: #{_sms_message.gsub(/\n/,"\n        ")}"
       puts " ------------ \n"
-      OpsTwilio.text to: verification.user.phone, msg: _sms_message   ##!  Can fail; returns {status: 1|0}
+      OpsTwilio.text to: user_phone, msg: _sms_message   ##!  Can fail; returns {status: 1|0}
     else
       specifics[:type] = :sms_await
       specifics[:expires_at] = 1.hour.from_now
