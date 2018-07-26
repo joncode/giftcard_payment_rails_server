@@ -104,8 +104,7 @@ private
     puts " | rule:         #{rule}"
     specifics = {}
     msg = nil
-    user_phone   = verification.user.user_socials.where(type_of: :phone).order(updated_at: :desc).first
-    user_phone ||= verification.user.phone  # Only use this as a fallback
+    user_phone = get_user_phone(verification.user)
     if user_phone.present?
       specifics[:type] = :sms
       ##TODO: pull already-existing PVCheck out and update its code
@@ -116,7 +115,7 @@ private
       _sms_message = "ItsOnMe verification code: #{specifics[:code]}\nPlease enter this code into the app."
       puts "\n ------------ "
       puts "Sending TWILIO text"
-      puts " | to:  #{verification.user.phone}"
+      puts " | to:  #{user_phone}"
       puts " | msg: #{_sms_message.gsub(/\n/,"\n        ")}"
       puts " ------------ \n"
       OpsTwilio.text to: user_phone, msg: _sms_message   ##!  Can fail; returns {status: 1|0}
@@ -173,6 +172,21 @@ private
     return false if pvc.check_type.to_s.downcase.include? "await"
 
     true
+  end
+
+
+  def get_user_phone(user)
+    socials = user.user_socials.where(type_of: :phone)
+
+    # Pick out the best available phone number, in this order:
+    #   1) most recent live (verified) number
+    #   2) most recent non-verified number
+    #   3) phone number from initial account creation
+    #      (user.phone, which will return nil if it isn't present)
+
+    social = socials.where(    status: :live).order(updated_at: :desc).first  and  return social.identifier
+    social = socials.where.not(status: :live).order(updated_at: :desc).first  and  return social.identifier
+    user.phone
   end
 
 end

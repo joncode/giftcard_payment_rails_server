@@ -98,6 +98,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   def _verify_sms(response)
     puts "\n[model PurchaseVerificationCheck :: _verify_sms]"
     puts " | Comparing '#{response.downcase.strip}' to '#{self.data['code']}'"
+    #TODO: If the code is from an unverified UserSocial phone number, verify it
     ((response.downcase.strip == self.data['code']) ? pass! : fail!)
   end
 
