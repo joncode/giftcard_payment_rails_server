@@ -112,7 +112,7 @@ private
       specifics[:code] = "12345"
 
 
-      _sms_message = "ItsOnMe verification code: #{specifics[:code]}\nPlease enter this code into the app."
+      _sms_message = "ItsOnMe verification code: #{specifics[:code]}\nPlease enter this code into the verification field."
       puts "\n ------------ "
       puts "Sending TWILIO text"
       puts " | to:  #{user_phone}"
