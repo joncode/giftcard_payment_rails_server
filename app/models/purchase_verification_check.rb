@@ -135,9 +135,9 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   def lockout!
     puts "\n[model PurchaseVerificationCheck :: lockout!]"
     lockout_duration = 5.minutes
-    self.failed_at = DateTime.now
-    self.save
+    self.update(failed_at: DateTime.now.utc)
     self.verification.user.purchase_lockout_for lockout_duration
+    self.verification.update(failed_at: DateTime.now.utc)
     {verdict: :lockout, success: false, duration: lockout_duration}
   end
 
