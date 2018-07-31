@@ -208,7 +208,7 @@ private
 		if self.live_at
 			self.expires_at = self.live_at + 1.year
 		elsif self.partner.respond_to?(:live_at)
-			self.live_at = self.partner.live_at
+			self.live_at = self.partner.live_at || DateTime.now.utc
 			self.expires_at = self.live_at + 1.year
 		end
 	end

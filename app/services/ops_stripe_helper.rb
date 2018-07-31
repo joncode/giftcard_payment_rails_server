@@ -17,46 +17,87 @@ module OpsStripeHelper
 		end
 	end
 
-	def set_ccy country
+	def get_ccy(country)
 		{'US' => 'USD', 'CA' => 'CAD', 'GB' => 'GBP'}[country]
 	end
 
 #	-------------
 
-	def process_card_validation card
+	# noinspection RubyResolve
+	def process_card_validation(card)
+		# Note: @cvc_check_skip comes from the OpsStripe class that includes this module.
 		@card_id = card.id
 		@card = card
 		@country = card.country
-		@ccy = set_ccy(card.country)
+		@ccy = get_ccy(card.country)
 		@brand = card.brand.downcase.gsub(' ', '_') if card.brand.respond_to?(:downcase)
-		if !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check == 'pass') && (card.cvc_check == 'pass')
+
+		if !@cvc_check_skip && checks_passed?(card.cvc_check, card.address_zip_check, card.address_line1_check)
 			process_card_success card
-		elsif !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?) && (card.cvc_check == 'pass')
-			process_card_success card
-		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?)
+		elsif @cvc_check_skip && checks_passed?(card.address_zip_check, card.address_line1_check)
 			# do nothing
-		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check == 'pass')
-			# do nothing
-		elsif (card.address_zip_check == 'fail')
+		elsif check_failed?(card.address_zip_check) || check_failed?(card.address_line1_check)
 			address_validation_error
-		elsif (card.address_line1_check == 'fail')
-			address_validation_error
-		elsif (card.cvc_check == 'fail')
+		elsif check_failed?(card.cvc_check)
 			cvc_validation_error
 		else
 			unavailable_validations
 		end
 		card
+	rescue => err
+		puts "[module OpsStripeHelper :: process_card_validation]  Error"
+		puts " | card:   #{card.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
 	end
 
 #	-------------
 
-	def process_card_success card
+	# Occasionally, Stripe will report that a certain check is unavailable or not performed.
+	# These are not failures, so treat them as passing.  (Also assume a pass if there's no explicit fail)
+	# Example: `address_zip_check` for Australian 4-digit zips was unavailable at the time of this addition.
+	def check_passed?(check)
+		check.nil? || %w[pass unavailable unchecked].include?(check.downcase)
+	rescue => err
+		puts "[module OpsStripeHelper :: check_passed?]  Error"
+		puts " | check:   #{check.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
+	end
+
+	def checks_passed?(*checks)
+		# Check each then & the results together
+		checks.map{|check| check_passed?(check) }.reduce(&:&)
+	rescue => err
+		puts "[module OpsStripeHelper :: checks_passed?]  Error"
+		puts " | checks:  #{checks.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
+	end
+
+
+	# Explicit failures only
+	def check_failed?(check)
+		check.present? && check.downcase == 'fail'
+	rescue => err
+		puts "[module OpsStripeHelper :: check_failed?]  Error"
+		puts " | check:   #{check.inspect}"
+		puts " | message: #{err.message}"
+		puts " | error:   #{err}"
+		raise err
+	end
+
+#	-------------
+
+	def process_card_success(_card)
 		@success = true
 		@http_status = 200
 	end
 
-	def process_error e
+	def process_error(e)
 		@error = e
 		@success = false
 		@resp_code = 3

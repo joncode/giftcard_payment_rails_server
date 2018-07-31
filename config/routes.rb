@@ -183,7 +183,9 @@ Drinkboard::Application.routes.draw do
 					patch :associate
 				end
 				collection do
-					patch :verify
+					post :verify
+					post :verify_response
+					post :verify_sms_resume
 					get :list
 					post :promo
 				end
