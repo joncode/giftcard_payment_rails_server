@@ -117,7 +117,7 @@ class User < ActiveRecord::Base
 	end
 
 	def purchase_lockout?
-		self.purchase_lockout_until.present?  &&  self.purchase_lockout_until < DateTime.now.utc
+		self.purchase_lockout_until.present?  &&  self.purchase_lockout_until >= DateTime.now.utc
 	end
 
 #   -------------
