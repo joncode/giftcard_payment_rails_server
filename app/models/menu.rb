@@ -1,15 +1,12 @@
 class Menu < ActiveRecord::Base
     has_many    :menu_items , through: :sections
     has_many    :sections, 	dependent: :destroy
-    belongs_to  :merchant  ##j- Probably not needed anymore (see #owner)
+    belongs_to  :owner, polymorphic: true
 
     validates_presence_of :owner_id, :owner_type
 
     after_create :make_sections
 
-    def owner
-        self.owner_type.constantize.find(self.owner_id)
-    end
 
     MENU_SECTIONS_INIT = ["Gifting Menu", "Gift Vouchers"]
 
