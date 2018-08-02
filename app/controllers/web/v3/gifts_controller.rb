@@ -175,7 +175,13 @@ class Web::V3::GiftsController < MetalCorsController
             return
         end
 
-        (response[:success] ? success(response) : fail_web(response))
+        unless response[:success]
+            # Currently the only unsuccessful PV response is a lockout.
+            fail_web({err: "FORBIDDEN", msg: "For your protection, your account has been temporary locked."})
+            return
+        end
+
+        success(response)
 
     rescue => e
         puts "\n[api Web::V3::Gifts :: verify] Error 500: #{e.message}"
