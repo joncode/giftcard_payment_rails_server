@@ -171,13 +171,13 @@ class Web::V3::GiftsController < MetalCorsController
         response = PurchaseVerification.for(@gift_hash).perform
 
         if response[:verdict] == :expired
-            fail_web({err: "BAD_REQUEST", msg: "Expired"})
+            fail_web({err: "VERIFY_EXPIRED", msg: "Purchase expired"})
             return
         end
 
         unless response[:success]
             # Currently the only unsuccessful PV response is a lockout.
-            fail_web({err: "FORBIDDEN", msg: "For your protection, your account has been temporary locked."})
+            fail_web({err: "VERIFY_LOCKOUT", msg: "For your protection, your account has been temporary locked."})
             return
         end
 
@@ -197,27 +197,27 @@ class Web::V3::GiftsController < MetalCorsController
         puts " | params: #{verify_params}"
 
         if verify_params['response'].nil? || verify_params['response'].strip.empty?
-            fail_web({err: "INVALID_INPUT", msg: "Missing response"})
+            fail_web({err: "VERIFY_RESPONSE_MISSING", msg: "Missing response"})
             return
         end
 
         pv = PurchaseVerification.for_session(verify_params['session_id'])
         if pv.nil?
-            fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
+            fail_web({err: "VERIFY_RESPONSE_BAD_SESSION", msg: "Invalid session"})
             return
         elsif pv.check_count == 0 || pv.checks.last.verified?
-            fail_web({err: "BAD_REQUEST", msg: "Nothing to verify"})
+            fail_web({err: "VERIFY_RESPONSE_NO_VERIFICATIONS", msg: "Nothing to verify"})
             return
         end
 
         result =  pv.verify_check(verify_params['response'])
         if result[:verdict] == :defer
-            fail_web({err: "BAD_REQUEST", msg: "Cannot verify a deferred check"})
+            fail_web({err: "VERIFY_RESPONSE_AWAITING_DEFERRED", msg: "Cannot verify a deferred check"})
             return
         end
 
         unless result[:success]
-            fail_web({err: "NOT_ACCEPTABLE", msg: "Incorrect verification response"})
+            fail_web({err: "VERIFY_RESPONSE_INCORRECT", msg: "Incorrect verification response"})
             return
         end
 
