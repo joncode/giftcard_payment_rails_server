@@ -216,7 +216,12 @@ class Web::V3::GiftsController < MetalCorsController
             return
         end
 
-        (result[:success] ? success(result) : fail_web(result))
+        unless result[:success]
+            fail_web({err: "NOT_ACCEPTABLE", msg: "Incorrect verification response"})
+            return
+        end
+
+        success(result)
     rescue => e
         puts "\n[api Web::V3::Gifts :: verify_response] Error 500: #{e.message}"
         fail_web({err: e, msg: e.message})
