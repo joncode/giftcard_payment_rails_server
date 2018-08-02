@@ -88,7 +88,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     puts " | It's someone's lucky day!  I don't know how to verify this type of check."
     puts " | type: #{self.check_type}"
     puts " | id:   #{self.hex_id} (#{self.id})"
-    self.verified_at = DateTime.now
+    self.verified_at = DateTime.now.utc
 
     pass!
   end
@@ -108,7 +108,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   def pass!
     puts "\n[model PurchaseVerificationCheck :: pass!]"
-    self.verified_at = DateTime.now
+    self.verified_at = DateTime.now.utc
     self.save
     {verdict: :pass, success: true}
   end
@@ -116,7 +116,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   def fail!
     puts "\n[model PurchaseVerificationCheck :: fail!]"
-    self.failed_at = DateTime.now
+    self.failed_at = DateTime.now.utc
     self.save
     {verdict: :fail, success: false}
   end
