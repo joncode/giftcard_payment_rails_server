@@ -1,7 +1,7 @@
 class PurchaseVerification < ActiveRecord::Base
   # Usage:
-  #  | PurchaseVerification.for(purchase_params:).perform
-  #  | PurchaseVerification.for(purchase_params:).verify_check(response)
+  #  | PurchaseVerification.for(purchase_params).perform
+  #  | PurchaseVerification.for(purchase_params).verify_check(response)
 
   HEX_ID_PREFIX = 'pv_'
   include HexIdMethods
