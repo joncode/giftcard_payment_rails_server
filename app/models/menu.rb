@@ -47,6 +47,7 @@ class Menu < ActiveRecord::Base
     end
 
     def set_edited
+        #FIXME: What the fuck?
         self.edited = false
     end
 
