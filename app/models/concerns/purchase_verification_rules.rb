@@ -133,12 +133,15 @@ private
 
   # Create a PVCheck and return the verdict
   def check_factory(verification, specifics, rule:, msg:nil)
-    puts "\n[module PurchaseVerificationRules :: check_factory]"
+    puts "\n[concern PurchaseVerificationRules :: check_factory]"
     puts " | verification: #{verification.hex_id}"
     puts " | rule:         #{rule}"
     puts " | specifics:    #{specifics}"
     # Don't create a duplicate PVCheck if it already exists  (e.g. due to multiple verify() calls)
+    puts "\n[concern PurchaseVerificationRules :: check_factory]"
+    puts " | sql: #{PurchaseVerificationCheck.pending.where(rule_name: rule, session_id: self.session_id, check_type: specifics[:type]).to_sql}"
     unless PurchaseVerificationCheck.pending.where(rule_name: rule, session_id: self.session_id, check_type: specifics[:type]).present?
+      puts "\n[concern PurchaseVerificationRules :: check_factory]  Creating new PVCheck"
       pvc = {
           session_id:      verification.session_id,
           verification_id: verification.id,
@@ -153,6 +156,8 @@ private
       verification.save
     end
 
+    puts "\n[concern PurchaseVerificationRules :: check_factory]  Returning verdict:check, type:#{specifics[:type]}, msg:#{msg || 'nil'}"
+
     {verdict: :check, success: true, type: specifics[:type], msg: msg}.compact
   end
 
@@ -160,17 +165,20 @@ private
   # ------------
 
   def already_checked?(rule)
+    puts "\n[concern PurchaseVerificationRules :: already_checked?(#{rule})]"
     pvc = PurchaseVerificationCheck
               .verified  \
               .where(rule_name: rule, session_id: self.session_id)  \
               .order(created_at: :desc)  \
               .first
 
+
     # No PVCheck for this rule and session
     return false if pvc.nil?
     # "Verified" deferred checks (e.g. sms_await) mean we now have the required data to perform the check
     return false if pvc.check_type.to_s.downcase.include? "await"
 
+    puts "\n[concern PurchaseVerificationRules :: already_checked?(#{rule})]  Already checked."
     true
   end
 
