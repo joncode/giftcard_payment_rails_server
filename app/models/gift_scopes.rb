@@ -158,6 +158,10 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
 
 ##### PROVIDER SCOPES
 
+    def golf_gifts
+        joins(:merchant).where(merchants: {affiliate_id: Affiliate.find_by_first_name("GolfNow").id})
+    end
+
     def get_provider merchant  #indexed
         where(merchant_id: merchant).where("pay_stat not in (?)", ['unpaid']).where(status: %w[open hand_delivery notified incomplete]).order("updated_at DESC")
     end
