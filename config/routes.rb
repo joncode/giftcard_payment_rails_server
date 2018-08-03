@@ -269,6 +269,7 @@ Drinkboard::Application.routes.draw do
 				get      ":merchant_id/printer/queue",         action: "list_redemption_print_queue"
 				post     ":merchant_id/printer/reprint/:id",   action: "reprint"
 				post     ":merchant_id/printer/shift_report",  action: "print_shift_report"
+				get      ":merchant_id/menu",                  action: "show_menu"
 			end
 
 			namespace :associations do
