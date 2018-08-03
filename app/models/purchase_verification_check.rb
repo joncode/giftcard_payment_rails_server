@@ -19,15 +19,15 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   # ------------
 
   # Convert all DateTime's to UTC because otherwise Postgres will compare them incorrectly (see PurchaseVerification scopes for details)
-  scope :pending,  -> { where("expires_at >  '#{DateTime.now.utc}'").where(verified_at: nil).where(failed_at: nil) }
-  scope :expired,  -> { where("expires_at <= '#{DateTime.now.utc}'") }
+  scope :pending,  -> { where("expires_at >  '#{DateTime.now.utc}'").where(verified_at: nil, failed_at: nil) }
+  scope :expired,  -> { where("expires_at <= '#{DateTime.now.utc}'").where(verified_at: nil, failed_at: nil) }
   scope :verified, -> { where.not(verified_at: nil) }
   scope :failed,   -> { where.not(  failed_at: nil) }
 
   def where_session(session_id) ; where(session_id: session_id) ; end
   def where_rule(rule_name)     ; where(rule_name: rule_name)   ; end
 
-  def expired?  ; (self.expires_at.present? && (self.expires_at <= DateTime.now.utc)) ; end
+  def expired?  ; (self.expires_at.present? && (self.expires_at <= DateTime.now.utc) && !(self.verified? || self.failed?)) ; end
   def verified? ; (self.verified_at.present?) ; end
   def failed?   ; (self.failed_at.present?)   ; end
   def deferred? ; (self.check_type.to_s.downcase.include? "await") ; end

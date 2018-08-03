@@ -22,12 +22,13 @@ class PurchaseVerification < ActiveRecord::Base
   # Reason: The column in the database is a `datetime` (therefore lacking timezone info),
   #         and apparently Postgres doesn't compare these correctly with ISO8601 literals
   #         with TZ data from Rails (`DateTime.now.to_s` or "2018-07-23T19:39:10-07:00").
-  scope :pending,  -> { where("expires_at >  '#{DateTime.now.utc}'").where(verified_at: nil).where(failed_at: nil) }
-  scope :expired,  -> { where("expires_at <= '#{DateTime.now.utc}'") }
+  scope :pending,  -> { where("expires_at >  '#{DateTime.now.utc}'").where(verified_at: nil, failed_at: nil) }
+  scope :expired,  -> { where("expires_at <= '#{DateTime.now.utc}'").where(verified_at: nil, failed_at: nil) }
   scope :verified, -> { where.not(verified_at: nil) }
   scope :failed,   -> { where.not(  failed_at: nil) }
 
-  def expired?  ; (self.expires_at.present? && (self.expires_at <= DateTime.now.utc)) ; end
+  # Expired records have passed their expiry without having been verified or failed.
+  def expired?  ; (self.expires_at.present? && (self.expires_at <= DateTime.now.utc) && !(self.verified? || self.failed?)) ; end
   def verified? ; (self.verified_at.present?) ; end
   def failed?   ; (self.failed_at.present?)   ; end
 
