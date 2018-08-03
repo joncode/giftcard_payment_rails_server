@@ -12,8 +12,8 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   # ------------
 
-  FAIL_SEVERITY = Hash.new(0).merge(sms_code: 50, ideology: 50)  # Default to 0
-  PASS_SEVERITY = Hash.new(0).merge(sms_code: 5,  ideology: 20)
+  FAIL_SEVERITY = Hash.new(0).merge(sms_code: 35, ideology: 50)  # Default to 0
+  PASS_SEVERITY = Hash.new(0).merge(sms_code: 15, ideology: 20)
   LOCKOUT_THRESHOLD = 100
 
   # ------------
