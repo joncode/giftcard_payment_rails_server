@@ -108,6 +108,7 @@ private
     if user_phone.present?
       specifics[:type] = :sms
       ##TODO: pull already-existing PVCheck out and update its code
+      specifics[:phone_number] = user_phone
       specifics[:code] = (((0..9).to_a.shuffle)*4).join[0...5]  # 5 random digits
       specifics[:code] = "12345"
 
@@ -158,7 +159,7 @@ private
 
     puts "\n[concern PurchaseVerificationRules :: check_factory]  Returning verdict:check, type:#{specifics[:type]}, msg:#{msg || 'nil'}"
 
-    {verdict: :check, success: true, type: specifics[:type], msg: msg}.compact
+    {verdict: :check, success: true, type: specifics[:type], phone_number: specifics[:phone_number], msg: msg}.compact
   end
 
 
