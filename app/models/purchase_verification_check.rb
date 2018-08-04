@@ -35,16 +35,25 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   # ------------
 
   def verify(response)
-    puts "\n[model PurchaseVerificationCheck :: verify]"
+    puts "\n\n[model PurchaseVerificationCheck :: verify]"
     puts " | response: #{response}"
     # Check for expiry
-    return expire  if expired?
+    if expired?
+      puts "\n[model purchase_verificationCheck :: verify]  expired! Not verifying."
+      return expire
+    end
     # Check for e.g. sms_await  (incorrect api call order)
-    return defer   if deferred?
+    if deferred?
+      puts "\n[model purchase_verificationCheck :: verify]  deferred! Not verifying."
+      return defer
+    end
 
     # Call the appropriate verify method and get its verdict
     result = syndicate_verify(response)
-    return result  if result[:verdict] == :pass
+    if result[:verdict] == :pass
+      puts "\n[model purchase_verificationCheck :: verify]  pass!"
+      return result
+    end
 
     # Oh no, a failure!  Tally up each check's severity
     total_severity = 0
@@ -53,6 +62,8 @@ class PurchaseVerificationCheck < ActiveRecord::Base
       total_severity += FAIL_SEVERITY[check.check_type]  if check.failed?
       total_severity -= PASS_SEVERITY[check.check_type]  if check.verified?
     end
+
+    puts "\n[model purchase_verificationCheck :: verify]  lockout!"  if total_severity >= LOCKOUT_THRESHOLD
 
     # If the user fucked up badly enough, lock them out; otherwise, issue a normal failure response.
     ((total_severity >= LOCKOUT_THRESHOLD) ? lockout! : fail!)
