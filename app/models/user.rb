@@ -98,9 +98,8 @@ class User < ActiveRecord::Base
 		end
 
 		# `grant.level` returns higher numbers for higher access levels, so pluck off the last level after sorting. (This will be nil without access)
-		highest_grant = self.access_grants.where(active: true).where(owner: owner).collect(&:level).sort.last
-		# If the user has an access grant at the merchant/affiliate, return its level; otherwise return -1 (indicating no access)
-		(highest_grant.present? ? highest_grant.level : -1)
+		# No access level?  Use -1 to indicate no access.
+		self.access_grants.where(active: true).where(owner: owner).collect(&:level).sort.last  ||  -1
 	end
 
 	def can_redeem_gift?(gift)
