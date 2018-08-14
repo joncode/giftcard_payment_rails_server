@@ -91,15 +91,23 @@ class User < ActiveRecord::Base
 #   -------------
 
 
+	# Returns the user's highest access level (ascending integer), or -1 to indicate no access.
 	def highest_access_level_at(owner)
 		#TODO: add `owner_id:, owner_type:` params to avoid an extra lookup
-		unless owner.instance_of?(Merchant) || owner.instance_of?(Affiliate)
+		unless owner.is_a?(Merchant) || owner.is_a?(Affiliate)
 			raise ArgumentError, "Expected a Merchant or Affiliate instance, got #{owner.class}"
 		end
 
-		# `grant.level` returns higher numbers for higher access levels, so pluck off the last level after sorting. (This will be nil without access)
-		# No access level?  Use -1 to indicate no access.
-		self.access_grants.where(active: true).where(owner: owner).collect(&:level).sort.last  ||  -1
+		# `grant.level` returns higher numbers for higher access levels.  Find the highest (or nil without access)
+		highest_access = self.access_grants.where(active: true).where(owner: owner).collect(&:level).max
+
+		# For Merchants, also consider access grants at their Affiliate (if present)
+		if owner.is_a?(Merchant) && owner.affiliate.present?
+			affiliate = owner.affiliate
+			highest_access = [highest_access, self.highest_access_level_at(affiliate)].max
+		end
+
+		highest_access || -1
 	end
 
 	def can_redeem_gift?(gift)
