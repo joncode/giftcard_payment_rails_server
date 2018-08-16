@@ -183,6 +183,9 @@ class Web::V3::GiftsController < MetalCorsController
             return
         end
 
+        ##- Debugging
+        puts "\n[api Web::V3::Gifts :: verify]  Error: expected :pass verdict, got #{response[:verdict].inspect}"  unless response[:verdict] == :pass
+
         success(response)
 
     rescue => e
@@ -231,6 +234,9 @@ class Web::V3::GiftsController < MetalCorsController
             fail_web({err: "VERIFY_RESPONSE_INCORRECT", msg: "Incorrect verification response"})
             return
         end
+
+        ##- Debugging
+        puts "\n[api Web::V3::Gifts :: verify_response]  Error: expected :pass verdict, got #{result[:verdict].inspect}"  unless result[:verdict] == :pass
 
         success(result)
     rescue => e
