@@ -79,6 +79,13 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   def verify(response)
     puts "\n\n[model PurchaseVerificationCheck :: verify]"
     puts " | response: #{response}"
+
+    # Check for failure
+    if self.verification.failed?
+      puts "\n[model purchase_verificationCheck :: verify]  parent verification failed!  Not verifying."
+      return parent_failed
+    end
+
     # Check for expiry
     if expired?
       puts "\n[model purchase_verificationCheck :: verify]  expired! Not verifying."
@@ -175,6 +182,12 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     self.failed_at = DateTime.now.utc
     self.save
     {verdict: :fail, success: false}
+  end
+
+  def parent_failed
+    # The PurchaseVerification is marked as failed, yet someone is trying to re-verify the last check?
+    # Whatever.  Tell them failed they purchase attempt and they suck.
+    {verdict: :parent_failed, success: false}
   end
 
   def expire
