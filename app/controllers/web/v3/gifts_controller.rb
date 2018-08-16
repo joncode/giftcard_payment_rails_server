@@ -248,13 +248,13 @@ class Web::V3::GiftsController < MetalCorsController
 
         pv = PurchaseVerification.for_session(params['data']['session_id'])
         if pv.nil?
-            fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
+            fail_web({err: "VERIFY_BAD_SESSION", msg: "Invalid session"})
             return
         end
 
         result = pv.deferred_sms
         if result.nil?
-            fail_web({err: "BAD_REQUEST", msg: "No deferred SMS verifications pending"})
+            fail_web({err: "VERIFY_RESUME_NO_DEFERRED", msg: "No deferred SMS verifications pending"})
             return
         end
 
