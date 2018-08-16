@@ -248,7 +248,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
 
-    # POST  /web/v3/gifts/verify_sms
+    # POST  /web/v3/gifts/verify_sms_resume
     def verify_sms_resume
         puts "\n[api Web::V3::Gifts :: verify_sms_resume]"
         puts " | params: #{params}"
