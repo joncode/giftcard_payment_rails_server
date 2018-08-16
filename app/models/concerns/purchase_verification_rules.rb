@@ -17,7 +17,7 @@ module PurchaseVerificationRules
 
 
     #TODO: Lookup rules by Merchant
-    rules = [:lockout, :first_large_gift, :large_gift]
+    rules = [:lockout, :failed, :first_large_gift, :large_gift]
 
     # Check each rule in series, exiting upon the first failure
     _common_rule_setup(self)  # Passing `self` to bypass linter warnings
@@ -52,6 +52,14 @@ module PurchaseVerificationRules
     puts " | verification: #{verification.hex_id}"
     ((verification.user.purchase_lockout?) ? :lockout : nil)
   end
+
+
+  def rule_failed(verification)
+    puts "\n[module PurchaseVerificationRules :: rule_failed]"
+    puts " | verification: #{verification.hex_id}"
+    ((verification.failed?) ? :failed : nil)
+  end
+
 
   def rule_first_large_gift(verification)
     puts "\n[module PurchaseVerificationRules :: rule_first_large_gift]"
@@ -97,6 +105,14 @@ private
     # The actual lockout happens within PurchaseVerificationCheck::lockout!
     {verdict: :lockout, success: false}
   end
+
+
+  def failed(*_)
+    puts "\n[module PurchaseVerificationRules :: failed]"
+    # The user failed too many checks.
+    {verdict: :failed, success: false}
+  end
+
 
   def sms_check(verification, rule:)
     puts "\n[module PurchaseVerificationRules :: sms_check]"
