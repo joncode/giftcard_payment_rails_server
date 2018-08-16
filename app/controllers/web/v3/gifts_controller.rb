@@ -219,6 +219,9 @@ class Web::V3::GiftsController < MetalCorsController
         if result[:verdict] == :lockout
             fail_web({err: "VERIFY_RESPONSE_LOCKOUT", msg: "For your protection, your account has been temporary locked."})
             return
+        elsif result[:verdict] == :parent_failed
+            fail_web({err: "VERIFY_RESPONSE_FAILED", msg: "Too many failed verifications"})
+            return
         elsif result[:verdict] == :defer
             fail_web({err: "VERIFY_RESPONSE_AWAITING_DEFERRED", msg: "Cannot verify a deferred check"})
             return
