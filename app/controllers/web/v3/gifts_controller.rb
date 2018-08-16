@@ -207,6 +207,9 @@ class Web::V3::GiftsController < MetalCorsController
         if pv.nil?
             fail_web({err: "VERIFY_RESPONSE_BAD_SESSION", msg: "Invalid session"})
             return
+        elsif pv.expired?
+            fail_web({err: "VERIFY_RESPONSE_EXPIRED", msg: "Purchase expired"})
+            return
         elsif pv.check_count == 0 || pv.checks.last.verified?
             fail_web({err: "VERIFY_RESPONSE_NO_VERIFICATIONS", msg: "Nothing to verify"})
             return
