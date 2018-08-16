@@ -4,6 +4,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   HEX_ID_PREFIX = 'vc_'
   include HexIdMethods
 
+  after_create :update_parent_check_count
   before_save :update_expiry
   after_save :update_parent_expiry
 
@@ -31,6 +32,15 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   def verified? ; (self.verified_at.present?) ; end
   def failed?   ; (self.failed_at.present?)   ; end
   def deferred? ; (self.check_type.to_s.downcase.include? "await") ; end
+
+  def orphaned?
+    return false  if self.verification.present?
+    return nil    if self.id.nil?  # Not saved yet.
+    puts "\n[model PurchaseVerificationCheck :: orphaned?]  Orphaned PVC detected!  (#{self.hex_id || self.id})"
+    true
+  end
+
+
 
   # ------------
 
@@ -71,6 +81,12 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
 
+  def update_parent_check_count
+    return if orphaned?
+
+    self.verification.check_count += 1
+    self.verification.save
+  end
 
   def update_expiry
     return if self.expires_at.present?
@@ -78,10 +94,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   end
 
   def update_parent_expiry
-    if self.verification.nil?
-      puts "\n[model PurchaseVerificationCheck :: update_parent_expiry]  Orphaned PVC detected!  (#{self.hex_id || self.id})"
-      return
-    end
+    return if orphaned?
 
     ##?  This will call the PurchaseVerification before_save filter, which basically does the same thing.
     ##?  But would calling `self.verification.save` without any changes actually trigger it?
