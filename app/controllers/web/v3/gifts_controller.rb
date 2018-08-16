@@ -170,13 +170,15 @@ class Web::V3::GiftsController < MetalCorsController
         puts " | params: #{@gift_hash}"
         response = PurchaseVerification.for(@gift_hash).perform
 
-        if response[:verdict] == :expired
+        case(response[:verdict])
+        when :expired
             fail_web({err: "VERIFY_EXPIRED", msg: "Purchase expired"})
             return
-        end
-
-        unless response[:success]
-            # Currently the only unsuccessful PV response is a lockout.
+        when :failed
+            # This happens when the user uses the same session_id that triggered a (now-expired) lockout
+            fail_web({err: "VERIFY_FAILED", msg: "Too many failed verifications"})
+            return
+        when :lockout
             fail_web({err: "VERIFY_LOCKOUT", msg: "For your protection, your account has been temporary locked."})
             return
         end
