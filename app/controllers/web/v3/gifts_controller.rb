@@ -231,6 +231,7 @@ class Web::V3::GiftsController < MetalCorsController
         end
 
         unless result[:success]
+            # Failure catch-all
             fail_web({err: "VERIFY_RESPONSE_INCORRECT", msg: "Incorrect verification response"})
             return
         end
