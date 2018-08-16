@@ -44,6 +44,38 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   # ------------
 
+
+  def self.for(session_id:, type:, rule:)
+    puts "\n\n[model PurchaseVerificationCheck :: for]"
+    verification = PurchaseVerification.find_by_session_id(session_id)
+    puts "\n[concern PurchaseVerificationCheck :: for]"
+    puts " | verification: #{verification.hex_id}"
+    puts " | rule:         #{rule}"
+    puts " | type:         #{type}"
+    # Don't create a duplicate PVCheck if it already exists  (e.g. due to multiple verify() calls)
+    check = self.pending.where(rule_name: rule, session_id: session_id, check_type: type)  ##x .first
+    puts "\n[model PurchaseVerificationCheck :: for]"
+    puts " | sql: #{check.to_sql}"
+    check = check.first  if check.present?   # temporary while the debugging is in place
+
+    unless check.present?
+      puts "\n[model PurchaseVerificationCheck :: for]  Building new PVCheck"
+      pvc = {
+          session_id:      verification.session_id,
+          verification_id: verification.id,
+          rule_name:       rule,
+          check_type:      type,  # `type` is a magic Rails keyword
+      }
+      check = new(pvc)
+    end
+
+    check
+  end
+
+
+  # ------------
+
+
   def verify(response)
     puts "\n\n[model PurchaseVerificationCheck :: verify]"
     puts " | response: #{response}"
