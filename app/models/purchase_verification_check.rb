@@ -13,8 +13,8 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   # ------------
 
-  FAIL_SEVERITY = Hash.new(0).merge(sms_code: 35, ideology: 50)  # Default to 0
-  PASS_SEVERITY = Hash.new(0).merge(sms_code: 15, ideology: 20)
+  FAIL_SEVERITY = Hash.new(0).merge(sms: 35, ideology: 50)  # Default to 0
+  PASS_SEVERITY = Hash.new(0).merge(sms: 15, ideology: 20)
   LOCKOUT_THRESHOLD = 100
 
   # ------------
@@ -69,8 +69,8 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     total_severity = 0
     # noinspection RubyResolve
     self.verification.checks.each do |check|
-      total_severity += FAIL_SEVERITY[check.check_type]  if check.failed?
-      total_severity -= PASS_SEVERITY[check.check_type]  if check.verified?
+      total_severity += FAIL_SEVERITY[check.check_type.to_sym]  if check.failed?
+      total_severity -= PASS_SEVERITY[check.check_type.to_sym]  if check.verified?
     end
 
     puts "\n[model purchase_verificationCheck :: verify]  lockout!"  if total_severity >= LOCKOUT_THRESHOLD
