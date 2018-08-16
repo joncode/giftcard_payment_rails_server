@@ -208,7 +208,7 @@ class Web::V3::GiftsController < MetalCorsController
 
         pv = PurchaseVerification.for_session(verify_params['session_id'])
         if pv.nil?
-            fail_web({err: "VERIFY_RESPONSE_BAD_SESSION", msg: "Invalid session"})
+            fail_web({err: "VERIFY_BAD_SESSION", msg: "Invalid session"})
             return
         elsif pv.expired?
             fail_web({err: "VERIFY_RESPONSE_EXPIRED", msg: "Purchase expired"})
@@ -223,7 +223,7 @@ class Web::V3::GiftsController < MetalCorsController
             fail_web({err: "VERIFY_RESPONSE_LOCKOUT", msg: "For your protection, your account has been temporary locked."})
             return
         elsif result[:verdict] == :parent_failed
-            fail_web({err: "VERIFY_RESPONSE_FAILED", msg: "Too many failed verifications"})
+            fail_web({err: "VERIFY_FAILED", msg: "Too many failed verifications"})
             return
         elsif result[:verdict] == :defer
             fail_web({err: "VERIFY_RESPONSE_AWAITING_DEFERRED", msg: "Cannot verify a deferred check"})
