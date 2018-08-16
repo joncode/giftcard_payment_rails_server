@@ -84,6 +84,8 @@ class PurchaseVerification < ActiveRecord::Base
     # if there isn't one, bail.
     return if await.nil?
 
+    ##FIXME `sms_await -> verify_resume()` with no phone number will verify and create a new sms_await check each time.  Doesn't actually cause issues, but can create db clutter.
+
     # verify it
     await.verified_at = DateTime.now.utc
     await.save
