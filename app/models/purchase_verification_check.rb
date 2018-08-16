@@ -120,6 +120,10 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
 
+  # ------------
+  # Update hooks
+
+
   def update_parent_check_count
     return if orphaned?
 
@@ -141,6 +145,12 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     self.verification.save
   end
 
+
+
+  # ------------
+  # Verifications
+
+
   def syndicate_verify(response)
     # Call the specific verify method for this PVCheck type
     puts "\n[model PurchaseVerificationCheck :: syndicate_verify]"
@@ -156,7 +166,6 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     pass!
   end
 
-  # ------------
 
   def _verify_sms(response)
     puts "\n[model PurchaseVerificationCheck :: _verify_sms]"
@@ -166,7 +175,9 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   end
 
 
+
   # ------------
+  # Verdicts
 
 
   def pass!
