@@ -201,6 +201,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
   def fail!
+    ##FIXME: How is this getting called twice in a row?!
     puts "\n[model PurchaseVerificationCheck :: fail!]"
     self.failed_at = DateTime.now.utc
     self.save
