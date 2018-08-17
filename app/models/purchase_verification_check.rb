@@ -168,6 +168,18 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
   def _verify_sms(response)
+    if self.failed?
+      puts "\n[model PurchaseVerificationCheck :: _verify_sms]  Re-verifying after a failed SMS check"
+      # Allow the user to verify against the same code again. (thus sending fewer texts)
+      # Duplicate the check (for lockout tallying) and reset its failed_at timestamp, and hex_id (so it gets a unique one)
+
+      # The reason this is here and not in PurchaseVerification#verify_check
+      # is that we will likely want different behavior for more stringent checks e.g. Ideology.
+      pvc = self.dup
+      pvc.update(hex_id: nil, failed_at: nil)  # Also saves the record
+      return pvc._verify_sms(response)
+    end
+
     puts "\n[model PurchaseVerificationCheck :: _verify_sms]"
     puts " | Comparing '#{response.downcase.strip}' to '#{self.data['code']}'"
     #TODO: If the code is from an unverified UserSocial phone number, verify it
