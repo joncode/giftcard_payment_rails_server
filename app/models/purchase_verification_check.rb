@@ -188,7 +188,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
       # The reason this is here and not in PurchaseVerification#verify_check
       # is that we will likely want different behavior for more stringent checks e.g. Ideology.
       pvc = self.dup
-      pvc.update(hex_id: nil, failed_at: nil)  # Also saves the record
+      pvc.update(hex_id: nil, failed_at: nil, response: nil, result: nil)  # Also saves the record
       return pvc._verify_sms(response)
     end
 
