@@ -124,8 +124,9 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   ensure
     # Store the response and result on the PVCheck object
-    self.response = {response: response}
-    self.result = result.as_json
+    timestamp = DateTime.now.utc
+    self.response = {timestamp: timestamp, response: response}
+    self.result = result.merge({timestamp: timestamp}).as_json
     self.save
   end
 

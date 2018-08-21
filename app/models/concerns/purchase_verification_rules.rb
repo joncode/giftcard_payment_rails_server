@@ -132,7 +132,7 @@ private
       data[:code] = (((0..9).to_a.shuffle)*4).join[0...5]  # 5 random digits
       sms_message = "ItsOnMe verification code: #{data[:code]}\nPlease enter this code into the verification field."
 
-      check.request = {sms: sms_message}.as_json
+      check.request = {timestamp: DateTime.now.utc, sms: sms_message}.as_json
       check.data = data
       check.save
 
