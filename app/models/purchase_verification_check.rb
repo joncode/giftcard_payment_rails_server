@@ -77,9 +77,9 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
   def verify(response)
-    # This function stores `result` and saves that to the PVCheck object within `ensure`
-    # While a little messy, this prevents both unnecessary indentation herein,
-    # and adding another function whose only purpose is to catch and save the result.
+    # This function stores `result` and saves it (and the user's response) on the PVCheck object within `ensure`
+    # While a little messy, this prevents both unnecessary indentation within this function,
+    # as well as adding another function whose only purpose is to catch and save that result.
 
     puts "\n\n[model PurchaseVerificationCheck :: verify]"
     puts " | response: #{response}"
