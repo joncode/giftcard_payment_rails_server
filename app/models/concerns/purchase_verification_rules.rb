@@ -74,8 +74,8 @@ module PurchaseVerificationRules
 
   def rule_large_gift(_)
     puts "\n[module PurchaseVerificationRules :: rule_large_gift]"
-    puts " | Comparing: #{@_value} >= 250"
-    return  unless @_value >= 250
+    puts " | Comparing: #{@_value} >= 200"
+    return  unless @_value >= 200
 
     puts " | Triggering SMS check\n\n"
     :sms_check
