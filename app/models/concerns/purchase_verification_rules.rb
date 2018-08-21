@@ -130,10 +130,12 @@ private
     if type == :sms
       data[:phone_number] = user_phone
       data[:code] = (((0..9).to_a.shuffle)*4).join[0...5]  # 5 random digits
+      sms_message = "ItsOnMe verification code: #{data[:code]}\nPlease enter this code into the verification field."
+
+      check.request = {sms: sms_message}.as_json
       check.data = data
       check.save
 
-      sms_message = "ItsOnMe verification code: #{data[:code]}\nPlease enter this code into the verification field."
       puts "\n ------------ "
       puts "Sending TWILIO text"
       puts " | to:  #{user_phone}"
