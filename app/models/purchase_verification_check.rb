@@ -123,7 +123,8 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     result = ((total_severity >= LOCKOUT_THRESHOLD) ? lockout! : fail!)
 
   ensure
-    # Store the result on the PVCheck object
+    # Store the response and result on the PVCheck object
+    self.response = {response: response}
     self.result = result.as_json
     self.save
   end
