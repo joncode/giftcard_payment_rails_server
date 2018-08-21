@@ -77,28 +77,33 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
   def verify(response)
+    # This function stores `result` and saves that to the PVCheck object within `ensure`
+    # While a little messy, this prevents both unnecessary indentation herein,
+    # and adding another function whose only purpose is to catch and save the result.
+
     puts "\n\n[model PurchaseVerificationCheck :: verify]"
     puts " | response: #{response}"
 
     # Check for failure
     if self.verification.failed?
       puts "\n[model purchase_verificationCheck :: verify]  parent verification failed!  Not verifying."
-      return parent_failed
+      return result = parent_failed
     end
 
     # Check for expiry
     if expired?
       puts "\n[model purchase_verificationCheck :: verify]  expired! Not verifying."
-      return expire
+      return result = expire
     end
     # Check for e.g. sms_await  (incorrect api call order)
     if deferred?
       puts "\n[model purchase_verificationCheck :: verify]  deferred! Not verifying."
-      return defer
+      return result = defer
     end
 
     # Call the appropriate verify method and get its verdict
     result = syndicate_verify(response)
+
     if result[:verdict] == :pass
       puts "\n[model purchase_verificationCheck :: verify]  pass!"
       return result
@@ -115,7 +120,12 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     puts "\n[model purchase_verificationCheck :: verify]  lockout!"  if total_severity >= LOCKOUT_THRESHOLD
 
     # If the user fucked up badly enough, lock them out; otherwise, issue a normal failure response.
-    ((total_severity >= LOCKOUT_THRESHOLD) ? lockout! : fail!)
+    result = ((total_severity >= LOCKOUT_THRESHOLD) ? lockout! : fail!)
+
+  ensure
+    # Store the result on the PVCheck object
+    self.result = result.as_json
+    self.save
   end
 
 
