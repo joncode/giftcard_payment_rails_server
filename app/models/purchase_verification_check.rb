@@ -36,7 +36,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   def orphaned?
     return false  if self.verification.present?
     return nil    if self.id.nil?  # Not saved yet.
-    puts "\n[model PurchaseVerificationCheck :: orphaned?]  Orphaned PVC detected!  (#{self.hex_id || self.id})"
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id || self.id}) :: orphaned?]  Orphaned PVC detected!"
     true
   end
 
@@ -81,23 +81,23 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     # While a little messy, this prevents both unnecessary indentation within this function,
     # as well as adding another function whose only purpose is to catch and save that result.
 
-    puts "\n\n[model PurchaseVerificationCheck :: verify]"
+    puts "\n\n[model PurchaseVerificationCheck(#{self.hex_id}) :: verify]"
     puts " | response: #{response}"
 
     # Check for failure
     if self.verification.failed?
-      puts "\n[model purchase_verificationCheck :: verify]  parent verification failed!  Not verifying."
+      puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: verify]  parent verification failed!  Not verifying."
       return result = parent_failed
     end
 
     # Check for expiry
     if expired?
-      puts "\n[model purchase_verificationCheck :: verify]  expired! Not verifying."
+      puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: verify]  expired! Not verifying."
       return result = expire
     end
     # Check for e.g. sms_await  (incorrect api call order)
     if deferred?
-      puts "\n[model purchase_verificationCheck :: verify]  deferred! Not verifying."
+      puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: verify]  deferred! Not verifying."
       return result = defer
     end
 
@@ -105,7 +105,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
     result = syndicate_verify(response)
 
     if result[:verdict] == :pass
-      puts "\n[model purchase_verificationCheck :: verify]  pass!"
+      puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: verify]  pass!"
       return result
     end
 
@@ -117,7 +117,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
       total_severity -= PASS_SEVERITY[check.check_type.to_sym]  if check.verified?
     end
 
-    puts "\n[model purchase_verificationCheck :: verify]  lockout!"  if total_severity >= LOCKOUT_THRESHOLD
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: verify]  lockout!"  if total_severity >= LOCKOUT_THRESHOLD
 
     # If the user fucked up badly enough, lock them out; otherwise, issue a normal failure response.
     result = ((total_severity >= LOCKOUT_THRESHOLD) ? lockout! : fail!)
@@ -165,7 +165,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   def syndicate_verify(response)
     # Call the specific verify method for this PVCheck type
-    puts "\n[model PurchaseVerificationCheck :: syndicate_verify]"
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: syndicate_verify]"
     method_name = "_verify_#{self.check_type}"
     return self.send(method_name, response)  if self.respond_to?(method_name)
 
@@ -181,7 +181,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   def _verify_sms(response)
     if self.failed?
-      puts "\n[model PurchaseVerificationCheck :: _verify_sms]  Re-verifying after a failed SMS check"
+      puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: _verify_sms]  Re-verifying after a failed SMS check"
       # Allow the user to verify against the same code again. (thus sending fewer texts)
       # Duplicate the check (for lockout tallying) and reset its failed_at timestamp, and hex_id (so it gets a unique one)
 
@@ -192,7 +192,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
       return pvc._verify_sms(response)
     end
 
-    puts "\n[model PurchaseVerificationCheck :: _verify_sms]"
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: _verify_sms]"
     puts " | Comparing '#{response.downcase.strip}' to '#{self.data['code']}'"
     #TODO: If the code is from an unverified UserSocial phone number, verify it
     ((response.downcase.strip == self.data['code']) ? pass! : fail!)
@@ -205,7 +205,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
   def pass!
-    puts "\n[model PurchaseVerificationCheck :: pass!]"
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: pass!]"
     self.verified_at = DateTime.now.utc
     self.save
     {verdict: :pass, success: true}
@@ -214,7 +214,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   def fail!
     ##FIXME: How is this getting called twice in a row?!
-    puts "\n[model PurchaseVerificationCheck :: fail!]"
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: fail!]"
     self.failed_at = DateTime.now.utc
     self.save
     {verdict: :fail, success: false}
@@ -238,7 +238,7 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   end
 
   def lockout!
-    puts "\n[model PurchaseVerificationCheck :: lockout!]"
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: lockout!]"
     lockout_duration = 30.minutes
     self.update(failed_at: DateTime.now.utc)
     self.verification.user.purchase_lockout_for lockout_duration
