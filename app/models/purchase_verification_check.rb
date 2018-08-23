@@ -180,22 +180,22 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
 
   def _verify_sms(response)
-    if self.failed?
-      puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: _verify_sms]  Re-verifying after a failed SMS check"
-      # Allow the user to verify against the same code again. (thus sending fewer texts)
-      # Duplicate the check (for lockout tallying) and reset its failed_at timestamp, and hex_id (so it gets a unique one)
-
-      # The reason this is here and not in PurchaseVerification#verify_check
-      # is that we will likely want different behavior for more stringent checks e.g. Ideology.
-      pvc = self.dup
-      pvc.update(hex_id: nil, failed_at: nil, response: nil, result: nil)  # Also saves the record
-      return pvc._verify_sms(response)
-    end
-
     puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: _verify_sms]"
     puts " | Comparing '#{response.downcase.strip}' to '#{self.data['code']}'"
     #TODO: If the code is from an unverified UserSocial phone number, verify it
-    ((response.downcase.strip == self.data['code']) ? pass! : fail!)
+
+    return pass!  if response.downcase.strip == self.data['code']
+
+    # Verification failure.
+    puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: _verify_sms]  Failed SMS check. Duplicating to allow easy re-verifying"
+    # Duplicate this check (for lockout tallying) and reset the cols we don't want to keep.
+    # The next call to /web/v3/gifts/verify (PV#verify_check) will fetch this new record,
+    # allowing the user to verify against the same code again. This also means we don't send any unnecessary texts!
+
+    # The reason this is here and not in PVC#verify is that we will likely want
+    # to disallow retries on more stringent checks such as Ideology.
+    self.dup.update(hex_id: nil, failed_at: nil, response: nil, result: nil)  # Also saves the record
+    fail!
   end
 
 
