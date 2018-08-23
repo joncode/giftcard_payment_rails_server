@@ -13,7 +13,7 @@ class PurchaseVerification < ActiveRecord::Base
   belongs_to :merchant
   belongs_to :gift
   # Shorten method (to #checks) and foreign key (from `purchase_verification_id`)
-  has_many :checks, class_name: 'PurchaseVerificationCheck', foreign_key: 'verification_id'
+  has_many :checks, -> { order(:created_at) }, class_name: 'PurchaseVerificationCheck', foreign_key: 'verification_id'
 
   # ------------
 
