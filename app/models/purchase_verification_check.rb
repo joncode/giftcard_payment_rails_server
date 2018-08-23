@@ -206,17 +206,15 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   def pass!
     puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: pass!]"
-    self.verified_at = DateTime.now.utc
-    self.save
+    self.update(verified_at: DateTime.now.utc)
     {verdict: :pass, success: true}
   end
 
 
   def fail!
-    ##FIXME: How is this getting called twice in a row?!
     puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: fail!]"
-    self.failed_at = DateTime.now.utc
-    self.save
+    # Both verify() and syndicated verifies call this.  Only update once.
+    self.update(failed_at: DateTime.now.utc)  unless self.failed_at.present?
     {verdict: :fail, success: false}
   end
 
@@ -240,9 +238,12 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   def lockout!
     puts "\n[model PurchaseVerificationCheck(#{self.hex_id}) :: lockout!]"
     lockout_duration = 30.minutes
-    self.update(failed_at: DateTime.now.utc)
+    now = DateTime.now.utc
+
+    self.update(failed_at: now)
+    self.verification.update(failed_at: now)
     self.verification.user.purchase_lockout_for lockout_duration
-    self.verification.update(failed_at: DateTime.now.utc)
+
     {verdict: :lockout, success: false, duration: lockout_duration}
   end
 
