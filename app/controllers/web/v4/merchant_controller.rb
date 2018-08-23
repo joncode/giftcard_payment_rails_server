@@ -102,6 +102,25 @@ class Web::V4::MerchantController < MetalCorsController
     end
 
 
+
+    # ---[ Menus ]---------
+
+    def show_menu
+        # Find the merchant's menu and return either its json or nil
+        menu = Menu.find_by(owner: @merchant)
+
+        response = {menu_standard: nil, menu_promo: nil, sections: nil, menu_is_live: nil}
+        if menu.present?
+            response[:menu_standard] = menu.items_standard
+            response[:menu_promo]    = menu.items_promo
+            response[:sections]      = menu.sections
+        end
+        response[:menu_is_live] = @merchant.menu_is_live
+
+        success(response) and respond
+    end
+
+
 private
 
     def resolve_merchant
@@ -116,7 +135,7 @@ private
     def verify_employee_access
         #TODO: refactor after fixing `user#highest_access_level_at`
         unless @current_user.highest_access_level_at(@merchant) >= UserAccess.level(:employee)
-            fail_web({ err: "UNAUTHORIZED",  msg: "You lack sufficient permissions at this merchant." })
+            fail_web({ err: "FORBIDDEN",  msg: "You lack sufficient permissions at this merchant." })
             return respond
         end
     end

@@ -170,12 +170,23 @@ class Web::V3::GiftsController < MetalCorsController
         puts " | params: #{@gift_hash}"
         response = PurchaseVerification.for(@gift_hash).perform
 
-        if response[:verdict] == :expired
-            fail_web({err: "BAD_REQUEST", msg: "Expired"})
+        case(response[:verdict])
+        when :expired
+            fail_web({err: "VERIFY_EXPIRED", msg: "Purchase expired"})
+            return
+        when :failed
+            # This happens when the user uses the same session_id that triggered a (now-expired) lockout
+            fail_web({err: "VERIFY_FAILED", msg: "Too many failed verifications"})
+            return
+        when :lockout
+            fail_web({err: "VERIFY_LOCKOUT", msg: "For your protection, your account has been temporary locked."})
             return
         end
 
-        (response[:success] ? success(response) : fail_web(response))
+        ##- Debugging
+        puts "\n[api Web::V3::Gifts :: verify]  Error: expected :pass verdict, got #{response[:verdict].inspect}"  unless response[:verdict] == :pass
+
+        success(response)
 
     rescue => e
         puts "\n[api Web::V3::Gifts :: verify] Error 500: #{e.message}"
@@ -191,26 +202,44 @@ class Web::V3::GiftsController < MetalCorsController
         puts " | params: #{verify_params}"
 
         if verify_params['response'].nil? || verify_params['response'].strip.empty?
-            fail_web({err: "INVALID_INPUT", msg: "Missing response"})
+            fail_web({err: "VERIFY_RESPONSE_MISSING", msg: "Missing response"})
             return
         end
 
         pv = PurchaseVerification.for_session(verify_params['session_id'])
         if pv.nil?
-            fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
+            fail_web({err: "VERIFY_BAD_SESSION", msg: "Invalid session"})
+            return
+        elsif pv.expired?
+            fail_web({err: "VERIFY_RESPONSE_EXPIRED", msg: "Purchase expired"})
             return
         elsif pv.check_count == 0 || pv.checks.last.verified?
-            fail_web({err: "BAD_REQUEST", msg: "Nothing to verify"})
+            fail_web({err: "VERIFY_RESPONSE_NO_VERIFICATIONS", msg: "Nothing to verify"})
             return
         end
 
         result =  pv.verify_check(verify_params['response'])
-        if result[:verdict] == :defer
-            fail_web({err: "BAD_REQUEST", msg: "Cannot verify a deferred check"})
+        if result[:verdict] == :lockout
+            fail_web({err: "VERIFY_RESPONSE_LOCKOUT", msg: "For your protection, your account has been temporary locked."})
+            return
+        elsif result[:verdict] == :parent_failed
+            fail_web({err: "VERIFY_FAILED", msg: "Too many failed verifications"})
+            return
+        elsif result[:verdict] == :defer
+            fail_web({err: "VERIFY_RESPONSE_AWAITING_DEFERRED", msg: "Cannot verify a deferred check"})
             return
         end
 
-        (result[:success] ? success(result) : fail_web(result))
+        unless result[:success]
+            # Failure catch-all
+            fail_web({err: "VERIFY_RESPONSE_INCORRECT", msg: "Incorrect verification response"})
+            return
+        end
+
+        ##- Debugging
+        puts "\n[api Web::V3::Gifts :: verify_response]  Error: expected :pass verdict, got #{result[:verdict].inspect}"  unless result[:verdict] == :pass
+
+        success(result)
     rescue => e
         puts "\n[api Web::V3::Gifts :: verify_response] Error 500: #{e.message}"
         fail_web({err: e, msg: e.message})
@@ -219,20 +248,20 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
 
-    # POST  /web/v3/gifts/verify_sms
+    # POST  /web/v3/gifts/verify_sms_resume
     def verify_sms_resume
         puts "\n[api Web::V3::Gifts :: verify_sms_resume]"
         puts " | params: #{params}"
 
         pv = PurchaseVerification.for_session(params['data']['session_id'])
         if pv.nil?
-            fail_web({err: "INVALID_INPUT", msg: "Invalid session"})
+            fail_web({err: "VERIFY_BAD_SESSION", msg: "Invalid session"})
             return
         end
 
         result = pv.deferred_sms
         if result.nil?
-            fail_web({err: "BAD_REQUEST", msg: "No deferred SMS verifications pending"})
+            fail_web({err: "VERIFY_RESUME_NO_DEFERRED", msg: "No deferred SMS verifications pending"})
             return
         end
 

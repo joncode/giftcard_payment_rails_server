@@ -129,7 +129,7 @@ private
 
         # convert e.g. "rd 0000__ffff" -> "rd_0000ffff"
         # This will not alter id's, e.g. "01234"
-        @token.gsub!(/[_\- ]/, '')   # Note: Order is intentional to demostrate that, when unescaped, "-" forms a range, even between " " and "_".
+        @token.gsub!(/[_\- ]/, '')   # Note: Order is intentional to demonstrate that, when unescaped, "-" forms a range, even between " " and "_".
         @token.gsub!(/^(gf|rd)([\da-z]{4}{2})$/, '\1_\2') # select the gf|rd prefix and two sets of four alphanumeric chars, and separate the two with _'s
 
         numeric_token = !!@token.match(/^[0-9]+$/)

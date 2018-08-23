@@ -17,7 +17,7 @@ module PurchaseVerificationRules
 
 
     #TODO: Lookup rules by Merchant
-    rules = [:lockout, :first_large_gift, :large_gift]
+    rules = [:lockout, :failed, :first_large_gift, :large_gift]
 
     # Check each rule in series, exiting upon the first failure
     _common_rule_setup(self)  # Passing `self` to bypass linter warnings
@@ -53,6 +53,14 @@ module PurchaseVerificationRules
     ((verification.user.purchase_lockout?) ? :lockout : nil)
   end
 
+
+  def rule_failed(verification)
+    puts "\n[module PurchaseVerificationRules :: rule_failed]"
+    puts " | verification: #{verification.hex_id}"
+    ((verification.failed?) ? :failed : nil)
+  end
+
+
   def rule_first_large_gift(verification)
     puts "\n[module PurchaseVerificationRules :: rule_first_large_gift]"
     puts " | verification: #{verification.hex_id}"
@@ -66,8 +74,8 @@ module PurchaseVerificationRules
 
   def rule_large_gift(_)
     puts "\n[module PurchaseVerificationRules :: rule_large_gift]"
-    puts " | Comparing: #{@_value} >= 250"
-    return  unless @_value >= 250
+    puts " | Comparing: #{@_value} >= 200"
+    return  unless @_value >= 200
 
     puts " | Triggering SMS check\n\n"
     :sms_check
@@ -98,79 +106,71 @@ private
     {verdict: :lockout, success: false}
   end
 
+
+  def failed(*_)
+    puts "\n[module PurchaseVerificationRules :: failed]"
+    # The user failed too many checks.
+    {verdict: :failed, success: false}
+  end
+
+
   def sms_check(verification, rule:)
     puts "\n[module PurchaseVerificationRules :: sms_check]"
     puts " | verification: #{verification.hex_id}"
     puts " | rule:         #{rule}"
-    specifics = {}
-    msg = nil
+
+    check = nil
+    data  = {}
+    msg   = nil
+
     user_phone = get_user_phone(verification.user)
-    if user_phone.present?
-      specifics[:type] = :sms
-      ##TODO: pull already-existing PVCheck out and update its code
-      specifics[:code] = (((0..9).to_a.shuffle)*4).join[0...5]  # 5 random digits
-      specifics[:code] = "12345"
+    type = (user_phone.present? ? :sms : :sms_await)
+    check = PurchaseVerificationCheck.for(session_id: verification.session_id, rule: rule, type: type)
 
+    if type == :sms
+      data[:phone_number] = user_phone
+      data[:code] = (((0..9).to_a.shuffle)*4).join[0...5]  # 5 random digits
+      sms_message = "ItsOnMe verification code: #{data[:code]}\nPlease enter this code into the verification field."
 
-      _sms_message = "ItsOnMe verification code: #{specifics[:code]}\nPlease enter this code into the verification field."
+      check.request = {timestamp: DateTime.now.utc, sms: sms_message}.as_json
+      check.data = data
+      check.save
+
       puts "\n ------------ "
       puts "Sending TWILIO text"
       puts " | to:  #{user_phone}"
-      puts " | msg: #{_sms_message.gsub(/\n/,"\n        ")}"
+      puts " | msg: #{sms_message.gsub(/\n/,"\n        ")}"
       puts " ------------ \n"
-      OpsTwilio.text to: user_phone, msg: _sms_message   ##!  Can fail; returns {status: 1|0}
-    else
-      specifics[:type] = :sms_await
-      specifics[:expires_at] = 1.hour.from_now
+      OpsTwilio.text to: user_phone, msg: sms_message   ##!  Can fail; returns {status: 1|0}
+    else  # :sms_await
+      check.expires_at ||= 1.hour.from_now
+      check.save
+
       msg = "Missing phone number"
     end
-    check_factory(verification, specifics, rule: rule, msg: msg)
+
+    {verdict: :check, success: true, type: type, phone_number: data[:phone_number], msg: msg}.compact
   end
 
 
   # ------------
 
-
-  # Create a PVCheck and return the verdict
-  def check_factory(verification, specifics, rule:, msg:nil)
-    puts "\n[module PurchaseVerificationRules :: check_factory]"
-    puts " | verification: #{verification.hex_id}"
-    puts " | rule:         #{rule}"
-    puts " | specifics:    #{specifics}"
-    # Don't create a duplicate PVCheck if it already exists  (e.g. due to multiple verify() calls)
-    unless PurchaseVerificationCheck.pending.where(rule_name: rule, session_id: self.session_id, check_type: specifics[:type]).present?
-      pvc = {
-          session_id:      verification.session_id,
-          verification_id: verification.id,
-          rule_name:       rule,
-          check_type:      specifics[:type],                # `type` is a magic Rails keyword
-          expires_at:      specifics.delete(:expires_at),   # No need to record this twice.
-          data:            specifics,
-      }
-      PurchaseVerificationCheck.create(pvc)
-
-      verification.check_count += 1
-      verification.save
-    end
-
-    {verdict: :check, success: true, type: specifics[:type], msg: msg}.compact
-  end
-
-
-  # ------------
 
   def already_checked?(rule)
+    puts "\n[concern PurchaseVerificationRules :: already_checked?(#{rule})]"
     pvc = PurchaseVerificationCheck
               .verified  \
               .where(rule_name: rule, session_id: self.session_id)  \
               .order(created_at: :desc)  \
               .first
 
+
     # No PVCheck for this rule and session
     return false if pvc.nil?
     # "Verified" deferred checks (e.g. sms_await) mean we now have the required data to perform the check
     return false if pvc.check_type.to_s.downcase.include? "await"
 
+    puts "\n[concern PurchaseVerificationRules :: already_checked?(#{rule})]  Already checked."
     true
   end
 

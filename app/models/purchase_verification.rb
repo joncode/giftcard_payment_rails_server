@@ -1,7 +1,7 @@
 class PurchaseVerification < ActiveRecord::Base
   # Usage:
-  #  | PurchaseVerification.for(purchase_params:).perform
-  #  | PurchaseVerification.for(purchase_params:).verify_check(response)
+  #  | PurchaseVerification.for(purchase_params).perform
+  #  | PurchaseVerification.for(purchase_params).verify_check(response)
 
   HEX_ID_PREFIX = 'pv_'
   include HexIdMethods
@@ -13,7 +13,7 @@ class PurchaseVerification < ActiveRecord::Base
   belongs_to :merchant
   belongs_to :gift
   # Shorten method (to #checks) and foreign key (from `purchase_verification_id`)
-  has_many :checks, class_name: 'PurchaseVerificationCheck', foreign_key: 'verification_id'
+  has_many :checks, -> { order(:created_at) }, class_name: 'PurchaseVerificationCheck', foreign_key: 'verification_id'
 
   # ------------
 
@@ -22,12 +22,13 @@ class PurchaseVerification < ActiveRecord::Base
   # Reason: The column in the database is a `datetime` (therefore lacking timezone info),
   #         and apparently Postgres doesn't compare these correctly with ISO8601 literals
   #         with TZ data from Rails (`DateTime.now.to_s` or "2018-07-23T19:39:10-07:00").
-  scope :pending,  -> { where("expires_at >  '#{DateTime.now.utc}'").where(verified_at: nil).where(failed_at: nil) }
-  scope :expired,  -> { where("expires_at <= '#{DateTime.now.utc}'") }
+  scope :pending,  -> { where("expires_at >  '#{DateTime.now.utc}'").where(verified_at: nil, failed_at: nil) }
+  scope :expired,  -> { where("expires_at <= '#{DateTime.now.utc}'").where(verified_at: nil, failed_at: nil) }
   scope :verified, -> { where.not(verified_at: nil) }
   scope :failed,   -> { where.not(  failed_at: nil) }
 
-  def expired?  ; (self.expires_at.present? && (self.expires_at <= DateTime.now.utc)) ; end
+  # Expired records have passed their expiry without having been verified or failed.
+  def expired?  ; (self.expires_at.present? && (self.expires_at <= DateTime.now.utc) && !(self.verified? || self.failed?)) ; end
   def verified? ; (self.verified_at.present?) ; end
   def failed?   ; (self.failed_at.present?)   ; end
 
@@ -82,6 +83,8 @@ class PurchaseVerification < ActiveRecord::Base
 
     # if there isn't one, bail.
     return if await.nil?
+
+    ##FIXME `sms_await -> verify_resume()` with no phone number will verify and create a new sms_await check each time.  Doesn't actually cause issues, but can create db clutter.
 
     # verify it
     await.verified_at = DateTime.now.utc

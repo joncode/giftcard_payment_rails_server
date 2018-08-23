@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180713082732) do
+ActiveRecord::Schema.define(version: 20180821015807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1268,6 +1268,7 @@ ActiveRecord::Schema.define(version: 20180713082732) do
     t.json     "response"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.json     "result"
   end
 
   add_index "purchase_verification_checks", ["hex_id"], name: "index_purchase_verification_checks_on_hex_id", using: :btree
