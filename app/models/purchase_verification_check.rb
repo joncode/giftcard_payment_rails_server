@@ -220,7 +220,6 @@ class PurchaseVerificationCheck < ActiveRecord::Base
 
   def parent_failed
     # The PurchaseVerification is marked as failed, yet someone is trying to re-verify the last check?
-    # Whatever.  Tell them failed they purchase attempt and they suck.
     {verdict: :parent_failed, success: false}
   end
 
