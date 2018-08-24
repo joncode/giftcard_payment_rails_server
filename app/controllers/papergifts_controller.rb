@@ -24,11 +24,11 @@ class PapergiftsController < ApplicationController
                                           .order(created_at: :desc).last
 
         json = {}
-        json[:hex_id]         = params[:rd]
-        json[:original_value] = gift.original_value / 100.0
-        json[:balance]        = gift.balance / 100.0
-        json[:available]      = json[:balance]
-        json[:available]      = last_redemption.gift_next_value  if last_redemption.present?
+        json[:hex_id]            = params[:rd]
+        json[:original_value]    = gift.original_value / 100.0
+        json[:balance]           = gift.balance / 100.0
+        json[:available_balance] = json[:balance]
+        json[:available_balance] = last_redemption.gift_next_value  if last_redemption.present?
 
         render json: {status: 1, data: json.as_json}
     end
