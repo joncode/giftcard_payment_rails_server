@@ -1,6 +1,38 @@
 class PapergiftsController < ApplicationController
 
-    before_action :resolve_gift
+    before_action :resolve_gift, only: [:paper_cert]
+
+    # GET  /papergifts/:rd/balance
+    def balance
+        puts "\n\n[controller Papergifts :: balance]"
+        puts " | rd: #{params[:rd]}"
+
+        err = nil
+        err = "Invalid gift id"  unless params[:rd].downcase.starts_with? "rd"
+
+        redemption = Redemption.where_with(params[:rd]).first
+        err = "Unable to find gift"  if redemption.nil?
+
+        if err.present?
+            render json: {status: 0, err: "INVALID INPUT", msg: err} and return
+        end
+
+        gift  = redemption.gift
+        paper = REDEMPTION_HSH.values.map(&:downcase).index("paper")  # Because id=>string, and it's capitalized!
+        last_redemption = gift.redemptions.where.not(type_of: paper)
+                                          .where(status: "pending")
+                                          .order(created_at: :desc).last
+
+        json = {}
+        json[:hex_id]         = params[:rd]
+        json[:original_value] = gift.original_value / 100.0
+        json[:balance]        = gift.balance / 100.0
+        json[:available]      = json[:balance]
+        json[:available]      = last_redemption.gift_next_value  if last_redemption.present?
+
+        render json: {status: 1, data: json.as_json}
+    end
+
 
     # GET  /papergifts/:id
     def paper_cert
