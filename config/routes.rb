@@ -397,6 +397,7 @@ Drinkboard::Application.routes.draw do
 
 	namespace :papergifts do
 		get '/:id',  action: 'paper_cert'
+		get '/:rd/balance', action: 'balance'
 	end
 
 
