@@ -525,6 +525,7 @@ private
         @gift_hash["merchant_id"]   = gps[:loc_id]
         @gift_hash["value"]         = gps[:value]
         @gift_hash["message"]       = gps[:msg]
+        @gift_hash["scheduled_at"]  = gps[:scheduled_at]
 
         @gift_hash
     end
