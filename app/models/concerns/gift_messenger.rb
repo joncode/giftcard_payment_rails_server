@@ -4,10 +4,16 @@ module GiftMessenger
 
     def messenger(invoice=false, thread_it=true)
         if self.success? && thread_on?
-            puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name} #{self.receiver_email}"
+            _args = {invoice:invoice, thread_it:thread_it}.reject{|_,v| !v}.keys.join(', ')
+            puts "\n\n[GiftMessenger :: messenger(#{_args})]"
+            puts " | #{self.class} -messenger- Notify Receiver via email #{self.receiver_name} #{self.receiver_email}"
 
             # notify_admin if self.giver_type == "User"
-            send_receiver_notification(thread_it) if self.status != 'schedule'
+            if self.status != 'schedule'
+                puts "\n[GiftMessenger :: messenger(#{_args})] -> send_receiver_notification"
+                puts " | Gift: #{self}"
+                send_receiver_notification(thread_it)
+            end
             if invoice
                 invoice_giver(thread_it)
             end
@@ -17,18 +23,32 @@ module GiftMessenger
     end
 
     def send_receiver_notification(thread_it=true)
-        puts "send_receiver_notification"
+        _args = (thread_it ? "thread_it" : '')
+        _signature = "[GiftMessenger :: send_receiver_notification(#{_args})]"
+        puts "\n\n#{_signature}"
         Relay.send_push_notification(self)
+
+        puts "\n#{_signature}  -> notify_receiver()"
         notify_receiver(thread_it)
+        puts "\n#{_signature}  -> notify_via_text()"
         notify_via_text
     end
 
     def send_gift_delivered_notifications
+        _signature = "[GiftMessenger :: send_gift_delivered_notifications]"
+        puts "\n\n#{_signature}"
+        puts " | Gift #{self.id} (#{self.hex_id}): #{self}"
+
         if self.payable == "Proto"
+            puts "\n#{_signature}  Proto!"
+            puts "\n#{_signature} -> messenger_proto_join()"
             messenger_proto_join
+            puts "\n#{_signature} -> notify_via_text()"
             notify_via_text
         else
+            puts "\n#{_signature} -> Relay.send_gift_delivered()"
             Relay.send_gift_delivered(self)
+            puts "\n#{_signature} -> messenger_proto_join()"
             send_receiver_notification
         end
     end
@@ -48,8 +68,11 @@ Click here for your gift.\n #{self.invite_link}"
     end
 
     def notify_via_text
+        _signature = "[GiftMessenger :: notify_via_text]"
+        puts "\n\n#{_signature}"
+        puts " | Gift #{self.id} (#{self.hex_id}): #{self}"
         if !self.receiver_phone.blank?
-            puts "link texting the gift receiver for #{self.id}"
+            puts " | Link-texting the gift receiver"
             if self.partner == Affiliate.find(GOLDEN_GAMING_ID)
                 msg = "Your friend, #{self.giver_name}, sent you a gift at PT's. Download or open the app to claim: https://pteglvapp.com/download/iom"
                 resp = OpsTwilio.text to: self.receiver_phone, msg: msg
@@ -61,6 +84,9 @@ Click here for your gift.\n #{self.invite_link}"
                 suffix    = "Enjoy!"
                 suffix    = "'#{self.message}' -#{self.giver_name}"  unless self.message.blank?
                 link_msg += suffix
+                puts "\n#{_signature}"
+                puts " | Texting #{self.receiver_phone}..."
+                puts " |  | Message:  #{link_msg.gsub(/\n/, '\n')}"
                 resp = OpsTwilio.link_text to: self.receiver_phone, link: link_msg, usr_msg: usr_msg, system_msg: sys_msg
             end
         end

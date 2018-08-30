@@ -3,20 +3,25 @@ class GiftCreatedEvent
     @queue = :after_save
 
     def self.perform gift_id
-    	puts "\n gift #{gift_id} is being GiftCreatedEvent.job\n"
+      _signature = "[job GiftCreatedEvent :: perform(#{gift_id})]"
+      puts "\n\n#{_signature}"
     	gift = Gift.find gift_id
+      puts " | Gift: #{gift}"
 
         if gift.pay_stat != "payment_error"
             Accountant.gift_created_event(gift)
 
             unless gift.status == 'schedule'
+                puts "\n#{_signature}  -> notify_via_facebook()"
                 notify_via_facebook gift
+                puts "\n#{_signature}  -> gift.notify_via_text()"
                 gift.notify_via_text
             end
 
             # PointsForSaleJob.perform gift_id
             if gift.cat == 300
                 begin
+                    puts "\n#{_signature}  -> GiftPurchasePromotionJob.perform"
                     GiftPurchasePromotionJob.perform(gift)
                 rescue => e
                     puts "500 Internal #{e.inspect}"
