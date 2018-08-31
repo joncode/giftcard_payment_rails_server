@@ -60,7 +60,7 @@ class Web::V4::AssociationsController < MetalCorsController
                     id:        grant.owner.id,
                     name:      grant.owner.name,
                     address:   grant.owner.address,
-                    city_name: grant.owner.city_name,
+                    city_name: grant.owner.city,
                     state:     grant.owner.state,
                     zip:       grant.owner.zip,
                     phone:     grant.owner.phone,
