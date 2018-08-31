@@ -81,6 +81,10 @@ class Web::V4::AssociationsController < MetalCorsController
         end
 
 
+        associations.sort_by! do |association|
+            association[:owner][:name].downcase
+        end
+
         success({ associations: associations.as_json })
         respond
     end
