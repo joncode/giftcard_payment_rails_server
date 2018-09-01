@@ -6,7 +6,7 @@ class GiftCreatedEvent
       _signature = "[job GiftCreatedEvent :: perform(#{gift_id})]"
       puts "\n\n#{_signature}"
     	gift = Gift.find gift_id
-      puts " | Gift: #{gift}"
+      puts " | Gift: #{gift.inspect}"
 
         if gift.pay_stat != "payment_error"
             Accountant.gift_created_event(gift)

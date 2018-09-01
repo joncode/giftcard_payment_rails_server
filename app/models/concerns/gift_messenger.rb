@@ -11,7 +11,7 @@ module GiftMessenger
             # notify_admin if self.giver_type == "User"
             if self.status != 'schedule'
                 puts "\n[GiftMessenger :: messenger(#{_args})] -> send_receiver_notification"
-                puts " | Gift: #{self}"
+                puts " | Gift: #{self.inspect}"
                 send_receiver_notification(thread_it)
             end
             if invoice
@@ -37,7 +37,7 @@ module GiftMessenger
     def send_gift_delivered_notifications
         _signature = "[GiftMessenger :: send_gift_delivered_notifications]"
         puts "\n\n#{_signature}"
-        puts " | Gift #{self.id} (#{self.hex_id}): #{self}"
+        puts " | Gift #{self.id} (#{self.hex_id}): #{self.inspect}"
 
         if self.payable == "Proto"
             puts "\n#{_signature}  Proto!"
@@ -70,7 +70,7 @@ Click here for your gift.\n #{self.invite_link}"
     def notify_via_text
         _signature = "[GiftMessenger :: notify_via_text]"
         puts "\n\n#{_signature}"
-        puts " | Gift #{self.id} (#{self.hex_id}): #{self}"
+        puts " | Gift #{self.id} (#{self.hex_id}): #{self.inspect}"
         if !self.receiver_phone.blank?
             puts " | Link-texting the gift receiver"
             if self.partner == Affiliate.find(GOLDEN_GAMING_ID)
