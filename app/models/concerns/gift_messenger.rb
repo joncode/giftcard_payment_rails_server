@@ -5,16 +5,16 @@ module GiftMessenger
     def messenger(invoice=false, thread_it=true)
         if self.success? && thread_on?
             _args = {invoice:invoice, thread_it:thread_it}.reject{|_,v| !v}.keys.join(', ')
-            puts "\n\n[GiftMessenger :: messenger(#{_args})]"
-            puts " | #{self.class} -messenger- Notify Receiver via email #{self.receiver_name} #{self.receiver_email}"
+            _signature = "[GiftMessenger(#{self.hex_id}) :: messenger(#{_args})]"
 
             # notify_admin if self.giver_type == "User"
             if self.status != 'schedule'
-                puts "\n[GiftMessenger :: messenger(#{_args})] -> send_receiver_notification"
-                puts " | Gift: #{self.inspect}"
+                puts "\n#{_signature}  Sending receiver notification to #{self.receiver_name}"
                 send_receiver_notification(thread_it)
             end
             if invoice
+                # From Mailers/Email
+                puts "\n#{_signature} -> invoice_giver()"
                 invoice_giver(thread_it)
             end
         else
@@ -24,31 +24,23 @@ module GiftMessenger
 
     def send_receiver_notification(thread_it=true)
         _args = (thread_it ? "thread_it" : '')
-        _signature = "[GiftMessenger :: send_receiver_notification(#{_args})]"
-        puts "\n\n#{_signature}"
+        puts "\n\n[GiftMessenger(#{self.hex_id}) :: send_receiver_notification(#{_args})]  Sending push notification, email, text"
         Relay.send_push_notification(self)
 
-        puts "\n#{_signature}  -> notify_receiver()"
-        notify_receiver(thread_it)
-        puts "\n#{_signature}  -> notify_via_text()"
+        notify_receiver(thread_it)  # Notify via email, if present
         notify_via_text
     end
 
     def send_gift_delivered_notifications
-        _signature = "[GiftMessenger :: send_gift_delivered_notifications]"
-        puts "\n\n#{_signature}"
-        puts " | Gift #{self.id} (#{self.hex_id}): #{self.inspect}"
+        _signature = "[GiftMessenger(#{self.hex_id}) :: send_gift_delivered_notifications]"
 
         if self.payable == "Proto"
-            puts "\n#{_signature}  Proto!"
-            puts "\n#{_signature} -> messenger_proto_join()"
+            puts "\n\n#{_signature}  (Proto) Sending push notification, email, text"
             messenger_proto_join
-            puts "\n#{_signature} -> notify_via_text()"
             notify_via_text
         else
-            puts "\n#{_signature} -> Relay.send_gift_delivered()"
+            puts "\n\n#{_signature}  Sending delivery notification, and receiver email+text"
             Relay.send_gift_delivered(self)
-            puts "\n#{_signature} -> messenger_proto_join()"
             send_receiver_notification
         end
     end
@@ -68,12 +60,11 @@ Click here for your gift.\n #{self.invite_link}"
     end
 
     def notify_via_text
-        _signature = "[GiftMessenger :: notify_via_text]"
+        _signature = "[GiftMessenger(#{self.hex_id}) :: notify_via_text]"
         puts "\n\n#{_signature}"
-        puts " | Gift #{self.id} (#{self.hex_id}): #{self.inspect}"
         if !self.receiver_phone.blank?
-            puts " | Link-texting the gift receiver"
             if self.partner == Affiliate.find(GOLDEN_GAMING_ID)
+                puts "\n#{_signature}  (PT's) Texting #{self.receiver_phone}"
                 msg = "Your friend, #{self.giver_name}, sent you a gift at PT's. Download or open the app to claim: https://pteglvapp.com/download/iom"
                 resp = OpsTwilio.text to: self.receiver_phone, msg: msg
             else
@@ -84,9 +75,7 @@ Click here for your gift.\n #{self.invite_link}"
                 suffix    = "Enjoy!"
                 suffix    = "'#{self.message}' -#{self.giver_name}"  unless self.message.blank?
                 link_msg += suffix
-                puts "\n#{_signature}"
-                puts " | Texting #{self.receiver_phone}..."
-                puts " |  | Message:  #{link_msg.gsub(/\n/, '\n')}"
+                puts "\n#{_signature}  Texting #{self.receiver_phone}"
                 resp = OpsTwilio.link_text to: self.receiver_phone, link: link_msg, usr_msg: usr_msg, system_msg: sys_msg
             end
         end
