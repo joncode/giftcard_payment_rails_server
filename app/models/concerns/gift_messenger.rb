@@ -45,20 +45,6 @@ module GiftMessenger
         end
     end
 
-    def notify_via_text_old
-        if !self.receiver_phone.blank?
-            puts "texting the gift receiver for #{self.id}"
-            if self.partner == Affiliate.find(GOLDEN_GAMING_ID)
-                msg = "Your friend, #{self.giver_name}, sent you a gift at PT's. Download or open the app to claim: https://pteglvapp.com/download/iom"
-            else
-                msg = "#{self.giver_name} has sent you a #{self.value_s} gift card
-at #{self.merchant_name}.\n
-Click here for your gift.\n #{self.invite_link}"
-            end
-            resp = OpsTwilio.text to: self.receiver_phone, msg: msg
-        end
-    end
-
     def notify_via_text
         _signature = "[GiftMessenger(#{self.hex_id}) :: notify_via_text]"
         puts "\n\n#{_signature}"
