@@ -12,24 +12,22 @@ class GiftCreatedEvent
             Accountant.gift_created_event(gift)
 
             unless gift.status == 'schedule'
-                puts "\n#{_signature}  -> notify_via_facebook()"
                 notify_via_facebook gift
 
                 # Disable notifying for cat300 (Standard gift) because these are already notified after creation.
                 # However, 301 (StndRegift) and 307 (StndBoom) may still need to notify.
                 # (I don't know this portion of the system well enough to say.)
                 if gift.cat != 300
-                    puts "\n#{_signature}  -> gift.notify_via_text()"
+                    puts "\n#{_signature}  Notifying via text"
                     gift.notify_via_text
                 else
-                    puts "\n#{_signature}  Cat 300; Not notifying via text."
                 end
             end
 
             # PointsForSaleJob.perform gift_id
             if gift.cat == 300
                 begin
-                    puts "\n#{_signature}  -> GiftPurchasePromotionJob.perform"
+                    puts "\n#{_signature}  -> GiftPurchasePromotionJob"
                     GiftPurchasePromotionJob.perform(gift)
                 rescue => e
                     puts "500 Internal #{e.inspect}"
