@@ -176,17 +176,8 @@ private
 
 
   def get_user_phone(user)
-    socials = user.user_socials.where(type_of: :phone)
-
-    # Pick out the best available phone number, in this order:
-    #   1) most recent live (verified) number
-    #   2) most recent non-verified number
-    #   3) phone number from initial account creation
-    #      (user.phone, which will return nil if it isn't present)
-
-    social = socials.where(    status: :live).order(updated_at: :desc).first  and  return social.identifier
-    social = socials.where.not(status: :live).order(updated_at: :desc).first  and  return social.identifier
-    user.phone
+    social = UserSocial.best(user.id, :phone)
+    (social.present? ? social.identifier : user.phone)
   end
 
 end
