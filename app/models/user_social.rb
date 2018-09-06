@@ -91,6 +91,18 @@ class UserSocial < ActiveRecord::Base
 
 #   -------------
 
+    def self.best(user_id, network)
+        # Pick out the best available UserSocial
+        socials = UserSocial.where(user_id: user_id, type_of: network).order(created_at: :desc)
+        social  = nil
+        social ||= socials.where(primary: true).first
+        social ||= socials.where(status: :live).first
+        social ||= socials.first
+        social
+    end
+
+#   -------------
+
     def authorize
         self.status = 'live'
         self.msg = "Authorized #{DateTime.now.utc} #{self.code}"
