@@ -53,11 +53,13 @@ module UserSerializers
                     if social.status == 'live'
                         usr_hash[net_id] << { "_id" => social.id,
                             "value" => social.identifier,
-                            'status' => social.status }
+                            'status' => social.status,
+                            'primary' => social.primary }
                     else
                         usr_hash[net_id] << { "_id" => social.id,
                             "value" => social.identifier,
                             'status' => social.status,
+                            'primary' => social.primary,
                             'msg' => social.msg }
                     end
                 end
