@@ -187,6 +187,7 @@ class Web::V3::UsersController < MetalCorsController
                 end
             end
             updates.delete("social")
+            UserSocial.ensure_primaries(@current_user.id)  # Set default primaries, if applicable
         end
         if error_hsh == {} && user.update(updates)
             success     user.login_client_serialize
