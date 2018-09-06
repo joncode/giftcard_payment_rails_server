@@ -3,6 +3,7 @@ class UserSocial < ActiveRecord::Base
     include ModelValidationHelper
 
     default_scope -> { where(active: true) }  # indexed
+    scope :primary, -> { where(primary: true) }
 
 #   -------------
 
@@ -35,6 +36,10 @@ class UserSocial < ActiveRecord::Base
 
 #   -------------
 
+    def primary?
+        self.primary
+    end
+
     def phone?
         self.type_of == 'phone'
     end
@@ -53,6 +58,35 @@ class UserSocial < ActiveRecord::Base
 
     def network
         type_of
+    end
+
+#   -------------
+
+    def self.ensure_primaries(user_id)
+        # Set default primaries if either network has zero or >1 primaries
+        # returns status array:  nil for unchanged, true for success, false for error
+        %w[email phone].map do |network|
+            next if self.unscoped.primary.where(user_id: user_id, type_of: network).count == 1
+            self.set_default_primary(user_id, network)
+        end
+    end
+
+    def self.set_default_primary(user_id, network)
+        # Clear all primaries for this user and network type, including inactives
+        self.unscoped.where(user_id: user_id, type_of: network).update_all(primary: false)
+
+        # Find the best UserSocial and set it as primary (if it exists)
+        # Using #update_column to bypass all the expensive `after_commit` hooks
+        social = self.best(user_id, network)
+        social.update_column(:primary, true)  if social.present?
+    end
+
+    def set_primary
+        # Clear all primaries for this user and network type, including inactives
+        UserSocial.unscoped.primary.where(user: self.user, type_of: self.type_of).update_all(primary: false)
+
+        # Using #update_column instead of #update to bypass all the expensive `after_commit` hooks
+        self.update_column(:primary, true)
     end
 
 #   -------------
