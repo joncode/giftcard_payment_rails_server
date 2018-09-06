@@ -292,6 +292,10 @@ Drinkboard::Application.routes.draw do
         end
       end
 
+      resources :socials, only: [] do
+        post "primary", action: :set_primary
+      end
+
 		end
 
 	end
