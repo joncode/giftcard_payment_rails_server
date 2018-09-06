@@ -36,6 +36,10 @@ module UserSerializers
         usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip", "sex"]
         usr_hash["photo"]   = self.get_photo
         usr_hash["user_id"] = self.id
+
+        # Set default primary UserSocials for the user if they don't have any yet
+        UserSocial.ensure_primaries(self.id)
+
         ids = ["email", "phone", "facebook_id", "twitter"].each do |id|
             us = self.user_socials.where(type_of: id)
             if us.count > 0
