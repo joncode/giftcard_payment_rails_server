@@ -285,6 +285,13 @@ Drinkboard::Application.routes.draw do
 				get      ":owner_type/:owner_id/users",        action: "list_entity_users"
 				get      ":owner_type/:owner_id/pending",      action: "list_entity_pending"
 			end
+
+      resources :users, only: [] do
+        collection do
+          patch :update
+        end
+      end
+
 		end
 
 	end
