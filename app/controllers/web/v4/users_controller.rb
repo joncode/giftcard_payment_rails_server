@@ -83,7 +83,7 @@ private
 
 
   def update_user_params
-    params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => %w[net _id value], oauth: [:token, :secret, :net, :net_id, :handle, :photo] )
+    params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => %w[net _id value primary], oauth: [:token, :secret, :net, :net_id, :handle, :photo] )
   end
 
 
