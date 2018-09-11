@@ -65,7 +65,7 @@ module PurchaseVerificationRules
     puts "\n[module PurchaseVerificationRules :: rule_first_large_gift]"
     puts " | verification: #{verification.hex_id}"
     return  unless verification.user.sent.empty?
-    return  unless @_value >= 100
+    return  unless @_value >= 125
 
     puts " | Triggering SMS check\n\n"
     :sms_check
