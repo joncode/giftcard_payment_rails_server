@@ -85,11 +85,32 @@ class UserSocial < ActiveRecord::Base
     end
 
     def set_primary
+        _signature = "[model UserSocial(#{self.id}) :: set_primary]"
+        puts _signature
+        puts " | User ID:    #{self.user_id}"
+        puts " | Network:    #{self.type_of}"
+        puts " | Identifier: #{self.identifier}"
+
         # Clear all primaries for this user and network type, including inactives
         UserSocial.unscoped.primary.where(user: self.user, type_of: self.type_of).update_all(primary: false)
 
-        # Using #update_column instead of #update to bypass all the expensive `after_commit` hooks
-        self.update_column(:primary, true)
+        # Set this record as primary
+        self.update(primary: true)
+
+        # Promote to user#email, user#phone, etc. (if applicable)
+        self.user.update(self.type_of => self.identifier)  if [:email, :phone, :twitter, :facebook].include?(self.type_of.to_sym)
+
+        # Catch and log failures to ensure we can recover the data.
+        unless self.reload.primary?
+            ids  = UserSocial.unscoped.primary.where(user: self.user, type_of: self.type_of).pluck(:id) - [self.id]
+            msg  = "#{_signature}  Error: Could not promote #{self.id} to primary."
+            msg += "  These should be non-primary: #{ids.inspect}"  unless ids.empty?
+            puts msg
+            return false  # Signal an error
+        end
+
+        # return self for chaining
+        self.reload
     end
 
 #   -------------
