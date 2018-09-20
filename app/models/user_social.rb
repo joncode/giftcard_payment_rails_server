@@ -60,18 +60,28 @@ class UserSocial < ActiveRecord::Base
         # returns status array:  nil for unchanged, true for success, false for error
         %w[email phone].map do |network|
             next if self.unscoped.primary.where(user_id: user_id, type_of: network).count == 1
-            self.set_default_primary(user_id, network)
+            self.set_default_primary!(user_id, network)
         end
     end
 
-    def self.set_default_primary(user_id, network)
+    def self.set_default_primary!(user_id, network)
+        self.set_default_primary(user_id, network, bypass_hooks: true)
+    end
+
+    def self.set_default_primary(user_id, network, bypass_hooks: false)
+        puts "[model UserSocial :: set_default_primary#{bypass_hooks ? '!' : ''}(user_id:#{user_id}, network:#{network})]"
+
         # Clear all primaries for this user and network type, including inactives
         self.unscoped.where(user_id: user_id, type_of: network).update_all(primary: false)
 
         # Find the best UserSocial and set it as primary (if it exists)
-        # Using #update_column to bypass all the expensive `after_commit` hooks
         social = self.best(user_id, network)
-        social.update_column(:primary, true)  if social.present?
+        return unless social.present?
+
+        # Use #update_column to bypass the expensive `after_commit` hooks, if requested
+        social.update_column(:primary, true)  if     bypass_hooks
+        social.update(primary: true)          unless bypass_hooks
+        social.reload
     end
 
     def set_primary
