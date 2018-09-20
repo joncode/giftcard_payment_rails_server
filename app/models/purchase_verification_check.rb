@@ -31,6 +31,14 @@ class PurchaseVerificationCheck < ActiveRecord::Base
   def expired?  ; (self.expires_at.present? && (self.expires_at <= DateTime.now.utc) && !(self.verified? || self.failed?)) ; end
   def verified? ; (self.verified_at.present?) ; end
   def failed?   ; (self.failed_at.present?)   ; end
+
+  def status
+    return :expired   if expired?
+    return :verified  if verified?
+    return :failed    if failed?
+    return :pending
+  end
+
   def deferred? ; (self.check_type.to_s.downcase.include? "await") ; end
 
   def orphaned?
