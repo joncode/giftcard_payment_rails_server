@@ -36,13 +36,14 @@ class UserSocial < ActiveRecord::Base
 
 #   -------------
 
-    def primary?
-        self.primary
-    end
+    def primary?   ; primary    ; end
+    def network_id ; identifier ; end
+    def network    ; type_of    ; end
 
-    def phone?
-        self.type_of == 'phone'
-    end
+    def phone?    ; (type_of.to_s == 'phone')    ; end
+    def email?    ; (type_of.to_s == 'email')    ; end
+    def facebook? ; (type_of.to_s == 'facebook') ; end
+    def twitter?  ; (type_of.to_s == 'twitter')  ; end
 
     def display_net_id
         if phone?
@@ -50,14 +51,6 @@ class UserSocial < ActiveRecord::Base
         else
             self.identifier
         end
-    end
-
-    def network_id
-        identifier
-    end
-
-    def network
-        type_of
     end
 
 #   -------------
