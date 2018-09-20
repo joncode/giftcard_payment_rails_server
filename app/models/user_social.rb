@@ -113,6 +113,37 @@ class UserSocial < ActiveRecord::Base
         self.reload
     end
 
+
+    def deactivate(force: false)
+        _signature = "[model UserSocial(#{self.id}) :: deactivate#{force ? '(force)' : ''}]"
+
+        # Deactivating non-primary contacts is nice and straightforward
+        unless self.primary?
+            puts "#{_signature}  Deactivating #{self.type_of}"
+            self.update(active: false)
+            return self.reload
+        end
+
+        # Don't allow deactivating a user's sole primary email (unless forced or the user is deactivated)
+        if self.email? && UserSocial.where(user: self.user, type_of: self.type_of).where.not(identifier: self.identifier).empty?
+            # Allow force-deactivating, and deactivating sole primary emails of deactivated users
+            if force || !self.user.active
+                puts "#{_signature}  #{force ? 'Force-d' : 'D'}eactivating primary #{self.type_of}"
+                self.update(primary: false, active: false)
+                self.user.update(self.type_of => nil)   # Update the corresponding column on the user
+                return self.reload
+            end
+            puts "#{_signature}  Refusing to deactivate User##{self.user_id}'s only #{self.type_of} contact."
+            return false  # Silent failures are terrible.  Return false instead of `self` to indicate failure (and discourage unsafe chaining)
+        end
+
+        puts "#{_signature}  Deactivating primary #{self.type_of} and attempting to promote new UserSocial"
+        self.update(primary: false, active: false)                  # Deactivate and demote the primary contact
+        self.user.update(self.type_of => nil)                       # Update the corresponding column on the user  ##! Will break if type_of is not within [phone, email, twitter, facebook]
+        UserSocial.set_default_primary(self.user_id, self.type_of)  # Pick a new primary contact
+        return self.reload
+    end
+
 #   -------------
 
     def self.best(user_id, network)
