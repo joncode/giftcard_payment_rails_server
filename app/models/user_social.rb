@@ -144,6 +144,24 @@ class UserSocial < ActiveRecord::Base
         return self.reload
     end
 
+    def reactivate
+        _signature = "[model UserSocial(#{self.id}) :: reactivate]"
+
+        a = ->(word){ (%w[a e i o u].include?(word[0].downcase) ? 'an ' : 'a ') + word }
+
+        # Fail if the identifier already exists
+        duplicates = UserSocial.where(identifier: self.identifier).count
+        unless duplicates.zero?
+            puts "#{_signature}  Failed: #{a.call self.type_of.titleize} UserSocial already exists for #{self.identifier}"
+            return false
+        end
+
+        # Demote and set active, return the (reloaded) social
+        puts "#{_signature}  Reactivating #{self.type_of}: #{self.identifier}"
+        self.update(active: true, primary: false)
+        self.reload
+    end
+
 #   -------------
 
     def self.best(user_id, network)
