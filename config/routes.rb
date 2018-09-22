@@ -329,6 +329,7 @@ Drinkboard::Application.routes.draw do
 					post :deactivate
 					post :suspend
 					put :deactivate_social
+					patch :reactivate_social
 					post :deactivate_gifts
 				end
 			end

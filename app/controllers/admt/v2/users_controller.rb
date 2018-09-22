@@ -82,6 +82,15 @@ class Admt::V2::UsersController < JsonController
         respond
     end
 
+    def reactivate_social
+        social = UserSocial.unscoped.where(user_id: params[:id], id: params["data"]["user_social_id"]).first  rescue nil
+        return fail    "Record not found."                  unless social.present?
+        return success "Reactivated #{social.identifier}"   if     social.reactivate
+        return fail    "Unable to reactivate #{social.identifier}"
+    ensure
+        respond
+    end
+
     def deactivate_gifts
         user = User.unscoped.find(params[:id])
         total_gifts = Gift.get_user_activity(user)
