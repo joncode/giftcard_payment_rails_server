@@ -1,16 +1,25 @@
 module UrbanAirshipWrap
 
     def send_push(user, alert, gift_id=nil, redemption_id=nil)
+        args = []
+        args << "gift:#{gift_id}"              if gift_id.present?
+        args << "redemption:#{redemption_id}"  if redemption_id.present?
+        args << "user:#{user.id}"              # Last to make grepping easier
+        _signature = "[module UrbanAirshipWrap :: send_push(#{args.join(', ')})]"
+
+        puts "#{_signature}  Sending push notification"
+        puts " | alert:    #{alert}"
+
         target_id = target_type = nil
         target_id = gift_id || redemption_id
         target_type = 'Gift' if gift_id
         target_type = 'Redemption' if redemption_id
-        puts "SENDING PUSH NOTE for #{target_type} = #{target_id} | PUSH_RECEIVER ID = #{user.id} | #{alert}"
         pnts = user.pn_tokens
         resp = []
         googe_push_tokens = []
         pnts.each do |pn_token_obj|
             begin
+                puts " | platform: #{pn_token_obj.platform.inspect rescue '(unknown)'}"
                 if pn_token_obj.platform == 'ios'
                     r = OpsPushApple.send_push(pn_token_obj, alert, target_id)
                     resp << r
@@ -25,19 +34,22 @@ module UrbanAirshipWrap
                         # puts "500 Internal - PUSH NO PLATFORM |#{pn_token_obj.id}| - #{r.inspect}"
                     end
                 end
-            rescue
-                puts "500 Internal PUSH FAILED - #{user.id} - #{pn_token_obj.id}"
+            rescue => e
+                puts "#{_signature}  Error: #{e.inspect}"
+                puts " | pn_token_obj_id: #{pn_token_obj}.id"
             end
         end
 
         if googe_push_tokens.count > 0
 
             r = OpsPushGoogle.send_push(googe_push_tokens, alert, target_id)
-            puts "PUSH SUCCEEDED |#{googe_push_tokens.map(&:id)}| - #{r.inspect}"
+            puts "#{_signature}  Push succeeded!"
+            puts " | Google token IDs: #{googe_push_tokens.map(&:id)}"
+            puts " | Response: #{r.inspect} "
             resp << r
         end
 
-        puts "UrbanAirshipWrap push sent via TOKENS! #{resp.inspect}"
+        puts "#{_signature}  Push sent via TOKENS! #{resp.inspect}"
         Ditto.send_push_create(resp[0], target_id, target_type)
     end
 
