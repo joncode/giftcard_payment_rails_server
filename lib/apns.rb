@@ -8,11 +8,11 @@ module APNS
 	if Rails.env.production?
 		@host 			= 'gateway.push.apple.com'
 		@feedback_host 	= 'feedback.push.apple.com'
-		@pem 			= "#{Rails.root}/config/certs/aps-8-28-2017.pem"
+		@pem 			= "#{Rails.root}/config/certs/aps-9-26-2018-PROD.pem"  # FYI, this is overwritten in config/initializers/apns.rb
 	elsif Rails.env.staging?
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
-		@pem 			= "#{Rails.root}/config/certs/aps-8-28-2017-QA.pem"
+		@pem 			= "#{Rails.root}/config/certs/aps-9-26-2018-QA.pem"  # FYI, this is overwritten in config/initializers/apns.rb
 	else
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
@@ -20,7 +20,7 @@ module APNS
 
 	@port = 2195
 	@feedback_port = 2196
-	@pass = 'JG7ta77dl7'
+	@pass = 'JG7ta77dl7'  # FYI, this is overwritten in config/initializers/apns.rb
 
 
 	@cache_connections = false
