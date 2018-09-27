@@ -19,7 +19,6 @@ module UrbanAirshipWrap
         googe_push_tokens = []
         pnts.each do |pn_token_obj|
             begin
-                puts " | platform: #{pn_token_obj.platform.inspect rescue '(unknown)'}"
                 if pn_token_obj.platform == 'ios'
                     r = OpsPushApple.send_push(pn_token_obj, alert, target_id)
                     resp << r
