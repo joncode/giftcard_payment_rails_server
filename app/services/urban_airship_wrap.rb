@@ -42,13 +42,13 @@ module UrbanAirshipWrap
         if googe_push_tokens.count > 0
 
             r = OpsPushGoogle.send_push(googe_push_tokens, alert, target_id)
-            puts "#{_signature}  Push succeeded!"
+            puts "#{_signature}  Google push succeeded!"
             puts " | Google token IDs: #{googe_push_tokens.map(&:id)}"
-            puts " | Response: #{r.inspect} "
+            # puts " | Response: #{r.inspect} "
             resp << r
         end
 
-        puts "#{_signature}  Push sent via TOKENS! #{resp.inspect}"
+        puts "#{_signature}  Push sent successfully"  ## Removed: "via TOKENS! #{resp.inspect}"
         Ditto.send_push_create(resp[0], target_id, target_type)
     end
 
