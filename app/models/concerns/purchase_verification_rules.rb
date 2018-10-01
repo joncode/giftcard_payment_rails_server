@@ -17,7 +17,7 @@ module PurchaseVerificationRules
 
 
     #TODO: Lookup rules by Merchant
-    rules = [:lockout, :failed, :first_large_gift, :large_gift]
+    rules = [:lockout, :failed, :large_gift]
 
     # Check each rule in series, exiting upon the first failure
     _common_rule_setup(self)  # Passing `self` to bypass linter warnings
