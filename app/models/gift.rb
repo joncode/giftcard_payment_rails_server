@@ -344,6 +344,40 @@ class Gift < ActiveRecord::Base
     end
 
 
+    # Returns a "title" indicating the dollar-value or brand card item(s) for the gift.  Ex:
+    #  | "$100 gift card"
+    #  | "Ghost tequila"
+    #  | "Ghost tequila and 1 other item"
+    #  | "Ghost tequila and 2 other items"
+    def title
+        default = "#{self.value_s} gift card"
+        return default  unless self.brand_card? && self.payable_id.present?
+
+        # Brand cards send items, not dollar amounts
+        begin
+            # Because this system is shoddy and you can't ever trust things to work right
+            cart = self.payable.shoppingCart
+            cart = JSON.parse(cart)
+
+            # Describe the item(s) sent, ex:
+            #  | "apple and 1 other item"
+            #  | "cider and 2 other items"
+            item = MenuItem.find( cart.first["item_id"] )
+            str  = item.name  if cart.size > 0
+            str += " and #{cart.size-1} other #{'item'.pluralize(cart.size-1)}"  if cart.size > 1
+
+        rescue => e
+            puts "[model Gift(#{self.hex_id || self.id || 'n/a'}) :: title]  Error: Unable to extract brand_card item name / count"
+            puts " | Error: #{e.inspect}"
+            puts " | Gift:  #{self.inspect}"
+            # and happily continue on, displaying the typical "$11 gift card" payload
+        end
+
+        # Default to dollar value (in the event of an error)
+        str || default
+    end
+
+
 #/-----------------------------------------------Status---------------------------------------/
 
 
