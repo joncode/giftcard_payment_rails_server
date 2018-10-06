@@ -1,6 +1,7 @@
 module GiftMessenger
     extend ActiveSupport::Concern
     include Email
+    include EnglishHelper
 
     def messenger(invoice=false, thread_it=true)
         if self.success? && thread_on?
@@ -55,7 +56,8 @@ module GiftMessenger
                 resp = OpsTwilio.text to: self.receiver_phone, msg: msg
             else
                 usr_msg = nil
-                sys_msg = "#{self.giver_name} has sent you a #{self.value_s} gift card at #{self.merchant_name}."
+                # `self.title` refers to gift#title
+                sys_msg = "#{self.giver_name} has sent you #{a self.title} at #{self.merchant_name}."
                 # Append a newline to `link_msg`, followed by the user message here to prevent iOS 11 from inserting a "Tap to load preview" message.
                 link_msg  = "Tap the link to accept your gift: #{self.invite_link}\n\n"
                 suffix    = "Enjoy!"
@@ -96,14 +98,14 @@ module GiftMessenger
             rec = self.receiver
             if !rec.phone.blank?
 
-                msg = "#{self.giver_name} has sent you a #{self.value_s} eGift Card
+                msg = "#{self.giver_name} has sent you #{a self.title}
 at #{self.merchant_name} with ItsOnMe®\n
 The gift is scheduled to arrive on #{schedule_time}"
                 resp = OpsTwilio.text to: rec.phone, msg: msg
 
             else
 
-                 msg = "<h2>#{self.giver_name} has sent you a #{self.value_s} eGift Card
+                 msg = "<h2>#{self.giver_name} has sent you #{a self.title}
 at #{self.merchant_name} with ItsOnMe®</h2>
 <p>The gift is scheduled to arrive on #{schedule_time}</p>
 #{cta_button}"
@@ -119,7 +121,7 @@ at #{self.merchant_name} with ItsOnMe®</h2>
 
         elsif !self.receiver_phone.blank?
 
-            msg = "#{self.giver_name} has sent you a #{self.value_s} eGift Card
+            msg = "#{self.giver_name} has sent you #{a self.title}
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.\n
 The gift is scheduled to arrive on #{schedule_time}\n
 Use this phone number when you make your account to connect the gift\n
@@ -128,7 +130,7 @@ Click here to download the app.\n #{CLEAR_CACHE}/download"
 
         elsif !self.receiver_email.blank?
 
-             msg = "<h2>#{self.giver_name} has sent you a #{self.value_s} eGift Card
+             msg = "<h2>#{self.giver_name} has sent you #{a self.title}
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.</h2>
 <p>The gift is scheduled to arrive on #{schedule_time}</p>
 <p>Use this email when you make your account to connect the gift</p>
