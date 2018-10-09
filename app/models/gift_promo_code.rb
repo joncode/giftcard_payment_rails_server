@@ -96,7 +96,7 @@ class GiftPromoCode
                 success_msg << line
             end
 
-            success_msg.join("\n")
+            return { status: 1, data: success_msg.join("\n") }
         end
 	end
 
