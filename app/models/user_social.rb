@@ -130,7 +130,9 @@ class UserSocial < ActiveRecord::Base
             if force || !self.user.active
                 puts "#{_signature}  #{force ? 'Force-d' : 'D'}eactivating primary #{self.type_of}"
                 self.update(primary: false, active: false)
-                self.user.update(self.type_of => nil)   # Update the corresponding column on the user
+                # Update the corresponding column on the user
+                self.user.update(self.type_of => nil)              #  Once to run hooks, though this will ultimately fail to do the update.
+                self.user.update_column(self.type_of.to_sym, nil)  # Twice to actually update the value.  Dirty, eh?  Welcome to Drinkboard.
                 return self.reload
             end
             puts "#{_signature}  Refusing to deactivate User##{self.user_id}'s only #{self.type_of} contact."
