@@ -250,9 +250,9 @@ class User < ActiveRecord::Base
     	end
     end
 
-    def deactivate_social type_of, identifier
+    def deactivate_social type_of, identifier, force: false
 	    user_social = self.user_socials.where(identifier: identifier).first
-	    user_social.deactivate
+	    user_social.deactivate(force: force)
     end
 
 ####### USER GETTERS AND SETTERS

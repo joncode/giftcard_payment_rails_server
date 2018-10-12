@@ -73,7 +73,8 @@ class Admt::V2::UsersController < JsonController
         user_id    = params["id"]
         type_of    = params["data"]["type_of"]
         identifier = params["data"]["identifier"]
-        user.deactivate_social(type_of, identifier)
+        force      = params["data"]["force"]
+        user.deactivate_social(type_of, identifier, force: force)
         if UserSocial.unscoped.where(identifier: identifier).first.active == false
             success "#{identifier} has been deactivated"
         else
