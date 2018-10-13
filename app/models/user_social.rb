@@ -64,7 +64,7 @@ class UserSocial < ActiveRecord::Base
     def self.ensure_primary(user_id, network)
         # Set a default primary for the given network if it doesn't have exactly one primary
         # returns nil for unchanged, true for success, false for error
-        self.set_default_primary!(user_id, network)  if self.primaries.where(user_id: user_id, type_of: network).count != 1
+        self.set_default_primary!(user_id, network)  if self.primary.where(user_id: user_id, type_of: network).count != 1
     end
 
     def self.set_default_primary!(user_id, network)
