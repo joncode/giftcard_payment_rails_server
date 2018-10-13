@@ -154,6 +154,7 @@ class UserSocial < ActiveRecord::Base
         puts "#{_signature}  Deactivating primary #{self.type_of} and attempting to promote new UserSocial"
         self.update(primary: false, active: false)                  # Deactivate and demote the primary contact
         self.user.update(self.type_of => nil)                       # Update the corresponding column on the user  ##! Will break if type_of is not within [phone, email, twitter, facebook]
+        self.user.update_column(self.type_of.to_sym, nil)           # And set it (directly) a second time because #update doesn't always update it.
         UserSocial.set_default_primary(self.user_id, self.type_of)  # Pick a new primary contact
         return self.reload
     end
