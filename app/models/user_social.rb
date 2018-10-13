@@ -58,10 +58,13 @@ class UserSocial < ActiveRecord::Base
     def self.ensure_primaries(user_id)
         # Set default primaries if either network has zero or >1 primaries
         # returns status array:  nil for unchanged, true for success, false for error
-        %w[email phone].map do |network|
-            next if self.unscoped.primary.where(user_id: user_id, type_of: network).count == 1
-            self.set_default_primary!(user_id, network)
-        end
+        %w[email phone].map{|network| self.ensure_primary(user_id, network) }
+    end
+
+    def self.ensure_primary(user_id, network)
+        # Set a default primary for the given network if it doesn't have exactly one primary
+        # returns nil for unchanged, true for success, false for error
+        self.set_default_primary!(user_id, network)  if self.primaries.where(user_id: user_id, type_of: network).count != 1
     end
 
     def self.set_default_primary!(user_id, network)
@@ -78,14 +81,19 @@ class UserSocial < ActiveRecord::Base
         social = self.best(user_id, network)
         return unless social.present?
 
-        # Use #update_column to bypass the expensive `after_commit` hooks, if requested
-        social.update_column(:primary, true)  if     bypass_hooks
-        social.update(primary: true)          unless bypass_hooks
+        # Bypass the expensive `after_commit` hooks, if requested
+        social.set_primary!  if     bypass_hooks
+        social.set_primary   unless bypass_hooks
         social.reload
     end
 
-    def set_primary
-        _signature = "[model UserSocial(#{self.id}) :: set_primary]"
+
+    def set_primary!
+        set_primary(bypass_hooks: true)
+    end
+
+    def set_primary(bypass_hooks: false)
+        _signature = "[model UserSocial(#{self.id}) :: set_primary#{bypass_hooks ? '!' : ''}]"
         puts _signature
         puts " | User ID:    #{self.user_id}"
         puts " | Network:    #{self.type_of}"
@@ -95,10 +103,8 @@ class UserSocial < ActiveRecord::Base
         UserSocial.unscoped.primary.where(user: self.user, type_of: self.type_of).update_all(primary: false)
 
         # Set this record as primary
-        self.update(primary: true)
-
-        # Promote to user#email, user#phone, etc. (if applicable)
-        self.user.update(self.type_of => self.identifier)  if [:email, :phone, :twitter, :facebook].include?(self.type_of.to_sym)
+        self.update_column(:primary, true)  if     bypass_hooks
+        self.update(primary: true)          unless bypass_hooks
 
         # Catch and log failures to ensure we can recover the data.
         unless self.reload.primary?
@@ -107,6 +113,12 @@ class UserSocial < ActiveRecord::Base
             msg += "  These should be non-primary: #{ids.inspect}"  unless ids.empty?
             puts msg
             return false  # Signal an error
+        end
+
+        # Promote to user#email, user#phone, etc. (if applicable)
+        if [:email, :phone, :twitter, :facebook].include?(self.type_of.downcase.to_sym)
+            self.user.update_column(self.type_of, self.identifier)  if     bypass_hooks
+            self.user.update(self.type_of => self.identifier)       unless bypass_hooks
         end
 
         # return self for chaining
