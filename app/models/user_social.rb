@@ -117,8 +117,9 @@ class UserSocial < ActiveRecord::Base
 
         # Promote to user#email, user#phone, etc. (if applicable)
         if [:email, :phone, :twitter, :facebook].include?(self.type_of.downcase.to_sym)
-            self.user.update_column(self.type_of, self.identifier)  if     bypass_hooks
             self.user.update(self.type_of => self.identifier)       unless bypass_hooks
+            # Update it a second time  (directly) because #update isn't reliable here.
+            self.user.update_column(self.type_of, self.identifier)
         end
 
         # return self for chaining
