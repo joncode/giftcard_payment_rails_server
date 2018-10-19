@@ -32,6 +32,22 @@ class PurchaseVerification < ActiveRecord::Base
   def verified? ; (self.verified_at.present?) ; end
   def failed?   ; (self.failed_at.present?)   ; end
 
+  def status
+    return :expired   if expired?
+    return :verified  if verified?
+    return :failed    if failed?
+    return :pending
+  end
+
+  def lockout?
+    self.checks.each do |pvc|
+      return true  if pvc.check_type.to_sym == :admin_lockout
+      next         if pvc.result.nil?
+      return true  if pvc.result['verdict'].to_sym == :lockout
+    end
+    false
+  end
+
   # ------------
 
   def self.for(purchase_params)
