@@ -25,6 +25,12 @@ module KpiQueryHelper
         @users ||= User.where(created_at: between).count
         @redemptions ||= Redemption.where(active: true, status:'done', created_at: between).count
         @paper_certs ||= Redemption.where(active: true, r_sys: 4, status: ['pending', 'done'], created_at: between).count
+
+        # Pull out all PVs with checks, since there's a PV created for every purchase
+        pvs = PurchaseVerification.where(created_at: between).where.not(check_count: 0)
+        @pv_verified = pvs.select(&:verified?).count
+        @pv_lockouts = pvs.select(&:lockout?).count
+        @pv_expired  = pvs.select(&:expired?).count
 	end
 
 	def text_msg name
@@ -43,7 +49,12 @@ MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
 New Users: #{@users}\n\
 Redemptions: #{@redemptions}\n\
-Paper Certs: #{@paper_certs}"
+Paper Certs: #{@paper_certs}\n\
+\n\
+Purchase Verifications:\n\
+* Completed: #{@pv_verified}\n\
+* Lockouts: #{@pv_lockouts}\n\
+* Expired: #{@pv_expired}"
 	end
 
 	def email_msg name
@@ -65,6 +76,12 @@ Paper Certs: #{@paper_certs}"
 <li>New Users: #{@users}</li>\
 <li>Redemptions: #{@redemptions}</li>\
 <li>Paper Certs: #{@paper_certs}</li>\
+</ul></p>\
+<p><ul>\
+<li>Purchase Verifications:</li>\
+<li>Completed: #{@pv_verified}</li>\
+<li>Lockouts: #{@pv_lockouts}</li>\
+<li>Expired: #{@pv_expired}</li>\
 </ul></p></div>".html_safe
 	end
 
