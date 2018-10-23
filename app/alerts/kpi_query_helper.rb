@@ -1,7 +1,12 @@
 module KpiQueryHelper
 
 
-	def get_data since: 24.hours.ago, between: nil  # defaults to daily report
+	def get_data since:nil, between:nil
+		# Default to using yesterday's data starting from midnight PST/PDT
+		# (converting from UTC to PST/PDT for internal reporting becase that's where the entire company resides)
+		# This uses `in_time_zone()` to account for DST, and converts back to UTC to avoid Postgre's timezone comparison issue.
+		since ||= DateTime.now.in_time_zone('Pacific Time (US & Canada)').beginning_of_day.utc
+
 		if between.nil?
 			between = [since ... DateTime.now]
 		end
