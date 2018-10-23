@@ -6,7 +6,7 @@ module KpiQueryHelper
 		# (converting from UTC to PST/PDT for internal reporting becase that's where the entire company resides)
 		# This uses `in_time_zone()` to account for DST, and converts back to UTC to avoid Postgre's timezone comparison issue.
 		since ||= DateTime.now.in_time_zone('Pacific Time (US & Canada)').beginning_of_day.utc
-		between ||= [since ... DateTime.now]
+		between ||= [since ... DateTime.now.utc]
 
 		@total_gifts ||= Gift.where(cat: 300, created_at: between)
 		@purchases ||= @total_gifts.count
