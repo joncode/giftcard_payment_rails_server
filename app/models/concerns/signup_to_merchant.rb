@@ -43,6 +43,7 @@ module SignupToMerchant
             m.zinger          = args['data']['zinger']
             m.zip             = args['data']['venue']['zip']
             m.yelp            = args['data']['venue']['yelp_url']        rescue nil
+            m.building_id     = args['data']['venue']['golfnow_facility_id']  rescue nil
 
         # Clover signup
         elsif args['point_of_sale_system'] == 'clover' && args['position'] == 'CloverPOS'
