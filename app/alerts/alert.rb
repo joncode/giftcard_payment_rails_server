@@ -49,7 +49,7 @@ class Alert < ActiveRecord::Base
 			mtus = AlertContact.where(active: true, note_id: note.id, note_type: note.class.to_s,
 				alert_id: self.id)
 			ptus = []
-			if merchant.affiliate_id.present?
+			if note.try(:affiliate_id).present?
 				if a = Affiliate.where(id: note.affiliate_id).first
 					ptus = AlertContact.where(active: true, note_id: a.id, note_type: a.class.to_s,
 						alert_id: self.id)
