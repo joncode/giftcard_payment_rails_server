@@ -43,14 +43,14 @@ class Alert < ActiveRecord::Base
 			AlertContact.where(active: true, alert_id: self.id, user_type: 'AtUser')
 		else
 			raise "Alert has no TARGET!" unless self.target
-			merchant = self.note.merchant if self.note.kind_of?(Gift)
-			merchant = self.note
+			note = self.note.merchant  if self.note.kind_of?(Gift)
+			note = self.note
 
-			mtus = AlertContact.where(active: true, note_id: merchant.id, note_type: merchant.class.to_s,
+			mtus = AlertContact.where(active: true, note_id: note.id, note_type: note.class.to_s,
 				alert_id: self.id)
 			ptus = []
 			if merchant.affiliate_id.present?
-				if a = Affiliate.where(id: merchant.affiliate_id).first
+				if a = Affiliate.where(id: note.affiliate_id).first
 					ptus = AlertContact.where(active: true, note_id: a.id, note_type: a.class.to_s,
 						alert_id: self.id)
 
