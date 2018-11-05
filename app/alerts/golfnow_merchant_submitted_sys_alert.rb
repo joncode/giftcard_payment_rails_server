@@ -1,4 +1,4 @@
-class GolfnowMerchantSubmittedMtAlert < Alert
+class GolfnowMerchantSubmittedSysAlert < Alert
 
     def text_msg
         get_data(type: :text)
