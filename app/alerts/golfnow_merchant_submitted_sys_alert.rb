@@ -89,12 +89,9 @@ class GolfnowMerchantSubmittedSysAlert < Alert
             if line.nil?
                 # Linebreak (will be after joining, anyway)
                 ''
-            elsif line.last.nil?
-                # Pass if there's no data
-                nil
             else
                 # *Term:* info
-                "<strong>#{line.first}:</strong> #{line.last}"
+                "<strong>#{line.first}:</strong> #{line.last || '<i>(not provided)</i>'}"
             end
         end.compact.join('<br/>')
     end
