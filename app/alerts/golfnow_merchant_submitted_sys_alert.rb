@@ -54,16 +54,30 @@ class GolfnowMerchantSubmittedSysAlert < Alert
         _contact += " (#{signup.position})"  if signup.position.present?
         _url      = nil
         _url      = "<a href='#{signup.venue_url}'>#{signup.venue_url}</a>"  if signup.venue_url.present?
+        _gn_url   = signup.data['venue']['golfnow_url']    rescue nil
+        _gn_url   = "<a href='#{_gn_url}'>#{_gn_url}</a>"  if _gn_url.present?
+
+        _fid       = signup.data['venue']['golfnow_facility_id']  rescue nil
+        _rep_name  = signup.data['contact']['golfnow_rep_name']   rescue nil
+        _rep_email = signup.data['contact']['golfnow_rep_email']  rescue nil
+        _rep_email = "<a href='#{_rep_email}'>#{_rep_email}</a>"  if _rep_email.present?
 
         body = []
-        body << ['Course',   signup.venue_name]
-        body << ['URL',     _url]
+        body << ['Course Name',   signup.venue_name]
+        body << ['URL',           _url]
+        body << ['GolfNow URL',   _gn_url]
+        body << ['Facility ID',   _fid]
         body << nil
         body << ['Contact',  _contact]
         body << ['Email',    signup.email]
         body << ['Phone',    number_to_phone(signup.phone)]  if signup.phone.present?
 
-        # This is separate to also add a newline
+        if _rep_name.present? || _rep_email.present?
+            body << nil
+            body << ['GolfNow Rep Name',  _rep_name]
+            body << ['GolfNow Rep Email', _rep_email]
+        end
+
         if signup.data.present? && signup.data['contact']['notes'].present?
             body << nil
             body << ['Extra info', signup.data['contact']['notes']]
