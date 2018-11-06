@@ -34,7 +34,7 @@ class GolfnowMerchantSubmittedSysAlert < Alert
 
 
         title = "<strong><u>New GolfNow Signup</u></strong><br/><hr/>"
-        body  = construct_body(signup)
+        body  = construct_body(signup, type: type)
 
 
         if type == :email
@@ -49,7 +49,7 @@ class GolfnowMerchantSubmittedSysAlert < Alert
     end
 
 
-    def construct_body(signup)
+    def construct_body(signup, type: :email)
         _contact  = signup.name
         _contact += " (#{signup.position})"  if signup.position.present?
         _url      = nil
@@ -81,6 +81,15 @@ class GolfnowMerchantSubmittedSysAlert < Alert
         if signup.data.present? && signup.data['contact']['notes'].present?
             body << nil
             body << ['Extra info', signup.data['contact']['notes']]
+        end
+
+        if type == :email
+            # Only include these in emails because of their length
+            # Two line breaks to make these easier to distinguish
+            body << nil
+            body << ['Short description', signup.data['venue']['zinger']]
+            body << nil
+            body << ['Long description',  signup.data['venue']['description']]
         end
 
 
