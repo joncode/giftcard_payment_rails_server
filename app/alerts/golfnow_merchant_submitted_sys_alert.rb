@@ -62,8 +62,32 @@ class GolfnowMerchantSubmittedSysAlert < Alert
         _rep_email = signup.data['contact']['golfnow_rep_email']  rescue nil
         _rep_email = "<a href='#{_rep_email}'>#{_rep_email}</a>"  if _rep_email.present?
 
+        # Construct address out of whatever data is available.
+        # (n.b.: The below uses `reject(&:empty?)` to remove empty strings produced by e.g. `[].join`)
+        _address = ''
+        begin
+            # Address, first line:
+            _address  = [ signup.data['venue']['address'] ]
+
+            # Address, second line:  ("City, State zip")
+            _address2 = [ signup.data['venue']['city'], signup.data['venue']['state'] ]
+            _address2 = [ _address2.compact.join(', '), signup.data['venue']['zip']   ]
+            _address2 = _address2.compact.reject(&:empty?).join(' ')
+
+            # join!
+            _address  = [_address, _address2].compact.reject(&:empty?).join(', ')
+        rescue
+            _address = ''
+        end
+
+        # Default to nil so we can display '(not provided)' below
+        _address = nil  if _address.empty?
+
+
+
         body = []
         body << ['Course Name',   signup.venue_name]
+        body << ['Address',       _address]                  if type == :email  # due to length
         body << ['URL',           _url]
         body << ['GolfNow URL',   _gn_url]
         body << ['Facility ID',   _fid]
