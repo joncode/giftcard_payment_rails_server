@@ -13,6 +13,7 @@ class MerchantSignupCreatedEvent
 		##! There is a chance GolfNow signups will require payment in the future; this alert call will not happen if the course pays.
 		#TODO: Check for an `affiliate_name` on the signup instead of using `payment_method`.  This requires Surfboard providing the data and Drinkboard storing it on the signup.  This would also allow better reporting, but I'm kind of totally buried, so it'll have to wait.
 		payment_method = (ms['data']['payment_method']  rescue '')
+		payment_method ||= ''  # handle Clover signups (these have a 'data' key but no 'payment_method' subkey, so this will be nil)
 		Alert.perform('GOLFNOW_MERCHANT_SUBMITTED_SYS', ms)  if payment_method.strip.downcase == 'golfnow'
 
 		merchant = nil
