@@ -23,7 +23,7 @@ class OpsTwilio
 			new_ary.each_with_index do |m, index|
 				text(to: to, msg: m, media_url: media_url)
 				media_url = nil  # So we only send the graphic with the first message
-				sleep(2)  ##! Hack: help ensure messages arrive in-order, without building out a callback API and message queueing system
+				sleep(3)  ##! Hack: help ensure messages arrive in-order, without building out a callback API and message queueing system
 			end
 
 		end
