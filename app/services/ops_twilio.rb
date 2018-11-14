@@ -4,7 +4,7 @@ class OpsTwilio
 
 	class << self
 
-		def link_text to: , link: , usr_msg: , system_msg: nil
+		def link_text to: , link: , usr_msg: , system_msg: nil, media_url: nil
 
 			# 	3 steps to the process
 			# 1 send the user to user message
@@ -20,33 +20,36 @@ class OpsTwilio
 			indexed_msg = indexed_msg.each_with_index do |msg, i|
 				new_ary << "#{i+ 1}/#{total}: #{msg}"
 			end
-			new_ary.each do |m|
-				text(to: to, msg: m)
+			new_ary.each_with_index do |m, index|
+				text(to: to, msg: m, media_url: media_url)
+				media_url = nil  # So we only send the graphic with the first message
 			end
 
 		end
 
-		def text to:, msg:
+		def text to:, msg:, media_url:nil
 			if Rails.env.development? || Rails.env.test?
 				return {status: 1, data: "Text send to #{to}"}
 			end
-			account_sid = TWILIO_ACCOUNT_SID
-			auth_token = TWILIO_AUTH_TOKEN
 
-			twilio_number = TWILIO_PHONE_NUMBER
-
+			# Clean the phone number
 			to.gsub!(/[^0-9]/, '')
 			to = '1' + to if to.length == 10
-			receiver_phone = "+" + to
+			to = '+' + to
 
 			# msg = ReceivedMessage.create(params)
 
+			# Compact our options because Twilio fails overdramatically if `media_url` is nil.
+			options = {
+				from:      TWILIO_PHONE_NUMBER,
+				to:        to,
+				body:      msg,
+				media_url: media_url,
+			}.compact
+
 			begin
-			    client = Twilio::REST::Client.new account_sid, auth_token
-			    message = client.messages.create(
-			    	:body => msg,
-			        :to => receiver_phone,
-			        :from => twilio_number)
+			    client = Twilio::REST::Client.new(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+			    message = client.messages.create(options)
 			    return { status: 1, data: message }
 			rescue => e
 			    puts e.inspect + " - OpsTwilio(31) 500 Internal"
