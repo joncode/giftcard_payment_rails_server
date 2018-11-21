@@ -51,12 +51,12 @@ class UniqueIdMaker
 			return unique_alpha
 		end
 
-		def four_digit_token klass, column_name, where_clause
+		def five_digit_token klass, column_name, where_clause
 			klass = klass.to_s.titleize.constantize unless klass.kind_of?(Class)
 			column_name = column_name.to_sym
-	        unique_value = rand(9000) + 1000
+	        unique_value = rand(90000) + 10000
 	        until klass.unscoped.where(column_name => unique_value).where(where_clause).count == 0
-	            unique_value = rand(9000) + 1000
+	            unique_value = rand(90000) + 10000
 	        end
 	        return unique_value
 		end
