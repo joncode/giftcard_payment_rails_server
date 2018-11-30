@@ -143,12 +143,16 @@ class Merchant < ActiveRecord::Base
     end
 
     def get_redemptions_for_hex_id_or_token value
-        value = value.to_s
-        if value.length == 4
-            Redemption.get_multi_with_token(value, multi_redemption_merchant_ids)
-        else
-            hex_id = value.downcase.gsub('rd-', 'rd_').gsub('-','')
+        code = value.to_s.downcase.strip
+
+        case(code)
+        when /rd[-_].++/
+            # Redemption hex_id
+            hex_id = code.gsub('rd-', 'rd_').delete('-')  # rd-abcd-1234 -> rd_abcd1234
             Redemption.get_multi_with_hex_id(hex_id, multi_redemption_merchant_ids)
+        else
+            # Redemption token
+            Redemption.get_multi_with_token(code, multi_redemption_merchant_ids)
         end
     end
 
