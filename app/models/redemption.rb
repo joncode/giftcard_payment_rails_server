@@ -537,7 +537,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 	end
 
 	def set_unique_token
-		self.token = UniqueIdMaker.four_digit_token(Redemption, :token, { status: 'pending', active: true })  ##j! May break around 1k pending redemptions
+		self.token = UniqueIdMaker.five_digit_token(Redemption, :token, { status: 'pending', active: true })
 		self.new_token_at = DateTime.now.utc
 	end
 
