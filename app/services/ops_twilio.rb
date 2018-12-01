@@ -34,6 +34,12 @@ class OpsTwilio
 		end
 
 		def text to:, msg:, media_url:nil
+			_signature = "[service OpsTwilio :: text(to:#{to})]"
+
+			puts "#{_signature}"
+			puts " | msg: #{msg}"              if msg
+			puts " | media_url: #{media_url}"  if media_url
+
 			if Rails.env.development? || Rails.env.test?
 				return {status: 1, data: "Text send to #{to}"}
 			end
@@ -61,7 +67,7 @@ class OpsTwilio
 			    message = client.messages.create(options)
 			    return { status: 1, data: message }
 			rescue => e
-			    puts e.inspect + " - OpsTwilio(31) 500 Internal"
+				puts "#{_signature}  Error: #{e.inspect}"
 			    return { status: 0, data: e }
 			end
 
