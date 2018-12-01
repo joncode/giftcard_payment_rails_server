@@ -63,21 +63,7 @@ module GiftMessenger
                 suffix    = "Enjoy!"
                 suffix    = "'#{self.message}' -#{self.giver_name}"  unless self.message.blank?
                 link_msg += suffix
-
-                media_url = nil
-                begin
-                    # This is in a try/catch because the shoppingCart data doesn't always want to parse.
-                    item = JSON.parse(self.shoppingCart).first
-                    item = MenuItem.find(item["item_id"])
-                    # Pluck out the item's photo and apply our transformation
-                    # The "b_rgb" (b for background) here is due to a Cloudinary bug: b_rgb is ignored when present in transformation, so we must apply it separately.
-                    media_url = item.photo.split("upload").join("upload/b_rgb:00141c,t_MMS%20gifting%20vignette")  rescue nil
-                rescue => e
-                    # `_signature` contains the gift id, which should be sufficient for investigating
-                    puts "\n#{_signature}  Error while extracting photo url for MMS"
-                    puts " | Error details: #{e.inspect}"
-                    media_url = nil
-                end
+                media_url = self.photo_mms
 
                 puts "\n#{_signature}  #{media_url ? "MMS" : "SMS"} Texting #{self.receiver_phone}"
                 resp = OpsTwilio.link_text to: self.receiver_phone, link: link_msg, usr_msg: usr_msg, system_msg: sys_msg, media_url: media_url

@@ -378,6 +378,47 @@ class Gift < ActiveRecord::Base
     end
 
 
+    # Parses the gift's shopping cart and returns the first available item photo, or nil
+    def photo
+        _signature = "[model Gift(#{self.hex_id || self.id}) :: photo]"
+
+        url = nil
+        begin
+            # shopping carts don't always want to parse, so.
+            items = self.cart.collect{|item| item["item_id"]}
+            items = MenuItem.find(items)
+
+            # Strip out missing and empty photo urls
+            photos = items.map(&:photo).compact.reject(&:empty?)
+
+            # Pluck out the item's photo
+            url = photos.first
+        rescue => error
+            puts "\n#{_signature}  Error: #{error.inspect}"
+            url = nil
+        end
+
+        url
+    end
+
+
+    # Returns the photo intended for MMS messaging, complete with Cloudinary transform.
+    def photo_mms
+        url = nil
+        url ||= self.photo  if self.brand_card?  # Use an item photo for brand cards
+        url ||= self.merchant.photo              # Use merchant's cover photo as a default
+        #TODO: Add fallback image for merchants lacking cover photos
+
+        # Apply our transformation
+        url = url.split("upload").join("upload/t_mms_gift_card")  if url.present?
+        url
+
+    rescue => error
+        puts "[model Gift(#{self.hex_id || self.id}) :: mms_photo]  Error: #{error.inspect}"
+        nil
+    end
+
+
 #/-----------------------------------------------Status---------------------------------------/
 
 
