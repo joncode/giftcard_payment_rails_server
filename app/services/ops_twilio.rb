@@ -22,9 +22,9 @@ class OpsTwilio
 			end
 
 			# Send the gift card image first, if present.
+			# Note: As Twilio MMS messages take much longer to send (5+ seconds), this will arrive last.
 			if media_url.present?
 				text(to: to, msg: nil, media_url: media_url)
-				sleep(5)  # with a delay so there's a chance it arrives first.  (as Twilio's MMS takes much longer to send)
 			end
 
 			new_ary.map do |m|
