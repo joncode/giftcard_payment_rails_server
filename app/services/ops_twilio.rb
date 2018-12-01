@@ -45,13 +45,16 @@ class OpsTwilio
 
 			# msg = ReceivedMessage.create(params)
 
-			# Compact our options because Twilio fails overdramatically if `media_url` is nil.
+			# Construct Twilio params
+			# Twilio is very particular: 'body' must be passed, even when nil  (e.g. MMS with no text)
 			options = {
 				from:      TWILIO_PHONE_NUMBER,
 				to:        to,
 				body:      msg,
-				media_url: media_url,
-			}.compact
+			}
+
+			# Twilio is very particular: `media_url` must be omitted if nil.
+			options[:media_url] = media_url  if media_url.present?
 
 			begin
 			    client = Twilio::REST::Client.new(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
