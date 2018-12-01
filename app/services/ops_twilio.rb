@@ -20,10 +20,15 @@ class OpsTwilio
 			indexed_msg = indexed_msg.each_with_index do |msg, i|
 				new_ary << "#{i+ 1}/#{total}: #{msg}"
 			end
-			new_ary.each_with_index do |m, index|
-				text(to: to, msg: m, media_url: media_url)
-				media_url = nil  # So we only send the graphic with the first message
-				sleep(3)  ##! Hack: help ensure messages arrive in-order, without building out a callback API and message queueing system
+
+			# Send the gift card image first, if present.
+			if media_url.present?
+				text(to: to, msg: nil, media_url: media_url)
+				sleep(5)  # with a delay so there's a chance it arrives first.  (as Twilio's MMS takes much longer to send)
+			end
+
+			new_ary.map do |m|
+				text(to: to, msg: m)
 			end
 
 		end
