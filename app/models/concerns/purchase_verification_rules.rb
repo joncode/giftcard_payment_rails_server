@@ -22,7 +22,7 @@ module PurchaseVerificationRules
     # Check each rule in series, exiting upon the first failure
     _common_rule_setup(self)  # Passing `self` to bypass linter warnings
     rules.each do |rule|
-      # Skip if the user has already passed this check
+      # Skip if the user has already completed this rule
       next if already_checked?(rule)
 
       # Call the rule
