@@ -27,6 +27,10 @@ module PurchaseVerificationRules
 
       # Call the rule
       check = self.send("rule_#{rule}", self)  # Passing `self` to bypass linter warnings
+
+      # Skip if the user has already passed this type of check (e.g. SMS)
+      next if already_passed?(check)
+
       # Perform the indicated check (if present), and return its verdict
       # This is dynamic so I can pass the rule name along without re-specifying every time
       return self.send(check, self, rule: rule)  if check.present?  # Passing `self` to bypass linter warnings
@@ -171,6 +175,24 @@ private
     return false if pvc.check_type.to_s.downcase.include? "await"
 
     puts "\n[concern PurchaseVerificationRules :: already_checked?(#{rule})]  Already checked."
+    true
+  end
+
+
+  def already_passed?(check_type)
+    puts "\n[concern PurchaseVerificationRules :: already_passed?(#{check_type})]"
+
+    # Only allow bypassing certain types of checks
+    return false  unless %i[sms_check].include? check_type
+
+    # Pull the last PVC with the same check_type
+    pvc = PurchaseVerificationCheck
+              .verified  \
+              .where(check_type: check_type, session_id: self.session_id)  \
+              .order(created_at: :desc)  \
+              .first
+
+    return false  if pvc.nil?
     true
   end
 
