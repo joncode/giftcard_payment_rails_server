@@ -189,7 +189,7 @@ class Web::V3::GiftsController < MetalCorsController
         success(response)
 
     rescue => e
-        puts "\n[api Web::V3::Gifts :: verify] Error 500: #{e.message}"
+        puts "\n[api Web::V3::Gifts :: verify]  Error 500: #{e.message}"
         fail_web({err: e, msg: e.message})
     ensure
         respond
