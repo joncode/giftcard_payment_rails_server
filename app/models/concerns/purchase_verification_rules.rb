@@ -179,7 +179,7 @@ private
   end
 
 
-  def already_passed?(check_type)
+  def already_passed?(check_type)  ##! The query in this method does not work; I've run out of time to fix it.  ~ Terra
     puts "\n[concern PurchaseVerificationRules :: already_passed?(#{check_type})]"
 
     # Only allow bypassing certain types of checks
