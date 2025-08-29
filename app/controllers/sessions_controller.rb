@@ -12,9 +12,9 @@ class SessionsController < ApplicationController
     def create
         user = User.find_by(email: params[:session][:email])
         password = params[:session][:password]
-        if password == "hNgobEA3h_mNeQOPJcVxuA"
-            password = "0"
-        end
+        # if password == "hNgobEA3h_mNeQOPJcVxuA"
+        #     password = "0"
+        # end
         if user && user.authenticate(password)
             sign_in user
             # if user.admin

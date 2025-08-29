@@ -21,13 +21,19 @@ AND (g.created_at >= '#{start_date}' AND g.created_at < '#{end_date}')"
     #     notified_gifts + redeemed_gifts
     # end
 
-    def find_gift_for_mt_user_and_code(mt_user_id, code)
-        query = "SELECT g.* FROM gifts g, invites i , merchants m \
-WHERE i.mt_user_id = #{mt_user_id} AND i.company_type = 'Merchant' AND m.id = i.company_id \
-AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_time}'"
-        return find_by_sql(query).first
-    end
 
+    def find_gift_for_mt_user_and_code(mt_user_id, code)
+        #         query = "SELECT g.* FROM gifts g, invites i , merchants m \
+        # WHERE i.mt_user_id = #{mt_user_id} AND i.company_type = 'Merchant' AND m.id = i.company_id \
+        # AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_time}'"
+        #         return find_by_sql(query).first
+        joins(:invite, :merchant)
+          .where(invites: { mt_user_id: mt_user_id, company_type: 'Merchant' })
+          .where(merchants: { id: :company_id })
+          .where(token: code)
+          .where('new_token_at > ?', reset_time)
+          .first
+    end
 #   -------------
 
     def get_all

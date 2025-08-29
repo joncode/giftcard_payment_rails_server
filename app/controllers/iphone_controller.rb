@@ -40,9 +40,9 @@ class IphoneController < AppController
 		pn_token  = params["pn_token"] || nil
 		platform = 'ios'
 
-		if password == "hNgobEA3h_mNeQOPJcVxuA"
-			password = "0"
-		end
+		# if password == "hNgobEA3h_mNeQOPJcVxuA"
+		# 	password = "0"
+		# end
 
 		if email.blank? || password.blank?
 			response["error"]     = "Data not received."

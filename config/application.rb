@@ -20,7 +20,7 @@ module Drinkboard
 
     config.middleware.insert_before 0, "Rack::Cors" do
         allow do
-            origins '*'
+            origins ENV['ALLOWED_ORIGINS'] || 'https://giftlocal.com'
             resource '*', :headers => :any, :methods => [:get, :post, :options, :patch, :put, :delete ]
         end
     end

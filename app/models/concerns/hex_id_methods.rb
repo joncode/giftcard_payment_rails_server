@@ -13,15 +13,15 @@ module HexIdMethods
 	module InstanceMethods
 
 		def set_unique_hex_id
-			if self.hex_id.blank?
-				prefix = self.class.const_get(:HEX_ID_PREFIX)
+			return unless hex_id.blank?
+			prefix = self.class.const_get(:HEX_ID_PREFIX)
 
-				if self.class == Redemption
-					self.hex_id = UniqueIdMaker.eight_alpha(self.class, :hex_id, prefix)
-				else
-					self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, prefix)
-				end
+			if self.class == Redemption
+				self.hex_id = UniqueIdMaker.eight_alpha(self.class, :hex_id, prefix)
+			else
+				self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, prefix)
 			end
+		
 		end
 
 
@@ -37,7 +37,7 @@ module HexIdMethods
 #   -------------  HEX ID / PAPER ID / DB ID Model.find
 
 	module ClassMethods
-
+		ALPHANUMERIC_REGEX = /[a-zA-Z0-9]/
 		def where_with _id
 			if _id.to_s == _id.to_i.to_s
 				where(id: _id)
@@ -62,23 +62,21 @@ module HexIdMethods
 
 	#   -------------    Class Utilities
 
-
-		def paper_to_hex paper_id
-			new_str = ""
-			paper_id.chars.each do |char|
-				if char.match /[a-zA-Z0-9]/
-					new_str += char.downcase
-				else
-					next
-				end
-			end
-			new_str[0..1].to_s + '_' + new_str[2..-1].to_s
+		def paper_to_hex(paper_id)
+			return nil if paper_id.blank?
+			
+			# Use more efficient string operations
+			filtered_chars = paper_id.chars.select { |char| char.match?(ALPHANUMERIC_REGEX) }
+			return nil if filtered_chars.length < 3  # Safety check
+			
+			filtered_str = filtered_chars.join.downcase
+			"#{filtered_str[0..1]}_#{filtered_str[2..-1]}"
 		end
 
 		def hex_to_paper hex_id
 			return hex_id unless hex_id.try(:match,'_')
 			hx = hex_id.to_s.gsub('_', '-').upcase
-			hx[0..6].to_s + '-' + hx[7..10].to_s
+			"#{hx[0..6]}-#{hx[7..10]}"
 		end
 
 	end
